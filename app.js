@@ -2,7 +2,7 @@ var path     = require('path')
   , express  = require('express')
   , http     = require('http')
   , socketIo = require('socket.io');
- 
+
 var app = express();
 app.configure(function() {
   app.set('port', process.env.PORT || 3000);
@@ -23,9 +23,7 @@ var server = http.createServer(app);
 server.listen(app.get('port'));
  
 var io = socketIo.listen(server);
-io.sockets.on('connection', function(socket) {
-  socket.on('message:send', function(data) {
-    io.sockets.emit('message:receive', { message: data.message });
-  });
-});
+
+var chat = require('mmo-tkool/chat');
+chat.start(io);
 
