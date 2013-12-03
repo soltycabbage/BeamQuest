@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "express": "*",
-    "socket.io": "*"
+    "express": "3.4.6",
+    "socket.io": "0.9.16"
   }
 }
