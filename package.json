@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "NODE_PATH=lib node app",
+    "start": "NODE_PATH=app node app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
