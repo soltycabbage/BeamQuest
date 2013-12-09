@@ -39,7 +39,8 @@
         //SingleEngineFile:'',
         appFiles:[
             'js/src/resource.js',
-            'js/src/myApp.js'//add your own files in order here
+            'js/src/config.js',
+            'js/src/beamQuest.js'//add your own files in order here
         ]
     };
 
