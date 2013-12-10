@@ -1,0 +1,3 @@
+[submodule "public/js/lib/cocos2d"]
+	path = public/js/lib/cocos2d
+	url = git://github.com/cocos2d/cocos2d-html5.git
