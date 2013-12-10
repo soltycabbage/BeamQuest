@@ -28,27 +28,60 @@ var BeamQuestWorld = cc.Layer.extend({
         baseLayer.addChild(tileMap, 0);
 
         this.baseLayer = baseLayer;
-        
+        this.scheduleUpdate();
         return true;
     },
 
     /** @override */
-    onKeyDown: function(key) {
+    update: function() {
         var baseP = this.baseLayer.getPosition();
-        var dx = bq.config.maps.TILE_SIZE; // x移動量
+        var dx = 1;//bq.config.maps.TILE_SIZE / 4; // x移動量
         var dy = dx; // y移動量
+        if (this.moveLeft_) {
+            this.baseLayer.setPosition(cc.p(baseP.x + dx, baseP.y));
+        }
+        if (this.moveDown_) {
+            this.baseLayer.setPosition(cc.p(baseP.x, baseP.y + dy));
+        }
+        if (this.moveRight_) {
+            this.baseLayer.setPosition(cc.p(baseP.x - dx, baseP.y));
+        }
+        if (this.moveUp_) {
+            this.baseLayer.setPosition(cc.p(baseP.x, baseP.y - dy));
+        }
+    },
+
+    /** @override */
+    onKeyDown: function(key) {
         switch (key) {
             case cc.KEY.a:
-                this.baseLayer.setPosition(cc.p(baseP.x + dx, baseP.y));
+                this.moveLeft_ = true;
                 break;
             case cc.KEY.s:
-                this.baseLayer.setPosition(cc.p(baseP.x, baseP.y + dy));
+                this.moveDown_ = true;
                 break;
             case cc.KEY.d:
-                this.baseLayer.setPosition(cc.p(baseP.x - dx, baseP.y));
+                this.moveRight_ = true;
                 break;
             case cc.KEY.w:
-                this.baseLayer.setPosition(cc.p(baseP.x, baseP.y - dy));
+                this.moveUp_ = true;
+                break;
+        }
+    },
+    /** @override */
+    onKeyUp: function(key) {
+        switch (key) {
+            case cc.KEY.a:
+                this.moveLeft_ = false;
+                break;
+            case cc.KEY.s:
+                this.moveDown_ = false;
+                break;
+            case cc.KEY.d:
+                this.moveRight_ = false;
+                break;
+            case cc.KEY.w:
+                this.moveUp_ = false;
                 break;
         }
     }
