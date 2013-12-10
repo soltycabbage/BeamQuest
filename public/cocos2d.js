@@ -40,6 +40,7 @@
         appFiles:[
             'js/src/resource.js',
             'js/src/config.js',
+            'js/src/player.js',
             'js/src/beamQuest.js'//add your own files in order here
         ]
     };

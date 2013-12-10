@@ -8,7 +8,6 @@ var bq = {};
 
 // img
 var s_Player = 'res/img/player.png';
-var s_Iwa = 'res/img/iwa.png';
 
 // tmx
 var s_ShinjukuTmx = 'res/map/shinjuku.tmx';
