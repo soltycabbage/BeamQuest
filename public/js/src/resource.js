@@ -12,12 +12,12 @@ var s_Iwa = 'res/img/iwa.png';
 
 // tmx
 var s_ShinjukuTmx = 'res/map/shinjuku.tmx';
-var s_ShinjukuTmxSprite = 'res/map/shinjuku.png';
+var s_MapSet= 'res/map/mapset.png';
 
 var g_resources = [
     //img
     {type: 'image', src:s_Player},
-    {type: 'image', src:s_ShinjukuTmxSprite},
+    {type: 'image', src:s_MapSet},
 
     //plist
 
