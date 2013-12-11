@@ -6,22 +6,23 @@ var InputHandler = cc.Class.extend({
         this.player_ = player;
     },
 
+    /** @override */
     keyDown: function(key) {
         switch (key) {
             case cc.KEY.a:
-                this.addDownKey(key);
+                this.addDownKey_(key);
                 this.dx = this.player_.moveSpeed;
                 break;
             case cc.KEY.s:
-                this.addDownKey(key);
+                this.addDownKey_(key);
                 this.dy = this.player_.moveSpeed;
                 break;
             case cc.KEY.d:
-                this.addDownKey(key);
+                this.addDownKey_(key);
                 this.dx = -1 * this.player_.moveSpeed;
                 break;
             case cc.KEY.w:
-                this.addDownKey(key);
+                this.addDownKey_(key);
                 this.dy = -1 * this.player_.moveSpeed;
                 break;
             default:
@@ -31,7 +32,7 @@ var InputHandler = cc.Class.extend({
 
     /** @override */
     keyUp: function(key) {
-        this.removeDownKey(key);
+        this.removeDownKey_(key);
         if (this.downKeys_.length > 0) {
             return;
         }
@@ -48,13 +49,22 @@ var InputHandler = cc.Class.extend({
         }
     },
 
-    addDownKey: function(key) {
+    /**
+     * 同時押し時に滑らかに移動させたいので現在押されているキーをリストに登録して管理する
+     * @param {Event} key
+     * @private
+     */
+    addDownKey_: function(key) {
         if (!_.contains(this.downKeys_, key) && this.downKeys_.length < 2) {
             this.downKeys_.push(key);
         }
     },
 
-    removeDownKey: function(key) {
+    /**
+     * @param {Event} key
+     * @private
+     */
+    removeDownKey_: function(key) {
         this.downKeys_ = _.without(this.downKeys_, key);
     }
 
