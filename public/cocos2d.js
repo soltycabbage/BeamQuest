@@ -38,6 +38,7 @@
         engineDir:'js/lib/cocos2d/cocos2d/',
         //SingleEngineFile:'',
         appFiles:[
+            'js/lib/underscore-min.js',
             'js/src/resource.js',
             'js/src/config.js',
             'js/src/player.js',
