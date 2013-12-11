@@ -34,14 +34,16 @@ var InputHandler = cc.Class.extend({
     keyUp: function(key) {
         this.removeDownKey_(key);
         if (this.downKeys_.length > 0) {
-            return;
+            // return;
+            // TODO: 移動で引っかかるのをどうにかする
         }
         switch (key) {
             case cc.KEY.a:
             case cc.KEY.d:
+                this.dx = 0;
+                break;
             case cc.KEY.s:
             case cc.KEY.w:
-                this.dx = 0;
                 this.dy = 0;
                 break;
             default:
