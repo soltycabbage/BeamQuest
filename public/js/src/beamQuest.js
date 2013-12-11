@@ -1,4 +1,5 @@
 var BeamQuestWorld = cc.Layer.extend({
+    downKeys: [],
     init:function () {
         this._super();
         this.setKeyboardEnabled(true);
@@ -40,33 +41,53 @@ var BeamQuestWorld = cc.Layer.extend({
     onKeyDown: function(key) {
         switch (key) {
             case cc.KEY.a:
+                this.addDownKey(key);
                 this.dx_ = this.player.moveSpeed;
                 break;
             case cc.KEY.s:
+                this.addDownKey(key);
                 this.dy_ = this.player.moveSpeed;
                 break;
             case cc.KEY.d:
+                this.addDownKey(key);
                 this.dx_ = -1 * this.player.moveSpeed;
                 break;
             case cc.KEY.w:
+                this.addDownKey(key);
                 this.dy_ = -1 * this.player.moveSpeed;
+                break;
+            default:
                 break;
         }
     },
     /** @override */
     onKeyUp: function(key) {
+        this.removeDownKey(key);
+        if (this.downKeys.length > 0) {
+            return;
+        }
         switch (key) {
             case cc.KEY.a:
             case cc.KEY.d:
-                this.dx_ = 0;
-                break;
             case cc.KEY.s:
             case cc.KEY.w:
+                this.dx_ = 0;
                 this.dy_ = 0;
                 break;
             default:
                 break;
         }
+    },
+
+    addDownKey: function(key) {
+        if (!_.contains(this.downKeys, key) && this.downKeys.length < 2) {
+            this.downKeys.push(key);
+        }
+    },
+
+    removeDownKey: function(key) {
+        console.log('remove:'  + key);
+        this.downKeys = _.without(this.downKeys, key);
     }
 });
 
