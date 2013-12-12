@@ -4,11 +4,14 @@ var InputHandler = cc.Class.extend({
     dy: 0, // プレイヤーy方向移動量(px)
     ctor: function(player) {
         this.player_ = player;
+        this.chat_ = new Chat();
     },
-
     /** @override */
     keyDown: function(key) {
         switch (key) {
+            case cc.KEY.enter:
+                this.chat_.focusChat();
+                break;
             case cc.KEY.a:
                 this.addDownKey_(key);
                 this.dx = this.player_.moveSpeed;
@@ -69,5 +72,4 @@ var InputHandler = cc.Class.extend({
     removeDownKey_: function(key) {
         this.downKeys_ = _.without(this.downKeys_, key);
     }
-
 });

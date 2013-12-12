@@ -1,3 +1,13 @@
-#gameCanvas {
+.bq-menu {
+    width: 800px;
+    margin: 0 auto;
+}
 
+#bq-chat-input {
+    width: 730px;
+}
+
+#bq-chat-submit {
+    margin: 5px 0px 2px 5px;
+    width: 57px;
 }
