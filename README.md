@@ -20,3 +20,12 @@ $ npm start
 
 `http://localhost:3000/` に、あくせす！
 
+## たのしいgruntせいかつ
+
+ファイルに変更があった場合に自動的にjshintを実行するようにします。
+
+```
+$ npm install -g grunt-cli
+$ grunt watch
+```
+
