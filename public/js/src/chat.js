@@ -4,6 +4,7 @@
 var Chat = cc.Class.extend({
     ctor: function() {
         this.chatInput_ = $('#bq-chat-input')[0];
+        this.gameCanvas_ = $('#gameCanvas')[0];
         this.initChatHandler_();
     },
 
@@ -33,5 +34,6 @@ var Chat = cc.Class.extend({
     submitChat: function(value) {
         // TODO: サーバへの送信処理を書く
         bq.player.showMessage(value);
+        this.gameCanvas_.focus();
     }
 });
