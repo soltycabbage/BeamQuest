@@ -16,7 +16,7 @@ var BeamQuestWorld = cc.Layer.extend({
         var player = new Player(s_Player, cc.rect(0,0,32,32));
         player.setPosition(cc.p(size.width / 2, size.height / 2));
         playerLayer.addChild(player, 0);
-        this.player = player;
+        bq.player = player;
 
         var tileMap = new cc.TMXTiledMap();
         tileMap.initWithTMXFile(bq.config.maps.area.SHINJUKU);
