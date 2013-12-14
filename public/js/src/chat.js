@@ -13,9 +13,9 @@ var Chat = cc.Class.extend({
      */
     initChatHandler_: function() {
         $('#bq-chat-form').bind('submit', $.proxy(function(evt) {
+            evt.preventDefault();
             this.submitChat(this.chatInput_.value);
             this.chatInput_.value = '';
-            evt.preventDefault();
         }, this));
     },
 
@@ -32,5 +32,6 @@ var Chat = cc.Class.extend({
      */
     submitChat: function(value) {
         // TODO: サーバへの送信処理を書く
+        bq.player.showMessage(value);
     }
 });
