@@ -32,8 +32,9 @@ var Chat = cc.Class.extend({
      * @param {string} value
      */
     submitChat: function(value) {
+        this.gameCanvas_.focus();
+        if (value.length === 0) {return;}
         // TODO: サーバへの送信処理を書く
         bq.player.showMessage(value);
-        this.gameCanvas_.focus();
     }
 });

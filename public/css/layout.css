@@ -1,3 +1,8 @@
+@font-face {
+  font-family: pixelMplus;
+  src: url(../res/fonts/pixelMplus.ttf) format("truetype");
+}
+
 .bq-menu {
     width: 800px;
     margin: 0 auto;
