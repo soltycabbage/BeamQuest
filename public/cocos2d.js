@@ -14,9 +14,12 @@
         appFiles:[
             'js/lib/jquery-min.js',
             'js/lib/underscore-min.js',
+            'js/lib/md5.js',
             'js/src/socket/socket.js',
             'js/src/resource.js',
             'js/src/config.js',
+            'js/src/bqLabel.js',
+            'js/src/scene/login.js',
             'js/src/chat.js',
             'js/src/inputHandler.js',
             'js/src/entity/entity.js',

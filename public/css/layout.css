@@ -1,6 +1,6 @@
 @font-face {
-  font-family: pixelMplus;
-  src: url(../res/fonts/pixelMplus.ttf) format("truetype");
+    font-family: pixelMplus;
+    src: url(../res/fonts/pixelMplus.ttf) format("truetype");
 }
 
 .bq-menu {
@@ -10,6 +10,10 @@
 
 #bq-chat-input {
     width: 730px;
+}
+
+#bq-chat-form {
+    font-family: pixelMplus;
 }
 
 #bq-chat-submit {

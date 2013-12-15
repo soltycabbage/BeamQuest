@@ -12,6 +12,17 @@ var Socket = cc.Class.extend({
         this.socket.on('connected', function (data) {
 
         });
+    },
+
+    /**
+     * @param {string} userId
+     * @param {string} hash
+     * @param {Function} callback
+     * @param {Object} selfObj
+     */
+    tryLogin: function(userId, hash, callback, selfObj) {
+        this.socket.emit('login', {userId: userId, hash: hash});
+        this.socket.on('login:receive', $.proxy(callback, selfObj));
     }
 });
 

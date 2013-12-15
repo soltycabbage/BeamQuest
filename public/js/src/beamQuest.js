@@ -52,9 +52,22 @@ var BeamQuestWorld = cc.Layer.extend({
 var BeamQuestWorldScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
-        var layer = new BeamQuestWorld();
-        layer.init();
-        this.addChild(layer);
+        if (this.isAlreadyLogin_()) {
+            var layer = new BeamQuestWorld();
+            layer.init();
+            this.addChild(layer);
+        } else {
+            this.addChild(new LoginScene());
+        }
+    },
+
+    /**
+     * @return {boolean} ログイン済み（過去にログインしたことがある)ならTRUE
+     * @private
+     */
+    isAlreadyLogin_: function() {
+        var userId = sys.localStorage.getItem('userId');
+        return !!userId;
     }
 });
 

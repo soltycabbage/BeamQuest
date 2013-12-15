@@ -25,7 +25,7 @@ var Entity = cc.Sprite.extend({
         msgRect.setPosition(cc.p(15, 50));
 
         // label
-        var tt = cc.LabelTTF.create(msg, 'pixelMplus', 11);
+        var tt = bq.Label.create(msg);
         tt.setPosition(cc.p(msgRect.getBoundingBox().size.width / 2, 8));
 
         // 吹き出しのしっぽみたいなやつ
