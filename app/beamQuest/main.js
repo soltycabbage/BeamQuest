@@ -4,10 +4,12 @@ exports.start = function(io) {
     io.sockets.on('connection', function(socket) {
         socket.on('login', function(data) {
             // TODO: userIdに':'とか使われたやばい気がするが今はDon't think. Feel.
-            client.get('user:id:' + data.userId, function(err, val) {
+            // base64 エンコーディングするとかどっすか
+            var encodedId = new Buffer(data.userId).toString('base64');
+            client.get('user:id:' + encodedId, function(err, val) {
                 var result = {};
                 if (!val) { // IDとハッシュが登録されていない
-                    client.set('user:id:' + data.userId, data.hash);
+                    client.set('user:id:' + encodedId, data.hash);
                     result = {result: 'create'};
                 } else if (val == data.hash) { // IDとハッシュが一致
                     result = {result: 'success'};
