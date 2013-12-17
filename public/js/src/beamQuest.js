@@ -13,10 +13,18 @@ var BeamQuestWorld = cc.Layer.extend({
         playerLayer.setPosition(cc.p(0,0));
         this.addChild(playerLayer, 100, bq.config.tags.BASE_LAYER);
 
-        var player = new Player(s_Player, cc.rect(0,0,32,32));
+
+        // init frame cache
+        var frameCache = cc.SpriteFrameCache.getInstance();
+        frameCache.addSpriteFrames(s_PlayerWalkingPlist, s_PlayerWalkingImg); 
+
+
+        var player = this.createPlayer_();
         player.setPosition(cc.p(size.width / 2, size.height / 2));
         playerLayer.addChild(player, 0);
         bq.player = player;
+
+
 
         var tileMap = new cc.TMXTiledMap();
         tileMap.initWithTMXFile(bq.config.maps.area.SHINJUKU);
@@ -46,7 +54,30 @@ var BeamQuestWorld = cc.Layer.extend({
     /** @override */
     onKeyUp: function(key) {
         this.inputHandler.keyUp(key);
+    },
+    
+    /*
+     * private method
+     */
+
+    createPlayer_: function() {
+        var player = cc.Sprite.createWithSpriteFrameName("b0_0.png");
+        var frameCache = cc.SpriteFrameCache.getInstance();
+
+        var animation = cc.Animation.create();
+        for (var i = 0; i < 7; i++) {
+            var str = "b0_" + i + ".png";
+            var frame = frameCache.getSpriteFrame(str);
+            animation.addSpriteFrame(frame);
+        }
+        animation.setDelayPerUnit(0.1); 
+
+        var forever = cc.RepeatForever.create(cc.Animate.create(animation));
+        player.runAction(forever);
+
+        return player;
     }
+ 
 });
 
 var BeamQuestWorldScene = cc.Scene.extend({
