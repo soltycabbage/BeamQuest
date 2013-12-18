@@ -19,7 +19,7 @@ var BeamQuestWorld = cc.Layer.extend({
         frameCache.addSpriteFrames(s_PlayerWalkingPlist, s_PlayerWalkingImg); 
 
 
-        var player = this.createPlayer_();
+        var player =  new Player();
         player.setPosition(cc.p(size.width / 2, size.height / 2));
         playerLayer.addChild(player, 0);
         bq.player = player;
@@ -60,24 +60,6 @@ var BeamQuestWorld = cc.Layer.extend({
      * private method
      */
 
-    createPlayer_: function() {
-        var player = cc.Sprite.createWithSpriteFrameName("b0_0.png");
-        var frameCache = cc.SpriteFrameCache.getInstance();
-
-        var animation = cc.Animation.create();
-        for (var i = 0; i < 7; i++) {
-            var str = "b0_" + i + ".png";
-            var frame = frameCache.getSpriteFrame(str);
-            animation.addSpriteFrame(frame);
-        }
-        animation.setDelayPerUnit(0.1); 
-
-        var forever = cc.RepeatForever.create(cc.Animate.create(animation));
-        player.runAction(forever);
-
-        return player;
-    }
- 
 });
 
 var BeamQuestWorldScene = cc.Scene.extend({
