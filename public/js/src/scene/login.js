@@ -1,8 +1,8 @@
 var LoginLayer = cc.Layer.extend({
     status: {
-        SUCCESS: 'success',
-        CREATE: 'create',
-        FAIL: 'fail'
+        SUCCESS: 'success', // ログイン成功
+        CREATE: 'create',   // サインアップ成功
+        FAIL: 'fail'        // ログイン失敗
     },
     init: function() {
         this._super();
@@ -38,8 +38,10 @@ var LoginLayer = cc.Layer.extend({
         soc.tryLogin(userId, hash, function(data) {
             if (data.result === this.status.CREATE) {
                 sys.localStorage.setItem('userHash:' + userId, hash);
+                this.welcomeToBeamQuestWorld_(userId);
             } else if (data.result === this.status.SUCCESS) {
                 console.log(userId + 'がログインしました。');
+                this.welcomeToBeamQuestWorld_(userId);
             } else {
                 var failedLabel = bq.Label.create('ログイン失敗。');
                 var nameP = this.nameField_.getPosition();
@@ -47,6 +49,28 @@ var LoginLayer = cc.Layer.extend({
                 this.addChild(failedLabel);
             }
         }, this);
+    },
+
+    /**
+     * フィールド画面へ飛ぶ
+     * @param {string} userId
+     * @private
+     */
+    welcomeToBeamQuestWorld_: function(userId) {
+        this.initPlayer_(userId);
+        cc.Director.getInstance().replaceScene(new BeamQuestWorldScene());
+    },
+
+    /**
+     * 主人公を生成してbq.playerにセットする
+     * @param {string} userId
+     * @private
+     */
+    initPlayer_: function(userId) {
+        var player = new Player(s_Player, cc.rect(0,0,32,32));
+        // TODO: ログイン成功時にユーザ情報を返してもらうか、ここでuserIdをサーバに投げてユーザ情報を取るAPIを叩くとかすると良さそう
+        player.name = userId;
+        bq.player = player;
     },
 
     /**

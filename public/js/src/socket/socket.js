@@ -15,6 +15,7 @@ var Socket = cc.Class.extend({
     },
 
     /**
+     * ログインを試みる。レスポンスが返ってきたらcallbackを実行する
      * @param {string} userId
      * @param {string} hash
      * @param {Function} callback
@@ -22,7 +23,7 @@ var Socket = cc.Class.extend({
      */
     tryLogin: function(userId, hash, callback, selfObj) {
         this.socket.emit('login', {userId: userId, hash: hash});
-        this.socket.on('login:receive', $.proxy(callback, selfObj));
+        this.socket.once('login:receive', $.proxy(callback, selfObj));
     }
 });
 

@@ -35,4 +35,4 @@ var cocos2dApp = cc.Application.extend({
         return true;
     }
 });
-var BeamQuestApp = new cocos2dApp(BeamQuestWorldScene);
+var BeamQuestApp = new cocos2dApp(LoginScene);

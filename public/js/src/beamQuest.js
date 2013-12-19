@@ -12,17 +12,14 @@ var BeamQuestWorld = cc.Layer.extend({
         var playerLayer = cc.Layer.create();
         playerLayer.setPosition(cc.p(0,0));
         this.addChild(playerLayer, 100, bq.config.tags.BASE_LAYER);
-
-        var player = new Player(s_Player, cc.rect(0,0,32,32));
-        player.setPosition(cc.p(size.width / 2, size.height / 2));
-        playerLayer.addChild(player, 0);
-        bq.player = player;
+        bq.player.setPosition(cc.p(size.width / 2, size.height / 2));
+        playerLayer.addChild(bq.player, 0);
 
         var tileMap = new cc.TMXTiledMap();
         tileMap.initWithTMXFile(bq.config.maps.area.SHINJUKU);
         tileMap.setPosition(cc.p(0,0));
         baseLayer.addChild(tileMap, 0);
-        this.inputHandler = new InputHandler(player);
+        this.inputHandler = new InputHandler(bq.player);
         this.baseLayer = baseLayer;
         this.scheduleUpdate();
         return true;
@@ -52,7 +49,7 @@ var BeamQuestWorld = cc.Layer.extend({
 var BeamQuestWorldScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
-        if (this.isAlreadyLogin_()) {
+        if (this.isAlreadyLogin_(bq.player.name)) {
             var layer = new BeamQuestWorld();
             layer.init();
             this.addChild(layer);
@@ -62,11 +59,12 @@ var BeamQuestWorldScene = cc.Scene.extend({
     },
 
     /**
+     * @param {string} userId
      * @return {boolean} ログイン済み（過去にログインしたことがある)ならTRUE
      * @private
      */
-    isAlreadyLogin_: function() {
-        var userId = sys.localStorage.getItem('userId');
+    isAlreadyLogin_: function(userId) {
+        var userId = sys.localStorage.getItem('userHash:' + userId);
         return !!userId;
     }
 });

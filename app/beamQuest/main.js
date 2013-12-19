@@ -3,8 +3,6 @@ exports.start = function(io) {
 
     io.sockets.on('connection', function(socket) {
         socket.on('login', function(data) {
-            // TODO: userIdに':'とか使われたやばい気がするが今はDon't think. Feel.
-            // base64 エンコーディングするとかどっすか
             var encodedId = new Buffer(data.userId).toString('base64');
             client.get('user:id:' + encodedId, function(err, val) {
                 var result = {};
