@@ -31,7 +31,7 @@ var Entity = cc.Sprite.extend({
 
         // label
         var tt = bq.Label.create(msg);
-        tt.setPosition(cc.p(msgRect.getBoundingBox().size.width / 2, 8));
+        tt.setPosition(cc.p(msgRect.getBoundingBox().size.width / 2, 10));
 
         // 吹き出しのしっぽみたいなやつ
         var tail = cc.Sprite.create(s_ChatTail);
