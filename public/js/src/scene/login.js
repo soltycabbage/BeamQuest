@@ -67,7 +67,12 @@ var LoginLayer = cc.Layer.extend({
      * @private
      */
     initPlayer_: function(userId) {
-        var player = new Player(s_Player, cc.rect(0,0,32,32));
+        // TODO: このクラスでframeCacheにセットするのはハイパー違和感があるので初期設定用のクラスとか作ってやりたい
+        // init frame cache
+        var frameCache = cc.SpriteFrameCache.getInstance();
+        frameCache.addSpriteFrames(s_PlayerWalkingPlist, s_PlayerWalkingImg);
+
+        var player = new Player();
         // TODO: ログイン成功時にユーザ情報を返してもらうか、ここでuserIdをサーバに投げてユーザ情報を取るAPIを叩くとかすると良さそう
         player.name = userId;
         bq.player = player;

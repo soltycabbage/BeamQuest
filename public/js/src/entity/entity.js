@@ -5,9 +5,14 @@
 var Entity = cc.Sprite.extend({
     name: 'entity', // entityの名前
     chatRect: null, // チャット吹き出しのSprite
-    ctor: function(fileName, rect) {
+
+    /**
+     * @param {string} spriteFrameName *.plistの<key>に設定されてるframeName
+     */
+    ctor: function(spriteFrameName) {
         this._super();
-        this.initWithFile(fileName, rect);
+        var spriteFrame = cc.SpriteFrameCache.getInstance().getSpriteFrame(spriteFrameName);
+        spriteFrame && this.initWithSpriteFrame(spriteFrame);
     },
 
     /**
