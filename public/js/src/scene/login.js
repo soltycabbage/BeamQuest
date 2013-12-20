@@ -29,6 +29,9 @@ var LoginLayer = cc.Layer.extend({
      * @private
      */
     processLogin_: function(userId) {
+        if (!this.isValidUserId_(userId)) {
+            return;
+        }
         var soc = Socket.getInstance();
         var hash = sys.localStorage.getItem('userHash:' + userId);
         if (!hash) {
@@ -76,6 +79,19 @@ var LoginLayer = cc.Layer.extend({
         // TODO: ログイン成功時にユーザ情報を返してもらうか、ここでuserIdをサーバに投げてユーザ情報を取るAPIを叩くとかすると良さそう
         player.name = userId;
         bq.player = player;
+    },
+
+    /**
+     * 入力されたUserIDが正しいか判定する
+     * @param {string} userId
+     * @return {boolean}
+     * @private
+     */
+    isValidUserId_: function(userId) {
+        var valid = true;
+        // TODO: 条件増やす
+        valid = (userId.length > 0);
+        return valid;
     },
 
     /**
