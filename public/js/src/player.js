@@ -1,14 +1,16 @@
-var Player = cc.Node.extend({
+var Player = Entity.extend({
     moveSpeed: 2, // 1frameの移動量(px)
     animationSpeed:0.15, // delay on animation
     ctor:function () {
-        this._super();
-        player = this.createAnimation_();
-        this.addChild(player);
+        this._super('b0_0.png');
+        this.initAnimation_();
     },
 
-    createAnimation_: function() {
-        var player = cc.Sprite.createWithSpriteFrameName("b0_0.png");
+    /**
+     * アニメーションを設定する
+     * @private
+     */
+    initAnimation_: function() {
         var frameCache = cc.SpriteFrameCache.getInstance();
 
         var animation = cc.Animation.create();
@@ -20,9 +22,15 @@ var Player = cc.Node.extend({
         animation.setDelayPerUnit(this.animationSpeed); 
 
         var forever = cc.RepeatForever.create(cc.Animate.create(animation));
-        player.runAction(forever);
+        this.runAction(forever);
+    },
 
-        return player;
+    /**
+     * 各種値を設定する
+     * @param {Object} data
+     */
+    setProfile: function(data) {
+       this.name = data.name;
     }
  
 

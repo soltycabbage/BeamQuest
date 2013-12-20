@@ -24,6 +24,6 @@ server.listen(app.get('port'));
  
 var io = socketIo.listen(server);
 
-var chat = require('beamQuest/chat');
+var chat = require('beamQuest/main');
 chat.start(io);
 
