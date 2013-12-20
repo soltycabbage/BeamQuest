@@ -44,12 +44,7 @@ var BeamQuestWorld = cc.Layer.extend({
     /** @override */
     onKeyUp: function(key) {
         this.inputHandler.keyUp(key);
-    },
-    
-    /*
-     * private method
-     */
-
+    }
 });
 
 var BeamQuestWorldScene = cc.Scene.extend({
