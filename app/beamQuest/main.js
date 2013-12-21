@@ -39,6 +39,6 @@ exports.start = function(io) {
         });
 
         socket.emit('connected');
-  });
+    });
 };
 
