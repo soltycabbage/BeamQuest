@@ -2,6 +2,10 @@ var InputHandler = cc.Class.extend({
     downKeys_: [], // 今押されているキーのリスト (max2)
     dx: 0, // プレイヤーx方向移動量(px)
     dy: 0, // プレイヤーy方向移動量(px)
+    /**
+     * コンストラクタ
+     * @param {Player} player
+     */
     ctor: function(player) {
         this.player_ = player;
         this.chat_ = new Chat();
@@ -15,18 +19,22 @@ var InputHandler = cc.Class.extend({
             case cc.KEY.a:
                 this.addDownKey_(key);
                 this.dx = this.player_.moveSpeed;
+                this.player_.updateAnimation(Direction.left, Status.walking);
                 break;
             case cc.KEY.s:
                 this.addDownKey_(key);
                 this.dy = this.player_.moveSpeed;
+                this.player_.updateAnimation(Direction.bottom, Status.walking);
                 break;
             case cc.KEY.d:
                 this.addDownKey_(key);
                 this.dx = -1 * this.player_.moveSpeed;
+                this.player_.updateAnimation(Direction.right, Status.walking);
                 break;
             case cc.KEY.w:
                 this.addDownKey_(key);
                 this.dy = -1 * this.player_.moveSpeed;
+                this.player_.updateAnimation(Direction.top, Status.walking);
                 break;
             default:
                 break;
@@ -44,10 +52,12 @@ var InputHandler = cc.Class.extend({
             case cc.KEY.a:
             case cc.KEY.d:
                 this.dx = 0;
+                this.player_.updateAnimation(null, Status.stop);
                 break;
             case cc.KEY.s:
             case cc.KEY.w:
                 this.dy = 0;
+                this.player_.updateAnimation(null, Status.stop);
                 break;
             default:
                 break;
@@ -72,4 +82,5 @@ var InputHandler = cc.Class.extend({
     removeDownKey_: function(key) {
         this.downKeys_ = _.without(this.downKeys_, key);
     }
+
 });
