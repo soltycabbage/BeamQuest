@@ -38,6 +38,10 @@ exports.start = function(io) {
             io.sockets.emit('message:receive', { message: data.message });
         });
 
+        socket.on('message:update', function(data) {
+            io.sockets.emit('notify:message', { message: data.message });
+        });
+
         socket.emit('connected');
     });
 };

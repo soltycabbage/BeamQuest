@@ -9,8 +9,8 @@ bq.Socket = cc.Class.extend({
     },
 
     init: function() {
-        this.socket.on('connected', function (data) {
-
+        this.socket.on('notify:message', function (data) {
+            bq.player.showMessage(data.message + ' echo');
         });
     },
 
@@ -24,7 +24,12 @@ bq.Socket = cc.Class.extend({
     tryLogin: function(userId, hash, callback, selfObj) {
         this.socket.emit('login', {userId: userId, hash: hash});
         this.socket.once('login:receive', $.proxy(callback, selfObj));
+    },
+
+    sendChat: function(text) {
+        this.socket.emit('message:update', {message:text});
     }
+
 });
 
 bq.Socket.instance_ = new bq.Socket();
