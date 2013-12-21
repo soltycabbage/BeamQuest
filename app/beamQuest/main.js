@@ -1,5 +1,21 @@
+var SessionStore = {
+    session_: {},
+    get: function (key, callback) {
+        if (key in this.session_) {
+            callback(null, this.session_[key]);
+        }
+        else {
+            callback({error:1, messge:'notfound'});
+        }
+    },
+    set: function (key, value) {
+        this.session_[key] = value;
+    }
+};
+
+
 exports.start = function(io) {
-    var client = require('redis').createClient();
+    var client = SessionStore;
 
     io.sockets.on('connection', function(socket) {
         socket.on('login', function(data) {
