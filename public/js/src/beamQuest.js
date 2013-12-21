@@ -13,6 +13,7 @@ var BeamQuestWorld = cc.Layer.extend({
         playerLayer.setPosition(cc.p(0,0));
         this.addChild(playerLayer, 100, bq.config.tags.BASE_LAYER);
 
+
         bq.player.setPosition(cc.p(size.width / 2, size.height / 2));
         playerLayer.addChild(bq.player, 0);
 
