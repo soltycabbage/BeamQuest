@@ -8,15 +8,15 @@ var bq = {};
 
 // img
 var s_Player = 'res/img/player.png';
-var s_ChatTail = 'res/img/chat_tail.png'
-var s_PlayerWalkingImg = 'res/img/walk_anime.png'
+var s_ChatTail = 'res/img/chat_tail.png';
+var s_PlayerWalkingImg = 'res/img/walk_anime.png';
 
 // tmx
 var s_ShinjukuTmx = 'res/map/shinjuku.tmx';
 var s_MapSet= 'res/map/mapset.png';
 
 // plist
-var s_PlayerWalkingPlist = 'res/img/walk_anime.plist'
+var s_PlayerWalkingPlist = 'res/img/walk_anime.plist';
 
 var g_resources = [
     //img
