@@ -1,3 +1,4 @@
+_ = require('underscore');
 var path     = require('path')
   , express  = require('express')
   , http     = require('http')
