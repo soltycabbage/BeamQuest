@@ -2,7 +2,7 @@
  * @fileoverview socket.ioの初期設定をする
  */
 
-var Socket = cc.Class.extend({
+bq.Socket = cc.Class.extend({
     ctor: function() {
         this.socket = io.connect();
         this.init();
@@ -27,8 +27,8 @@ var Socket = cc.Class.extend({
     }
 });
 
-Socket.instance_ = new Socket();
+bq.Socket.instance_ = new bq.Socket();
 
-Socket.getInstance = function() {
-    return Socket.instance_;
+bq.Socket.getInstance = function() {
+    return bq.Socket.instance_;
 };

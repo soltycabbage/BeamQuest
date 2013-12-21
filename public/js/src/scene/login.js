@@ -32,7 +32,7 @@ var LoginLayer = cc.Layer.extend({
         if (!this.isValidUserId_(userId)) {
             return;
         }
-        var soc = Socket.getInstance();
+        var soc = bq.Socket.getInstance();
         var hash = sys.localStorage.getItem('userHash:' + userId);
         if (!hash) {
             hash = this.createHash_();
@@ -100,7 +100,7 @@ var LoginLayer = cc.Layer.extend({
      * @private
      */
     createHash_: function() {
-        var sid = Socket.getInstance().socket.socket.sessionid;
+        var sid = bq.Socket.getInstance().socket.socket.sessionid;
         return CybozuLabs.MD5.calc(sid);
     },
 
