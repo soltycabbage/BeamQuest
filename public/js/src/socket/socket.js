@@ -12,6 +12,11 @@ bq.Socket = cc.Class.extend({
         this.socket.on('notify:message', function (data) {
             bq.player.showMessage(data.message + ' echo');
         });
+
+        // 他プレイヤーの移動
+        this.socket.on('notify:user:move', function(data) {
+            console.log(data.userId + ': ' + 'x:'+ data.x + ' y:'+ data.y);
+        });
     },
 
     /**
@@ -28,8 +33,15 @@ bq.Socket = cc.Class.extend({
 
     sendChat: function(text) {
         this.socket.emit('message:update', {message:text});
-    }
+    },
 
+    /**
+     * プレイヤーの絶対座標をサーバに送信する
+     * @param {Object:<mapId: number, x: number, y: number>} pos
+     */
+    sendPlayerPosition: function(pos) {
+        this.socket.emit('user:position:update', pos);
+    }
 });
 
 bq.Socket.instance_ = new bq.Socket();
