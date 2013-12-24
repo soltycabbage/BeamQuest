@@ -28,12 +28,10 @@ var Entity = cc.Sprite.extend({
 
     /**
      * Entityの頭上にキャラ名を表示する
-     * @param {string} name
-     * @param {boolean} visible
      */
-    showName: function(name, visible) {
+    showName: function() {
         var size = this.getBoundingBox().size;
-        var label = bq.Label.createWithShadow(name);
+        var label = bq.Label.createWithShadow(this.name);
 
         label.setPosition(cc.p(size.width / 2, size.height + 3));
         this.addChild(label);
