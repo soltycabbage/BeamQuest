@@ -77,7 +77,8 @@ var LoginLayer = cc.Layer.extend({
 
         var player = new Player();
         // TODO: ログイン成功時にユーザ情報を返してもらうか、ここでuserIdをサーバに投げてユーザ情報を取るAPIを叩くとかすると良さそう
-        player.name = userId;
+        player.setProfile({name: userId});
+        player.showName(userId);
         bq.player = player;
     },
 

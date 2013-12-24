@@ -84,7 +84,4 @@ var Player = Entity.extend({
     setProfile: function(data) {
        this.name = data.name;
     }
- 
-
 });
-
