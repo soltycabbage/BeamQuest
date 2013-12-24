@@ -11,7 +11,7 @@ bq.Label.DEFAULT_FONT_SIZE = 11;
 /**
  * @param {string} msg
  * @param {number=} opt_fontSize
- * @return {bq.Label}
+ * @return {cc.LabelTTF}
  * @static
  */
 bq.Label.create = function(msg, opt_fontSize) {
@@ -19,6 +19,12 @@ bq.Label.create = function(msg, opt_fontSize) {
     return cc.LabelTTF.create(msg, bq.Label.DEFAULT_FONT, fontSize);
 };
 
+/**
+ * ふちどりしたラベルを返す
+ * @param {string} msg
+ * @param {number=} opt_fontSize
+ * @return {cc.LabelTTF}
+ */
 bq.Label.createWithShadow = function(msg, opt_fontSize) {
     var fontDef = {
         fontName: bq.Label.DEFAULT_FONT,
