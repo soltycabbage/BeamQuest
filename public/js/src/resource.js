@@ -5,12 +5,16 @@
 cc.AudioEngine.getInstance().init("aac,mp3,ogg,wav");
 // BeamQuest用のグローバル変数。こいつはどのコードからでも読み出し可能。
 // 設定値とかを入れる。
-var bq = {};
+var bq = {
+    beams:[] /** キャッシュされたビーム */
+};
 
 // img
 var s_Player = 'res/img/player.png';
 var s_ChatTail = 'res/img/chat_tail.png';
 var s_PlayerWalkingImg = 'res/img/walk_anime.png';
+var s_beam0 = 'res/img/star.png';
+var s_smoke0 = 'res/img/smoke.png';
 
 // tmx
 var s_ShinjukuTmx = 'res/map/shinjuku.tmx';
@@ -28,6 +32,8 @@ var g_resources = [
     {type: 'image', src:s_MapSet},
     {type: 'image', src:s_ChatTail},
     {type: 'image', src:s_PlayerWalkingImg},
+    {type: 'image', src:s_beam0},
+    {type: 'image', src:s_smoke0},
 
     //plist
     {type: 'plist', src:s_PlayerWalkingPlist},
