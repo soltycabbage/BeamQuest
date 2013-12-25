@@ -13,6 +13,7 @@ var SessionStore = {
     }
 };
 
+var ping = require('beamQuest/ping');
 
 exports.start = function(io) {
     var client = SessionStore;
@@ -41,6 +42,8 @@ exports.start = function(io) {
         socket.on('message:update', function(data) {
             io.sockets.emit('notify:message', { message: data.message });
         });
+
+        ping.listen(socket);
 
         socket.emit('connected');
     });
