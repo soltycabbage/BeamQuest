@@ -25,6 +25,7 @@
             'js/src/inputHandler.js',
             'js/src/entity/entity.js',
             'js/src/entity/player.js',
+            'js/src/ping.js',
             'js/src/beamQuest.js'//add your own files in order here
         ]
     };
