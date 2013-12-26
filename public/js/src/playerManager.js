@@ -16,6 +16,15 @@ bq.PlayerManager = cc.Class.extend({
     },
 
     /**
+     * 他プレイヤーのチャットを受信したら吹き出しを表示する
+     * @param {bq.model.Chat} chatData
+     */
+    chat: function(chatData) {
+        var targetOther = this.otherPlayers_[chatData.userId];
+        targetOther.showMessage(chatData.message);
+    },
+
+    /**
      * 他プレイヤーが動いたという情報がサーバから帰ってきたら呼ばれる
      * @param {bq.model.PlayerMove} moveData
      */

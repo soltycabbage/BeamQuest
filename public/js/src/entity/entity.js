@@ -64,7 +64,7 @@ var Entity = cc.Sprite.extend({
 
         msgRect.addChild(tt);
         msgRect.addChild(tail, -100);
-        this.addChild(msgRect);
+        this.addChild(msgRect, bq.config.tags.CHAT);
         this.chatRect = msgRect;
         setTimeout($.proxy(this.removeChatRect_, this, msgRect), 5000);
     },

@@ -15,7 +15,8 @@ var BQConfig = cc.Class.extend({
 
         // Spriteのタグ（IDみたいなの）
         this.tags = {
-            BASE_LAYER: 0
+            BASE_LAYER: 0,
+            CHAT: 500
         }
     }}
 );

@@ -34,12 +34,9 @@ exports.start = function(io) {
             });
         });
 
-        socket.on('message:send', function(data) {
-            io.sockets.emit('message:receive', { message: data.message });
-        });
-
+        // チャット
         socket.on('message:update', function(data) {
-            io.sockets.emit('notify:message', { message: data.message });
+            socket.broadcast.emit('notify:message', data);
         });
 
         // プレイヤーが移動したら位置情報が送られてくる

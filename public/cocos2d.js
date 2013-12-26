@@ -23,6 +23,7 @@
             // models
             'js/src/model/model.js',
             'js/src/model/playerMove.js',
+            'js/src/model/chat.js',
 
             'js/src/playerManager.js',
             'js/src/socket/socket.js',

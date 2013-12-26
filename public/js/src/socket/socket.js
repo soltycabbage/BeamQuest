@@ -11,11 +11,14 @@ bq.Socket = cc.Class.extend({
      * ログイン後にsocketで受け取る処理を書く
      */
     initAfterLogin: function() {
+        var playerManager = bq.PlayerManager.getInstance();
+
+        // チャット受信
         this.socket.on('notify:message', function (data) {
-            bq.player.showMessage(data.message);
+            var chatData = new bq.model.Chat(data);
+            playerManager.chat(chatData)
         });
 
-        var playerManager = bq.PlayerManager.getInstance();
         // 他プレイヤーの移動
         this.socket.on('notify:user:move', function(data) {
             var moveData = new bq.model.PlayerMove(data);
@@ -35,8 +38,11 @@ bq.Socket = cc.Class.extend({
         this.socket.once('login:receive', $.proxy(callback, selfObj));
     },
 
-    sendChat: function(text) {
-        this.socket.emit('message:update', {message:text});
+    /**
+     * @param {Object} chatData
+     */
+    sendChat: function(chatData) {
+        this.socket.emit('message:update', chatData);
     },
 
     /**
