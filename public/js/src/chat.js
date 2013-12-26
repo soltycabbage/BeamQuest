@@ -34,6 +34,7 @@ var Chat = cc.Class.extend({
     submitChat: function(value) {
         this.gameCanvas_.focus();
         if (value.length === 0) {return;}
-        bq.Socket.getInstance().sendChat(value);
+        bq.Socket.getInstance().sendChat({userId: bq.player.name, message: value});
+        bq.player.showMessage(value);
     }
 });

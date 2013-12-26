@@ -28,12 +28,10 @@ var Entity = cc.Sprite.extend({
 
     /**
      * Entityの頭上にキャラ名を表示する
-     * @param {string} name
-     * @param {boolean} visible
      */
-    showName: function(name, visible) {
+    showName: function() {
         var size = this.getBoundingBox().size;
-        var label = bq.Label.createWithShadow(name);
+        var label = bq.Label.createWithShadow(this.name);
 
         label.setPosition(cc.p(size.width / 2, size.height + 3));
         this.addChild(label);
@@ -66,7 +64,7 @@ var Entity = cc.Sprite.extend({
 
         msgRect.addChild(tt);
         msgRect.addChild(tail, -100);
-        this.addChild(msgRect);
+        this.addChild(msgRect, bq.config.tags.CHAT);
         this.chatRect = msgRect;
         setTimeout($.proxy(this.removeChatRect_, this, msgRect), 5000);
     },

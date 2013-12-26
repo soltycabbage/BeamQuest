@@ -22,18 +22,18 @@ var BeamQuestWorld = cc.Layer.extend({
         tileMap.setPosition(cc.p(0,0));
         baseLayer.addChild(tileMap, 0);
         this.inputHandler = new InputHandler(bq.player);
-        this.baseLayer = baseLayer;
+        bq.baseLayer = baseLayer;
         this.scheduleUpdate();
         return true;
     },
 
     /** @override */
     update: function() {
-        var baseP = this.baseLayer.getPosition();
+        var baseP = bq.baseLayer.getPosition();
         var dx = this.inputHandler.dx;
         var dy = this.inputHandler.dy;
         if (dx !== 0 || dy !== 0) {
-            this.baseLayer.setPosition(cc.p(baseP.x + dx, baseP.y + dy));
+            bq.baseLayer.setPosition(cc.p(baseP.x + dx, baseP.y + dy));
         }
     },
 

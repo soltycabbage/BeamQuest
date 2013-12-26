@@ -15,15 +15,51 @@ var Direction = {
     maxDirection: 8
 };
 var Player = Entity.extend({
-
-    moveSpeed: 2, // 1frameの移動量(px)
-    animationSpeed:0.15, // delay on animation
+    moveSpeed: 2,                // 1frameの移動量(px)
+    animationSpeed:0.15,         // delay on animation
     direction: Direction.bottom, // 向いている方向
-    state:Status.stop, // 動いてるとか止まってるとかの状態
-
+    state:Status.stop,           // 動いてるとか止まってるとかの状態
+    POSITION_SEND_INTERVAL: 5,   // 位置情報を何frameごとに送信するか
+    positionSendCount_: 0,       // 位置情報送信用カウンター
+    prevPos_: {x: 0, y: 0},      // 前回送信時の座標
 
     ctor:function () {
         this._super('b0_0.png');
+        this.socket = bq.Socket.getInstance();
+        this.scheduleUpdate();
+    },
+
+    /** @override */
+    update: function() {
+        if (this.positionSendCount_++ > this.POSITION_SEND_INTERVAL) {
+            this.positionSendCount_ = 0;
+            this.sendPosition();
+        }
+    },
+
+    /**
+     * 自分の現在座標をサーバに送信する
+     */
+    sendPosition: function() {
+        if (!bq.baseLayer) {return;}
+        var playerP = this.getPosition();
+        var baseLayerP = bq.baseLayer.getPosition();
+
+        var abslPos = {
+            userId: this.name,
+            mapId: 1, // TODO: MapID の実装
+            x: playerP.x - baseLayerP.x,
+            y: playerP.y - baseLayerP.y
+        }
+
+        // 前回送信時と位置が変わってなかったら送信しない
+        if (this.prevPos_.mapId === abslPos.mapId && this.prevPos_.x === abslPos.x && this.prevPos_.y === abslPos.y) {
+            return;
+        }
+        this.prevPos_.mapId = abslPos.mapId;
+        this.prevPos_.x = abslPos.x;
+        this.prevPos_.y = abslPos.y;
+        this.socket.sendPlayerPosition(abslPos);
     },
 
     /**

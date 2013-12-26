@@ -34,12 +34,15 @@ exports.start = function(io) {
             });
         });
 
-        socket.on('message:send', function(data) {
-            io.sockets.emit('message:receive', { message: data.message });
+        // チャット
+        socket.on('message:update', function(data) {
+            socket.broadcast.emit('notify:message', data);
         });
 
-        socket.on('message:update', function(data) {
-            io.sockets.emit('notify:message', { message: data.message });
+        // プレイヤーが移動したら位置情報が送られてくる
+        socket.on('user:position:update', function(data) {
+            // 自分以外の全プレイヤーにブロードキャスト
+            socket.broadcast.emit('notify:user:move', data);
         });
 
         socket.emit('connected');

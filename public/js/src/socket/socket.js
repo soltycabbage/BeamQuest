@@ -5,12 +5,24 @@
 bq.Socket = cc.Class.extend({
     ctor: function() {
         this.socket = io.connect();
-        this.init();
     },
 
-    init: function() {
+    /**
+     * ログイン後にsocketで受け取る処理を書く
+     */
+    initAfterLogin: function() {
+        var playerManager = bq.PlayerManager.getInstance();
+
+        // チャット受信
         this.socket.on('notify:message', function (data) {
-            bq.player.showMessage(data.message + ' echo');
+            var chatData = new bq.model.Chat(data);
+            playerManager.chat(chatData)
+        });
+
+        // 他プレイヤーの移動
+        this.socket.on('notify:user:move', function(data) {
+            var moveData = new bq.model.PlayerMove(data);
+            playerManager.moveTo(moveData);
         });
     },
 
@@ -26,10 +38,20 @@ bq.Socket = cc.Class.extend({
         this.socket.once('login:receive', $.proxy(callback, selfObj));
     },
 
-    sendChat: function(text) {
-        this.socket.emit('message:update', {message:text});
-    }
+    /**
+     * @param {Object} chatData
+     */
+    sendChat: function(chatData) {
+        this.socket.emit('message:update', chatData);
+    },
 
+    /**
+     * プレイヤーの絶対座標をサーバに送信する
+     * @param {Object:<mapId: number, x: number, y: number>} pos
+     */
+    sendPlayerPosition: function(pos) {
+        this.socket.emit('user:position:update', pos);
+    }
 });
 
 bq.Socket.instance_ = new bq.Socket();

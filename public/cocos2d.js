@@ -12,11 +12,20 @@
         engineDir:'js/lib/cocos2d/cocos2d/',
         //SingleEngineFile:'',
         appFiles:[
+            // libs
             'js/lib/jquery-min.js',
             'js/lib/underscore-min.js',
             'js/lib/md5.js',
 
+            // resources
             'js/src/resource.js',
+
+            // models
+            'js/src/model/model.js',
+            'js/src/model/playerMove.js',
+            'js/src/model/chat.js',
+
+            'js/src/playerManager.js',
             'js/src/socket/socket.js',
             'js/src/config.js',
             'js/src/bqLabel.js',
