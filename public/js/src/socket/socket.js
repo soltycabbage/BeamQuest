@@ -15,24 +15,11 @@ bq.Socket = cc.Class.extend({
             bq.player.showMessage(data.message);
         });
 
-        var hoge = [];
-        var otherPlayers = {};
+        var playerManager = bq.PlayerManager.getInstance();
         // 他プレイヤーの移動
         this.socket.on('notify:user:move', function(data) {
-            console.log(data.userId + ': ' + 'x:'+ data.x + ' y:'+ data.y);
-            if (!_.contains(hoge, data.userId)) {
-                hoge.push(data.userId);
-                var other = new Entity('b0_0.png');
-                other.name = data.userId;
-                other.showName(data.userId, true);
-                other.setPosition(cc.p(data.x, data.y));
-                bq.baseLayer.addChild(other);
-                otherPlayers[data.userId] = other;
-            } else {
-                var act = cc.MoveTo.create(0.01, cc.p(data.x, data.y));
-                var otherPlayer = otherPlayers[data.userId];
-                otherPlayer.runAction(act);
-            }
+            var moveData = new bq.model.PlayerMove(data);
+            playerManager.moveTo(moveData);
         });
     },
 
