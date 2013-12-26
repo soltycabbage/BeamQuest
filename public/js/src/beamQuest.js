@@ -57,17 +57,20 @@ var BeamQuestWorld = cc.Layer.extend({
         this.ping_ = new bq.Ping(bq.Socket.getInstance().socket, 300);
         this.ping_.start();
 
+        var pingText = function() {
+            return "ping: " + this.ping_.getRoundTripTime();
+        }.bind(this);
         // ラベル作る
-        var pingLabel = new cc.LabelTTF.create("ping: " + this.ping_.getRoundTripTime(), "Arial", 24);
-        pingLabel.setAnchorPoint(cc.p(0, 0.5));
+        var pingLabel = bq.Label.createWithShadow(pingText(), 16);
+        pingLabel.setAnchorPoint(cc.p(0, 1.0));
 
-        var statsPosition = cc.DIRECTOR_STATS_POSITION;
-        var contentSize = pingLabel.getContentSize();
-        pingLabel.setPosition(cc.pAdd(cc.p(1, contentSize.height * 6 / 2), statsPosition));
+        var size = cc.Director.getInstance().getWinSize();
+        var margin = 5;
+        pingLabel.setPosition(cc.p(margin, size.height - margin));
 
         // ラベル更新する
         pingLabel.schedule(function() {
-            pingLabel.setString("ping: " + this.ping_.getRoundTripTime());
+            pingLabel.setString(pingText());
         }.bind(this));
 
         this.addChild(pingLabel, 10000, bq.config.tags.DEBUG_PING);
