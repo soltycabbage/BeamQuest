@@ -6,6 +6,8 @@
 var BQConfig = cc.Class.extend({
     version: "ver1.0",
     ctor: function() {
+        'use strict';
+
         // マップに関する設定値
         this.maps = {
             TILE_SIZE: 32, // グリッド1マスのサイズ (px)
@@ -18,8 +20,8 @@ var BQConfig = cc.Class.extend({
         this.tags = {
             BASE_LAYER: 0,
             CHAT: 500
-        }
-    }}
-);
+        };
+    }
+});
 
 bq.config = new BQConfig();
