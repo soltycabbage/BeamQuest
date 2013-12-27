@@ -4,6 +4,7 @@
  */
 
 var BQConfig = cc.Class.extend({
+    version: "ver1.0",
     ctor: function() {
         // マップに関する設定値
         this.maps = {
