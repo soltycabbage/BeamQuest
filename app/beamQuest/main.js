@@ -13,6 +13,7 @@ var SessionStore = {
     }
 };
 
+var ping = require('beamQuest/ping');
 
 exports.start = function(io) {
     var client = SessionStore;
@@ -44,6 +45,8 @@ exports.start = function(io) {
             // 自分以外の全プレイヤーにブロードキャスト
             socket.broadcast.emit('notify:user:move', data);
         });
+
+        ping.listen(socket);
 
         socket.emit('connected');
     });

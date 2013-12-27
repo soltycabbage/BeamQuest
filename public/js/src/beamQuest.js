@@ -24,6 +24,8 @@ var BeamQuestWorld = cc.Layer.extend({
         this.inputHandler = new InputHandler(bq.player);
         bq.baseLayer = baseLayer;
         this.scheduleUpdate();
+
+        this.initPing_();
         return true;
     },
 
@@ -45,6 +47,40 @@ var BeamQuestWorld = cc.Layer.extend({
     /** @override */
     onKeyUp: function(key) {
         this.inputHandler.keyUp(key);
+    },
+
+    initPing_: function() {
+        if (! cc.Director.getInstance().isDisplayStats()) {
+            return;
+        }
+
+        // ping始める
+        var interval = 300;
+        this.ping_ = new bq.Ping(bq.Socket.getInstance().socket, interval);
+        this.ping_.start();
+
+        // 表示用テキストを作る
+        var pingText = function() {
+            return "ping: " + this.ping_.getRoundTripTime();
+        }.bind(this);
+
+        // ラベル作る
+        var fontSize = 16;
+        var pingLabel = bq.Label.createWithShadow(pingText(), fontSize);
+        pingLabel.setAnchorPoint(cc.p(0, 1.0));
+
+        // 表示位置
+        var margin = 5;
+        var winSize = cc.Director.getInstance().getWinSize();
+        pingLabel.setPosition(cc.p(margin, winSize.height - margin));
+
+        // 表示内容更新処理
+        pingLabel.schedule(function() {
+            pingLabel.setString(pingText());
+        });
+
+        var zIndex = 10000;
+        this.addChild(pingLabel, zIndex, bq.config.tags.DEBUG_PING);
     }
 });
 
