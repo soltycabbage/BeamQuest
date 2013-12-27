@@ -21,6 +21,11 @@ var LoginLayer = cc.Layer.extend({
         this.addChild(nameField);
         nameField.setPosition(cc.p(size.width / 2, size.height / 2));
         this.nameField_ = nameField;
+
+        var versionLabel = bq.Label.create(bq.config.version);
+        var versionSize = versionLabel.getContentSize();
+        versionLabel.setPosition(cc.p(size.width - versionSize.width, versionSize.height));
+        this.addChild(versionLabel);
     },
 
     /**
