@@ -1,5 +1,7 @@
 var BeamQuestWorld = cc.Layer.extend({
     init:function () {
+        'use strict';
+
         this._super();
         this.setKeyboardEnabled(true);
 
@@ -35,6 +37,8 @@ var BeamQuestWorld = cc.Layer.extend({
 
     /** @override */
     update: function() {
+        'use strict';
+
         var baseP = bq.baseLayer.getPosition();
         var dx = this.inputHandler.dx;
         var dy = this.inputHandler.dy;
@@ -45,15 +49,21 @@ var BeamQuestWorld = cc.Layer.extend({
 
     /** @override */
     onKeyDown: function(key) {
+        'use strict';
+
         this.inputHandler.keyDown(key);
     },
 
     /** @override */
     onKeyUp: function(key) {
+        'use strict';
+
         this.inputHandler.keyUp(key);
     },
 
     initPing_: function() {
+        'use strict';
+
         if (! cc.Director.getInstance().isDisplayStats()) {
             return;
         }
@@ -90,6 +100,8 @@ var BeamQuestWorld = cc.Layer.extend({
 
 var BeamQuestWorldScene = cc.Scene.extend({
     onEnter:function () {
+        'use strict';
+
         this._super();
         if (this.isAlreadyLogin_(bq.player.name)) {
             var layer = new BeamQuestWorld();
@@ -106,7 +118,9 @@ var BeamQuestWorldScene = cc.Scene.extend({
      * @private
      */
     isAlreadyLogin_: function(userId) {
-        var userId = sys.localStorage.getItem('userHash:' + userId);
+        'use strict';
+
+        userId = sys.localStorage.getItem('userHash:' + userId);
         return !!userId;
     }
 });
