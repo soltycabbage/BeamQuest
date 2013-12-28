@@ -4,6 +4,8 @@ var BeamQuestWorld = cc.Layer.extend({
         this.setKeyboardEnabled(true);
 
         var size = cc.Director.getInstance().getWinSize();
+        cc.AudioEngine.getInstance().setEffectsVolume(0.5);
+        cc.AudioEngine.getInstance().setMusicVolume(0.5);
 
         var baseLayer = cc.Layer.create();
         baseLayer.setPosition(cc.p(0,0));
@@ -26,6 +28,8 @@ var BeamQuestWorld = cc.Layer.extend({
         this.scheduleUpdate();
 
         this.initPing_();
+
+        cc.AudioEngine.getInstance().playMusic(s_BgmField, true);
         return true;
     },
 
