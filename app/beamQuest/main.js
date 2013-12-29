@@ -1,4 +1,3 @@
-
 var ping = require('beamQuest/ping'),
     login = require('beamQuest/login');
 
