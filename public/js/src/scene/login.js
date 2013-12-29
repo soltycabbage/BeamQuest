@@ -35,6 +35,7 @@ var LoginLayer = cc.Layer.extend({
      */
     processLogin_: function(userId) {
         if (!this.isValidUserId_(userId)) {
+            this.loginFailed_();
             return;
         }
         var soc = bq.Socket.getInstance();
@@ -51,10 +52,7 @@ var LoginLayer = cc.Layer.extend({
                 console.log(userId + 'がログインしました。');
                 this.welcomeToBeamQuestWorld_(userId);
             } else {
-                var failedLabel = bq.Label.create('ログイン失敗。');
-                var nameP = this.nameField_.getPosition();
-                failedLabel.setPosition(nameP.x + 10, nameP.y - 30);
-                this.addChild(failedLabel);
+                this.loginFailed_();
             }
         }, this);
     },
@@ -89,6 +87,17 @@ var LoginLayer = cc.Layer.extend({
     },
 
     /**
+     * ログイン失敗した時の処理
+     * @private
+     */
+    loginFailed_: function() {
+        var failedLabel = bq.Label.create('ログイン失敗。');
+        var nameP = this.nameField_.getPosition();
+        failedLabel.setPosition(nameP.x + 10, nameP.y - 30);
+        this.addChild(failedLabel);
+    },
+
+    /**
      * 入力されたUserIDが正しいか判定する
      * @param {string} userId
      * @return {boolean}
@@ -98,6 +107,7 @@ var LoginLayer = cc.Layer.extend({
         var valid = true;
         // TODO: 条件増やす
         valid = (userId.length > 0);
+        valid = userId.match(/^[a-zA-Zぁ-んァ-ン0-9]+$/);
         return valid;
     },
 
