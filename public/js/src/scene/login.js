@@ -8,6 +8,7 @@ var LoginLayer = cc.Layer.extend({
         this._super();
         this.setKeyboardEnabled(true);
         this.setMouseEnabled(true);
+        this.defaultPlaceHolder_ = '< click here >';
     },
 
     onEnter: function() {
@@ -17,7 +18,7 @@ var LoginLayer = cc.Layer.extend({
         label.setPosition(cc.p(size.width/2, size.height/2 + 50));
         this.addChild(label);
 
-        var nameField = cc.TextFieldTTF.create("< click here >", 'pixelMplus', 16);
+        var nameField = cc.TextFieldTTF.create(this.defaultPlaceHolder_, 'pixelMplus', 16);
         this.addChild(nameField);
         nameField.setPosition(cc.p(size.width / 2, size.height / 2));
         this.nameField_ = nameField;
@@ -143,8 +144,10 @@ var LoginLayer = cc.Layer.extend({
     enableIME_: function(isClicked) {
         if (isClicked) {
             this.nameField_.attachWithIME();
+            this.nameField_.setPlaceHolder('|');
         } else {
             this.nameField_.detachWithIME();
+            this.nameField_.setPlaceHolder(this.defaultPlaceHolder_);
         }
     },
 
