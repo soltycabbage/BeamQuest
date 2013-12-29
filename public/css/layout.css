@@ -3,6 +3,14 @@
     src: url(../res/fonts/pixelMplus.ttf) format("truetype");
 }
 
+#bq-canvas-container {
+    position: relative;
+    overflow: hidden;
+    width: 800px;
+    height: 450px;
+    margin: 0px auto;
+}
+
 .bq-menu {
     width: 800px;
     margin: 0 auto;
@@ -20,3 +28,4 @@
     margin: 5px 0px 2px 5px;
     width: 57px;
 }
+
