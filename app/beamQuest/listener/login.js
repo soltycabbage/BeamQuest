@@ -1,11 +1,8 @@
-var store = require('beamQuest/store');
-    playerModel = require('beamQuest/model/player');
+var kvs = require('beamQuest/store/kvs');
+    playerModel = require('beamQuest/model/player'),
+    entities = require('beamQuest/store/entities').getInstance();
 
 exports.listen = function(socket) {
-    // ログイン中の全ユーザを記憶
-    // @type {Object.<model.Player>}
-    var loginUsers_ = {};
-
     socket.on('login', function(data) {
         var invalidErr = validateUserId_(data.userId);
         if (invalidErr) {
@@ -13,10 +10,10 @@ exports.listen = function(socket) {
             return;
         };
 
-        store.get('user:id:' + data.userId, function(err, val) {
+        kvs.get('user:id:' + data.userId, function(err, val) {
             var result = {};
             if (!val) { // IDとハッシュが登録されていない
-                store.set('user:id:' + data.userId, data.hash);
+                kvs.set('user:id:' + data.userId, data.hash);
                 addLoginUser_(data.userId);
                 result = {result: 'create'};
             } else if (val == data.hash) { // IDとハッシュが一致
@@ -47,12 +44,11 @@ exports.listen = function(socket) {
      * @private
      */
     function addLoginUser_(userId) {
-        if (!_.contains(loginUsers_, userId)) {
-            var player = new playerModel();
-            player.id = userId;
-            player.socket = socket;
-            loginUsers_[userId] = player;
-        }
+        var player = new playerModel();
+        player.id = userId;
+        player.socket = socket;
+        loginUsers_[userId] = player;
+        entities.addPlayer(player);
     }
 
     /**

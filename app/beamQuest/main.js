@@ -1,9 +1,11 @@
-var ping = require('beamQuest/ping'),
-    login = require('beamQuest/login');
+var ping = require('beamQuest/listener/ping'),
+    login = require('beamQuest/listener/login'),
+    user = require('beamQuest/listener/user');
 
 exports.start = function(io) {
     io.sockets.on('connection', function(socket) {
         login.listen(socket);
+        user.listen(socket);
 
         // チャット
         socket.on('message:update', function(data) {

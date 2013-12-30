@@ -1,5 +1,7 @@
 var util = require('util'),
-    Entity = require('beamQuest/model/entity');
+    Entity = require('beamQuest/model/entity'),
+    store = require('beamQuest/store');
+
 
 /**
  * @constructor
