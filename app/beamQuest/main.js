@@ -10,6 +10,11 @@ var SessionStore = {
     },
     set: function (key, value) {
         this.session_[key] = value;
+    },
+    del: function (key) {
+        "use strict";
+
+        delete this.session_[key];
     }
 };
 
