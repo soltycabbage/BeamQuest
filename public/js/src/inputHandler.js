@@ -122,7 +122,9 @@ var InputHandler = cc.Class.extend({
             {key: [cc.KEY.w], val:Direction.top},
             {key: [cc.KEY.w, cc.KEY.a], val:Direction.topleft},
             {key: [cc.KEY.a], val:Direction.left},
-            {key: [cc.KEY.a, cc.KEY.s], val:Direction.bottomleft}
+            {key: [cc.KEY.a, cc.KEY.s], val:Direction.bottomleft},
+            {key: [cc.KEY.a, cc.KEY.d], val:null},
+            {key: [cc.KEY.w, cc.KEY.s], val:null}
         ];
 
         if ( downs.length == 0 ) {
@@ -134,7 +136,6 @@ var InputHandler = cc.Class.extend({
             return ( downs.length==1 &&  _.contains(downs, pair.key[0]) )
                 || ( downs.length==2 &&   _.contains(downs, pair.key[0]) && _.contains(downs, pair.key[1]) );
         } );
-
 
         return found.val;
     }
