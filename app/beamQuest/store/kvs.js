@@ -9,7 +9,7 @@ var SessionStore = {
             callback(null, this.session_[key]);
         }
         else {
-            callback({error:1, messge:'notfound'});
+            callback({error:1, message:'notfound'});
         }
     },
     set: function (key, value) {
