@@ -32,6 +32,7 @@
             'js/src/scene/login.js',
             'js/src/chat.js',
             'js/src/inputHandler.js',
+            'js/src/entity/entityState.js',
             'js/src/entity/entity.js',
             'js/src/entity/player.js',
             'js/src/entity/enemy.js',

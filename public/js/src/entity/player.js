@@ -3,40 +3,14 @@
  */
 
 /**
- * プレイヤーの状態
- * @type {{stop: number, walking: number, maxStatus: number}}
- */
-var Status = {
-    stop: 0,
-    walking: 1,
-    maxStatus: 2
-};
-
-/**
- * 8方向
- * @type {{bottom: number, bottomright: number, right: number, topright: number, top: number, topleft: number, left: number, bottomleft: number, maxDirection: number}}
- */
-var Direction = {
-    bottom: 0,
-    bottomright: 1,
-    right: 2,
-    topright: 3,
-    top: 4,
-    topleft: 5,
-    left: 6,
-    bottomleft: 7,
-    maxDirection: 8
-};
-
-/**
  *
  * @type {*|void|Object|Function}
  */
 var Player = Entity.extend({
     moveSpeed: 2,                // 1frameの移動量(px)
     animationSpeed:0.15,         // delay on animation
-    direction: Direction.bottom, // 向いている方向
-    state:Status.stop,           // 動いてるとか止まってるとかの状態
+    direction: EntityState.Direction.bottom, // 向いている方向
+    state:EntityState.Mode.stop,           // 動いてるとか止まってるとかの状態
     POSITION_SEND_INTERVAL: 5,   // 位置情報を何frameごとに送信するか
     positionSendCount_: 0,       // 位置情報送信用カウンター
     prevPos_: {x: 0, y: 0},      // 前回送信時の座標
@@ -83,8 +57,8 @@ var Player = Entity.extend({
 
     /**
      * 向きと状態を更新してそれにもとづいてアニメーションを更新する
-     * @param {Direction} dir 向き (nullなら更新しない）
-     * @param {Status} sts 状態 (nullなら更新しない）
+     * @param {EntityState.Direction} dir 向き (nullなら更新しない）
+     * @param {EntityState.Mode} sts 状態 (nullなら更新しない）
      */
     updateAnimation: function(dir, sts) {
         // 同じだったら更新しない
@@ -104,21 +78,21 @@ var Player = Entity.extend({
     /**
      * ある状態である方向のアニメーションを作成する
      * @param {Direction} dir 向き
-     * @param {Status} sts 状態
+     * @param {EntityState.Mode} sts 状態
      * @private
      * @returns {cc.Animation}
      */
     createAnimation_: function (dir, sts) {
 
-        if ( dir > Direction.maxDirection ) {
+        if ( dir > EntityState.Direction.maxDirection ) {
             return null;
         }
         var frameCache = cc.SpriteFrameCache.getInstance();
         var animation = cc.Animation.create();
 
         // 0〜3が止まってる絵、4〜7が歩いている絵
-        var starti = (sts == Status.stop) ? 0:4;
-        var endi = (sts == Status.stop) ? 3:7;
+        var starti = (sts == EntityState.Mode.stop) ? 0:4;
+        var endi = (sts == EntityState.Mode.stop) ? 3:7;
         //cc.log("dir " + dir + " sts " + sts);
         // TODO underscore.js を使って書き直す
         for (var i = starti; i <= endi; i++) {

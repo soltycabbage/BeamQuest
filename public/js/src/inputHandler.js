@@ -22,27 +22,27 @@ var InputHandler = cc.Class.extend({
                 this.addDownKey_(key);
                 this.dx = this.player_.moveSpeed;
                 dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(dir, Status.walking);
+                this.player_.updateAnimation(dir, EntityState.Mode.walking);
                 break;
             case cc.KEY.s:
                 this.addDownKey_(key);
                 this.dy = this.player_.moveSpeed;
                 dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(dir, Status.walking);
+                this.player_.updateAnimation(dir, EntityState.Mode.walking);
 
                 break;
             case cc.KEY.d:
                 this.addDownKey_(key);
                 this.dx = -1 * this.player_.moveSpeed;
                 dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(dir, Status.walking);
+                this.player_.updateAnimation(dir, EntityState.Mode.walking);
 
                 break;
             case cc.KEY.w:
                 this.addDownKey_(key);
                 this.dy = -1 * this.player_.moveSpeed;
                 dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(dir, Status.walking);
+                this.player_.updateAnimation(dir, EntityState.Mode.walking);
 
                 break;
             default:
@@ -64,7 +64,7 @@ var InputHandler = cc.Class.extend({
             case cc.KEY.d:
                 this.dx = 0;
                 // 押しているキーが０でない場合まだ歩いている
-                var sts = (this.downKeys_.length == 0) ? Status.stop : null;
+                var sts = (this.downKeys_.length == 0) ? EntityState.Mode.stop : null;
                 var dir = this.convertDirectionFromKeys_(this.downKeys_);
                 this.player_.updateAnimation(dir, sts);
                 break;
@@ -72,7 +72,7 @@ var InputHandler = cc.Class.extend({
             case cc.KEY.w:
                 this.dy = 0;
                 var dir = this.convertDirectionFromKeys_(this.downKeys_);
-                var sts = (this.downKeys_.length == 0) ? Status.stop : null;
+                var sts = (this.downKeys_.length == 0) ? EntityState.Mode.stop : null;
                 this.player_.updateAnimation(dir, sts);
                 break;
             default:
@@ -111,18 +111,18 @@ var InputHandler = cc.Class.extend({
     /**
      * キー押したやつから方向に変換
      * @param {Array} downs
-     * @return {Direction} 見つからない場合null
+     * @return {EntityState.Direction} 見つからない場合null
      */
     convertDirectionFromKeys_: function(downs) {
         var pairs = [
-            {key: [cc.KEY.s], val:Direction.bottom},
-            {key: [cc.KEY.s,cc.KEY.d], val:Direction.bottomright},
-            {key: [cc.KEY.d], val:Direction.right},
-            {key: [cc.KEY.d, cc.KEY.w], val:Direction.topright},
-            {key: [cc.KEY.w], val:Direction.top},
-            {key: [cc.KEY.w, cc.KEY.a], val:Direction.topleft},
-            {key: [cc.KEY.a], val:Direction.left},
-            {key: [cc.KEY.a, cc.KEY.s], val:Direction.bottomleft},
+            {key: [cc.KEY.s], val:EntityState.Direction.bottom},
+            {key: [cc.KEY.s,cc.KEY.d], val:EntityState.Direction.bottomright},
+            {key: [cc.KEY.d], val:EntityState.Direction.right},
+            {key: [cc.KEY.d, cc.KEY.w], val:EntityState.Direction.topright},
+            {key: [cc.KEY.w], val:EntityState.Direction.top},
+            {key: [cc.KEY.w, cc.KEY.a], val:EntityState.Direction.topleft},
+            {key: [cc.KEY.a], val:EntityState.Direction.left},
+            {key: [cc.KEY.a, cc.KEY.s], val:EntityState.Direction.bottomleft},
             {key: [cc.KEY.a, cc.KEY.d], val:null},
             {key: [cc.KEY.w, cc.KEY.s], val:null}
         ];
