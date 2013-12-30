@@ -10,10 +10,17 @@ var SessionStore = {
     },
     set: function (key, value) {
         this.session_[key] = value;
+    },
+    del: function (key) {
+        "use strict";
+
+        delete this.session_[key];
     }
 };
 
 var ping = require('beamQuest/ping');
+
+var users = {};
 
 exports.start = function(io) {
     var client = SessionStore;
@@ -25,6 +32,8 @@ exports.start = function(io) {
                 var result = {};
                 if (!val) { // IDとハッシュが登録されていない
                     client.set('user:id:' + encodedId, data.hash);
+                    users[socket.id] = data.userId;
+
                     result = {result: 'create'};
                 } else if (val == data.hash) { // IDとハッシュが一致
                     result = {result: 'success'};
@@ -44,6 +53,15 @@ exports.start = function(io) {
         socket.on('user:position:update', function(data) {
             // 自分以外の全プレイヤーにブロードキャスト
             socket.broadcast.emit('notify:user:move', data);
+        });
+
+        socket.on('disconnect', function() {
+            "use strict";
+
+            var userid = users[socket.id];
+            client.del('user:id:' + new Buffer(userid).toString('base64'));
+            socket.broadcast.emit('notify:user:disconnect', userid);
+            delete users[socket.id];
         });
 
         ping.listen(socket);
