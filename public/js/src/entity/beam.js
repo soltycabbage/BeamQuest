@@ -46,7 +46,7 @@ var Beam = cc.Node.extend({
         this.inc_.y = dest.y * this.speed_;
 
         // duration秒後にこのビームがdisableになるアクションを追加
-        var duration = 10;
+        var duration = 5;
         var remove = cc.CallFunc.create(this.disable_, this);
         var seq = cc.Sequence.create( cc.FadeIn.create(duration) , remove);
         this.runAction(seq);
