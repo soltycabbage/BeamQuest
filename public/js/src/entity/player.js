@@ -117,7 +117,7 @@ var Player = Entity.extend({
         var animation = cc.Animation.create();
 
         // 0〜3が止まってる絵、4〜7が歩いている絵
-        var starti = (sts == Status.stop) ? 0:3;
+        var starti = (sts == Status.stop) ? 0:4;
         var endi = (sts == Status.stop) ? 3:7;
         //cc.log("dir " + dir + " sts " + sts);
         // TODO underscore.js を使って書き直す
