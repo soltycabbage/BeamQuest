@@ -29,6 +29,11 @@ var cocos2dApp = cc.Application.extend({
 
         //load resources
         cc.LoaderScene.preload(g_resources, function () {
+            // preload sprite frames
+            var frameCache = cc.SpriteFrameCache.getInstance();
+            _.forEach(g_sprite_frames, function(spriteFrame) {
+                frameCache.addSpriteFrames(spriteFrame.plist, spriteFrame.image);
+            });
             director.replaceScene(new this.startScene());
         }, this);
 

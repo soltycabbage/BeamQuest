@@ -17,7 +17,6 @@ var BeamQuestWorld = cc.Layer.extend({
         playerLayer.setPosition(cc.p(0,0));
         this.addChild(playerLayer, 100, bq.config.tags.BASE_LAYER);
 
-
         bq.player.setPosition(cc.p(size.width / 2, size.height / 2));
         playerLayer.addChild(bq.player, 0);
 
@@ -28,6 +27,8 @@ var BeamQuestWorld = cc.Layer.extend({
         this.inputHandler = new InputHandler(bq.player);
         bq.baseLayer = baseLayer;
         this.scheduleUpdate();
+
+        this.spawnEnemy_();
 
         this.initPing_();
 
@@ -95,6 +96,17 @@ var BeamQuestWorld = cc.Layer.extend({
 
         var zIndex = 10000;
         this.addChild(pingLabel, zIndex, bq.config.tags.DEBUG_PING);
+    },
+
+    spawnEnemy_: function() {
+        // NOTE 座標を適当に決めさせていただきますですハイ
+        var size = cc.Director.getInstance().getWinSize();
+        var x = size.width / 4;
+        var y = size.height * 3 / 4;
+        var enemy_id = 1;
+        var enemy = new bq.Enemy(enemy_id);
+        enemy.setPosition(cc.p(x, y));
+        bq.baseLayer.addChild(enemy, 50);
     }
 });
 
