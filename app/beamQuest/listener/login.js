@@ -53,6 +53,7 @@ exports.listen = function(socket) {
 
         var player = new playerModel({
             id: userId,
+            name: userId,
             socket: socket,
             position: position
         });

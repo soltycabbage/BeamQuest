@@ -3,9 +3,9 @@
  */
 
 bq.EntityManager = cc.Class.extend({
-    otherPlayers_: [],
-    enemys_: [],
-    npcs_: [],
+    otherPlayers_: {},
+    enemys_: {},
+    npcs_: {},
     ctor: function() {
     },
 
@@ -14,14 +14,17 @@ bq.EntityManager = cc.Class.extend({
      * @param {number} mapId
      */
     updateEntitiesByMapId: function(mapId) {
-       var soc = bq.Socket.getInstance();
-        soc.requestEntitiesByMapId(1, function(data) {
-            debugger;
-        });
+        var soc = bq.Socket.getInstance();
+        soc.requestEntitiesByMapId(1, $.proxy(function(data) {
+            var players = _.reject(data.players, function(player) {
+                return bq.player.name === player.id;
+            });
+            this.createOtherPlayers(players);
+        }, this));
     },
 
     /**
-     * @return {Array}
+     * @return {Object}
      */
     getOtherPlayers: function() {
         return this.otherPlayers_;
@@ -41,24 +44,34 @@ bq.EntityManager = cc.Class.extend({
      * @param {bq.model.PlayerMove} moveData
      */
     moveTo: function(moveData) {
-        if (!_.contains(this.otherPlayers_, moveData.userId)) {
+        if (!this.otherPlayers_[moveData.userId]) {
             this.createOtherPlayer(moveData);
         } else {
-            var act = cc.MoveTo.create(0.1, cc.p(moveData.x, moveData.y));
+            var act = cc.MoveTo.create(0.05, cc.p(moveData.x, moveData.y));
             var otherPlayer = this.otherPlayers_[moveData.userId];
             otherPlayer.runAction(act);
         }
     },
 
-    createOtherPlayers: function() {
-
+    /**
+     * @param {Object}
+     */
+    createOtherPlayers: function(players) {
+        _.each(players, $.proxy(function(player) {
+            var playerMove = new bq.model.PlayerMove({
+                userId: player.id,
+                mapId: player.position.mapId,
+                x: player.position.x,
+                y: player.position.y
+            });
+            this.createOtherPlayer(playerMove);
+        }, this));
     },
 
     /**
      * @param {bq.model.PlayerMove} moveData
      */
     createOtherPlayer: function(moveData) {
-        this.otherPlayers_.push(moveData.userId);
         var other = new Entity('b0_0.png');
         other.name = moveData.userId;
         other.showName(moveData.userId, true);
