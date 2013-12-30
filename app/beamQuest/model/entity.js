@@ -24,7 +24,7 @@ util.inherits(Entity, Model);
 
 /** @override */
 Entity.prototype.toJSON = function() {
-   var json = {};
+    var json = {};
     json.id = this.id;
     json.name = this.name;
     json.position = this.position.toJSON();

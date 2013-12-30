@@ -42,9 +42,7 @@ Entities.prototype.getPlayersJSON = function() {
  * @param {string} userId
  */
 Entities.prototype.removePlayerById = function(userId) {
-    this.players_ = _.reject(this.players_, function(player) {
-        return player.id === userId;
-    });
+    delete this.players_[userId];
 };
 
 /**
