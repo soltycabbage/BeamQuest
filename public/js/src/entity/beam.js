@@ -121,7 +121,7 @@ Beam.create = function(id) {
 Beam.setup = function(id, layer) {
     "use strict";
 
-    var maxBeamCount = 5;
+    var maxBeamCount = 2;
     _.times(maxBeamCount, function(i) {
         var beam = Beam.create(id);
         bq.beams[i] = beam;
