@@ -2,7 +2,6 @@
  * @fileoverview スタティックファイルなど置く。g_resourcesで定義したものはゲーム開始前に事前にloadされる。
  */
 
-cc.AudioEngine.getInstance().init("aac,mp3,ogg,wav");
 // BeamQuest用のグローバル変数。こいつはどのコードからでも読み出し可能。
 // 設定値とかを入れる。
 var bq = {
