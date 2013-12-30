@@ -3,15 +3,16 @@ var util = require('util'),
 
 /**
  * model全般の基底クラス
+ * @param {Object=} opt_data
  * @constructor
+ * @extends {events.EventEmitter}
  */
-var Model = function() {
-
+var Model = function(opt_data) {
 };
 util.inherits(Model, events.EventEmitter)
 
-Model.prototype.create = function() {
-    return new Model();
+Model.prototype.toJSON = function() {
+    return {};
 };
 
 module.exports = Model;

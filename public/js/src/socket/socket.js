@@ -11,18 +11,18 @@ bq.Socket = cc.Class.extend({
      * ログイン後にsocketで受け取る処理を書く
      */
     initAfterLogin: function() {
-        var playerManager = bq.PlayerManager.getInstance();
+        var entityManager = bq.EntityManager.getInstance();
 
         // チャット受信
         this.socket.on('notify:message', function (data) {
             var chatData = new bq.model.Chat(data);
-            playerManager.chat(chatData)
+            entityManager.chat(chatData)
         });
 
         // 他プレイヤーの移動
         this.socket.on('notify:user:move', function(data) {
             var moveData = new bq.model.PlayerMove(data);
-            playerManager.moveTo(moveData);
+            entityManager.moveTo(moveData);
         });
     },
 
@@ -51,7 +51,19 @@ bq.Socket = cc.Class.extend({
      */
     sendPlayerPosition: function(pos) {
         this.socket.emit('user:position:update', pos);
+    },
+
+    /**
+     * マップ上に存在する全Entityの一覧を要求する
+     * @param {number} mapId
+     * @param {Function} callback
+     * @param {Object} selfObj
+     */
+    requestEntitiesByMapId: function(mapId, callback, selfObj) {
+        this.socket.emit('world:entities:get', {mapId: mapId});
+        this.socket.once('world:entities:receive', $.proxy(callback, selfObj));
     }
+
 });
 
 bq.Socket.instance_ = new bq.Socket();

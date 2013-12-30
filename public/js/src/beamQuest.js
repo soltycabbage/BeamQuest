@@ -107,9 +107,20 @@ var BeamQuestWorldScene = cc.Scene.extend({
             var layer = new BeamQuestWorld();
             layer.init();
             this.addChild(layer);
+            this.renderEntities_(1); // TODO: maoId
         } else {
             this.addChild(new LoginScene());
         }
+    },
+
+    /**
+     * 他Entityを描画する
+     * @param {number} mapId
+     * @private
+     */
+    renderEntities_: function(mapId) {
+        var entityManager = bq.EntityManager.getInstance();
+        entityManager.updateEntitiesByMapId(mapId);
     },
 
     /**

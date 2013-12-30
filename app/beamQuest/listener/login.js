@@ -1,5 +1,6 @@
 var kvs = require('beamQuest/store/kvs');
     playerModel = require('beamQuest/model/player'),
+    positionModel = require('beamQuest/model/position'),
     entities = require('beamQuest/store/entities');
 
 exports.listen = function(socket) {
@@ -44,9 +45,17 @@ exports.listen = function(socket) {
      * @private
      */
     function addLoginUser_(userId) {
-        var player = new playerModel();
-        player.id = userId;
-        player.socket = socket;
+        var position = new positionModel({
+            mapId: 1, // TODO: ログアウト時の位置を記憶しておいてセットする
+            x: 200,
+            y: 200
+        });
+
+        var player = new playerModel({
+            id: userId,
+            socket: socket,
+            position: position
+        });
         entities.addPlayer(player);
     }
 

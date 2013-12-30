@@ -1,11 +1,23 @@
 /**
- * @fileoverview 他プレイヤーの行動などなどを管理する
+ * @fileoverview Entity (player, mob, npc) の行動などなどを管理する
  */
 
-bq.PlayerManager = cc.Class.extend({
+bq.EntityManager = cc.Class.extend({
     otherPlayers_: [],
+    enemys_: [],
+    npcs_: [],
     ctor: function() {
+    },
 
+    /**
+     * サーバからマップ上に存在するEntity一覧を取得してきて更新する
+     * @param {number} mapId
+     */
+    updateEntitiesByMapId: function(mapId) {
+       var soc = bq.Socket.getInstance();
+        soc.requestEntitiesByMapId(1, function(data) {
+            debugger;
+        });
     },
 
     /**
@@ -38,6 +50,10 @@ bq.PlayerManager = cc.Class.extend({
         }
     },
 
+    createOtherPlayers: function() {
+
+    },
+
     /**
      * @param {bq.model.PlayerMove} moveData
      */
@@ -53,8 +69,8 @@ bq.PlayerManager = cc.Class.extend({
 });
 
 
-bq.PlayerManager.instance_ = new bq.PlayerManager();
+bq.EntityManager.instance_ = new bq.EntityManager();
 
-bq.PlayerManager.getInstance = function() {
-    return bq.PlayerManager.instance_;
+bq.EntityManager.getInstance = function() {
+    return bq.EntityManager.instance_;
 };
