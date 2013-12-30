@@ -24,6 +24,7 @@ var s_PlayerWalkingPlist = 'res/img/walk_anime.plist';
 
 // bgm
 var s_BgmField = 'res/sounds/Field.m4a';
+var s_SeBeamA = 'res/sounds/BeamA.m4a';
 
 var g_resources = [
     //img
@@ -43,7 +44,8 @@ var g_resources = [
     {type: 'tmx', src:s_ShinjukuTmx},
 
     //bgm
-    {type:"bgm",src:s_BgmField}
+    {type:"bgm",src:s_BgmField},
+    {type:"bgm",src:s_SeBeamA}
 
     //effect
 ];
