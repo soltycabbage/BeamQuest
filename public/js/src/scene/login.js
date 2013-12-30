@@ -2,7 +2,7 @@ var LoginLayer = cc.Layer.extend({
     status: {
         SUCCESS: 'success', // ログイン成功
         CREATE: 'create',   // サインアップ成功
-        FAIL: 'fail'        // ログイン失敗
+        ERROR: 'error'        // ログイン失敗
     },
     init: function() {
         this._super();
@@ -35,10 +35,6 @@ var LoginLayer = cc.Layer.extend({
      * @private
      */
     processLogin_: function(userId) {
-        if (!this.isValidUserId_(userId)) {
-            this.loginFailed_();
-            return;
-        }
         var soc = bq.Socket.getInstance();
         var hash = sys.localStorage.getItem('userHash:' + userId);
         if (!hash) {
@@ -52,8 +48,8 @@ var LoginLayer = cc.Layer.extend({
             } else if (data.result === this.status.SUCCESS) {
                 console.log(userId + 'がログインしました。');
                 this.welcomeToBeamQuestWorld_(userId);
-            } else {
-                this.loginFailed_();
+            } else if (data.result === this.status.ERROR) {
+                this.loginFailed_(data.message);
             }
         }, this);
     },
@@ -89,10 +85,11 @@ var LoginLayer = cc.Layer.extend({
 
     /**
      * ログイン失敗した時の処理
+     * @param {string} message
      * @private
      */
-    loginFailed_: function() {
-        var failedLabel = bq.Label.create('ログイン失敗。');
+    loginFailed_: function(message) {
+        var failedLabel = bq.Label.create(message);
         var nameP = this.nameField_.getPosition();
         failedLabel.setPosition(nameP.x + 10, nameP.y - 30);
         this.addChild(failedLabel);
@@ -108,7 +105,7 @@ var LoginLayer = cc.Layer.extend({
         var valid = true;
         // TODO: 条件増やす
         valid = (userId.length > 0);
-        valid = userId.match(/^[a-zA-Zぁ-んァ-ン0-9]+$/);
+
         return valid;
     },
 

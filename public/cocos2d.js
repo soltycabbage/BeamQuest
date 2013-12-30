@@ -25,7 +25,7 @@
             'js/src/model/playerMove.js',
             'js/src/model/chat.js',
 
-            'js/src/playerManager.js',
+            'js/src/entityManager.js',
             'js/src/socket/socket.js',
             'js/src/config.js',
             'js/src/bqLabel.js',
