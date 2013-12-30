@@ -1,19 +1,37 @@
+/**
+ * @fileoverview プライヤー
+ */
+
+/**
+ * プレイヤーの状態
+ * @type {{stop: number, walking: number, maxStatus: number}}
+ */
 var Status = {
-    stop:0,
-        walking:1,
-        maxStatus:2
+    stop: 0,
+    walking: 1,
+    maxStatus: 2
 };
+
+/**
+ * 8方向
+ * @type {{bottom: number, bottomright: number, right: number, topright: number, top: number, topleft: number, left: number, bottomleft: number, maxDirection: number}}
+ */
 var Direction = {
     bottom: 0,
-    bottomright:1,
+    bottomright: 1,
     right: 2,
-    topright:3,
+    topright: 3,
     top: 4,
-    topleft:5,
+    topleft: 5,
     left: 6,
     bottomleft: 7,
     maxDirection: 8
 };
+
+/**
+ *
+ * @type {*|void|Object|Function}
+ */
 var Player = Entity.extend({
     moveSpeed: 2,                // 1frameの移動量(px)
     animationSpeed:0.15,         // delay on animation
@@ -22,6 +40,7 @@ var Player = Entity.extend({
     POSITION_SEND_INTERVAL: 5,   // 位置情報を何frameごとに送信するか
     positionSendCount_: 0,       // 位置情報送信用カウンター
     prevPos_: {x: 0, y: 0},      // 前回送信時の座標
+    beamId:[0], // 装備しているビームのID
 
     ctor:function () {
         this._super('b0_0.png');
@@ -87,6 +106,7 @@ var Player = Entity.extend({
      * @param {Direction} dir 向き
      * @param {Status} sts 状態
      * @private
+     * @returns {cc.Animation}
      */
     createAnimation_: function (dir, sts) {
 
@@ -111,6 +131,29 @@ var Player = Entity.extend({
 
         var forever = cc.RepeatForever.create(cc.Animate.create(animation));
         return forever;
+    },
+
+    /**
+     * destination までビームを出す
+     *
+     * @param {cc.p} destination
+     */
+    shoot: function( destination) {
+        var curr = this.getPosition();
+        var diff = cc.p((destination.x-curr.x), (destination.y-curr.y));
+
+        // BPが残ってるかチェック
+
+        //撃てるならBPを減らす
+
+        // プリロードされているビームを取り出して打つ
+        var b = Beam.pop();
+        if ( b == null ) {
+            // TODO どうする？？
+        } else {
+            b.initDestination(diff);
+            b.setPosition(0,0);
+        }
     },
 
     /**

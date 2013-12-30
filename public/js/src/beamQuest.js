@@ -4,6 +4,7 @@ var BeamQuestWorld = cc.Layer.extend({
 
         this._super();
         this.setKeyboardEnabled(true);
+        this.setMouseEnabled(true);
 
         var size = cc.Director.getInstance().getWinSize();
         cc.AudioEngine.getInstance().setEffectsVolume(0.5);
@@ -16,6 +17,8 @@ var BeamQuestWorld = cc.Layer.extend({
         var playerLayer = cc.Layer.create();
         playerLayer.setPosition(cc.p(0,0));
         this.addChild(playerLayer, 100, bq.config.tags.BASE_LAYER);
+
+        Beam.setup(bq.player.beamId[0], this);
 
         bq.player.setPosition(cc.p(size.width / 2, size.height / 2));
         playerLayer.addChild(bq.player, 0);
@@ -60,6 +63,12 @@ var BeamQuestWorld = cc.Layer.extend({
         'use strict';
 
         this.inputHandler.keyUp(key);
+    },
+
+    /** @override */
+    onMouseDown: function (event) {
+        this.inputHandler.onMouseDown(event);
+
     },
 
     initPing_: function() {
@@ -147,4 +156,5 @@ var BeamQuestWorldScene = cc.Scene.extend({
         return !!userId;
     }
 });
+
 
