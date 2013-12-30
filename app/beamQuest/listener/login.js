@@ -1,6 +1,6 @@
 var kvs = require('beamQuest/store/kvs');
     playerModel = require('beamQuest/model/player'),
-    entities = require('beamQuest/store/entities').getInstance();
+    entities = require('beamQuest/store/entities');
 
 exports.listen = function(socket) {
     socket.on('login', function(data) {
@@ -47,7 +47,6 @@ exports.listen = function(socket) {
         var player = new playerModel();
         player.id = userId;
         player.socket = socket;
-        loginUsers_[userId] = player;
         entities.addPlayer(player);
     }
 

@@ -6,9 +6,9 @@ var Entities = function() {
     /**
      * ログインしているプレイヤー一覧
      * @type {Object.<model.Player>}
+     * @private
      */
-    this.players = {};
-
+    this.players_ = {};
 };
 
 /**
@@ -16,10 +16,24 @@ var Entities = function() {
  */
 Entities.prototype.addPlayer = function(player) {
     if (!_.contains(this.players, player.id)) {
-        this.players[player.id] = player;
+        this.players_[player.id] = player;
     }
+};
+
+/**
+ * @return {Object.<model.Player>}
+ */
+Entities.prototype.getPlayers = function() {
+    return this.players_;
+};
+
+/**
+ * @param {string} userId
+ */
+Entities.prototype.removePlayerById = function(userId) {
+
 };
 
 var instance_ = new Entities();
 
-module.exports.getInstance = instance_;
+module.exports = instance_;
