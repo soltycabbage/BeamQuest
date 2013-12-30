@@ -46,7 +46,7 @@ var Beam = cc.Node.extend({
         this.inc_.y = dest.y * this.speed_;
 
         // duration秒後にこのビームがdisableになるアクションを追加
-        var duration = 5;
+        var duration = 2;
         var remove = cc.CallFunc.create(this.disable_, this);
         var seq = cc.Sequence.create( cc.FadeIn.create(duration) , remove);
         this.runAction(seq);
@@ -121,7 +121,7 @@ Beam.create = function(id) {
 Beam.setup = function(id, layer) {
     "use strict";
 
-    var maxBeamCount = 2;
+    var maxBeamCount = 5;
     _.times(maxBeamCount, function(i) {
         var beam = Beam.create(id);
         bq.beams[i] = beam;

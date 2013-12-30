@@ -33,8 +33,8 @@ var Direction = {
  * @type {*|void|Object|Function}
  */
 var Player = Entity.extend({
-    moveSpeed: 0.5, // 1frameの移動量(px)
-    animationSpeed:0.05, // delay on animation
+    moveSpeed: 2,                // 1frameの移動量(px)
+    animationSpeed:0.15,         // delay on animation
     direction: Direction.bottom, // 向いている方向
     state:Status.stop,           // 動いてるとか止まってるとかの状態
     POSITION_SEND_INTERVAL: 5,   // 位置情報を何frameごとに送信するか

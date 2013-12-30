@@ -111,7 +111,7 @@ var InputHandler = cc.Class.extend({
     /**
      * キー押したやつから方向に変換
      * @param {Array} downs
-     * @return {Direction}
+     * @return {Direction} 見つからない場合null
      */
     convertDirectionFromKeys_: function(downs) {
         var pairs = [
@@ -125,15 +125,16 @@ var InputHandler = cc.Class.extend({
             {key: [cc.KEY.a, cc.KEY.s], val:Direction.bottomleft}
         ];
 
+        if ( downs.length == 0 ) {
+            // 押してない状態はnull (向いてる方向を維持）
+            return null;
+        }
 
         var found = _.find(pairs, function(pair) {
             return ( downs.length==1 &&  _.contains(downs, pair.key[0]) )
                 || ( downs.length==2 &&   _.contains(downs, pair.key[0]) && _.contains(downs, pair.key[1]) );
         } );
 
-        if (found == undefined) {
-            return Direction.bottom;
-        }
 
         return found.val;
     }
