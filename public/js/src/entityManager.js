@@ -72,7 +72,7 @@ bq.EntityManager = cc.Class.extend({
      * @param {bq.model.PlayerMove} moveData
      */
     createOtherPlayer: function(moveData) {
-        var other = new Entity('b0_0.png');
+        var other = new bq.Entity('b0_0.png');
         other.name = moveData.userId;
         other.showName(moveData.userId, true);
         other.setPosition(cc.p(moveData.x, moveData.y));

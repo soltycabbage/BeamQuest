@@ -3,7 +3,7 @@
  * Created by iwag on 2013/12/31.
  */
 
-var EntityState = {
+bq.EntityState = {
 
     /**
      * Entityの状況
