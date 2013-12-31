@@ -27,6 +27,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         tileMap.initWithTMXFile(bq.config.maps.area.SHINJUKU);
         tileMap.setPosition(cc.p(0,0));
         baseLayer.addChild(tileMap, 0);
+        var chat = new bq.Chat();
 
         bq.baseLayer = baseLayer;
         this.scheduleUpdate();
@@ -39,7 +40,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         this.inputHandler.addListener({
             onKeyDown: function(key) {
                 if (key === cc.KEY.enter) {
-                    var chat = new Chat();
                     chat.focusChat();
                 }
             }
