@@ -35,6 +35,8 @@
             'js/src/inputHandler.js',
 
             // entity
+            'js/src/entity/entityState.js',
+            'js/src/entity/animation.js',
             'js/src/entity/entity.js',
             'js/src/entity/entityState.js',
             'js/src/entity/player.js',

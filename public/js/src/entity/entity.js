@@ -19,6 +19,7 @@ bq.entity.Entity = cc.Sprite.extend({
         this._super();
         var spriteFrame = cc.SpriteFrameCache.getInstance().getSpriteFrame(spriteFrameName);
         spriteFrame && this.initWithSpriteFrame(spriteFrame);
+        this.animations = this.createAnimations("");
         this.init_();
     },
 
@@ -84,5 +85,30 @@ bq.entity.Entity = cc.Sprite.extend({
             this.removeChild(this.chatRect);
             this.chatRect = null;
         }
+    },
+
+    createAnimations: function(filename) {
+      this.animations = bq.Animation.createAnimations(filename);
+    },
+
+    /**
+     *
+     * @param {string} name
+     * @param {EntityState.Direction} direction
+     * @returns {bq.Animation}
+     */
+    getAnimationByNameDirection: function(name, direction) {
+       return this.animations[name]; // 本当はdirectionも
+     },
+
+    /**
+     *
+     */
+    setAnimation: function(name, direction){
+        if ( this.currectName == name && this.currentDirection == direction ) {
+            return ;
+        }
+        var anime = this.getAnimationByNameDirection(name,direction);
+        this.runAction(anime);
     }
 });

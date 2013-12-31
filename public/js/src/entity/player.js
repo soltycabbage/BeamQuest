@@ -72,6 +72,8 @@ bq.entity.Player = bq.entity.Entity.extend({
      * @param {bq.entity.EntityState.Mode} sts 状態 (nullなら更新しない）
      */
     updateAnimation: function(dir, sts) {
+        this.setAnimation(sts, dir);
+        /*
         // 同じだったら更新しない
         if ( this.direction != dir || this.state != sts ) {
             this.direction = dir == null ? this.direction : dir;
@@ -84,6 +86,7 @@ bq.entity.Player = bq.entity.Entity.extend({
             }
             this.runAction(animation);
         }
+        */
     },
 
     /**
