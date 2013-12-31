@@ -269,7 +269,7 @@ bq.entity.Player.InputHandler = cc.Class.extend({
                 || ( downs.length==2 && _.contains(downs, pair.key[0]) && _.contains(downs, pair.key[1]) );
         } );
 
-         found.val;
+        return found.val;
     }
 });
 
