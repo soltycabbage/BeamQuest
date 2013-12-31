@@ -121,7 +121,7 @@ var Player = Entity.extend({
         //撃てるならBPを減らす
 
         // プリロードされているビームを取り出して打つ
-        var b = Beam.pop();
+        var b = bq.Beam.pop();
         if ( b == null ) {
             // TODO どうする？？
         } else {
