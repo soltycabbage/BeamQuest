@@ -34,7 +34,7 @@ var BeamQuestWorld = cc.Layer.extend({
         this.inputHandler = new bq.InputHandler();
         this.inputHandler.attach(this);
 
-        this.playerHandler = new bq.Player.InputHandler(bq.player);
+        this.playerHandler = new bq.entity.Player.InputHandler(bq.player);
         this.inputHandler.addListener(this.playerHandler);
         this.inputHandler.addListener({
             onKeyDown: function(key) {
@@ -106,7 +106,7 @@ var BeamQuestWorld = cc.Layer.extend({
         var x = size.width / 4;
         var y = size.height * 3 / 4;
         var enemy_id = 1;
-        var enemy = new bq.Enemy(enemy_id);
+        var enemy = new bq.entity.Enemy(enemy_id);
         enemy.setPosition(cc.p(x, y));
         bq.baseLayer.addChild(enemy, 50);
     }

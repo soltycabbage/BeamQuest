@@ -1,4 +1,4 @@
-var LoginLayer = cc.Layer.extend({
+bq.scene.LoginLayer = cc.Layer.extend({
     status: {
         SUCCESS: 'success', // ログイン成功
         CREATE: 'create',   // サインアップ成功
@@ -80,7 +80,7 @@ var LoginLayer = cc.Layer.extend({
         var frameCache = cc.SpriteFrameCache.getInstance();
         frameCache.addSpriteFrames(s_PlayerWalkingPlist, s_PlayerWalkingImg);
 
-        var player = new bq.Player();
+        var player = new bq.entity.Player();
         // TODO: ログイン成功時にユーザ情報を返してもらうか、ここでuserIdをサーバに投げてユーザ情報を取るAPIを叩くとかすると良さそう
         player.setProfile({name: userId});
         player.showName();
@@ -153,10 +153,10 @@ var LoginLayer = cc.Layer.extend({
     }
 });
 
-var LoginScene = cc.Scene.extend({
+bq.scene.LoginScene = cc.Scene.extend({
     onEnter: function() {
         this._super();
-        var layer = new LoginLayer();
+        var layer = new bq.scene.LoginLayer();
         layer.init();
         this.addChild(layer);
     }

@@ -1,8 +1,8 @@
 /**
  * @constructor
- * @extends {bq.Entity}
+ * @extends {bq.entity.Entity}
  */
-bq.Enemy = bq.Entity.extend({
+bq.entity.Enemy = bq.entity.Entity.extend({
     animationSpeed: 0.15,         // delay on animation
     isAttacking: false,
     ctor:function (enemy_id) {

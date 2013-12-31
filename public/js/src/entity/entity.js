@@ -1,12 +1,13 @@
 /**
  * @fileoverview プレイヤー、mob、NPC、全てのキャラクターの基底クラス
  */
+bq.entity = {};
 
 /**
  * @constructor
  * @extends {cc.Sprite}
  */
-bq.Entity = cc.Sprite.extend({
+bq.entity.Entity = cc.Sprite.extend({
     DEFULT_NAME: 'entity',
     name: 'entity', // entityの名前
     chatRect: null, // チャット吹き出しのSprite
