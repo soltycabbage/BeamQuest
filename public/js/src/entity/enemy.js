@@ -5,7 +5,7 @@ bq.Enemy = Entity.extend({
         'use strict';
         this.enemy_id_ = String('00' + enemy_id).slice(-3); // NOTE sprintf('%03d')
         this._super(this.getSpriteFrame_(1));
-        this.runAction(this.createSteppingAnimation());
+        this.runAction(this.createIdlingAnimation());
         this.scheduleUpdate();
     },
 
@@ -20,14 +20,14 @@ bq.Enemy = Entity.extend({
         }
     },
 
-    createSteppingAnimation: function() {
+    createIdlingAnimation: function() {
         'use strict';
-        var keyFrames = this.getSteppingAnimationKeyFrames_();
+        var keyFrames = this.getIdlingAnimationKeyFrames_();
         var animation = this.buildSimpleAnimationByKeyFrames_(keyFrames);
         return cc.RepeatForever.create(cc.Animate.create(animation));
     },
 
-    getSteppingAnimationKeyFrames_: function() {
+    getIdlingAnimationKeyFrames_: function() {
         return [1, 2, 3, 4];
     },
 
@@ -42,7 +42,7 @@ bq.Enemy = Entity.extend({
             cc.Animate.create(bite),
             cc.CallFunc.create(function(){
                 this.isAttacking = false;
-                this.runAction(this.createSteppingAnimation());
+                this.runAction(this.createIdlingAnimation());
             }, this),
         ]);
     },
