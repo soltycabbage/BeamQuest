@@ -27,6 +27,9 @@ var cocos2dApp = cc.Application.extend({
         // set FPS. the default value is 1.0/60 if you don't call this
         director.setAnimationInterval(1.0 / this.config['frameRate']);
 
+        // initialize audio engine
+        cc.AudioEngine.getInstance().init("aac,mp3,ogg,wav");
+
         //load resources
         cc.LoaderScene.preload(g_resources, function () {
             // preload sprite frames

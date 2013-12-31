@@ -2,7 +2,6 @@
  * @fileoverview スタティックファイルなど置く。g_resourcesで定義したものはゲーム開始前に事前にloadされる。
  */
 
-cc.AudioEngine.getInstance().init("aac,mp3,ogg,wav");
 // BeamQuest用のグローバル変数。こいつはどのコードからでも読み出し可能。
 // 設定値とかを入れる。
 var bq = {
@@ -25,6 +24,7 @@ var s_PlayerWalkingPlist = 'res/img/walk_anime.plist';
 
 // bgm
 var s_BgmField = 'res/sounds/Field.m4a';
+var s_SeBeamA = 'res/sounds/BeamA.m4a';
 
 var g_resources = [
     //img
@@ -44,7 +44,8 @@ var g_resources = [
     {type: 'tmx', src:s_ShinjukuTmx},
 
     //bgm
-    {type:"bgm",src:s_BgmField}
+    {type:"bgm",src:s_BgmField},
+    {type:"bgm",src:s_SeBeamA}
 
     //effect
 ];

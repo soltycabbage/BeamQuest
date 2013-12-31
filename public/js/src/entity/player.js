@@ -125,6 +125,7 @@ var Player = Entity.extend({
         if ( b == null ) {
             // TODO どうする？？
         } else {
+            cc.AudioEngine.getInstance().playEffect(s_SeBeamA);
             b.initDestination(diff);
             b.setPosition(0,0);
         }
