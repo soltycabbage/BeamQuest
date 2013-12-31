@@ -1,144 +1,53 @@
-var InputHandler = cc.Class.extend({
-    downKeys_: [], // 今押されているキーのリスト (max2)
-    dx: 0, // プレイヤーx方向移動量(px)
-    dy: 0, // プレイヤーy方向移動量(px)
-    /**
-     * コンストラクタ
-     * @param {Player} player
+bq.InputHandler = cc.Class.extend({
+    listeners: [],
+    targetEvents_: [
+        'onKeyDown',
+        'onKeyUp',
+        'onMouseDown',
+        'onMouseUp',
+        'onRightMouseDown',
+        'onRightMouseUp'
+    ],
+
+    ctor: function() {
+        'use strict';
+        _.each(this.targetEvents_, this.defineHandler_, this);
+    },
+
+    /*
+     * イベントハンドラ(delegate)を定義する
      */
-    ctor: function(player) {
-        this.player_ = player;
-        this.chat_ = new Chat();
-    },
-    /** @override */
-    keyDown: function(key) {
-        var dir;
-        switch (key) {
-            // TODO 重複多いのでリファクタリング
-            case cc.KEY.enter:
-                this.chat_.focusChat();
-                break;
-            case cc.KEY.a:
-                this.addDownKey_(key);
-                this.dx = this.player_.moveSpeed;
-                dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(dir, EntityState.Mode.walking);
-                break;
-            case cc.KEY.s:
-                this.addDownKey_(key);
-                this.dy = this.player_.moveSpeed;
-                dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(dir, EntityState.Mode.walking);
-
-                break;
-            case cc.KEY.d:
-                this.addDownKey_(key);
-                this.dx = -1 * this.player_.moveSpeed;
-                dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(dir, EntityState.Mode.walking);
-
-                break;
-            case cc.KEY.w:
-                this.addDownKey_(key);
-                this.dy = -1 * this.player_.moveSpeed;
-                dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(dir, EntityState.Mode.walking);
-
-                break;
-            default:
-                break;
-        }
-
+    defineHandler_: function(eventName) {
+        'use strict';
+        this[eventName] = function() {
+            var args = arguments;
+            // 登録されてるlistenerにイベントを伝える
+            _.forEach(this.listeners, function(listener) {
+                if (listener[eventName]) {
+                    listener[eventName].apply(listener, args);
+                }
+            });
+        }.bind(this);
     },
 
-    /** @override */
-    keyUp: function(key) {
-        this.removeDownKey_(key);
-
-        if (this.downKeys_.length > 0) {
-            // return;
-            // TODO: 移動で引っかかるのをどうにかする
-        }
-        switch (key) {
-            case cc.KEY.a:
-            case cc.KEY.d:
-                this.dx = 0;
-                // 押しているキーが０でない場合まだ歩いている
-                var sts = (this.downKeys_.length == 0) ? EntityState.Mode.stop : null;
-                var dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(dir, sts);
-                break;
-            case cc.KEY.s:
-            case cc.KEY.w:
-                this.dy = 0;
-                var dir = this.convertDirectionFromKeys_(this.downKeys_);
-                var sts = (this.downKeys_.length == 0) ? EntityState.Mode.stop : null;
-                this.player_.updateAnimation(dir, sts);
-                break;
-            default:
-                break;
-        }
-    },
-
-    /**
-     * 同時押し時に滑らかに移動させたいので現在押されているキーをリストに登録して管理する
-     * @param {Event} key
-     * @private
+    /*
+     * subjectの入力系イベントを上書きする
      */
-    addDownKey_: function(key) {
-        if (!_.contains(this.downKeys_, key) && this.downKeys_.length < 2) {
-            this.downKeys_.push(key);
-        }
+    attach: function(subject) {
+        'use strict';
+        _.each(this.targetEvents_, function(eventName) {
+            subject[eventName] = this[eventName];
+        }, this);
     },
 
-    /**
-     *
-     * @param event
+    /*
+     * イベントlistenerを登録する
      */
-    onMouseDown: function(event) {
-        // TODO 右クリックと左クリックで動作を変える
-        bq.player.shoot(event.getLocation());
+    addListener: function(listener) {
+        'use strict';
+        this.listeners.push(listener);
     },
 
-    /**
-     * @param {Event} key
-     * @private
-     */
-    removeDownKey_: function(key) {
-        this.downKeys_ = _.without(this.downKeys_, key);
-    },
-
-    /**
-     * キー押したやつから方向に変換
-     * @param {Array} downs
-     * @return {EntityState.Direction} 見つからない場合null
-     */
-    convertDirectionFromKeys_: function(downs) {
-        var pairs = [
-            {key: [cc.KEY.s], val:EntityState.Direction.bottom},
-            {key: [cc.KEY.s,cc.KEY.d], val:EntityState.Direction.bottomright},
-            {key: [cc.KEY.d], val:EntityState.Direction.right},
-            {key: [cc.KEY.d, cc.KEY.w], val:EntityState.Direction.topright},
-            {key: [cc.KEY.w], val:EntityState.Direction.top},
-            {key: [cc.KEY.w, cc.KEY.a], val:EntityState.Direction.topleft},
-            {key: [cc.KEY.a], val:EntityState.Direction.left},
-            {key: [cc.KEY.a, cc.KEY.s], val:EntityState.Direction.bottomleft},
-            {key: [cc.KEY.a, cc.KEY.d], val:null},
-            {key: [cc.KEY.w, cc.KEY.s], val:null}
-        ];
-
-        if ( downs.length == 0 ) {
-            // 押してない状態はnull (向いてる方向を維持）
-            return null;
-        }
-
-        var found = _.find(pairs, function(pair) {
-            return ( downs.length==1 &&  _.contains(downs, pair.key[0]) )
-                || ( downs.length==2 &&   _.contains(downs, pair.key[0]) && _.contains(downs, pair.key[1]) );
-        } );
-
-        return found.val;
-    }
-
-
+    // NOTE listener削除系のメソッドも必要かしら
 });
+
