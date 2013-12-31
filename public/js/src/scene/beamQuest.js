@@ -1,4 +1,4 @@
-var BeamQuestWorld = cc.Layer.extend({
+bq.scene.BeamQuestWorld = cc.Layer.extend({
     init:function () {
         'use strict';
 
@@ -18,7 +18,7 @@ var BeamQuestWorld = cc.Layer.extend({
         playerLayer.setPosition(cc.p(0,0));
         this.addChild(playerLayer, 100, bq.config.tags.BASE_LAYER);
 
-        Beam.setup(bq.player.beamId[0], this);
+        bq.Beam.setup(bq.player.beamId[0], this);
 
         bq.player.setPosition(cc.p(size.width / 2, size.height / 2));
         playerLayer.addChild(bq.player, 0);
@@ -27,6 +27,7 @@ var BeamQuestWorld = cc.Layer.extend({
         tileMap.initWithTMXFile(bq.config.maps.area.SHINJUKU);
         tileMap.setPosition(cc.p(0,0));
         baseLayer.addChild(tileMap, 0);
+        var chat = new bq.Chat();
 
         bq.baseLayer = baseLayer;
         this.scheduleUpdate();
@@ -34,12 +35,11 @@ var BeamQuestWorld = cc.Layer.extend({
         this.inputHandler = new bq.InputHandler();
         this.inputHandler.attach(this);
 
-        this.playerHandler = new Player.InputHandler(bq.player);
+        this.playerHandler = new bq.entity.Player.InputHandler(bq.player);
         this.inputHandler.addListener(this.playerHandler);
         this.inputHandler.addListener({
             onKeyDown: function(key) {
                 if (key === cc.KEY.enter) {
-                    var chat = new Chat();
                     chat.focusChat();
                 }
             }
@@ -106,19 +106,19 @@ var BeamQuestWorld = cc.Layer.extend({
         var x = size.width / 4;
         var y = size.height * 3 / 4;
         var enemy_id = 1;
-        var enemy = new bq.Enemy(enemy_id);
+        var enemy = new bq.entity.Enemy(enemy_id);
         enemy.setPosition(cc.p(x, y));
         bq.baseLayer.addChild(enemy, 50);
     }
 });
 
-var BeamQuestWorldScene = cc.Scene.extend({
+bq.scene.BeamQuestWorldScene = cc.Scene.extend({
     onEnter:function () {
         'use strict';
 
         this._super();
         if (this.isAlreadyLogin_(bq.player.name)) {
-            var layer = new BeamQuestWorld();
+            var layer = new bq.scene.BeamQuestWorld();
             layer.init();
             this.addChild(layer);
             this.renderEntities_(1); // TODO: maoId

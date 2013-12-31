@@ -43,4 +43,4 @@ var cocos2dApp = cc.Application.extend({
         return true;
     }
 });
-var BeamQuestApp = new cocos2dApp(LoginScene);
+var BeamQuestApp = new cocos2dApp(bq.scene.LoginScene);

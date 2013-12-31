@@ -3,14 +3,14 @@
  */
 
 /**
- *
- * @type {*|void|Object|Function}
+ * @constructor
+ * @extends {bq.Entity}
  */
-var Player = Entity.extend({
+bq.entity.Player = bq.entity.Entity.extend({
     moveSpeed: 4,                // 1frameの移動量(px)
     animationSpeed:0.15,         // delay on animation
-    direction: EntityState.Direction.bottom, // 向いている方向
-    state:EntityState.Mode.stop,           // 動いてるとか止まってるとかの状態
+    direction: bq.entity.EntityState.Direction.bottom, // 向いている方向
+    state: bq.entity.EntityState.Mode.stop,           // 動いてるとか止まってるとかの状態
     POSITION_SEND_INTERVAL: 5,   // 位置情報を何frameごとに送信するか
     positionSendCount_: 0,       // 位置情報送信用カウンター
     prevPos_: {x: 0, y: 0},      // 前回送信時の座標
@@ -57,8 +57,8 @@ var Player = Entity.extend({
 
     /**
      * 向きと状態を更新してそれにもとづいてアニメーションを更新する
-     * @param {EntityState.Direction} dir 向き (nullなら更新しない）
-     * @param {EntityState.Mode} sts 状態 (nullなら更新しない）
+     * @param {bq.entity.EntityState.Direction} dir 向き (nullなら更新しない）
+     * @param {bq.entity.EntityState.Mode} sts 状態 (nullなら更新しない）
      */
     updateAnimation: function(dir, sts) {
         // 同じだったら更新しない
@@ -77,22 +77,22 @@ var Player = Entity.extend({
 
     /**
      * ある状態である方向のアニメーションを作成する
-     * @param {Direction} dir 向き
-     * @param {EntityState.Mode} sts 状態
+     * @param {bq.entity.EntityState.Direction} dir 向き
+     * @param {bq.entity.EntityState.Mode} sts 状態
      * @private
-     * @returns {cc.Animation}
+     * @return {cc.Animation}
      */
     createAnimation_: function (dir, sts) {
 
-        if ( dir > EntityState.Direction.maxDirection ) {
+        if ( dir > bq.entity.EntityState.Direction.maxDirection ) {
             return null;
         }
         var frameCache = cc.SpriteFrameCache.getInstance();
         var animation = cc.Animation.create();
 
         // 0〜3が止まってる絵、4〜7が歩いている絵
-        var starti = (sts == EntityState.Mode.stop) ? 0:4;
-        var endi = (sts == EntityState.Mode.stop) ? 3:7;
+        var starti = (sts == bq.entity.EntityState.Mode.stop) ? 0:4;
+        var endi = (sts == bq.entity.EntityState.Mode.stop) ? 3:7;
         //cc.log("dir " + dir + " sts " + sts);
         // TODO underscore.js を使って書き直す
         for (var i = starti; i <= endi; i++) {
@@ -121,7 +121,7 @@ var Player = Entity.extend({
         //撃てるならBPを減らす
 
         // プリロードされているビームを取り出して打つ
-        var b = Beam.pop();
+        var b = bq.Beam.pop();
         if ( b == null ) {
             // TODO どうする？？
         } else {
@@ -140,7 +140,7 @@ var Player = Entity.extend({
     }
 });
 
-Player.InputHandler = cc.Class.extend({
+bq.entity.Player.InputHandler = cc.Class.extend({
     downKeys_: [], // 今押されているキーのリスト (max2)
     dx: 0, // プレイヤーx方向移動量(px)
     dy: 0, // プレイヤーy方向移動量(px)
@@ -157,7 +157,7 @@ Player.InputHandler = cc.Class.extend({
             this.dy = dy;
             this.addDownKey_(key);
             var dir = this.convertDirectionFromKeys_(this.downKeys_);
-            this.player_.updateAnimation(dir, EntityState.Mode.walking);
+            this.player_.updateAnimation(dir, bq.entity.EntityState.Mode.walking);
         }.bind(this);
 
         switch (key) {
@@ -196,7 +196,7 @@ Player.InputHandler = cc.Class.extend({
             case cc.KEY.d:
                 this.dx = 0;
                 // 押しているキーが０でない場合まだ歩いている
-                var sts = (this.downKeys_.length == 0) ? EntityState.Mode.stop : null;
+                var sts = (this.downKeys_.length == 0) ? bq.entity.EntityState.Mode.stop : null;
                 var dir = this.convertDirectionFromKeys_(this.downKeys_);
                 this.player_.updateAnimation(dir, sts);
                 break;
@@ -204,7 +204,7 @@ Player.InputHandler = cc.Class.extend({
             case cc.KEY.w:
                 this.dy = 0;
                 var dir = this.convertDirectionFromKeys_(this.downKeys_);
-                var sts = (this.downKeys_.length == 0) ? EntityState.Mode.stop : null;
+                var sts = (this.downKeys_.length == 0) ? bq.entity.EntityState.Mode.stop : null;
                 this.player_.updateAnimation(dir, sts);
                 break;
             default:
@@ -243,20 +243,20 @@ Player.InputHandler = cc.Class.extend({
     /**
      * キー押したやつから方向に変換
      * @param {Array} downs
-     * @return {EntityState.Direction} 見つからない場合null
+     * @return {bq.entity.EntityState.Direction} 見つからない場合null
      */
     convertDirectionFromKeys_: function(downs) {
         var pairs = [
-            {key: [cc.KEY.s], val:EntityState.Direction.bottom},
-            {key: [cc.KEY.s,cc.KEY.d], val:EntityState.Direction.bottomright},
-            {key: [cc.KEY.d], val:EntityState.Direction.right},
-            {key: [cc.KEY.d, cc.KEY.w], val:EntityState.Direction.topright},
-            {key: [cc.KEY.w], val:EntityState.Direction.top},
-            {key: [cc.KEY.w, cc.KEY.a], val:EntityState.Direction.topleft},
-            {key: [cc.KEY.a], val:EntityState.Direction.left},
-            {key: [cc.KEY.a, cc.KEY.s], val:EntityState.Direction.bottomleft},
-            {key: [cc.KEY.a, cc.KEY.d], val:null},
-            {key: [cc.KEY.w, cc.KEY.s], val:null}
+            {key: [cc.KEY.s], val: bq.entity.EntityState.Direction.bottom},
+            {key: [cc.KEY.s,cc.KEY.d], val: bq.entity.EntityState.Direction.bottomright},
+            {key: [cc.KEY.d], val: bq.entity.EntityState.Direction.right},
+            {key: [cc.KEY.d, cc.KEY.w], val: bq.entity.EntityState.Direction.topright},
+            {key: [cc.KEY.w], val: bq.entity.EntityState.Direction.top},
+            {key: [cc.KEY.w, cc.KEY.a], val: bq.entity.EntityState.Direction.topleft},
+            {key: [cc.KEY.a], val: bq.entity.EntityState.Direction.left},
+            {key: [cc.KEY.a, cc.KEY.s], val: bq.entity.EntityState.Direction.bottomleft},
+            {key: [cc.KEY.a, cc.KEY.d], val: null},
+            {key: [cc.KEY.w, cc.KEY.s], val: null}
         ];
 
         if ( downs.length == 0 ) {
@@ -269,7 +269,7 @@ Player.InputHandler = cc.Class.extend({
                 || ( downs.length==2 && _.contains(downs, pair.key[0]) && _.contains(downs, pair.key[1]) );
         } );
 
-        return found.val;
+         found.val;
     }
 });
 

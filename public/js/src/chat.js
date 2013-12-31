@@ -1,7 +1,8 @@
 /**
  * @fileoverview チャット全般を扱うクラス
  */
-var Chat = cc.Class.extend({
+
+bq.Chat = cc.Class.extend({
     ctor: function() {
         this.chatInput_ = $('#bq-chat-input')[0];
         this.gameCanvas_ = $('#gameCanvas')[0];

@@ -3,10 +3,10 @@
  */
 
 /**
- *
- * @type {*|void|Object|Function}
+ * @constructor
+ * @extends {cc.Node}
  */
-var Beam = cc.Node.extend({
+bq.Beam = cc.Node.extend({
     id: 0, /** ビームID */
     destination_:cc.p(0,0), /** {cc.p} 目標 */
     speed_:0.5, /** 進むスピード */
@@ -65,9 +65,9 @@ var Beam = cc.Node.extend({
 
 /**
  * プリセットからビームを取り出す
- * @returns {Beam} プリセットされたビームを返す、キャッシュされたビームが尽きていた場合は不定（今のところnullを返す）
+ * @return {bq.Beam} プリセットされたビームを返す、キャッシュされたビームが尽きていた場合は不定（今のところnullを返す）
  */
-Beam.pop = function() {
+bq.Beam.pop = function() {
     "use strict";
     if (bq.beams.length <= 0 ) {
         return null;
@@ -84,11 +84,11 @@ Beam.pop = function() {
  * 引数id にあうパーティクルのビームを作成する
  *
  * @param {number} id
- * @returns {Beam}
+ * @return {bq.Beam}
  */
-Beam.create = function(id) {
+bq.Beam.create = function(id) {
     "use strict";
-    var beam =  new Beam(id);
+    var beam =  new bq.Beam(id);
 
     // パーティクルをセット
     var particle = null;
@@ -115,17 +115,18 @@ Beam.create = function(id) {
 /**
  * idなビームをsetupする
  * プレイヤが武器を変更した瞬間などに呼ばれる。
- * @param id
- * @param layer {cc.Layer}
+ * @param {number} id
+ * @param {cc.Layer} layer
  */
-Beam.setup = function(id, layer) {
+bq.Beam.setup = function(id, layer) {
     "use strict";
 
     var maxBeamCount = 5;
     _.times(maxBeamCount, function(i) {
-        var beam = Beam.create(id);
+        var beam = bq.Beam.create(id);
         bq.beams[i] = beam;
         layer.addChild(beam, 10);
     });
 
 };
+
