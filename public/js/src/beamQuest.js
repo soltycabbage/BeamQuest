@@ -36,6 +36,14 @@ var BeamQuestWorld = cc.Layer.extend({
 
         this.playerHandler = new Player.InputHandler(bq.player);
         this.inputHandler.addListener(this.playerHandler);
+        this.inputHandler.addListener({
+            onKeyDown: function(key) {
+                if (key === cc.KEY.enter) {
+                    var chat = new Chat();
+                    chat.focusChat();
+                }
+            }
+        });
 
         this.spawnEnemy_();
         this.initPing_();
