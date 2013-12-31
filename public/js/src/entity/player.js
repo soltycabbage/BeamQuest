@@ -7,7 +7,7 @@
  * @type {*|void|Object|Function}
  */
 var Player = Entity.extend({
-    moveSpeed: 2,                // 1frameの移動量(px)
+    moveSpeed: 4,                // 1frameの移動量(px)
     animationSpeed:0.15,         // delay on animation
     direction: EntityState.Direction.bottom, // 向いている方向
     state:EntityState.Mode.stop,           // 動いてるとか止まってるとかの状態

@@ -47,7 +47,7 @@ bq.EntityManager = cc.Class.extend({
         if (!this.otherPlayers_[moveData.userId]) {
             this.createOtherPlayer(moveData);
         } else {
-            var act = cc.MoveTo.create(0.1, cc.p(moveData.x, moveData.y));
+            var act = cc.MoveTo.create(0.2, cc.p(moveData.x, moveData.y));
             var otherPlayer = this.otherPlayers_[moveData.userId];
             otherPlayer.runAction(act);
         }
