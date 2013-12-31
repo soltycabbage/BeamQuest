@@ -1,4 +1,4 @@
-var BeamQuestWorld = cc.Layer.extend({
+bq.scene.BeamQuestWorld = cc.Layer.extend({
     init:function () {
         'use strict';
 
@@ -112,13 +112,13 @@ var BeamQuestWorld = cc.Layer.extend({
     }
 });
 
-var BeamQuestWorldScene = cc.Scene.extend({
+bq.scene.BeamQuestWorldScene = cc.Scene.extend({
     onEnter:function () {
         'use strict';
 
         this._super();
         if (this.isAlreadyLogin_(bq.player.name)) {
-            var layer = new BeamQuestWorld();
+            var layer = new bq.scene.BeamQuestWorld();
             layer.init();
             this.addChild(layer);
             this.renderEntities_(1); // TODO: maoId

@@ -30,10 +30,6 @@
             'js/src/config.js',
             'js/src/bqLabel.js',
 
-            // scene
-            'js/src/scene/scene.js',
-            'js/src/scene/login.js',
-
             'js/src/chat.js',
             'js/src/inputHandler.js',
 
@@ -43,9 +39,12 @@
             'js/src/entity/player.js',
             'js/src/entity/enemy.js',
             'js/src/entity/beam.js',
-
             'js/src/ping.js',
-            'js/src/beamQuest.js'//add your own files in order here
+
+            // scene
+            'js/src/scene/scene.js',
+            'js/src/scene/login.js',
+            'js/src/scene/beamQuest.js'
         ]
     };
 

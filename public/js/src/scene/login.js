@@ -66,7 +66,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
     welcomeToBeamQuestWorld_: function(userId) {
         this.initPlayer_(userId);
         bq.Socket.getInstance().initAfterLogin();
-        cc.Director.getInstance().replaceScene(new BeamQuestWorldScene());
+        cc.Director.getInstance().replaceScene(new bq.scene.BeamQuestWorldScene());
     },
 
     /**
