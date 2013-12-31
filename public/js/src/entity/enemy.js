@@ -3,7 +3,7 @@
  * @extends {bq.entity.Entity}
  */
 bq.entity.Enemy = bq.entity.Entity.extend({
-    animationSpeed: 0.15,         // delay on animation
+    idlingAnimationSpeed: 0.15, // delay on animation
     isAttacking: false,
     ctor:function (enemy_id) {
         'use strict';
@@ -28,6 +28,7 @@ bq.entity.Enemy = bq.entity.Entity.extend({
         'use strict';
         var keyFrames = this.getIdlingAnimationKeyFrames_();
         var animation = this.buildSimpleAnimationByKeyFrames_(keyFrames);
+        animation.setDelayPerUnit(this.idlingAnimationSpeed);
         return cc.RepeatForever.create(cc.Animate.create(animation));
     },
 
@@ -53,8 +54,6 @@ bq.entity.Enemy = bq.entity.Entity.extend({
 
     buildSimpleAnimationByKeyFrames_: function(keyFrames) {
         var animation = cc.Animation.create();
-        animation.setDelayPerUnit(this.animationSpeed);
-
         var frameCache = cc.SpriteFrameCache.getInstance();
         _.forEach(keyFrames, function(i) {
             var frame = frameCache.getSpriteFrame(this.getSpriteFrame_(i));
