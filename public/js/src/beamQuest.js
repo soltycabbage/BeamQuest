@@ -27,12 +27,25 @@ var BeamQuestWorld = cc.Layer.extend({
         tileMap.initWithTMXFile(bq.config.maps.area.SHINJUKU);
         tileMap.setPosition(cc.p(0,0));
         baseLayer.addChild(tileMap, 0);
-        this.inputHandler = new InputHandler(bq.player);
+
         bq.baseLayer = baseLayer;
         this.scheduleUpdate();
 
-        this.spawnEnemy_();
+        this.inputHandler = new bq.InputHandler();
+        this.inputHandler.attach(this);
 
+        this.playerHandler = new Player.InputHandler(bq.player);
+        this.inputHandler.addListener(this.playerHandler);
+        this.inputHandler.addListener({
+            onKeyDown: function(key) {
+                if (key === cc.KEY.enter) {
+                    var chat = new Chat();
+                    chat.focusChat();
+                }
+            }
+        });
+
+        this.spawnEnemy_();
         this.initPing_();
 
         cc.AudioEngine.getInstance().playMusic(s_BgmField, true);
@@ -44,31 +57,11 @@ var BeamQuestWorld = cc.Layer.extend({
         'use strict';
 
         var baseP = bq.baseLayer.getPosition();
-        var dx = this.inputHandler.dx;
-        var dy = this.inputHandler.dy;
+        var dx = this.playerHandler.dx;
+        var dy = this.playerHandler.dy;
         if (dx !== 0 || dy !== 0) {
             bq.baseLayer.setPosition(cc.p(baseP.x + dx, baseP.y + dy));
         }
-    },
-
-    /** @override */
-    onKeyDown: function(key) {
-        'use strict';
-
-        this.inputHandler.keyDown(key);
-    },
-
-    /** @override */
-    onKeyUp: function(key) {
-        'use strict';
-
-        this.inputHandler.keyUp(key);
-    },
-
-    /** @override */
-    onMouseDown: function (event) {
-        this.inputHandler.onMouseDown(event);
-
     },
 
     initPing_: function() {
