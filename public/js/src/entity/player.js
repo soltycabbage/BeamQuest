@@ -150,40 +150,36 @@ Player.InputHandler = cc.Class.extend({
 
     /** @override */
     onKeyDown: function(key) {
-        var dir;
+
+        var startWalking = function(dx, dy) {
+            this.dx = dx;
+            this.dy = dy;
+            this.addDownKey_(key);
+            var dir = this.convertDirectionFromKeys_(this.downKeys_);
+            this.player_.updateAnimation(dir, EntityState.Mode.walking);
+        }.bind(this);
+
         switch (key) {
-            // TODO 重複多いのでリファクタリング
+            // 重複多いのでリファクタリングした結果ｗｗｗｗｗ
             case cc.KEY.a:
-                this.addDownKey_(key);
-                this.dx = this.player_.moveSpeed;
-                dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(dir, EntityState.Mode.walking);
+                startWalking(this.player_.moveSpeed, this.dy);
                 break;
+
             case cc.KEY.s:
-                this.addDownKey_(key);
-                this.dy = this.player_.moveSpeed;
-                dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(dir, EntityState.Mode.walking);
-
+                startWalking(this.dx, this.player_.moveSpeed);
                 break;
+
             case cc.KEY.d:
-                this.addDownKey_(key);
-                this.dx = -1 * this.player_.moveSpeed;
-                dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(dir, EntityState.Mode.walking);
-
+                startWalking(-this.player_.moveSpeed, this.dy);
                 break;
+
             case cc.KEY.w:
-                this.addDownKey_(key);
-                this.dy = -1 * this.player_.moveSpeed;
-                dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(dir, EntityState.Mode.walking);
-
+                startWalking(this.dx, -this.player_.moveSpeed);
                 break;
+
             default:
                 break;
         }
-
     },
 
     /** @override */
@@ -268,8 +264,8 @@ Player.InputHandler = cc.Class.extend({
         }
 
         var found = _.find(pairs, function(pair) {
-            return ( downs.length==1 &&  _.contains(downs, pair.key[0]) )
-                || ( downs.length==2 &&   _.contains(downs, pair.key[0]) && _.contains(downs, pair.key[1]) );
+            return ( downs.length==1 && _.contains(downs, pair.key[0]) )
+                || ( downs.length==2 && _.contains(downs, pair.key[0]) && _.contains(downs, pair.key[1]) );
         } );
 
         return found.val;
