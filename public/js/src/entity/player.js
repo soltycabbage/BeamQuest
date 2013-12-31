@@ -3,10 +3,10 @@
  */
 
 /**
- *
- * @type {*|void|Object|Function}
+ * @constructor
+ * @extends {bq.Entity}
  */
-var Player = Entity.extend({
+bq.Player = Entity.extend({
     moveSpeed: 4,                // 1frameの移動量(px)
     animationSpeed:0.15,         // delay on animation
     direction: EntityState.Direction.bottom, // 向いている方向
@@ -140,7 +140,7 @@ var Player = Entity.extend({
     }
 });
 
-Player.InputHandler = cc.Class.extend({
+bq.Player.InputHandler = cc.Class.extend({
     downKeys_: [], // 今押されているキーのリスト (max2)
     dx: 0, // プレイヤーx方向移動量(px)
     dy: 0, // プレイヤーy方向移動量(px)

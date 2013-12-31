@@ -34,7 +34,7 @@ var BeamQuestWorld = cc.Layer.extend({
         this.inputHandler = new bq.InputHandler();
         this.inputHandler.attach(this);
 
-        this.playerHandler = new Player.InputHandler(bq.player);
+        this.playerHandler = new bq.Player.InputHandler(bq.player);
         this.inputHandler.addListener(this.playerHandler);
         this.inputHandler.addListener({
             onKeyDown: function(key) {

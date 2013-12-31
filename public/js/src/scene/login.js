@@ -80,7 +80,7 @@ var LoginLayer = cc.Layer.extend({
         var frameCache = cc.SpriteFrameCache.getInstance();
         frameCache.addSpriteFrames(s_PlayerWalkingPlist, s_PlayerWalkingImg);
 
-        var player = new Player();
+        var player = new bq.Player();
         // TODO: ログイン成功時にユーザ情報を返してもらうか、ここでuserIdをサーバに投げてユーザ情報を取るAPIを叩くとかすると良さそう
         player.setProfile({name: userId});
         player.showName();
