@@ -14,11 +14,15 @@ var LoginLayer = cc.Layer.extend({
     onEnter: function() {
         this._super();
         var size = cc.Director.getInstance().getWinSize();
+        var title = bq.Label.createWithShadow('- Beam Quest -', 50);
+        title.setPosition(cc.p(size.width/2, size.height - 100));
+        this.addChild(title);
+
         var label = bq.Label.create('キャラクター名を入力してください。', 16);
         label.setPosition(cc.p(size.width/2, size.height/2 + 50));
         this.addChild(label);
 
-        var nameField = cc.TextFieldTTF.create(this.defaultPlaceHolder_, 'pixelMplus', 16);
+        var nameField = cc.TextFieldTTF.create(this.defaultPlaceHolder_, 'pixelMplus', 32);
         this.addChild(nameField);
         nameField.setPosition(cc.p(size.width / 2, size.height / 2));
         this.nameField_ = nameField;
@@ -93,20 +97,6 @@ var LoginLayer = cc.Layer.extend({
         var nameP = this.nameField_.getPosition();
         failedLabel.setPosition(nameP.x + 10, nameP.y - 30);
         this.addChild(failedLabel);
-    },
-
-    /**
-     * 入力されたUserIDが正しいか判定する
-     * @param {string} userId
-     * @return {boolean}
-     * @private
-     */
-    isValidUserId_: function(userId) {
-        var valid = true;
-        // TODO: 条件増やす
-        valid = (userId.length > 0);
-
-        return valid;
     },
 
     /**
