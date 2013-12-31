@@ -9,6 +9,9 @@
     width: 800px;
     height: 450px;
     margin: 0px auto;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
 }
 
 .bq-menu {
