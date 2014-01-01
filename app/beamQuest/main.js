@@ -1,12 +1,14 @@
 var ping = require('beamQuest/listener/ping'),
     login = require('beamQuest/listener/login'),
     world = require('beamQuest/listener/world');
+    beam = require('beamQuest/listener/beam'),
     entities = require('beamQuest/store/entities');
 
 exports.start = function(io) {
     io.sockets.on('connection', function(socket) {
         login.listen(socket);
         world.listen(socket);
+        beam.listen(socket, io);
 
         // チャット
         socket.on('message:update', function(data) {

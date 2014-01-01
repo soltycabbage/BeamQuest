@@ -14,7 +14,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         baseLayer.setPosition(cc.p(0,0));
         this.addChild(baseLayer, 1, bq.config.tags.BASE_LAYER);
 
-        bq.Beam.setup(bq.player.beamId[0], this);
+        bq.Beam.setup(bq.player.beamId[0], baseLayer);
 
         bq.player.setPosition(cc.p(size.width / 2, size.height / 2));
         baseLayer.addChild(bq.player, 100, bq.config.tags.PLAYER);
