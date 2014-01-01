@@ -54,6 +54,18 @@ bq.EntityManager = cc.Class.extend({
     },
 
     /**
+     * ビーム発射
+     * @param {bq.model.BeamPos} beamPos
+     */
+    beamShoot: function(beamPos) {
+        // TODO: ほんとはここじゃなくてentityに定義されたshoot()関数的なやつを呼ぶのがいい。
+        var beam = bq.Beam.create(beamPos.beamId);
+        bq.baseLayer.addChild(beam, 10);
+        cc.AudioEngine.getInstance().playEffect(s_SeBeamA);
+        beam.initDestination(beamPos.src, beamPos.dest);
+    },
+
+    /**
      * @param {Object}
      */
     createOtherPlayers: function(players) {

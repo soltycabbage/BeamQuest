@@ -34,33 +34,38 @@ bq.Beam = cc.Node.extend({
     },
 
     /**
-     * destまで飛ぶように設定する。呼び出したあとは画面に表示されて飛ぶ
-     * @param {cc.p} dest
+     * srcからdestまで飛ぶように設定する。呼び出したあとは画面に表示されて飛ぶ
+     * @param {cc.p} src 発射開始座標
+     * @param {cc.p} dest 到着予定座標
      */
-    initDestination: function (dest) {
+    initDestination: function (src, dest) {
         "use strict";
+        this.enable();
+        this.destination_ = dest;
+        this.setPosition(src);
+        this.inc_.x = (dest.x - src.x) * this.speed_;
+        this.inc_.y = (dest.y - src.y) * this.speed_;
+
+        // duration秒後にこのビームを消去する
+        var duration = 2;
+        var remove = cc.CallFunc.create(this.removeFromParent, this);
+        var seq = cc.Sequence.create(cc.FadeIn.create(duration) , remove);
+        this.runAction(seq);
+    },
+
+    enable: function() {
         this.setVisible(true);
         this.active_ = true;
-        this.destination_ = dest;
-        this.inc_.x = dest.x * this.speed_;
-        this.inc_.y = dest.y * this.speed_;
-
-        // duration秒後にこのビームがdisableになるアクションを追加
-        var duration = 2;
-        var remove = cc.CallFunc.create(this.disable_, this);
-        var seq = cc.Sequence.create( cc.FadeIn.create(duration) , remove);
-        this.runAction(seq);
     },
 
     /**
      * このビームをフィールドから消して次使えるように準備する
-     * @private
      */
-    disable_: function() {
+    disable: function() {
         this.setVisible(false);
         this.active_ = false;
+        this.inc_ = cc.p(0, 0);
     }
-
 });
 
 /**
@@ -76,6 +81,7 @@ bq.Beam.pop = function() {
     if ( be == undefined ) {
         return null;
     }
+    be.disable();
     return be;
 },
 
@@ -99,15 +105,17 @@ bq.Beam.create = function(id) {
         case 1:
             particle = cc.ParticleFlower.create();
             break;
+        case 2:
+            particle = cc.ParticleSun.create();
+            break;
     }
 
     var myTexture = cc.TextureCache.getInstance().textureForKey(s_beam0);
     particle.setTexture(myTexture);
-
+    particle.setPosition(cc.p(0, 0));
     beam.addChild(particle);
-    beam.setPosition(cc.p(0,0));
-
-    beam.speed_ = 0.1;
+    beam.speed_ = 0.05;
+    beam.disable();
 
     return beam;
 };
@@ -129,4 +137,3 @@ bq.Beam.setup = function(id, layer) {
     });
 
 };
-
