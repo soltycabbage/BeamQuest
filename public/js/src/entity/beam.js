@@ -46,9 +46,9 @@ bq.Beam = cc.Node.extend({
         this.inc_.x = (dest.x - src.x) * this.speed_;
         this.inc_.y = (dest.y - src.y) * this.speed_;
 
-        // duration秒後にこのビームがdisableになるアクションを追加
+        // duration秒後にこのビームを消去する
         var duration = 2;
-        var remove = cc.CallFunc.create(this.disable, this);
+        var remove = cc.CallFunc.create(this.removeFromParent, this);
         var seq = cc.Sequence.create(cc.FadeIn.create(duration) , remove);
         this.runAction(seq);
     },
@@ -66,7 +66,6 @@ bq.Beam = cc.Node.extend({
         this.active_ = false;
         this.inc_ = cc.p(0, 0);
     }
-
 });
 
 /**
@@ -116,6 +115,7 @@ bq.Beam.create = function(id) {
     particle.setPosition(cc.p(0, 0));
     beam.addChild(particle);
     beam.speed_ = 0.05;
+    beam.disable();
 
     return beam;
 };
