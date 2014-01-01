@@ -106,7 +106,7 @@ bq.Beam.create = function(id) {
             particle = cc.ParticleFlower.create();
             break;
         case 2:
-            particle= cc.ParticleSun.create();
+            particle = cc.ParticleSun.create();
             break;
     }
 
