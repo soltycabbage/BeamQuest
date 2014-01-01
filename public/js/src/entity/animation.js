@@ -3,24 +3,26 @@
  */
 
 bq.Animation = {};
+// todo bq.entity.animation
 
 /**
  * Jsonからアニメーションのマップを返す
  */
-bq.Animation.createAnimations = function (filename) {
+bq.Animation.createAnimations = function (keyFrameMap) {
     // var data = loadJson(filename);
-    var data = { "act": ["b0_1.png", "b0_2.png"]};
 
     var animations = {};
-    for (var k in data) {
-        var keyFrames = data[k];
+    for (var k in keyFrameMap) {
+        var keyFrames = keyFrameMap[k];
         animations[k] = bq.Animation.createAnimation_(keyFrames);
     }
+
+    return animations;
 };
 
 bq.Animation.createAnimation_ = function (frames) {
     var animation = cc.Animation.create();
-    animation.setDelayPerUnit(this.animationSpeed);
+    animation.setDelayPerUnit(0.1);
 
     var frameCache = cc.SpriteFrameCache.getInstance();
     _.forEach(frames, function (i) {

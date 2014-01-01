@@ -11,15 +11,19 @@ bq.entity.Entity = cc.Sprite.extend({
     DEFULT_NAME: 'entity',
     name: 'entity', // entityの名前
     chatRect: null, // チャット吹き出しのSprite
+    currentState:null,
+    currentDirection:null,
 
     /**
      * @param {string} spriteFrameName *.plistの<key>に設定されてるframeName
      */
-    ctor: function(spriteFrameName) {
+    ctor: function(spriteFrameName, frameMap) {
         this._super();
         var spriteFrame = cc.SpriteFrameCache.getInstance().getSpriteFrame(spriteFrameName);
         spriteFrame && this.initWithSpriteFrame(spriteFrame);
-        this.animations = this.createAnimations("");
+        if ( frameMap ) {
+            this.animations = bq.Animation.createAnimations(frameMap);
+        }
         this.init_();
     },
 
@@ -87,28 +91,47 @@ bq.entity.Entity = cc.Sprite.extend({
         }
     },
 
-    createAnimations: function(filename) {
-      this.animations = bq.Animation.createAnimations(filename);
-    },
 
     /**
      *
      * @param {string} name
      * @param {EntityState.Direction} direction
-     * @returns {bq.Animation}
+     * @returns {bq.Animate}
      */
     getAnimationByNameDirection: function(name, direction) {
-       return this.animations[name]; // 本当はdirectionも
+        var key = name + "_" + direction;
+        if ( this.animations[key] ) {
+            return this.animations[key];
+        } else {
+            cc.log(key + "　is not found");
+        }
      },
 
     /**
-     *
+     * 向きと状態を更新してそれにもとづいてアニメーションを更新する
+     * @param {bq.entity.EntityState.Direction} dir 向き (nullなら更新しない）
+     * @param {bq.entity.EntityState.Mode} sts 状態 (nullなら更新しない）
      */
-    setAnimation: function(name, direction){
-        if ( this.currectName == name && this.currentDirection == direction ) {
+    setAnimation: function(state, direction){
+        if ( state == null && direction == null ) {
+            return;
+        }
+        if ( state == this.currentState && direction == this.currentDirection ) {
             return ;
         }
-        var anime = this.getAnimationByNameDirection(name,direction);
-        this.runAction(anime);
+        state = state ? state : this.currentState;
+        direction = direction ? direction : this.currentDirection;
+
+        this.currentState = state;
+        this.currentDirection = direction;
+        // すでにあるアニメーションを削除
+        if ( this.getNumberOfRunningActions() > 0 ) {
+            this.stopAllActions();
+        }
+
+        var animation = this.getAnimationByNameDirection(state,direction);
+        var animate = cc.Animate.create(animation);
+        var forever = cc.RepeatForever.create(animate);
+        this.runAction(forever);
     }
 });
