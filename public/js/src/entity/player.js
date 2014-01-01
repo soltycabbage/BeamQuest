@@ -54,19 +54,6 @@ bq.entity.Player = bq.entity.Entity.extend({
     },
 
     /**
-     * 引数に与えられた座標をbaseLayerから見た座標に変換して返す
-     * @param {cc.p} src
-     * @return {Object}
-     */
-    convertAbsolutePosition: function(src) {
-        var baseLayerP = bq.baseLayer.getPosition();
-        return {
-            x: src.x - baseLayerP.x,
-            y: src.y - baseLayerP.y
-        };
-    },
-
-    /**
      * 向きと状態を更新してそれにもとづいてアニメーションを更新する
      * @param {bq.entity.EntityState.Direction} dir 向き (nullなら更新しない）
      * @param {bq.entity.EntityState.Mode} sts 状態 (nullなら更新しない）
@@ -145,7 +132,7 @@ bq.entity.Player = bq.entity.Entity.extend({
      */
     shootInternal_: function(beam, destination) {
         var src = this.getPosition();
-        var dest = this.convertAbsolutePosition(destination);
+        var dest = bq.camera.convertWindowPositionToWorldPosition(destination);
 
         var json = { // TODO モデル化したい気持ち
             userId: this.name,

@@ -21,6 +21,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
 
         this.camera = new bq.Camera(baseLayer);
         this.camera.lookAt(bq.player);
+        bq.camera = this.camera;
 
         var tileMap = new cc.TMXTiledMap();
         tileMap.initWithTMXFile(bq.config.maps.area.SHINJUKU);
