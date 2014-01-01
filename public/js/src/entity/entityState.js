@@ -10,8 +10,7 @@ bq.entity.EntityState = {
      */
     Mode: {
         stop: 'idle', /** 止まってる */
-        walking: 'step', /** 歩いてる */
-        maxMode: 2
+        walking: 'step' /** 歩いてる */
     },
 
     /**
@@ -26,8 +25,7 @@ bq.entity.EntityState = {
         top: 'top',
         topleft: 'topleft',
         left: 'left',
-        bottomleft: 'bottomleft',
-        maxDirection: 8 // TODO 削除 lengthを使う
+        bottomleft: 'bottomleft'
     }
 
 };
