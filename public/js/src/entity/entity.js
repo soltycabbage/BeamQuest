@@ -112,7 +112,7 @@ bq.entity.Entity = cc.Sprite.extend({
      * @param {bq.entity.EntityState.Direction} dir 向き
      * @param {bq.entity.EntityState.Mode} sts 状態
      */
-    setAnimation: function(state, direction){
+    updateAnimation: function(state, direction){
 
         if ( state == null && direction == null ) {
             return;

@@ -11,7 +11,7 @@ bq.entity.Enemy = bq.entity.Entity.extend({
         this._super(this.getSpriteFrame_(1), this.getKeyFrameMap_());
 
         this.animations['atacking_bottom'] = this.createAttackingAnimation();
-        this.setAnimation(bq.entity.EntityState.Mode.stop, bq.entity.EntityState.Direction.bottom);
+        this.updateAnimation(bq.entity.EntityState.Mode.stop, bq.entity.EntityState.Direction.bottom);
 
         this.scheduleUpdate();
     },
@@ -21,7 +21,7 @@ bq.entity.Enemy = bq.entity.Entity.extend({
             // 1%の確率で攻撃モーション(適当)
             if (Math.random() < 0.01) {
                 this.isAttacking = true;
-                this.setAnimation('atacking' , bq.entity.EntityState.Direction.bottom);
+                this.updateAnimation('atacking' , bq.entity.EntityState.Direction.bottom);
             }
         }
     },
@@ -38,7 +38,7 @@ bq.entity.Enemy = bq.entity.Entity.extend({
             cc.CallFunc.create(function(){
                 // アタックのモーションとったら元に戻す
                 this.isAttacking = false;
-                this.setAnimation('idle', 'bottom');
+                this.updateAnimation('idle', 'bottom');
             }, this),
         ]);
     },

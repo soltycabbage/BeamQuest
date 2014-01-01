@@ -20,7 +20,6 @@ bq.entity.Player = bq.entity.Entity.extend({
         this._super('b0_0.png', this.getKeyFrameMap_());
         this.socket = bq.Socket.getInstance();
         this.scheduleUpdate();
-
     },
 
     /** @override */
@@ -126,25 +125,23 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.name = data.name;
     },
 
-    getKeyFrameMap_: function() {
+    getKeyFrameMap_: function () {
         return  {
-            idle_bottom: ["b0_0.png", "b0_1.png", "b0_2.png", "b0_3.png"],
-            idle_bottomright: ["b1_0.png", "b1_1.png", "b1_2.png", "b1_3.png"],
-            idle_right: ["b2_0.png", "b2_1.png", "b2_2.png", "b2_3.png"],
-            idle_topright: ["b3_0.png", "b3_1.png", "b3_2.png", "b3_3.png"],
-            idle_top: ["b4_0.png", "b4_1.png", "b4_2.png", "b4_3.png"],
-            idle_topleft: ["b5_0.png", "b5_1.png", "b5_2.png", "b5_3.png"],
-            idle_left: ["b6_0.png", "b6_1.png", "b6_2.png", "b6_3.png"],
-            idle_bottomleft: ["b7_0.png", "b0_1.png", "b0_2.png", "b0_3.png"],
-
-            step_bottom: ["b0_4.png", "b0_5.png", "b0_6.png", "b0_7.png"],
+            idle_bottom:      ["b0_0.png", "b0_1.png", "b0_2.png", "b0_3.png"],
+            idle_right:       ["b2_0.png", "b2_1.png", "b2_2.png", "b2_3.png"],
+            idle_topright:    ["b3_0.png", "b3_1.png", "b3_2.png", "b3_3.png"],
+            idle_top:         ["b4_0.png", "b4_1.png", "b4_2.png", "b4_3.png"],
+            idle_topleft:     ["b5_0.png", "b5_1.png", "b5_2.png", "b5_3.png"],
+            idle_left:        ["b6_0.png", "b6_1.png", "b6_2.png", "b6_3.png"],
+            idle_bottomleft:  ["b7_0.png", "b0_1.png", "b0_2.png", "b0_3.png"],
+            step_bottom:      ["b0_4.png", "b0_5.png", "b0_6.png", "b0_7.png"],
             step_bottomright: ["b1_4.png", "b1_5.png", "b1_6.png", "b1_7.png"],
-            step_right: ["b2_4.png", "b2_5.png", "b2_6.png", "b2_7.png"],
-            step_topright: ["b3_4.png", "b3_5.png", "b3_6.png", "b3_7.png"],
-            step_top: ["b4_4.png", "b4_5.png", "b4_6.png", "b4_7.png"],
-            step_topleft: ["b5_4.png", "b5_5.png", "b5_6.png", "b5_7.png"],
-            step_left: ["b6_4.png", "b6_5.png", "b6_6.png", "b6_7.png"],
-            step_bottomleft: ["b7_4.png", "b7_5.png", "b7_6.png", "b7_7.png"]
+            step_right:       ["b2_4.png", "b2_5.png", "b2_6.png", "b2_7.png"],
+            step_topright:    ["b3_4.png", "b3_5.png", "b3_6.png", "b3_7.png"],
+            step_top:         ["b4_4.png", "b4_5.png", "b4_6.png", "b4_7.png"],
+            step_topleft:     ["b5_4.png", "b5_5.png", "b5_6.png", "b5_7.png"],
+            step_left:        ["b6_4.png", "b6_5.png", "b6_6.png", "b6_7.png"],
+            step_bottomleft:  ["b7_4.png", "b7_5.png", "b7_6.png", "b7_7.png"]
         };
     }
 });
@@ -166,7 +163,7 @@ bq.entity.Player.InputHandler = cc.Class.extend({
             this.dy = dy;
             this.addDownKey_(key);
             var dir = this.convertDirectionFromKeys_(this.downKeys_);
-            this.player_.setAnimation(bq.entity.EntityState.Mode.walking,dir);
+            this.player_.updateAnimation(bq.entity.EntityState.Mode.walking,dir);
         }.bind(this);
 
         switch (key) {
@@ -207,14 +204,14 @@ bq.entity.Player.InputHandler = cc.Class.extend({
                 // 押しているキーが０でない場合まだ歩いている
                 var sts = (this.downKeys_.length == 0) ? bq.entity.EntityState.Mode.stop : null;
                 var dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.setAnimation(sts,dir);
+                this.player_.updateAnimation(sts,dir);
                 break;
             case cc.KEY.s:
             case cc.KEY.w:
                 this.dy = 0;
                 var dir = this.convertDirectionFromKeys_(this.downKeys_);
                 var sts = (this.downKeys_.length == 0) ? bq.entity.EntityState.Mode.stop : null;
-                this.player_.setAnimation(sts,dir);
+                this.player_.updateAnimation(sts,dir);
                 break;
             default:
                 break;
