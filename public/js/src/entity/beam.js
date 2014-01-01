@@ -137,4 +137,3 @@ bq.Beam.setup = function(id, layer) {
     });
 
 };
-
