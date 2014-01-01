@@ -3,6 +3,12 @@
     src: url(../res/fonts/pixelMplus.ttf) format("truetype");
 }
 
+body {
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+}
+
 #bq-canvas-container {
     position: relative;
     overflow: hidden;
