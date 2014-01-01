@@ -111,8 +111,9 @@ bq.entity.Player = bq.entity.Entity.extend({
      * @param {cc.p} destination
      */
     shoot: function( destination) {
-        var curr = this.getPosition();
-        var diff = cc.p((destination.x-curr.x), (destination.y-curr.y));
+        var size = cc.Director.getInstance().getWinSize();
+        var center = cc.p(size.width / 2, size.height / 2);
+        var diff = cc.p((destination.x - center.x), (destination.y - center.y));
 
         // BPが残ってるかチェック
 
