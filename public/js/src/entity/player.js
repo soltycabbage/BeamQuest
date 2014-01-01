@@ -63,7 +63,7 @@ bq.entity.Player = bq.entity.Entity.extend({
         return {
             x: src.x - baseLayerP.x,
             y: src.y - baseLayerP.y
-        }
+        };
     },
 
     /**
