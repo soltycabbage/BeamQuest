@@ -35,7 +35,7 @@ bq.entity.Player = bq.entity.Entity.extend({
      */
     sendPosition: function() {
         if (!bq.baseLayer) {return;}
-        var absolPos = this.convertAbsolutePosition(this.getPosition());
+        var absolPos = this.getPosition();
         var posData = {
             userId: this.name,
             mapId: 1, // TODO: MapID の実装
@@ -144,7 +144,7 @@ bq.entity.Player = bq.entity.Entity.extend({
      * @private
      */
     shootInternal_: function(beam, destination) {
-        var src = this.convertAbsolutePosition(this.getPosition());
+        var src = this.getPosition();
         var dest = this.convertAbsolutePosition(destination);
 
         var json = { // TODO モデル化したい気持ち
