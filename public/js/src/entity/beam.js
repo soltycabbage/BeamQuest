@@ -40,8 +40,7 @@ bq.Beam = cc.Node.extend({
      */
     initDestination: function (src, dest) {
         "use strict";
-        this.setVisible(true);
-        this.active_ = true;
+        this.enable();
         this.destination_ = dest;
         this.setPosition(src);
         this.inc_.x = (dest.x - src.x) * this.speed_;
@@ -49,18 +48,23 @@ bq.Beam = cc.Node.extend({
 
         // duration秒後にこのビームがdisableになるアクションを追加
         var duration = 2;
-        var remove = cc.CallFunc.create(this.disable_, this);
-        var seq = cc.Sequence.create( cc.FadeIn.create(duration) , remove);
+        var remove = cc.CallFunc.create(this.disable, this);
+        var seq = cc.Sequence.create(cc.FadeIn.create(duration) , remove);
         this.runAction(seq);
+    },
+
+    enable: function() {
+        this.setVisible(true);
+        this.active_ = true;
     },
 
     /**
      * このビームをフィールドから消して次使えるように準備する
-     * @private
      */
-    disable_: function() {
+    disable: function() {
         this.setVisible(false);
         this.active_ = false;
+        this.inc_ = cc.p(0, 0);
     }
 
 });
@@ -78,6 +82,7 @@ bq.Beam.pop = function() {
     if ( be == undefined ) {
         return null;
     }
+    be.disable();
     return be;
 },
 
