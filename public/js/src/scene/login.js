@@ -97,6 +97,11 @@ bq.scene.LoginLayer = cc.Layer.extend({
         var nameP = this.nameField_.getPosition();
         failedLabel.setPosition(nameP.x + 10, nameP.y - 30);
         this.addChild(failedLabel);
+        // 数秒後に消えるように
+        _.delay(_.bind(function() {
+            "use strict";
+            this.removeChild(failedLabel);
+        }, this), 2000);
     },
 
     /**
