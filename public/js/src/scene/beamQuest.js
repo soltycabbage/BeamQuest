@@ -14,14 +14,13 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         baseLayer.setPosition(cc.p(0,0));
         this.addChild(baseLayer, 1, bq.config.tags.BASE_LAYER);
 
-        var playerLayer = cc.Layer.create();
-        playerLayer.setPosition(cc.p(0,0));
-        this.addChild(playerLayer, 100, bq.config.tags.BASE_LAYER);
-
         bq.Beam.setup(bq.player.beamId[0], this);
 
         bq.player.setPosition(cc.p(size.width / 2, size.height / 2));
-        playerLayer.addChild(bq.player, 0);
+        baseLayer.addChild(bq.player, 100, bq.config.tags.PLAYER);
+
+        this.camera = new bq.Camera(baseLayer);
+        this.camera.lookAt(bq.player);
 
         var tileMap = new cc.TMXTiledMap();
         tileMap.initWithTMXFile(bq.config.maps.area.SHINJUKU);
@@ -56,11 +55,11 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
     update: function() {
         'use strict';
 
-        var baseP = bq.baseLayer.getPosition();
+        var baseP = bq.player.getPosition();
         var dx = this.playerHandler.dx;
         var dy = this.playerHandler.dy;
         if (dx !== 0 || dy !== 0) {
-            bq.baseLayer.setPosition(cc.p(baseP.x + dx, baseP.y + dy));
+            bq.player.setPosition(cc.p(baseP.x + dx, baseP.y + dy));
         }
     },
 

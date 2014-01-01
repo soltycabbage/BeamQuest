@@ -34,15 +34,13 @@ bq.entity.Player = bq.entity.Entity.extend({
      * 自分の現在座標をサーバに送信する
      */
     sendPosition: function() {
-        if (!bq.baseLayer) {return;}
         var playerP = this.getPosition();
-        var baseLayerP = bq.baseLayer.getPosition();
 
         var abslPos = {
             userId: this.name,
             mapId: 1, // TODO: MapID の実装
-            x: playerP.x - baseLayerP.x,
-            y: playerP.y - baseLayerP.y
+            x: playerP.x,
+            y: playerP.y
         }
 
         // 前回送信時と位置が変わってなかったら送信しない
@@ -163,19 +161,19 @@ bq.entity.Player.InputHandler = cc.Class.extend({
         switch (key) {
             // 重複多いのでリファクタリングした結果ｗｗｗｗｗ
             case cc.KEY.a:
-                startWalking(this.player_.moveSpeed, this.dy);
-                break;
-
-            case cc.KEY.s:
-                startWalking(this.dx, this.player_.moveSpeed);
-                break;
-
-            case cc.KEY.d:
                 startWalking(-this.player_.moveSpeed, this.dy);
                 break;
 
-            case cc.KEY.w:
+            case cc.KEY.s:
                 startWalking(this.dx, -this.player_.moveSpeed);
+                break;
+
+            case cc.KEY.d:
+                startWalking(this.player_.moveSpeed, this.dy);
+                break;
+
+            case cc.KEY.w:
+                startWalking(this.dx, this.player_.moveSpeed);
                 break;
 
             default:
