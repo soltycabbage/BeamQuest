@@ -34,16 +34,18 @@ bq.Beam = cc.Node.extend({
     },
 
     /**
-     * destまで飛ぶように設定する。呼び出したあとは画面に表示されて飛ぶ
-     * @param {cc.p} dest
+     * srcからdestまで飛ぶように設定する。呼び出したあとは画面に表示されて飛ぶ
+     * @param {cc.p} src 発射開始座標
+     * @param {cc.p} dest 到着予定座標
      */
-    initDestination: function (dest) {
+    initDestination: function (src, dest) {
         "use strict";
         this.setVisible(true);
         this.active_ = true;
         this.destination_ = dest;
-        this.inc_.x = dest.x * this.speed_;
-        this.inc_.y = dest.y * this.speed_;
+        this.setPosition(src);
+        this.inc_.x = (dest.x - src.x) * this.speed_;
+        this.inc_.y = (dest.y - src.y) * this.speed_;
 
         // duration秒後にこのビームがdisableになるアクションを追加
         var duration = 2;
@@ -99,15 +101,16 @@ bq.Beam.create = function(id) {
         case 1:
             particle = cc.ParticleFlower.create();
             break;
+        case 2:
+            particle= cc.ParticleSun.create();
+            break;
     }
 
     var myTexture = cc.TextureCache.getInstance().textureForKey(s_beam0);
     particle.setTexture(myTexture);
-
+    particle.setPosition(cc.p(0, 0));
     beam.addChild(particle);
-    beam.setPosition(cc.p(0,0));
-
-    beam.speed_ = 0.1;
+    beam.speed_ = 0.05;
 
     return beam;
 };

@@ -14,7 +14,7 @@ bq.entity.Player = bq.entity.Entity.extend({
     POSITION_SEND_INTERVAL: 5,   // 位置情報を何frameごとに送信するか
     positionSendCount_: 0,       // 位置情報送信用カウンター
     prevPos_: {x: 0, y: 0},      // 前回送信時の座標
-    beamId:[0], // 装備しているビームのID
+    beamId:[2], // 装備しているビームのID
 
     ctor:function () {
         this._super('b0_0.png');
@@ -35,24 +35,35 @@ bq.entity.Player = bq.entity.Entity.extend({
      */
     sendPosition: function() {
         if (!bq.baseLayer) {return;}
-        var playerP = this.getPosition();
-        var baseLayerP = bq.baseLayer.getPosition();
-
-        var abslPos = {
+        var absolPos = this.convertAbsolutePosition(this.getPosition());
+        var posData = {
             userId: this.name,
             mapId: 1, // TODO: MapID の実装
-            x: playerP.x - baseLayerP.x,
-            y: playerP.y - baseLayerP.y
-        }
+            x: absolPos.x,
+            y: absolPos.y
+        };
 
         // 前回送信時と位置が変わってなかったら送信しない
-        if (this.prevPos_.mapId === abslPos.mapId && this.prevPos_.x === abslPos.x && this.prevPos_.y === abslPos.y) {
+        if (this.prevPos_.mapId === posData.mapId && this.prevPos_.x === posData.x && this.prevPos_.y === posData.y) {
             return;
         }
-        this.prevPos_.mapId = abslPos.mapId;
-        this.prevPos_.x = abslPos.x;
-        this.prevPos_.y = abslPos.y;
-        this.socket.sendPlayerPosition(abslPos);
+        this.prevPos_.mapId = posData.mapId;
+        this.prevPos_.x = posData.x;
+        this.prevPos_.y = posData.y;
+        this.socket.sendPlayerPosition(posData);
+    },
+
+    /**
+     * 引数に与えられた座標をbaseLayerから見た座標に変換して返す
+     * @param {cc.p} src
+     * @return {Object}
+     */
+    convertAbsolutePosition: function(src) {
+        var baseLayerP = bq.baseLayer.getPosition();
+        return {
+            x: src.x - baseLayerP.x,
+            y: src.y - baseLayerP.y
+        }
     },
 
     /**
@@ -112,10 +123,7 @@ bq.entity.Player = bq.entity.Entity.extend({
      *
      * @param {cc.p} destination
      */
-    shoot: function( destination) {
-        var curr = this.getPosition();
-        var diff = cc.p((destination.x-curr.x), (destination.y-curr.y));
-
+    shoot: function(destination) {
         // BPが残ってるかチェック
 
         //撃てるならBPを減らす
@@ -126,8 +134,8 @@ bq.entity.Player = bq.entity.Entity.extend({
             // TODO どうする？？
         } else {
             cc.AudioEngine.getInstance().playEffect(s_SeBeamA);
-            b.initDestination(diff);
-            b.setPosition(0,0);
+            b.initDestination(this.convertAbsolutePosition(this.getPosition()),
+                this.convertAbsolutePosition(destination));
         }
     },
 
