@@ -5,66 +5,65 @@
 bq.entity.Enemy = bq.entity.Entity.extend({
     idlingAnimationSpeed: 0.15, // delay on animation
     isAttacking: false,
-    ctor:function (enemy_id) {
+    ctor: function (enemy_id) {
         'use strict';
         this.enemy_id_ = String('00' + enemy_id).slice(-3); // NOTE sprintf('%03d')
-        this._super(this.getSpriteFrame_(1));
-        this.runAction(this.createIdlingAnimation());
+        this._super(this.getSpriteFrame_(1), this.getKeyFrameMap_());
+
+        this.animations['atacking_bottom'] = this.createAttackingAnimation();
+        this.setAnimation(bq.entity.EntityState.Mode.stop, bq.entity.EntityState.Direction.bottom);
+
         this.scheduleUpdate();
     },
 
-    update: function() {
-        if (! this.isAttacking) {
+    update: function () {
+        if (!this.isAttacking) {
             // 1%の確率で攻撃モーション(適当)
             if (Math.random() < 0.01) {
                 this.isAttacking = true;
-                this.stopAllActions();
-                this.runAction(this.createAttackingAnimation());
+                this.setAnimation('atacking' , bq.entity.EntityState.Direction.bottom);
             }
         }
     },
 
-    createIdlingAnimation: function() {
-        'use strict';
-        var keyFrames = this.getIdlingAnimationKeyFrames_();
-        var animation = this.buildSimpleAnimationByKeyFrames_(keyFrames);
-        animation.setDelayPerUnit(this.idlingAnimationSpeed);
-        return cc.RepeatForever.create(cc.Animate.create(animation));
-    },
-
-    getIdlingAnimationKeyFrames_: function() {
-        return [1, 2, 3, 4];
-    },
-
     createAttackingAnimation: function() {
-        var vibrate = this.buildSimpleAnimationByKeyFrames_([5, 6]);
+        var vibrate = bq.entity.Animation.createAnimation(this.getSpriteFrames_([5,6]));
         vibrate.setDelayPerUnit(0.1);
         vibrate.setLoops(5);
-        var bite =this.buildSimpleAnimationByKeyFrames_([7, 8]);
+        var bite = bq.entity.Animation.createAnimation(this.getSpriteFrames_([7,8]));
         bite.setDelayPerUnit(0.5);
         return cc.Sequence.create([
             cc.Animate.create(vibrate),
             cc.Animate.create(bite),
             cc.CallFunc.create(function(){
+                // アタックのモーションとったら元に戻す
                 this.isAttacking = false;
-                this.runAction(this.createIdlingAnimation());
+                this.setAnimation('idle', 'bottom');
             }, this),
         ]);
     },
 
-    buildSimpleAnimationByKeyFrames_: function(keyFrames) {
-        var animation = cc.Animation.create();
-        var frameCache = cc.SpriteFrameCache.getInstance();
-        _.forEach(keyFrames, function(i) {
-            var frame = frameCache.getSpriteFrame(this.getSpriteFrame_(i));
-            animation.addSpriteFrame(frame);
-        }, this);
-        return animation;
-    },
-
-    getSpriteFrame_: function(frame_no) {
+    getSpriteFrame_: function (i) {
         'use strict';
-        var no = String('0' + frame_no).slice(-2); // NOTE sprintf('%02d')
+        var no = String('0' + i).slice(-2); // NOTE sprintf('%02d')
         return 'enemy' + this.enemy_id_ + '_' + no + '.png';
     },
+
+
+    getSpriteFrames_: function (ids) {
+        'use strict';
+        return _.map(ids,
+            this.getSpriteFrame_, this);
+    },
+
+    getKeyFrameMap_: function () {
+        'use strict';
+        var frames = {};
+        var idleIds = [1,2,3,4];
+        _.each(['idle_bottom'], function (sts) {
+            frames[sts] = this.getSpriteFrames_(idleIds);
+            }, this);
+
+        return frames;
+    }
 });

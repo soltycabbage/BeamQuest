@@ -13,22 +13,27 @@ bq.entity.Animation.createAnimations = function (keyFrameMap) {
     var animations = {};
     for (var k in keyFrameMap) {
         var keyFrames = keyFrameMap[k];
-        animations[k] = bq.entity.Animation.createAnimation_(keyFrames);
+        var animation = bq.entity.Animation.createAnimation(keyFrames);
+        var animate = cc.Animate.create(animation);
+        animations[k] = cc.RepeatForever.create(animate);
     }
 
     return animations;
 };
 
-bq.entity.Animation.createAnimation_ = function (frames) {
+bq.entity.Animation.createAnimation = function (frames) {
     var animation = cc.Animation.create();
     animation.setDelayPerUnit(0.1);
 
     var frameCache = cc.SpriteFrameCache.getInstance();
     _.forEach(frames, function (i) {
         var frame = frameCache.getSpriteFrame(i);
-        animation.addSpriteFrame(frame);
+        if ( !frame ) {
+            cc.log("frame is "+frame);
+        } else {
+            animation.addSpriteFrame(frame);
+        }
     }, this);
-
 
     return animation;
 };

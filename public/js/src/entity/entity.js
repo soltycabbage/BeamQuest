@@ -95,7 +95,7 @@ bq.entity.Entity = cc.Sprite.extend({
     /**
      *
      * @param {string} name
-     * @param {EntityState.Direction} direction
+     * @param {string} direction
      * @returns {bq.Animate}
      */
     getAnimationByNameDirection: function(name, direction) {
@@ -109,10 +109,11 @@ bq.entity.Entity = cc.Sprite.extend({
 
     /**
      * 向きと状態を更新してそれにもとづいてアニメーションを更新する
-     * @param {bq.entity.EntityState.Direction} dir 向き (nullなら更新しない）
-     * @param {bq.entity.EntityState.Mode} sts 状態 (nullなら更新しない）
+     * @param {bq.entity.EntityState.Direction} dir 向き
+     * @param {bq.entity.EntityState.Mode} sts 状態
      */
     setAnimation: function(state, direction){
+
         if ( state == null && direction == null ) {
             return;
         }
@@ -124,14 +125,13 @@ bq.entity.Entity = cc.Sprite.extend({
 
         this.currentState = state;
         this.currentDirection = direction;
+
+        var animation = this.getAnimationByNameDirection(state,direction);
+
         // すでにあるアニメーションを削除
         if ( this.getNumberOfRunningActions() > 0 ) {
             this.stopAllActions();
         }
-
-        var animation = this.getAnimationByNameDirection(state,direction);
-        var animate = cc.Animate.create(animation);
-        var forever = cc.RepeatForever.create(animate);
-        this.runAction(forever);
+        this.runAction(animation);
     }
 });
