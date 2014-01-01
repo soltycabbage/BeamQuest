@@ -163,7 +163,7 @@ bq.entity.Player = bq.entity.Entity.extend({
      * @param {Object} data
      */
     setProfile: function(data) {
-       this.name = data.name;
+        this.name = data.name;
     }
 });
 
