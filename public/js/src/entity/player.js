@@ -133,10 +133,29 @@ bq.entity.Player = bq.entity.Entity.extend({
         if ( b == null ) {
             // TODO どうする？？
         } else {
-            cc.AudioEngine.getInstance().playEffect(s_SeBeamA);
-            b.initDestination(this.convertAbsolutePosition(this.getPosition()),
-                this.convertAbsolutePosition(destination));
+            this.shootInternal_(b, destination);
         }
+    },
+
+    /**
+     * サーバに伝えてからビーム発射
+     * @param {bq.Beam} beam
+     * @param {cc.p} destination
+     * @private
+     */
+    shootInternal_: function(beam, destination) {
+        var src = this.convertAbsolutePosition(this.getPosition());
+        var dest = this.convertAbsolutePosition(destination);
+
+        var json = { // TODO モデル化したい気持ち
+            userId: this.name,
+            mapId: 1, // TODO mapId
+            src: {x: src.x, y: src.y},
+            dest: {x: dest.x, y: dest.y},
+            beamId: this.beamId[0]
+        };
+
+        this.socket.shootBeam(json);
     },
 
     /**

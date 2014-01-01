@@ -24,6 +24,12 @@ bq.Socket = cc.Class.extend({
             var moveData = new bq.model.PlayerMove(data);
             entityManager.moveTo(moveData);
         });
+
+        // ビーム発射
+        this.socket.on('notify:beam:shoot', function(data) {
+            var beamPos = new bq.model.BeamPos(data);
+            entityManager.beamShoot(beamPos);
+        });
     },
 
     /**
@@ -47,7 +53,7 @@ bq.Socket = cc.Class.extend({
 
     /**
      * プレイヤーの絶対座標をサーバに送信する
-     * @param {Object:<mapId: number, x: number, y: number>} pos
+     * @param {Object.<userId: number, mapId: number, x: number, y: number>} pos
      */
     sendPlayerPosition: function(pos) {
         this.socket.emit('user:position:update', pos);
@@ -62,6 +68,14 @@ bq.Socket = cc.Class.extend({
     requestEntitiesByMapId: function(mapId, callback, selfObj) {
         this.socket.emit('world:entities:get', {mapId: mapId});
         this.socket.once('world:entities:receive', $.proxy(callback, selfObj));
+    },
+
+    /**
+     * いまからビーム撃つよってサーバに伝える
+     * @param {Object.<userId: number, mapId: number, src: cc.p, dest: cc.p} beamPos
+     */
+    shootBeam: function(beamPos) {
+        this.socket.emit('beam:shoot', beamPos);
     }
 
 });
