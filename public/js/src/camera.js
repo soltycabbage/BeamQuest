@@ -16,6 +16,6 @@ bq.Camera = cc.Class.extend({
     convertWindowPositionToWorldPosition: function(src) {
         var basePosition = this.follower_.getPosition();
         return cc.p(src.x - basePosition.x, src.y - basePosition.y);
-    },
+    }
 });
 
