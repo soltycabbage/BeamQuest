@@ -48,7 +48,7 @@ bq.entity.Enemy = bq.entity.Entity.extend({
             cc.CallFunc.create(function(){
                 this.isAttacking = false;
                 this.runAction(this.createIdlingAnimation());
-            }, this),
+            }, this)
         ]);
     },
 
@@ -66,5 +66,5 @@ bq.entity.Enemy = bq.entity.Entity.extend({
         'use strict';
         var no = String('0' + frame_no).slice(-2); // NOTE sprintf('%02d')
         return 'enemy' + this.enemy_id_ + '_' + no + '.png';
-    },
+    }
 });

@@ -16,7 +16,7 @@ bq.Socket = cc.Class.extend({
         // チャット受信
         this.socket.on('notify:message', function (data) {
             var chatData = new bq.model.Chat(data);
-            entityManager.chat(chatData)
+            entityManager.chat(chatData);
         });
 
         // 他プレイヤーの移動

@@ -1,4 +1,4 @@
-var util = require('util');
+var util = require('util'),
     Model = require('beamQuest/model/model');
 
 /**

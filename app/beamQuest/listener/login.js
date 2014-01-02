@@ -1,4 +1,4 @@
-var kvs = require('beamQuest/store/kvs');
+var kvs = require('beamQuest/store/kvs'),
     playerModel = require('beamQuest/model/player'),
     positionModel = require('beamQuest/model/position'),
     entities = require('beamQuest/store/entities');
@@ -9,7 +9,7 @@ exports.listen = function(socket) {
         if (invalidErr) {
             socket.emit('login:receive', invalidErr);
             return;
-        };
+        }
 
         kvs.get('user:id:' + data.userId, function(err, val) {
             var result = {};

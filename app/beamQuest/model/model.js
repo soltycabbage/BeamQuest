@@ -9,7 +9,7 @@ var util = require('util'),
  */
 var Model = function(opt_data) {
 };
-util.inherits(Model, events.EventEmitter)
+util.inherits(Model, events.EventEmitter);
 
 Model.prototype.toJSON = function() {
     return {};

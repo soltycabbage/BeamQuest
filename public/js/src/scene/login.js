@@ -123,9 +123,9 @@ bq.scene.LoginLayer = cc.Layer.extend({
 
     /** @override */
     onKeyUp: function(key) {
-       if (key === cc.KEY.enter) {
-           this.processLogin_(this.nameField_.getContentText());
-       }
+        if (key === cc.KEY.enter) {
+            this.processLogin_(this.nameField_.getContentText());
+        }
     },
 
     /**

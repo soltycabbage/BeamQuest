@@ -46,7 +46,7 @@ bq.InputHandler = cc.Class.extend({
     addListener: function(listener) {
         'use strict';
         this.listeners.push(listener);
-    },
+    }
 
     // NOTE listener削除系のメソッドも必要かしら
 });
