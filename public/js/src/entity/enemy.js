@@ -39,7 +39,7 @@ bq.entity.Enemy = bq.entity.Entity.extend({
                 // アタックのモーションとったら元に戻す
                 this.isAttacking = false;
                 this.updateAnimation('idle', 'bottom');
-            }, this),
+            }, this)
         ]);
     },
 

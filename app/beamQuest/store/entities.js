@@ -33,7 +33,7 @@ Entities.prototype.getPlayers = function() {
 Entities.prototype.getPlayersJSON = function() {
     var json = {};
     _.each(this.players_, function(player, key) {
-       json[key] = player.toJSON();
+        json[key] = player.toJSON();
     });
     return json;
 };

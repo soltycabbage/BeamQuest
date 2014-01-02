@@ -35,7 +35,7 @@ bq.entity.Player = bq.entity.Entity.extend({
      */
     sendPosition: function() {
         if (!bq.baseLayer) {return;}
-        var absolPos = this.convertAbsolutePosition(this.getPosition());
+        var absolPos = this.getPosition();
         var posData = {
             userId: this.name,
             mapId: 1, // TODO: MapID の実装
@@ -52,30 +52,6 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.prevPos_.y = posData.y;
         this.socket.sendPlayerPosition(posData);
     },
-
-    /**
-     * 引数に与えられた座標をbaseLayerから見た座標に変換して返す
-     * @param {cc.p} src
-     * @return {Object}
-     */
-    convertAbsolutePosition: function(src) {
-        var baseLayerP = bq.baseLayer.getPosition();
-        return {
-            x: src.x - baseLayerP.x,
-            y: src.y - baseLayerP.y
-        };
-    },
-
-
-
-    /**
-     * ある状態である方向のアニメーションを作成する
-     * @param {bq.entity.EntityState.Direction} dir 向き
-     * @param {bq.entity.EntityState.Mode} sts 状態
-     * @private
-     * @return {cc.Animation}
-     */
-
 
     /**
      * destination までビームを出す
@@ -103,8 +79,8 @@ bq.entity.Player = bq.entity.Entity.extend({
      * @private
      */
     shootInternal_: function(beam, destination) {
-        var src = this.convertAbsolutePosition(this.getPosition());
-        var dest = this.convertAbsolutePosition(destination);
+        var src = this.getPosition();
+        var dest = bq.camera.convertWindowPositionToWorldPosition(destination);
 
         var json = { // TODO モデル化したい気持ち
             userId: this.name,
@@ -169,19 +145,19 @@ bq.entity.Player.InputHandler = cc.Class.extend({
         switch (key) {
             // 重複多いのでリファクタリングした結果ｗｗｗｗｗ
             case cc.KEY.a:
-                startWalking(this.player_.moveSpeed, this.dy);
-                break;
-
-            case cc.KEY.s:
-                startWalking(this.dx, this.player_.moveSpeed);
-                break;
-
-            case cc.KEY.d:
                 startWalking(-this.player_.moveSpeed, this.dy);
                 break;
 
-            case cc.KEY.w:
+            case cc.KEY.s:
                 startWalking(this.dx, -this.player_.moveSpeed);
+                break;
+
+            case cc.KEY.d:
+                startWalking(this.player_.moveSpeed, this.dy);
+                break;
+
+            case cc.KEY.w:
+                startWalking(this.dx, this.player_.moveSpeed);
                 break;
 
             default:

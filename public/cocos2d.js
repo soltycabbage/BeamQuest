@@ -42,6 +42,7 @@
             'js/src/entity/enemy.js',
             'js/src/entity/beam.js',
             'js/src/ping.js',
+            'js/src/camera.js',
 
             // scene
             'js/src/scene/scene.js',
