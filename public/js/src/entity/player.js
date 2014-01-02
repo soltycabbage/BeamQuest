@@ -63,27 +63,20 @@ bq.entity.Player = bq.entity.Entity.extend({
 
         //撃てるならBPを減らす
 
-        // プリロードされているビームを取り出して打つ
-        var b = bq.Beam.pop();
-        if ( b == null ) {
-            // TODO どうする？？
-        } else {
-            this.shootInternal_(b, destination);
-        }
+        this.shootInternal_(destination);
     },
 
     /**
      * サーバに伝えてからビーム発射
-     * @param {bq.Beam} beam
      * @param {cc.p} destination
      * @private
      */
-    shootInternal_: function(beam, destination) {
+    shootInternal_: function(destination) {
         var src = this.getPosition();
         var dest = bq.camera.convertWindowPositionToWorldPosition(destination);
 
         var json = { // TODO モデル化したい気持ち
-            userId: this.name,
+            shooterId: this.name,
             mapId: 1, // TODO mapId
             src: {x: src.x, y: src.y},
             dest: {x: dest.x, y: dest.y},

@@ -7,17 +7,28 @@
  * @extends {cc.Node}
  */
 bq.Beam = cc.Node.extend({
-    id: 0, /** ビームID */
-    destination_:cc.p(0,0), /** {cc.p} 目標 */
-    speed_:0.5, /** 進むスピード */
-    inc_:cc.p(0,0), /** 1回のupdateで進ませるピクセル数（xとy方向) */
-    active_:false, //boolean
-    /** @override */
-    ctor: function (id) {
+    id: 0,                       // ビームID
+    destination_:cc.p(0,0),      // {cc.p} 目標
+    speed_:0.5,                  // 進むスピード
+    inc_:cc.p(0,0),              // 1回のupdateで進ませるピクセル数（xとy方向)
+    active_:false,               // 発射中ならtrue
+    POSITION_SEND_INTERVAL: 3,  // 位置情報を何frameごとに送信するか
+    positionSendCount_: 0,       // 位置情報送信用カウンター
+    prevPos_: {x: 0, y: 0},      // 前回送信時の座標
+    enableSendPosition_: false,  // 位置情報を送信するかどうか
+    shooterId_: null,            // ビームを打った人のID
+
+    ctor: function (id, shooterId) {
         "use strict";
         this._super();
         this.setVisible(false);
-        //this.hitRect_ = cc.rect(0, 0, this.getBoundingBox)
+        this.socket_ = bq.Socket.getInstance();
+        this.shooterId_ = shooterId || null;
+        if (shooterId === bq.player.name) {
+            // 自分が撃ったビームだけサーバに位置情報を送信する
+            // TODO: これもentityのshoot()的なメソッドでやるべき
+            this.enableSendPosition(true);
+        }
         this.scheduleUpdate();
     },
 
@@ -28,16 +39,37 @@ bq.Beam = cc.Node.extend({
             var curr = this.getPosition();
             // ビームを少し進ませる
             this.setPosition(cc.p(curr.x + this.inc_.x, curr.y + this.inc_.y));
-            this.isHit();
+            if (this.positionSendCount_++ > this.POSITION_SEND_INTERVAL) {
+                this.positionSendCount_ = 0;
+                this.sendPosition();
+            }
         }
 
     },
 
     /**
-     * 当たり判定チェック
+     * @param {boolean} enabled
      */
-    isHit: function() {
+    enableSendPosition: function(enabled) {
+        this.enableSendPosition_ = !!enabled;
+    },
 
+    /**
+     * ビームの現在座標をサーバに送信する
+     */
+    sendPosition: function() {
+        if (!this.enableSendPosition_) {
+            return;
+        }
+        var pos = this.getPosition();
+        var posData = {
+            shooterId: this.shooterId_,
+            beamId: this.id,
+            mapId: 1, // TODO マップID
+            x: pos.x,
+            y: pos.y
+        };
+        this.socket_.sendBeamPosition(posData);
     },
 
     /**
@@ -97,11 +129,12 @@ bq.Beam.pop = function() {
  * 引数id にあうパーティクルのビームを作成する
  *
  * @param {number} id
+ * @param {string} shooterId
  * @return {bq.Beam}
  */
-bq.Beam.create = function(id) {
+bq.Beam.create = function(id, shooterId) {
     "use strict";
-    var beam =  new bq.Beam(id);
+    var beam =  new bq.Beam(id, shooterId);
 
     // パーティクルをセット
     var particle = null;
@@ -133,12 +166,12 @@ bq.Beam.create = function(id) {
  * @param {number} id
  * @param {cc.Layer} layer
  */
-bq.Beam.setup = function(id, layer) {
+bq.Beam.setup = function(id, layer, shooterId) {
     "use strict";
 
     var maxBeamCount = 5;
     _.times(maxBeamCount, function(i) {
-        var beam = bq.Beam.create(id);
+        var beam = bq.Beam.create(id, shooterId);
         bq.beams[i] = beam;
         layer.addChild(beam, 10);
     });

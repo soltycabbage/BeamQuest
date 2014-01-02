@@ -60,6 +60,13 @@ bq.Socket = cc.Class.extend({
     },
 
     /**
+     * @param {Object.<shooterId: number, beamId: number, mapId: number, x: number, y: number>} pos
+     */
+    sendBeamPosition: function(pos) {
+        this.socket.emit('beam:position:update', pos);
+    },
+
+    /**
      * マップ上に存在する全Entityの一覧を要求する
      * @param {number} mapId
      * @param {Function} callback

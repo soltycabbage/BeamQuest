@@ -60,7 +60,7 @@ bq.EntityManager = cc.Class.extend({
      */
     beamShoot: function(beamPos) {
         // TODO: ほんとはここじゃなくてentityに定義されたshoot()関数的なやつを呼ぶのがいい。
-        var beam = bq.Beam.create(beamPos.beamId);
+        var beam = bq.Beam.create(beamPos.beamId, beamPos.shooterId);
         bq.baseLayer.addChild(beam, 10);
         cc.AudioEngine.getInstance().playEffect(s_SeBeamA);
         beam.initDestination(beamPos.src, beamPos.dest);
@@ -112,7 +112,7 @@ bq.EntityManager = cc.Class.extend({
         var enemy = new bq.entity.Enemy(enemy_id);
         enemy.setPosition(cc.p(x, y));
         bq.baseLayer.addChild(enemy, 50);
-
+        this.enemys_[mob.id] = enemy;
     }
 });
 
