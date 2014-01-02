@@ -106,7 +106,6 @@ bq.EntityManager = cc.Class.extend({
      * @param {Object} mob
      */
     createMob: function(mob) {
-        // NOTE 座標を適当に決めさせていただきますですハイ
         var x = mob.position.x;
         var y = mob.position.y;
         var enemy_id = 1;
