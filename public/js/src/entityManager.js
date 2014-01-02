@@ -6,20 +6,22 @@ bq.EntityManager = cc.Class.extend({
     otherPlayers_: {},
     enemys_: {},
     npcs_: {},
+    beams_: {},
     ctor: function() {
     },
 
     /**
-     * サーバからマップ上に存在するEntity一覧を取得してきて更新する
+     * サーバからmapIdに指定したマップ上に存在するEntity一覧を取得してきて更新する
      * @param {number} mapId
      */
     updateEntitiesByMapId: function(mapId) {
         var soc = bq.Socket.getInstance();
-        soc.requestEntitiesByMapId(1, $.proxy(function(data) {
+        soc.requestEntitiesByMapId(mapId, $.proxy(function(data) {
             var players = _.reject(data.players, function(player) {
                 return bq.player.name === player.id;
             });
             this.createOtherPlayers(players);
+            this.createMobs(data.mobs);
         }, this));
     },
 
@@ -28,6 +30,13 @@ bq.EntityManager = cc.Class.extend({
      */
     getOtherPlayers: function() {
         return this.otherPlayers_;
+    },
+
+    /**
+     * @return {Object}
+     */
+    getEnemys: function() {
+        return this.enemys_;
     },
 
     /**
@@ -59,10 +68,23 @@ bq.EntityManager = cc.Class.extend({
      */
     beamShoot: function(beamPos) {
         // TODO: ほんとはここじゃなくてentityに定義されたshoot()関数的なやつを呼ぶのがいい。
-        var beam = bq.Beam.create(beamPos.beamId);
+        var beam = bq.Beam.create(beamPos.beamId, beamPos.shooterId);
         bq.baseLayer.addChild(beam, 10);
         cc.AudioEngine.getInstance().playEffect(s_SeBeamA);
         beam.initDestination(beamPos.src, beamPos.dest);
+        this.beams_[beam.tag] = beam;
+    },
+
+    /**
+     * Entityにビームが当たったら呼ばれる
+     * TODO: いまんとこenemyだけ
+     * @param {Object} data
+     */
+    hitEntity: function(data) {
+        var enemy = this.enemys_[data.entity.id];
+        enemy.showMessage('痛いのだ');
+        var beam = this.beams_[data.beamTag];
+        beam.removeFromParent();
     },
 
     /**
@@ -90,6 +112,28 @@ bq.EntityManager = cc.Class.extend({
         other.setPosition(cc.p(moveData.x, moveData.y));
         bq.baseLayer.addChild(other);
         this.otherPlayers_[moveData.userId] = other;
+    },
+
+    /**
+     * @param {Object} mobs
+     */
+    createMobs: function(mobs) {
+        _.each(mobs, $.proxy(function(mob) {
+            this.createMob(mob);
+        }), this);
+    },
+
+    /**
+     * @param {Object} mob
+     */
+    createMob: function(mob) {
+        var x = mob.position.x;
+        var y = mob.position.y;
+        var enemy_id = 1;
+        var enemy = new bq.entity.Enemy(enemy_id);
+        enemy.setPosition(cc.p(x, y));
+        bq.baseLayer.addChild(enemy, 50);
+        this.enemys_[mob.id] = enemy;
     }
 });
 

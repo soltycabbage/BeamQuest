@@ -1,7 +1,7 @@
 bq.model.BeamPos = bq.model.extend({
     ctor: function(json) {
         /** @type {string} */
-        this.userId;
+        this.shooterId;
 
         /** @type {number} */
         this.mapId;
@@ -20,7 +20,7 @@ bq.model.BeamPos = bq.model.extend({
 
     /** @override */
     parse: function(json) {
-        this.userId = json['userId'];
+        this.shooterId = json['shooterId'];
         this.mapId = json['mapId'];
         this.src = cc.p(json['src'].x, json['src'].y);
         this.dest = cc.p(json['dest'].x, json['dest'].y);

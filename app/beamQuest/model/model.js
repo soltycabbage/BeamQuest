@@ -8,6 +8,7 @@ var util = require('util'),
  * @extends {events.EventEmitter}
  */
 var Model = function(opt_data) {
+    this.data = opt_data || {};
 };
 util.inherits(Model, events.EventEmitter);
 
