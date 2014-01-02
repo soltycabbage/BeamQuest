@@ -9,7 +9,7 @@
 bq.Beam = cc.Node.extend({
     id: 0, /** ビームID */
     destination_:cc.p(0,0), /** {cc.p} 目標 */
-    speed_:0.5, /** 進むスピード */
+    speed_: 10, /** 進むスピード */
     inc_:cc.p(0,0), /** 1回のupdateで進ませるピクセル数（xとy方向) */
     active_:false, //boolean
     /** @override */
@@ -28,7 +28,7 @@ bq.Beam = cc.Node.extend({
 
             var curr = this.getPosition();
             // ビームを少し進ませる
-            this.setPosition(cc.p(curr.x + this.inc_.x, curr.y + this.inc_.y));
+            this.setPosition(cc.pAdd(curr, this.inc_));
         }
 
     },
@@ -43,8 +43,9 @@ bq.Beam = cc.Node.extend({
         this.enable();
         this.destination_ = dest;
         this.setPosition(src);
-        this.inc_.x = (dest.x - src.x) * this.speed_;
-        this.inc_.y = (dest.y - src.y) * this.speed_;
+        var v = cc.pSub(dest, src);
+        var vn = cc.pNormalize(v);
+        this.inc_ = cc.pMult(vn, this.speed_);
 
         // duration秒後にこのビームを消去する
         var duration = 2;
@@ -114,7 +115,6 @@ bq.Beam.create = function(id) {
     particle.setTexture(myTexture);
     particle.setPosition(cc.p(0, 0));
     beam.addChild(particle);
-    beam.speed_ = 0.05;
     beam.disable();
 
     return beam;
