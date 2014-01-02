@@ -10,12 +10,12 @@ bq.EntityManager = cc.Class.extend({
     },
 
     /**
-     * サーバからマップ上に存在するEntity一覧を取得してきて更新する
+     * サーバからmapIdに指定したマップ上に存在するEntity一覧を取得してきて更新する
      * @param {number} mapId
      */
     updateEntitiesByMapId: function(mapId) {
         var soc = bq.Socket.getInstance();
-        soc.requestEntitiesByMapId(1, $.proxy(function(data) {
+        soc.requestEntitiesByMapId(mapId, $.proxy(function(data) {
             var players = _.reject(data.players, function(player) {
                 return bq.player.name === player.id;
             });

@@ -4,52 +4,64 @@
  */
 var Entities = function() {
     /**
-     * ログインしているプレイヤー一覧
-     * @type {Object.<model.Player>}
+     * マップごとのプレイヤー一覧
+     * @typedef {
+     *    mapId: {
+     *       userId: model.Player
+     *    }
+     * }
      * @private
      */
-    this.players_ = {};
+    this.mapPlayers_ = {};
+
+    /**
+     * マップごとのmob一覧
+     * @type {Object}
+     * @private
+     */
+    this.mapMobs_ = {};
 };
 
 /**
+ * @param {number} mapId
  * @param {model.Player} player
  */
-Entities.prototype.addPlayer = function(player) {
-    if (!_.contains(this.players, player.id)) {
-        this.players_[player.id] = player;
+Entities.prototype.addPlayer = function(mapId, player) {
+    var players = this.mapPlayers_[mapId] || [];
+    if (!_.contains(players, player.id)) {
+        players[player.id] = player;
     }
 };
 
 /**
- * @return {Object.<model.Player>}
+ * @param {number} mapId
+ * @param {model.Mob} mob
  */
-Entities.prototype.getPlayers = function() {
-    return this.players_;
+Entities.prototype.addMob = function(mapId, mob) {
+    var mobs = this.mapMobs_[mapId] || [];
+    if (!_.contains(mobs, mob.id)) {
+        mobs[mob.id] = mob;
+    }
 };
 
 /**
+ * @param {number} mapId
  * @return {Object}
  */
-Entities.prototype.getPlayersJSON = function() {
+Entities.prototype.getPlayersJSON = function(mapId) {
     var json = {};
-    _.each(this.players_, function(player, key) {
+    var players = this.mapPlayers_[mapId] || [];
+    _.each(players, function(player, key) {
        json[key] = player.toJSON();
     });
     return json;
 };
 
 /**
- * @param {string} userId
- */
-Entities.prototype.removePlayerById = function(userId) {
-    delete this.players_[userId];
-};
-
-/**
  * @param {Object.{userId, mapId, x, y}} data
  */
 Entities.prototype.updatePlayerPosition = function(data) {
-    var player = this.players_[data.userId];
+    var player = this.mapPlayers_[data.mapId][data.userId];
     if (player) {
         player.position.mapId = data.mapId;
         player.position.x = data.x;

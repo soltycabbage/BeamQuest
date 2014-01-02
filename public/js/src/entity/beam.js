@@ -17,7 +17,7 @@ bq.Beam = cc.Node.extend({
         "use strict";
         this._super();
         this.setVisible(false);
-
+        //this.hitRect_ = cc.rect(0, 0, this.getBoundingBox)
         this.scheduleUpdate();
     },
 
@@ -25,11 +25,18 @@ bq.Beam = cc.Node.extend({
     update: function(dt) {
         "use strict";
         if ( this.active_ ) {
-
             var curr = this.getPosition();
             // ビームを少し進ませる
             this.setPosition(cc.p(curr.x + this.inc_.x, curr.y + this.inc_.y));
+            this.isHit();
         }
+
+    },
+
+    /**
+     * 当たり判定チェック
+     */
+    isHit: function() {
 
     },
 
@@ -114,7 +121,7 @@ bq.Beam.create = function(id) {
     particle.setTexture(myTexture);
     particle.setPosition(cc.p(0, 0));
     beam.addChild(particle);
-    beam.speed_ = 0.05;
+    beam.speed_ = 0.1;
     beam.disable();
 
     return beam;
