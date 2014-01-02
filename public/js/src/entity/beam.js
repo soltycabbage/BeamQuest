@@ -8,6 +8,7 @@
  */
 bq.Beam = cc.Node.extend({
     id: 0,                       // ビームID
+    tag: parseInt((new Date)/1000), // ビーム識別用タグ
     destination_:cc.p(0,0),      // {cc.p} 目標
     speed_:0.5,                  // 進むスピード
     inc_:cc.p(0,0),              // 1回のupdateで進ませるピクセル数（xとy方向)
@@ -29,6 +30,7 @@ bq.Beam = cc.Node.extend({
             // TODO: これもentityのshoot()的なメソッドでやるべき
             this.enableSendPosition(true);
         }
+        this.tag = this.tag + shooterId;
         this.scheduleUpdate();
     },
 
@@ -63,6 +65,7 @@ bq.Beam = cc.Node.extend({
         }
         var pos = this.getPosition();
         var posData = {
+            tag: this.tag,
             shooterId: this.shooterId_,
             beamId: this.id,
             mapId: 1, // TODO マップID

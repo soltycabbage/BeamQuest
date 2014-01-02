@@ -20,7 +20,7 @@ exports.listen = function(socket, io) {
         // TODO: 誰が撃ったかによって当たり判定の対象を変えたい
         var entity = hitEntity(data);
         if (entity) {
-            io.sockets.emit('notify:beam:hit', {entity: entity});
+            io.sockets.emit('notify:beam:hit', {entity: entity, beamTag: data.tag});
         }
     });
 

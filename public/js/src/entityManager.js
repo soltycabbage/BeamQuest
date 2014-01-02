@@ -6,6 +6,7 @@ bq.EntityManager = cc.Class.extend({
     otherPlayers_: {},
     enemys_: {},
     npcs_: {},
+    beams_: {},
     ctor: function() {
     },
 
@@ -29,6 +30,13 @@ bq.EntityManager = cc.Class.extend({
      */
     getOtherPlayers: function() {
         return this.otherPlayers_;
+    },
+
+    /**
+     * @return {Object}
+     */
+    getEnemys: function() {
+        return this.enemys_;
     },
 
     /**
@@ -64,6 +72,19 @@ bq.EntityManager = cc.Class.extend({
         bq.baseLayer.addChild(beam, 10);
         cc.AudioEngine.getInstance().playEffect(s_SeBeamA);
         beam.initDestination(beamPos.src, beamPos.dest);
+        this.beams_[beam.tag] = beam;
+    },
+
+    /**
+     * Entityにビームが当たったら呼ばれる
+     * TODO: いまんとこenemyだけ
+     * @param {Object} data
+     */
+    hitEntity: function(data) {
+        var enemy = this.enemys_[data.entity.id];
+        enemy.showMessage('痛いのだ');
+        var beam = this.beams_[data.beamTag];
+        beam.removeFromParent();
     },
 
     /**

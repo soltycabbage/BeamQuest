@@ -33,7 +33,7 @@ bq.Socket = cc.Class.extend({
 
         // ビームヒット
         this.socket.on('notify:beam:hit', function(data) {
-            alert('1');
+            entityManager.hitEntity(data);
         });
 
     },
@@ -66,7 +66,7 @@ bq.Socket = cc.Class.extend({
     },
 
     /**
-     * @param {Object.<shooterId: number, beamId: number, mapId: number, x: number, y: number>} pos
+     * @param {Object.<tag: string, shooterId: number, beamId: number, mapId: number, x: number, y: number>} pos
      */
     sendBeamPosition: function(pos) {
         this.socket.emit('beam:position:update', pos);
