@@ -80,6 +80,20 @@ Entities.prototype.getPlayersJSON = function(mapId) {
     return json;
 };
 
+
+/**
+ * @param {number} mapId
+ * @return {Object}
+ */
+Entities.prototype.getMobsJSON = function(mapId) {
+    var json = {};
+    var mobs = this.mapMobs_[mapId] || [];
+    _.each(mobs, function(mob, key) {
+       json[key] = mob.toJSON();
+    });
+    return json;
+};
+
 /**
  * @param {Object.{userId, mapId, x, y}} data
  */

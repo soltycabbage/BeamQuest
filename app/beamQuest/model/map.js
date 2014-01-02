@@ -25,10 +25,17 @@ var Map = function(opt_data) {
      * @type {number}
      */
     this.mobCount = this.data.mobCount || 0;
+
+    /**
+     * マップサイズ
+     * @type {Object.<width:number, height: number>}
+     */
+    this.size = this.data.size || Map.DEFAULT_SIZE;
 };
 util.inherits(Map, Model);
 
 Map.DEFAULT_NAME = 'map';
+Map.DEFAULT_SIZE = {width: 100, height: 100};
 
 /** @override */
 Map.prototype.toJSON = function() {

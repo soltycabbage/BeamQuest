@@ -8,7 +8,8 @@ exports.listen = function(socket) {
     // @type {Object.<mapId:number>} data
     socket.on('world:entities:get', function(data) {
         var result = {
-            players: entities.getPlayersJSON(data.mapId)
+            players: entities.getPlayersJSON(data.mapId),
+            mobs: entities.getMobsJSON(data.mapId)
             // npc: entities.getNpc() みたいな感じを想定
         };
         socket.emit('world:entities:receive', result);

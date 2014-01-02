@@ -6,6 +6,9 @@ var ping = require('beamQuest/listener/ping'),
     mobEvent = require('beamQuest/activeEvent/mob');
 
 exports.start = function(io) {
+    // active event
+    mobEvent.run();
+    
     io.sockets.on('connection', function(socket) {
         login.listen(socket);
         world.listen(socket);
@@ -26,9 +29,6 @@ exports.start = function(io) {
         ping.listen(socket);
 
         socket.emit('connected');
-
-        // active event
-        mobEvent.run();
     });
 };
 

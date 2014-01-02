@@ -45,7 +45,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
             }
         });
 
-        this.spawnEnemy_();
         this.initPing_();
 
         cc.AudioEngine.getInstance().playMusic(s_BgmField, true);
@@ -98,17 +97,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
 
         var zIndex = 10000;
         this.addChild(pingLabel, zIndex, bq.config.tags.DEBUG_PING);
-    },
-
-    spawnEnemy_: function() {
-        // NOTE 座標を適当に決めさせていただきますですハイ
-        var size = cc.Director.getInstance().getWinSize();
-        var x = size.width / 4;
-        var y = size.height * 3 / 4;
-        var enemy_id = 1;
-        var enemy = new bq.entity.Enemy(enemy_id);
-        enemy.setPosition(cc.p(x, y));
-        bq.baseLayer.addChild(enemy, 50);
     }
 });
 

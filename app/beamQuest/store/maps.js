@@ -27,7 +27,8 @@ Maps.prototype.init_ = function() {
         id: 1,
         name: 'しんじゅく',
         maxMobCount: 10,
-        mobCount: 0
+        mobCount: 0,
+        size: {width: 1000, height: 1000} // 超テキトー
     });
     this.maps_.push(map);
 };

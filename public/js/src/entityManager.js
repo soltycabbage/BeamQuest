@@ -20,6 +20,7 @@ bq.EntityManager = cc.Class.extend({
                 return bq.player.name === player.id;
             });
             this.createOtherPlayers(players);
+            this.createMobs(data.mobs);
         }, this));
     },
 
@@ -90,6 +91,29 @@ bq.EntityManager = cc.Class.extend({
         other.setPosition(cc.p(moveData.x, moveData.y));
         bq.baseLayer.addChild(other);
         this.otherPlayers_[moveData.userId] = other;
+    },
+
+    /**
+     * @param {Object} mobs
+     */
+    createMobs: function(mobs) {
+        _.each(mobs, $.proxy(function(mob) {
+            this.createMob(mob);
+        }), this);
+    },
+
+    /**
+     * @param {Object} mob
+     */
+    createMob: function(mob) {
+        // NOTE 座標を適当に決めさせていただきますですハイ
+        var x = mob.position.x;
+        var y = mob.position.y;
+        var enemy_id = 1;
+        var enemy = new bq.entity.Enemy(enemy_id);
+        enemy.setPosition(cc.p(x, y));
+        bq.baseLayer.addChild(enemy, 50);
+
     }
 });
 
