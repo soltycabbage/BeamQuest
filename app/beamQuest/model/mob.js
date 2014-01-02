@@ -9,13 +9,13 @@ var Mob = function(opt_data) {
     Entity.apply(this, arguments);
 
     /** @type {number} */
-    this.hp = opt_data.hp || Mob.DEFAULT_HP;
+    this.hp = this.data.hp || Mob.DEFAULT_HP;
 
     /**
      * 獲得経験値的な
      * @type {number}
      */
-    this.exp = opt_data.exp || Mob.DEFAULT_EXP;
+    this.exp = this.data.exp || Mob.DEFAULT_EXP;
 };
 util.inherits(Mob, Entity);
 

@@ -1,3 +1,5 @@
+var mapModel = require('beamQuest/model/map');
+
 /**
  * ゲーム内のマップの状態を保持しておくクラス
  * @constructor
@@ -8,8 +10,7 @@ var Maps = function() {
      * - マップID
      * - マップの名前
      * - マップ上に存在するmobの数（常に一定数になるようにPOPを調整したい時に使う）
-     * 今のとこマップIDだけ。
-     * @type {Array.<number>}
+     * @type {Array.<model.Map>}
      * @private
      */
     this.maps_ = [];
@@ -22,8 +23,13 @@ var Maps = function() {
  */
 Maps.prototype.init_ = function() {
     // NOTE マップ情報の保存先がまだ決まってないので直接書いてる。将来的にはファイルorDBから取ってくる？
-    var mapIds = [1];
-    _.each(mapIds, this.maps_.push);
+    var map = new mapModel({
+        id: 1,
+        name: 'しんじゅく',
+        maxMobCount: 10,
+        mobCount: 0
+    });
+    this.maps_.push(map);
 };
 
 /**

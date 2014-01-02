@@ -1,3 +1,5 @@
+var mapStore = require('beamQuest/store/maps');
+
 /**
  * ゲーム内のEntityの状態を保持しておくクラス
  * @constructor
@@ -20,6 +22,27 @@ var Entities = function() {
      * @private
      */
     this.mapMobs_ = {};
+
+    /**
+     * マップごとのnpc一覧
+     * @type {Object}
+     * @private
+     */
+    this.mapNpcs_ = {};
+
+    this.init_();
+};
+
+/**
+ * @private
+ */
+Entities.prototype.init_ = function() {
+    _.each(mapStore.getMaps(), function(map) {
+        this.mapPlayers_[map.id] = {};
+        this.mapMobs_[map.id] = {};
+        this.mapNpcs_[map.id] = {};
+
+    }.bind(this));
 };
 
 /**

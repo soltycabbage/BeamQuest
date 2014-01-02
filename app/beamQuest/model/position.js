@@ -10,13 +10,13 @@ var Position = function(opt_data) {
     Model.apply(this, arguments);
 
     /** @type {number} */
-    this.mapId = opt_data.mapId || 1;
+    this.mapId = this.data.mapId || 1;
 
     /** @type {number} */
-    this.x = opt_data.x || 0;
+    this.x = this.data.x || 0;
 
     /** @type {number} */
-    this.y = opt_data.y || 0;
+    this.y = this.data.y || 0;
 };
 util.inherits(Position, Model);
 

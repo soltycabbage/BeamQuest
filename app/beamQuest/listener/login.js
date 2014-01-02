@@ -57,7 +57,7 @@ exports.listen = function(socket) {
             socket: socket,
             position: position
         });
-        entities.addPlayer(player);
+        entities.addPlayer(position.mapId, player);
     }
 
     /**

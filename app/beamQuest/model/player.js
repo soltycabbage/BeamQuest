@@ -9,13 +9,13 @@ var Player = function(opt_data) {
     Entity.apply(this, arguments);
 
     /** @type {number} */
-    this.hp = opt_data.hp || Player.DEFAULT_HP;
+    this.hp = this.data.hp || Player.DEFAULT_HP;
 
     /** @type {number} */
-    this.bp = opt_data.bp || Player.DEFAULT_BP;
+    this.bp = this.data.bp || Player.DEFAULT_BP;
 
     /** @type {Socket} */
-    this.socket = opt_data.socket || null;
+    this.socket = this.data.socket || null;
 };
 util.inherits(Player, Entity);
 

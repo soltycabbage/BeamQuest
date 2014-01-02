@@ -12,13 +12,13 @@ var Entity = function(opt_data) {
     Model.apply(this, arguments);
 
     /** @type {number} */
-    this.id = opt_data.id;
+    this.id = this.data.id;
 
     /** @type {string} */
-    this.name = opt_data.name;
+    this.name = this.data.name;
 
     /** @type {model.Position} */
-    this.position = opt_data.position || new positionModel();
+    this.position = this.data.position || new positionModel();
 };
 util.inherits(Entity, Model);
 

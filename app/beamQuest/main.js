@@ -2,7 +2,8 @@ var ping = require('beamQuest/listener/ping'),
     login = require('beamQuest/listener/login'),
     world = require('beamQuest/listener/world'),
     beam = require('beamQuest/listener/beam'),
-    entities = require('beamQuest/store/entities');
+    entities = require('beamQuest/store/entities'),
+    mobEvent = require('beamQuest/activeEvent/mob');
 
 exports.start = function(io) {
     io.sockets.on('connection', function(socket) {
@@ -25,6 +26,9 @@ exports.start = function(io) {
         ping.listen(socket);
 
         socket.emit('connected');
+
+        // active event
+        mobEvent.run();
     });
 };
 
