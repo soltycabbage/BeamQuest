@@ -43,7 +43,7 @@ bq.Beam = cc.Node.extend({
         this.enable();
         this.destination_ = dest;
         this.setPosition(src);
-        var v = cc.p(dest.x - src.x, dest.y - src.y);
+        var v = cc.pSub(dest, src);
         var vn = cc.pNormalize(v);
         this.inc_ = cc.pMult(vn, this.speed_);
 
