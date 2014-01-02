@@ -30,6 +30,12 @@ bq.Socket = cc.Class.extend({
             var beamPos = new bq.model.BeamPos(data);
             entityManager.beamShoot(beamPos);
         });
+
+        // ビームヒット
+        this.socket.on('notify:beam:hit', function(data) {
+            alert('1');
+        });
+
     },
 
     /**

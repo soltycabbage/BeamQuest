@@ -68,6 +68,13 @@ Entities.prototype.addMob = function(mapId, mob) {
 };
 
 /**
+ * @return {Object}
+ */
+Entities.prototype.getMobs = function() {
+    return this.mapMobs_;
+};
+
+/**
  * @param {number} mapId
  * @return {Object}
  */
