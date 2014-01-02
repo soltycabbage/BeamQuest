@@ -10,10 +10,10 @@ bq.Beam = cc.Node.extend({
     id: 0,                       // ビームID
     tag: parseInt((new Date)/1000), // ビーム識別用タグ
     destination_:cc.p(0,0),      // {cc.p} 目標
-    speed_:0.5,                  // 進むスピード
+    speed_:10,                   // 進むスピード
     inc_:cc.p(0,0),              // 1回のupdateで進ませるピクセル数（xとy方向)
     active_:false,               // 発射中ならtrue
-    POSITION_SEND_INTERVAL: 3,  // 位置情報を何frameごとに送信するか
+    POSITION_SEND_INTERVAL: 3,   // 位置情報を何frameごとに送信するか
     positionSendCount_: 0,       // 位置情報送信用カウンター
     prevPos_: {x: 0, y: 0},      // 前回送信時の座標
     enableSendPosition_: false,  // 位置情報を送信するかどうか
@@ -40,11 +40,12 @@ bq.Beam = cc.Node.extend({
         if ( this.active_ ) {
             var curr = this.getPosition();
             // ビームを少し進ませる
-            this.setPosition(cc.p(curr.x + this.inc_.x, curr.y + this.inc_.y));
+            this.setPosition(cc.pAdd(curr, this.inc_));
             if (this.positionSendCount_++ > this.POSITION_SEND_INTERVAL) {
                 this.positionSendCount_ = 0;
                 this.sendPosition();
             }
+
         }
 
     },
@@ -85,8 +86,9 @@ bq.Beam = cc.Node.extend({
         this.enable();
         this.destination_ = dest;
         this.setPosition(src);
-        this.inc_.x = (dest.x - src.x) * this.speed_;
-        this.inc_.y = (dest.y - src.y) * this.speed_;
+        var v = cc.pSub(dest, src);
+        var vn = cc.pNormalize(v);
+        this.inc_ = cc.pMult(vn, this.speed_);
 
         // duration秒後にこのビームを消去する
         var duration = 2;
@@ -157,7 +159,6 @@ bq.Beam.create = function(id, shooterId) {
     particle.setTexture(myTexture);
     particle.setPosition(cc.p(0, 0));
     beam.addChild(particle);
-    beam.speed_ = 0.1;
     beam.disable();
 
     return beam;
