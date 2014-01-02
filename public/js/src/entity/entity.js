@@ -12,14 +12,19 @@ bq.entity.Entity = cc.Sprite.extend({
     name: 'entity', // entityの名前
     chatRect: null, // チャット吹き出しのSprite
     collideRect_: null, // 当たり判定の範囲
+    currentState:null,
+    currentDirection:null,
 
     /**
      * @param {string} spriteFrameName *.plistの<key>に設定されてるframeName
      */
-    ctor: function(spriteFrameName) {
+    ctor: function(spriteFrameName, frameMap) {
         this._super();
         var spriteFrame = cc.SpriteFrameCache.getInstance().getSpriteFrame(spriteFrameName);
         spriteFrame && this.initWithSpriteFrame(spriteFrame);
+        if ( frameMap ) {
+            this.animations = bq.entity.Animation.createAnimations(frameMap);
+        }
         this.init_();
     },
 
@@ -94,5 +99,49 @@ bq.entity.Entity = cc.Sprite.extend({
             this.removeChild(this.chatRect);
             this.chatRect = null;
         }
+    },
+
+
+    /**
+     *
+     * @param {string} name
+     * @param {string} direction
+     * @returns {bq.Animate}
+     */
+    getAnimationByNameDirection: function(name, direction) {
+        var key = name + "_" + direction;
+        if ( this.animations[key] ) {
+            return this.animations[key];
+        } else {
+            cc.log(key + "　is not found");
+        }
+     },
+
+    /**
+     * 向きと状態を更新してそれにもとづいてアニメーションを更新する
+     * @param {bq.entity.EntityState.Direction} dir 向き
+     * @param {bq.entity.EntityState.Mode} sts 状態
+     */
+    updateAnimation: function(state, direction){
+
+        if ( state == null && direction == null ) {
+            return;
+        }
+        if ( state == this.currentState && direction == this.currentDirection ) {
+            return ;
+        }
+        state = state ? state : this.currentState;
+        direction = direction ? direction : this.currentDirection;
+
+        this.currentState = state;
+        this.currentDirection = direction;
+
+        var animation = this.getAnimationByNameDirection(state,direction);
+
+        // すでにあるアニメーションを削除
+        if ( this.getNumberOfRunningActions() > 0 ) {
+            this.stopAllActions();
+        }
+        this.runAction(animation);
     }
 });

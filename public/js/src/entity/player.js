@@ -17,7 +17,7 @@ bq.entity.Player = bq.entity.Entity.extend({
     beamId:[2], // 装備しているビームのID
 
     ctor:function () {
-        this._super('b0_0.png');
+        this._super('b0_0.png', this.getKeyFrameMap_());
         this.socket = bq.Socket.getInstance();
         this.scheduleUpdate();
     },
@@ -35,7 +35,7 @@ bq.entity.Player = bq.entity.Entity.extend({
      */
     sendPosition: function() {
         if (!bq.baseLayer) {return;}
-        var absolPos = this.convertAbsolutePosition(this.getPosition());
+        var absolPos = this.getPosition();
         var posData = {
             userId: this.name,
             mapId: 1, // TODO: MapID の実装
@@ -51,71 +51,6 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.prevPos_.x = posData.x;
         this.prevPos_.y = posData.y;
         this.socket.sendPlayerPosition(posData);
-    },
-
-    /**
-     * 引数に与えられた座標をbaseLayerから見た座標に変換して返す
-     * @param {cc.p} src
-     * @return {Object}
-     */
-    convertAbsolutePosition: function(src) {
-        var baseLayerP = bq.baseLayer.getPosition();
-        return {
-            x: src.x - baseLayerP.x,
-            y: src.y - baseLayerP.y
-        };
-    },
-
-    /**
-     * 向きと状態を更新してそれにもとづいてアニメーションを更新する
-     * @param {bq.entity.EntityState.Direction} dir 向き (nullなら更新しない）
-     * @param {bq.entity.EntityState.Mode} sts 状態 (nullなら更新しない）
-     */
-    updateAnimation: function(dir, sts) {
-        // 同じだったら更新しない
-        if ( this.direction != dir || this.state != sts ) {
-            this.direction = dir == null ? this.direction : dir;
-            this.state = sts == null ? this.state : sts;
-
-            // TODO 毎回作りなおさずキャッシュする
-            var animation = this.createAnimation_(this.direction, this.state);
-            if ( this.getNumberOfRunningActions() > 0 ) {
-                this.stopAllActions();
-            }
-            this.runAction(animation);
-        }
-    },
-
-    /**
-     * ある状態である方向のアニメーションを作成する
-     * @param {bq.entity.EntityState.Direction} dir 向き
-     * @param {bq.entity.EntityState.Mode} sts 状態
-     * @private
-     * @return {cc.Animation}
-     */
-    createAnimation_: function (dir, sts) {
-
-        if ( dir > bq.entity.EntityState.Direction.maxDirection ) {
-            return null;
-        }
-        var frameCache = cc.SpriteFrameCache.getInstance();
-        var animation = cc.Animation.create();
-
-        // 0〜3が止まってる絵、4〜7が歩いている絵
-        var starti = (sts == bq.entity.EntityState.Mode.stop) ? 0:4;
-        var endi = (sts == bq.entity.EntityState.Mode.stop) ? 3:7;
-        //cc.log("dir " + dir + " sts " + sts);
-        // TODO underscore.js を使って書き直す
-        for (var i = starti; i <= endi; i++) {
-            var str = "b" + dir +"_" + i + ".png";
-            //cc.log(str);
-            var frame = frameCache.getSpriteFrame(str);
-            animation.addSpriteFrame(frame);
-        }
-        animation.setDelayPerUnit(this.animationSpeed);
-
-        var forever = cc.RepeatForever.create(cc.Animate.create(animation));
-        return forever;
     },
 
     /**
@@ -144,8 +79,8 @@ bq.entity.Player = bq.entity.Entity.extend({
      * @private
      */
     shootInternal_: function(beam, destination) {
-        var src = this.convertAbsolutePosition(this.getPosition());
-        var dest = this.convertAbsolutePosition(destination);
+        var src = this.getPosition();
+        var dest = bq.camera.convertWindowPositionToWorldPosition(destination);
 
         var json = { // TODO モデル化したい気持ち
             userId: this.name,
@@ -164,6 +99,26 @@ bq.entity.Player = bq.entity.Entity.extend({
      */
     setProfile: function(data) {
         this.name = data.name;
+    },
+
+    getKeyFrameMap_: function () {
+        return  {
+            idle_bottom:      ["b0_0.png", "b0_1.png", "b0_2.png", "b0_3.png"],
+            idle_right:       ["b2_0.png", "b2_1.png", "b2_2.png", "b2_3.png"],
+            idle_topright:    ["b3_0.png", "b3_1.png", "b3_2.png", "b3_3.png"],
+            idle_top:         ["b4_0.png", "b4_1.png", "b4_2.png", "b4_3.png"],
+            idle_topleft:     ["b5_0.png", "b5_1.png", "b5_2.png", "b5_3.png"],
+            idle_left:        ["b6_0.png", "b6_1.png", "b6_2.png", "b6_3.png"],
+            idle_bottomleft:  ["b7_0.png", "b0_1.png", "b0_2.png", "b0_3.png"],
+            step_bottom:      ["b0_4.png", "b0_5.png", "b0_6.png", "b0_7.png"],
+            step_bottomright: ["b1_4.png", "b1_5.png", "b1_6.png", "b1_7.png"],
+            step_right:       ["b2_4.png", "b2_5.png", "b2_6.png", "b2_7.png"],
+            step_topright:    ["b3_4.png", "b3_5.png", "b3_6.png", "b3_7.png"],
+            step_top:         ["b4_4.png", "b4_5.png", "b4_6.png", "b4_7.png"],
+            step_topleft:     ["b5_4.png", "b5_5.png", "b5_6.png", "b5_7.png"],
+            step_left:        ["b6_4.png", "b6_5.png", "b6_6.png", "b6_7.png"],
+            step_bottomleft:  ["b7_4.png", "b7_5.png", "b7_6.png", "b7_7.png"]
+        };
     }
 });
 
@@ -184,25 +139,25 @@ bq.entity.Player.InputHandler = cc.Class.extend({
             this.dy = dy;
             this.addDownKey_(key);
             var dir = this.convertDirectionFromKeys_(this.downKeys_);
-            this.player_.updateAnimation(dir, bq.entity.EntityState.Mode.walking);
+            this.player_.updateAnimation(bq.entity.EntityState.Mode.walking,dir);
         }.bind(this);
 
         switch (key) {
             // 重複多いのでリファクタリングした結果ｗｗｗｗｗ
             case cc.KEY.a:
-                startWalking(this.player_.moveSpeed, this.dy);
-                break;
-
-            case cc.KEY.s:
-                startWalking(this.dx, this.player_.moveSpeed);
-                break;
-
-            case cc.KEY.d:
                 startWalking(-this.player_.moveSpeed, this.dy);
                 break;
 
-            case cc.KEY.w:
+            case cc.KEY.s:
                 startWalking(this.dx, -this.player_.moveSpeed);
+                break;
+
+            case cc.KEY.d:
+                startWalking(this.player_.moveSpeed, this.dy);
+                break;
+
+            case cc.KEY.w:
+                startWalking(this.dx, this.player_.moveSpeed);
                 break;
 
             default:
@@ -225,14 +180,14 @@ bq.entity.Player.InputHandler = cc.Class.extend({
                 // 押しているキーが０でない場合まだ歩いている
                 var sts = (this.downKeys_.length == 0) ? bq.entity.EntityState.Mode.stop : null;
                 var dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(dir, sts);
+                this.player_.updateAnimation(sts,dir);
                 break;
             case cc.KEY.s:
             case cc.KEY.w:
                 this.dy = 0;
                 var dir = this.convertDirectionFromKeys_(this.downKeys_);
                 var sts = (this.downKeys_.length == 0) ? bq.entity.EntityState.Mode.stop : null;
-                this.player_.updateAnimation(dir, sts);
+                this.player_.updateAnimation(sts,dir);
                 break;
             default:
                 break;
@@ -298,5 +253,6 @@ bq.entity.Player.InputHandler = cc.Class.extend({
 
         return found.val;
     }
+
 });
 

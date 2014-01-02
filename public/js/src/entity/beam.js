@@ -90,7 +90,7 @@ bq.Beam.pop = function() {
     }
     be.disable();
     return be;
-},
+};
 
 /**
  * Beamのファクトリ

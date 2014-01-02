@@ -1,8 +1,8 @@
 {
-  "strict"  : true,
+  "strict"  : false,
   "indent"  : 4,
-  "unused"  : true,
-  "undef"   : true,
+  "unused"  : false,
+  "undef"   : false,
   "browser" : true,
   "devel"   : true,
   "debug"   : true
