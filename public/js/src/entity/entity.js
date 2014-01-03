@@ -151,6 +151,7 @@ bq.entity.Entity = cc.Sprite.extend({
      */
     updateHp: function(amount, opt_popLeft) {
         if (amount < 0) { // ダメージ
+            cc.AudioEngine.getInstance().playEffect(s_SeDamage);
             this.popDamageLabel_(amount, !!opt_popLeft);
         } else if (amount > 0) { // 回復
             // TODO

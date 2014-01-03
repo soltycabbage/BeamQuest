@@ -20,9 +20,10 @@ var s_MapSet= 'res/map/mapset.png';
 // plist
 var s_PlayerWalkingPlist = 'res/img/walk_anime.plist';
 
-// bgm
+// sounds
 var s_BgmField = 'res/sounds/Field.m4a';
 var s_SeBeamA = 'res/sounds/BeamA.m4a';
+var s_SeDamage = 'res/sounds/Damage.ogg';
 
 var g_resources = [
     //img
