@@ -12,7 +12,7 @@ bq.model.BeamPos = bq.model.extend({
         /** @type {cc.p} */
         this.dest;
 
-        /** @type {number} */
+        /** @type {bq.Types.Beams} */
         this.beamId;
 
         this._super(json);

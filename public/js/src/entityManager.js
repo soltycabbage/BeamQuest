@@ -85,6 +85,7 @@ bq.EntityManager = cc.Class.extend({
         enemy.showMessage('痛いのだ');
         var beam = this.beams_[data.beamTag];
         beam.removeFromParent();
+        delete beam;
     },
 
     /**

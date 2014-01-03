@@ -5,7 +5,6 @@
 var entities = require('beamQuest/store/entities');
 
 exports.listen = function(socket, io) {
-    // マップに存在するEntityの一覧を返す
     socket.on('beam:shoot', function(data) {
         var result = data;
         result.success = true;
@@ -18,20 +17,37 @@ exports.listen = function(socket, io) {
      */
     socket.on('beam:position:update', function(data) {
         // TODO: 誰が撃ったかによって当たり判定の対象を変えたい
-        var entity = hitEntity(data);
+        var entity = isHitEntity_(data);
         if (entity) {
-            io.sockets.emit('notify:beam:hit', {entity: entity, beamTag: data.tag});
+            updateEntityStatus_(entity, data.beamId, data);
         }
     });
 
-    function hitEntity(data) {
+    function updateEntityStatus_(entity, beamType, data) {
+        // TODO: ほんとはクライアント側から指定されたビームtypeをそのまま使うべきではない
+        //       サーバ側に保存してあるプレイヤーの装備しているビームを参照すべき
+        var beam = bq.Params.getBeamParam(beamType);
+        var newEntity = _.clone(entity);
+        var damage = beam.atk; // とりあえずビームの攻撃力分のダメージ
+        var newHp = entity.hp - damage;
+        newEntity.hp = newHp;
+        entities.updateMobStatus(data.mapId, newEntity);
+        io.sockets.emit('notify:beam:hit', {entity: newEntity, beamTag: data.tag});
+    };
+
+    /**
+     * ビームがあたっていたら対象のEntityを返す
+     * @return {model.Mob}
+     * @private
+     */
+    function isHitEntity_(data) {
         var beamPos = {x: data.x, y: data.y};
         var mobs = entities.getMobs()[data.mapId] || {};
         var collideRect = {width: 20, height: 20}; // 当たり判定の範囲（これもビームごとに決められるようにしたい）
         return _.find(mobs, function(mob) {
-            return pointInRect(beamPos, mob.position, collideRect);
+            return pointInRect_(beamPos, mob.position, collideRect);
         });
-    }
+    };
 
     /**
      * 指定pointが範囲内(rect)に入っていたらtrue
@@ -39,7 +55,7 @@ exports.listen = function(socket, io) {
      * @param {Object} targetPoint
      * @param {Object} rect
      */
-    function pointInRect(beamPoint, targetPoint, rect) {
+    function pointInRect_(beamPoint, targetPoint, rect) {
         var startX = beamPoint.x - rect.width;
         var endX = beamPoint.x + rect.width;
         var startY = beamPoint.y - rect.height;
@@ -47,5 +63,5 @@ exports.listen = function(socket, io) {
 
         return startX < targetPoint.x && targetPoint.x < endX &&
             startY < targetPoint.y && targetPoint.y < endY;
-    }
+    };
 };

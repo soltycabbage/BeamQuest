@@ -7,7 +7,7 @@
  * @extends {cc.Node}
  */
 bq.Beam = cc.Node.extend({
-    id: 0,                       // ビームID
+    id: bq.Types.Beams.NORMAL,   // ビームID
     tag: parseInt((new Date)/1000), // ビーム識別用タグ
     destination_:cc.p(0,0),      // {cc.p} 目標
     speed_:10,                   // 進むスピード
@@ -133,24 +133,22 @@ bq.Beam.pop = function() {
  * Beamのファクトリ
  * 引数id にあうパーティクルのビームを作成する
  *
- * @param {number} id
+ * @param {bq.Types.Beams} beamType
  * @param {string} shooterId
  * @return {bq.Beam}
  */
-bq.Beam.create = function(id, shooterId) {
+bq.Beam.create = function(beamType, shooterId) {
     "use strict";
-    var beam =  new bq.Beam(id, shooterId);
+    var beam =  new bq.Beam(beamType, shooterId);
 
     // パーティクルをセット
     var particle = null;
-    switch (id) {
-        case 0:
+    var type = bq.Types.Beams;
+    switch (beamType) {
+        case type.NORMAL:
             particle = cc.ParticleMeteor.create();
             break;
-        case 1:
-            particle = cc.ParticleFlower.create();
-            break;
-        case 2:
+        case type.FIRE:
             particle = cc.ParticleSun.create();
             break;
     }
