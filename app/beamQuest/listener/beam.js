@@ -38,7 +38,7 @@ exports.listen = function(socket, io) {
             hpAmount: damage,
             beamPos: {x: data.x, y: data.y}
         });
-    };
+    }
 
     /**
      * ビームがあたっていたら対象のEntityを返す
@@ -52,7 +52,7 @@ exports.listen = function(socket, io) {
         return _.find(mobs, function(mob) {
             return pointInRect_(beamPos, mob.position, collideRect);
         });
-    };
+    }
 
     /**
      * 指定pointが範囲内(rect)に入っていたらtrue
@@ -68,5 +68,5 @@ exports.listen = function(socket, io) {
 
         return startX < targetPoint.x && targetPoint.x < endX &&
             startY < targetPoint.y && targetPoint.y < endY;
-    };
+    }
 };
