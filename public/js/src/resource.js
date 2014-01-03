@@ -4,9 +4,7 @@
 
 // BeamQuest用のグローバル変数。こいつはどのコードからでも読み出し可能。
 // 設定値とかを入れる。
-var bq = {
-    beams:[] /** キャッシュされたビーム */
-};
+bq.beams = [];
 
 // img
 var s_Player = 'res/img/player.png';

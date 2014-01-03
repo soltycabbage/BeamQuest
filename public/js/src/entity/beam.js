@@ -7,8 +7,8 @@
  * @extends {cc.Node}
  */
 bq.Beam = cc.Node.extend({
-    id: 0,                       // ビームID
-    tag: parseInt((new Date)/1000), // ビーム識別用タグ
+    id: bq.Types.Beams.NORMAL,   // ビームID
+    tag: '',                     // ビーム識別用タグ
     destination_:cc.p(0,0),      // {cc.p} 目標
     speed_:10,                   // 進むスピード
     inc_:cc.p(0,0),              // 1回のupdateで進ませるピクセル数（xとy方向)
@@ -19,7 +19,7 @@ bq.Beam = cc.Node.extend({
     enableSendPosition_: false,  // 位置情報を送信するかどうか
     shooterId_: null,            // ビームを打った人のID
 
-    ctor: function (id, shooterId) {
+    ctor: function (id, shooterId, tag) {
         "use strict";
         this._super();
         this.setVisible(false);
@@ -30,7 +30,7 @@ bq.Beam = cc.Node.extend({
             // TODO: これもentityのshoot()的なメソッドでやるべき
             this.enableSendPosition(true);
         }
-        this.tag = this.tag + shooterId;
+        this.tag = tag;
         this.scheduleUpdate();
     },
 
@@ -92,7 +92,7 @@ bq.Beam = cc.Node.extend({
 
         // duration秒後にこのビームを消去する
         var duration = 2;
-        var remove = cc.CallFunc.create(this.removeFromParent, this);
+        var remove = cc.CallFunc.create(this.dispose, this);
         var seq = cc.Sequence.create(cc.FadeIn.create(duration) , remove);
         this.runAction(seq);
     },
@@ -109,6 +109,11 @@ bq.Beam = cc.Node.extend({
         this.setVisible(false);
         this.active_ = false;
         this.inc_ = cc.p(0, 0);
+    },
+
+    dispose: function() {
+        $(this).triggerHandler(bq.Beam.EventType.REMOVE);
+        this.removeFromParent();
     }
 });
 
@@ -133,24 +138,23 @@ bq.Beam.pop = function() {
  * Beamのファクトリ
  * 引数id にあうパーティクルのビームを作成する
  *
- * @param {number} id
+ * @param {bq.Types.Beams} beamType
  * @param {string} shooterId
+ * @param {string} tag
  * @return {bq.Beam}
  */
-bq.Beam.create = function(id, shooterId) {
+bq.Beam.create = function(beamType, shooterId, tag) {
     "use strict";
-    var beam =  new bq.Beam(id, shooterId);
+    var beam =  new bq.Beam(beamType, shooterId, tag);
 
     // パーティクルをセット
     var particle = null;
-    switch (id) {
-        case 0:
+    var type = bq.Types.Beams;
+    switch (beamType) {
+        case type.NORMAL:
             particle = cc.ParticleMeteor.create();
             break;
-        case 1:
-            particle = cc.ParticleFlower.create();
-            break;
-        case 2:
+        case type.FIRE:
             particle = cc.ParticleSun.create();
             break;
     }
@@ -180,4 +184,8 @@ bq.Beam.setup = function(id, layer, shooterId) {
         layer.addChild(beam, 10);
     });
 
+};
+
+bq.Beam.EventType = {
+    REMOVE: 'remove'
 };

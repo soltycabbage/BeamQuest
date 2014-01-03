@@ -9,23 +9,22 @@ var Player = function(opt_data) {
     Entity.apply(this, arguments);
 
     /** @type {number} */
-    this.hp = this.data.hp || Player.DEFAULT_HP;
+    this.maxBp = this.data.maxBp || Player.DEFAULT_MAX_BP;
 
     /** @type {number} */
-    this.bp = this.data.bp || Player.DEFAULT_BP;
+    this.bp = this.data.bp || this.maxBp;
 
     /** @type {Socket} */
     this.socket = this.data.socket || null;
 };
 util.inherits(Player, Entity);
 
-Player.DEFAULT_HP = 100;
-Player.DEFAULT_BP = 10;
+Player.DEFAULT_MAX_BP = 10;
 
 /** @override */
 Player.prototype.toJSON = function() {
     var json = Player.super_.prototype.toJSON.apply(this);
-    json.hp =  this.hp;
+    json.maxBp =  this.maxBp;
     json.bp = this.bp;
     return json;
 };

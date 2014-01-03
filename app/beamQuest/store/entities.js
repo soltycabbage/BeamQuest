@@ -113,6 +113,17 @@ Entities.prototype.updatePlayerPosition = function(data) {
     }
 };
 
+/**
+ * @param {number} mapId
+ * @param {model.Mob} ステータスを更新したmob
+ */
+Entities.prototype.updateMobStatus = function(mapId, mob) {
+    var target = this.mapMobs_[mapId][mob.id];
+    if (target) {
+        target = mob;
+    }
+};
+
 var instance_ = new Entities();
 
 module.exports = instance_;

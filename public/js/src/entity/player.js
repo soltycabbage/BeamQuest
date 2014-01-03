@@ -14,7 +14,7 @@ bq.entity.Player = bq.entity.Entity.extend({
     POSITION_SEND_INTERVAL: 5,   // 位置情報を何frameごとに送信するか
     positionSendCount_: 0,       // 位置情報送信用カウンター
     prevPos_: {x: 0, y: 0},      // 前回送信時の座標
-    beamId:[2], // 装備しているビームのID
+    beamId:[bq.Types.Beams.FIRE], // 装備しているビームのID
 
     ctor:function () {
         this._super('b0_0.png', this.getKeyFrameMap_());
@@ -80,8 +80,9 @@ bq.entity.Player = bq.entity.Entity.extend({
             mapId: 1, // TODO mapId
             src: {x: src.x, y: src.y},
             dest: {x: dest.x, y: dest.y},
-            beamId: this.beamId[0]
-        };
+            beamId: this.beamId[0],
+            tag: parseInt(new Date().getTime()) + this.name
+         };
 
         this.socket.shootBeam(json);
     },

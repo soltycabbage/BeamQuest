@@ -68,11 +68,20 @@ bq.EntityManager = cc.Class.extend({
      */
     beamShoot: function(beamPos) {
         // TODO: ほんとはここじゃなくてentityに定義されたshoot()関数的なやつを呼ぶのがいい。
-        var beam = bq.Beam.create(beamPos.beamId, beamPos.shooterId);
+        var beam = bq.Beam.create(beamPos.beamId, beamPos.shooterId, beamPos.tag);
         bq.baseLayer.addChild(beam, 10);
         cc.AudioEngine.getInstance().playEffect(s_SeBeamA);
         beam.initDestination(beamPos.src, beamPos.dest);
-        this.beams_[beam.tag] = beam;
+        $(beam).on(bq.Beam.EventType.REMOVE, $.proxy(this.handleBeamRemove_, this));
+        this.beams_[beamPos.tag] = beam;
+    },
+
+    /**
+     *
+     * @private
+     */
+    handleBeamRemove_: function(evt) {
+        delete this.beams_[evt.currentTarget.tag];
     },
 
     /**
@@ -82,9 +91,13 @@ bq.EntityManager = cc.Class.extend({
      */
     hitEntity: function(data) {
         var enemy = this.enemys_[data.entity.id];
-        enemy.showMessage('痛いのだ');
+
+        // 右から当たったら左にダメージラベルがぴょーんて飛ぶ
+        var hitRight = (enemy.getPosition().x - data.beamPos.x) < 0;
+        enemy.updateHp(data.hpAmount, hitRight);
+
         var beam = this.beams_[data.beamTag];
-        beam.removeFromParent();
+        beam.dispose();
     },
 
     /**
