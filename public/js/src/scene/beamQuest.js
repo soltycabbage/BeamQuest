@@ -54,12 +54,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
     update: function() {
         'use strict';
 
-        var baseP = bq.player.getPosition();
-        var dx = this.playerHandler.dx;
-        var dy = this.playerHandler.dy;
-        if (dx !== 0 || dy !== 0) {
-            bq.player.setPosition(cc.p(baseP.x + dx, baseP.y + dy));
-        }
     },
 
     initPing_: function() {

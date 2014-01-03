@@ -9,7 +9,6 @@
 bq.entity.Player = bq.entity.Entity.extend({
     moveSpeed: 4,                // 1frameの移動量(px)
     animationSpeed:0.15,         // delay on animation
-    direction: bq.entity.EntityState.Direction.bottom, // 向いている方向
     state: bq.entity.EntityState.Mode.stop,           // 動いてるとか止まってるとかの状態
     POSITION_SEND_INTERVAL: 5,   // 位置情報を何frameごとに送信するか
     positionSendCount_: 0,       // 位置情報送信用カウンター
@@ -20,11 +19,30 @@ bq.entity.Player = bq.entity.Entity.extend({
         this._super('b0_0.png', this.getKeyFrameMap_());
         this.socket = bq.Socket.getInstance();
         this.inputHandler = new bq.entity.Player.InputHandler();
+        this.currentDirection = bq.entity.EntityState.Direction.bottom;
         this.scheduleUpdate();
     },
 
     /** @override */
     update: function() {
+        var direction = this.inputHandler.getDirection();
+
+        if (direction) {
+            // アニメーションを更新
+            this.updateAnimation(bq.entity.EntityState.Mode.walking, direction);
+
+            // プレイヤーを移動
+            var currentPosition = bq.player.getPosition();
+            var directionVector = this.getNormalizedDirectionVector(direction);
+            var moveDistance = cc.pMult(directionVector, this.moveSpeed);
+            this.setPosition(cc.pAdd(currentPosition, moveDistance));
+        }
+        else {
+            // ストップ
+            this.updateAnimation(bq.entity.EntityState.Mode.stop, this.currentDirection);
+        }
+
+        // 位置情報をサーバに送信
         if (this.positionSendCount_++ > this.POSITION_SEND_INTERVAL) {
             this.positionSendCount_ = 0;
             this.sendPosition();
@@ -113,7 +131,26 @@ bq.entity.Player = bq.entity.Entity.extend({
             step_left:        ["b6_4.png", "b6_5.png", "b6_6.png", "b6_7.png"],
             step_bottomleft:  ["b7_4.png", "b7_5.png", "b7_6.png", "b7_7.png"]
         };
-    }
+    },
+
+    /**
+     * 方向をベクトルに変換する
+     * TODO 他のクラスに移す
+     * @param {cc.p} direction
+     */
+    getNormalizedDirectionVector: _.memoize(function(direction) {
+        var d = bq.entity.EntityState.Direction;
+        var directionVectors = {};
+        directionVectors[d.bottom]      = cc.p( 0, -1);
+        directionVectors[d.bottomright] = cc.p( 1, -1);
+        directionVectors[d.right]       = cc.p( 1,  0);
+        directionVectors[d.topright]    = cc.p( 1,  1);
+        directionVectors[d.top]         = cc.p( 0,  1);
+        directionVectors[d.topleft]     = cc.p(-1,  1);
+        directionVectors[d.left]        = cc.p(-1,  0);
+        directionVectors[d.bottomleft]  = cc.p(-1, -1);
+        return cc.pNormalize(directionVectors[direction]);
+    })
 });
 
 bq.entity.Player.InputHandler = cc.Class.extend({
