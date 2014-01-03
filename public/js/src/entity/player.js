@@ -19,6 +19,7 @@ bq.entity.Player = bq.entity.Entity.extend({
     ctor:function () {
         this._super('b0_0.png', this.getKeyFrameMap_());
         this.socket = bq.Socket.getInstance();
+        this.inputHandler = new bq.entity.Player.InputHandler();
         this.scheduleUpdate();
     },
 
