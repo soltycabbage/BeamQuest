@@ -143,5 +143,37 @@ bq.entity.Entity = cc.Sprite.extend({
             this.stopAllActions();
         }
         this.runAction(animation);
+    },
+
+    /**
+     * @param {number} amount HP変化量
+     * @param {number} opt_popLeft trueならダメージラベルが左に飛ぶよ
+     */
+    updateHp: function(amount, opt_popLeft) {
+        if (amount < 0) { // ダメージ
+            this.popDamageLabel_(amount, !!opt_popLeft);
+        } else if (amount > 0) { // 回復
+            // TODO
+        } else { // ノーダメやで
+            // TODO
+        }
+    },
+
+    /**
+     * @private
+     */
+    popDamageLabel_: function(amount, popLeft) {
+        var damage = Math.abs(amount);
+        var label = bq.Label.createWithShadow(damage, 20);
+        var size = this.getBoundingBox();
+        label.setPosition(cc.p(size.width/2, size.height));
+        var d = popLeft ? -1 : 1;
+        var action = cc.JumpTo.create(1.5, cc.p(d * 200, -100), 100, 1);
+        var fadeOut = cc.FadeOut.create(1.5);
+        this.addChild(label);
+        label.runAction(cc.Sequence.create(cc.Spawn.create(action, fadeOut),
+            cc.CallFunc.create(function() {
+                label.removeFromParent();
+            })));
     }
 });
