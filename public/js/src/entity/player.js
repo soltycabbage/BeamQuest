@@ -45,7 +45,6 @@ bq.entity.Player = bq.entity.Entity.extend({
         // ビーム
         var mouseDown = this.inputHandler.shiftMouseDownEvent();
         if (mouseDown) {
-            console.log(mouseDown);
             this.shoot(mouseDown.getLocation());
         }
 
