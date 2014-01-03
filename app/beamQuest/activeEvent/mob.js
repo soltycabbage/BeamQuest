@@ -13,7 +13,7 @@ exports.run = function() {
         _.each(mapStore.getMaps(), function(map) {
             spawnMob(map);
         });
-    };
+    }
 
     function spawnMob(map) {
         for(var i = 0;i < map.maxMobCount; i++) {
@@ -26,7 +26,7 @@ exports.run = function() {
             });
             entitiesStore.addMob(map.id, mob);
         }
-    };
+    }
 
     /**
      * @param {model.Map}

@@ -85,7 +85,7 @@ bq.Socket = cc.Class.extend({
 
     /**
      * いまからビーム撃つよってサーバに伝える
-     * @param {Object.<userId: number, mapId: number, src: cc.p, dest: cc.p} beamPos
+     * @param {Object.<shooterId: number, mapId: number, src: cc.p, dest: cc.p, beamId: string, tag: string} beamPos
      */
     shootBeam: function(beamPos) {
         this.socket.emit('beam:shoot', beamPos);

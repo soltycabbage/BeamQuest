@@ -12,6 +12,9 @@
         engineDir:'js/lib/cocos2d/cocos2d/',
         //SingleEngineFile:'',
         appFiles:[
+            // サーバ側からも参照されるやつら
+            'shared/js/gameTypes.js',
+
             // libs
             'js/lib/jquery-min.js',
             'js/lib/underscore-min.js',

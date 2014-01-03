@@ -8,7 +8,7 @@ bq.entity = {};
  * @extends {cc.Sprite}
  */
 bq.entity.Entity = cc.Sprite.extend({
-    DEFULT_NAME: 'entity',
+    DEFAULT_NAME: 'entity',
     name: 'entity', // entityの名前
     chatRect: null, // チャット吹き出しのSprite
     collideRect_: null, // 当たり判定の範囲
@@ -32,7 +32,7 @@ bq.entity.Entity = cc.Sprite.extend({
      * @private
      */
     init_: function() {
-        if (this.DEFULT_NAME !== this.name) {
+        if (this.DEFAULT_NAME !== this.name) {
             this.showName(this.name, true);
         }
         var bbox = this.getBoundingBox();
@@ -143,5 +143,37 @@ bq.entity.Entity = cc.Sprite.extend({
             this.stopAllActions();
         }
         this.runAction(animation);
+    },
+
+    /**
+     * @param {number} amount HP変化量
+     * @param {number} opt_popLeft trueならダメージラベルが左に飛ぶよ
+     */
+    updateHp: function(amount, opt_popLeft) {
+        if (amount < 0) { // ダメージ
+            this.popDamageLabel_(amount, !!opt_popLeft);
+        } else if (amount > 0) { // 回復
+            // TODO
+        } else { // ノーダメやで
+            // TODO
+        }
+    },
+
+    /**
+     * @private
+     */
+    popDamageLabel_: function(amount, popLeft) {
+        var damage = Math.abs(amount);
+        var label = bq.Label.createWithShadow(damage, 20);
+        var size = this.getBoundingBox();
+        label.setPosition(cc.p(size.width/2, size.height));
+        var d = popLeft ? -1 : 1;
+        var action = cc.JumpTo.create(1.5, cc.p(d * 200, -100), 100, 1);
+        var fadeOut = cc.FadeOut.create(1.5);
+        this.addChild(label);
+        label.runAction(cc.Sequence.create(cc.Spawn.create(action, fadeOut),
+            cc.CallFunc.create(function() {
+                label.removeFromParent();
+            })));
     }
 });
