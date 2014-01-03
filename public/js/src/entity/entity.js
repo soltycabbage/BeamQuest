@@ -8,7 +8,7 @@ bq.entity = {};
  * @extends {cc.Sprite}
  */
 bq.entity.Entity = cc.Sprite.extend({
-    DEFULT_NAME: 'entity',
+    DEFAULT_NAME: 'entity',
     name: 'entity', // entityの名前
     chatRect: null, // チャット吹き出しのSprite
     collideRect_: null, // 当たり判定の範囲
@@ -32,7 +32,7 @@ bq.entity.Entity = cc.Sprite.extend({
      * @private
      */
     init_: function() {
-        if (this.DEFULT_NAME !== this.name) {
+        if (this.DEFAULT_NAME !== this.name) {
             this.showName(this.name, true);
         }
         var bbox = this.getBoundingBox();
