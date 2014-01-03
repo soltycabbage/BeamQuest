@@ -35,8 +35,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         this.inputHandler = new bq.InputHandler();
         this.inputHandler.attach(this);
 
-        this.playerHandler = new bq.entity.Player.InputHandler(bq.player);
-        this.inputHandler.addListener(this.playerHandler);
+        this.inputHandler.addListener(bq.player.inputHandler);
         this.inputHandler.addListener({
             onKeyDown: function(key) {
                 if (key === cc.KEY.enter) {
@@ -55,12 +54,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
     update: function() {
         'use strict';
 
-        var baseP = bq.player.getPosition();
-        var dx = this.playerHandler.dx;
-        var dy = this.playerHandler.dy;
-        if (dx !== 0 || dy !== 0) {
-            bq.player.setPosition(cc.p(baseP.x + dx, baseP.y + dy));
-        }
     },
 
     initPing_: function() {
