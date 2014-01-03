@@ -19,7 +19,7 @@ bq.Beam = cc.Node.extend({
     enableSendPosition_: false,  // 位置情報を送信するかどうか
     shooterId_: null,            // ビームを打った人のID
 
-    ctor: function (id, shooterId) {
+    ctor: function (id, shooterId, tag) {
         "use strict";
         this._super();
         this.setVisible(false);
@@ -30,7 +30,7 @@ bq.Beam = cc.Node.extend({
             // TODO: これもentityのshoot()的なメソッドでやるべき
             this.enableSendPosition(true);
         }
-        this.tag = parseInt(new Date().getTime()) + shooterId;
+        this.tag = tag;
         this.scheduleUpdate();
     },
 
@@ -135,11 +135,12 @@ bq.Beam.pop = function() {
  *
  * @param {bq.Types.Beams} beamType
  * @param {string} shooterId
+ * @param {string} tag
  * @return {bq.Beam}
  */
-bq.Beam.create = function(beamType, shooterId) {
+bq.Beam.create = function(beamType, shooterId, tag) {
     "use strict";
-    var beam =  new bq.Beam(beamType, shooterId);
+    var beam =  new bq.Beam(beamType, shooterId, tag);
 
     // パーティクルをセット
     var particle = null;

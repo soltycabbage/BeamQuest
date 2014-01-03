@@ -80,8 +80,9 @@ bq.entity.Player = bq.entity.Entity.extend({
             mapId: 1, // TODO mapId
             src: {x: src.x, y: src.y},
             dest: {x: dest.x, y: dest.y},
-            beamId: this.beamId[0]
-        };
+            beamId: this.beamId[0],
+            tag: parseInt(new Date().getTime()) + this.name
+         };
 
         this.socket.shootBeam(json);
     },
