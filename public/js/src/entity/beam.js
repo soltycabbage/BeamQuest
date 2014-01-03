@@ -92,7 +92,7 @@ bq.Beam = cc.Node.extend({
 
         // duration秒後にこのビームを消去する
         var duration = 2;
-        var remove = cc.CallFunc.create(this.removeFromParent, this);
+        var remove = cc.CallFunc.create(this.dispose, this);
         var seq = cc.Sequence.create(cc.FadeIn.create(duration) , remove);
         this.runAction(seq);
     },
@@ -109,6 +109,11 @@ bq.Beam = cc.Node.extend({
         this.setVisible(false);
         this.active_ = false;
         this.inc_ = cc.p(0, 0);
+    },
+
+    dispose: function() {
+        $(this).triggerHandler(bq.Beam.EventType.REMOVE);
+        this.removeFromParent();
     }
 });
 
@@ -179,4 +184,8 @@ bq.Beam.setup = function(id, layer, shooterId) {
         layer.addChild(beam, 10);
     });
 
+};
+
+bq.Beam.EventType = {
+    REMOVE: 'remove'
 };

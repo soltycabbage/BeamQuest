@@ -72,7 +72,16 @@ bq.EntityManager = cc.Class.extend({
         bq.baseLayer.addChild(beam, 10);
         cc.AudioEngine.getInstance().playEffect(s_SeBeamA);
         beam.initDestination(beamPos.src, beamPos.dest);
+        $(beam).on(bq.Beam.EventType.REMOVE, $.proxy(this.handleBeamRemove_, this));
         this.beams_[beamPos.tag] = beam;
+    },
+
+    /**
+     *
+     * @private
+     */
+    handleBeamRemove_: function(evt) {
+        delete this.beams_[evt.currentTarget.tag];
     },
 
     /**
@@ -88,8 +97,7 @@ bq.EntityManager = cc.Class.extend({
         enemy.updateHp(data.hpAmount, hitRight);
 
         var beam = this.beams_[data.beamTag];
-        beam.removeFromParent();
-        delete beam;
+        beam.dispose();
     },
 
     /**
