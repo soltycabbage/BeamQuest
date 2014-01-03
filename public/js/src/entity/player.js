@@ -207,7 +207,11 @@ bq.entity.Player.InputHandler = cc.Class.extend({
      * @return {bq.entity.EntityState.Direction} 見つからない場合null
      */
     getDirection: function() {
-        var downs = this.downKeys_.slice(0, 2);
+        var downKeys = this.downKeys_.slice(0, 2);
+        return this.getDirectionByDownKeys_(downKeys);
+    },
+
+    getDirectionByDownKeys_: _.memoize(function(downKeys) {
         var pairs = [
             {key: [cc.KEY.s],           val: bq.entity.EntityState.Direction.bottom},
             {key: [cc.KEY.s, cc.KEY.d], val: bq.entity.EntityState.Direction.bottomright},
@@ -222,8 +226,8 @@ bq.entity.Player.InputHandler = cc.Class.extend({
         ];
 
         var found = _.find(pairs, function(pair) {
-            return ( downs.length==1 && _.contains(downs, pair.key[0]) )
-                || ( downs.length==2 && _.contains(downs, pair.key[0]) && _.contains(downs, pair.key[1]) );
+            return ( downKeys.length==1 && _.contains(downKeys, pair.key[0]) )
+                || ( downKeys.length==2 && _.contains(downKeys, pair.key[0]) && _.contains(downKeys, pair.key[1]) );
         });
 
         if (_.isUndefined(found)) {
@@ -231,7 +235,7 @@ bq.entity.Player.InputHandler = cc.Class.extend({
         }
 
         return found.val;
-    },
+    }),
 
     shiftMouseDownEvent: function() {
         return this.mouseDownEvents_.shift();
