@@ -42,6 +42,13 @@ bq.entity.Player = bq.entity.Entity.extend({
             this.updateAnimation(bq.entity.EntityState.Mode.stop, this.currentDirection);
         }
 
+        // ビーム
+        var mouseDown = this.inputHandler.shiftMouseDownEvent();
+        if (mouseDown) {
+            console.log(mouseDown);
+            this.shoot(mouseDown.getLocation());
+        }
+
         // 位置情報をサーバに送信
         if (this.positionSendCount_++ > this.POSITION_SEND_INTERVAL) {
             this.positionSendCount_ = 0;
@@ -224,6 +231,10 @@ bq.entity.Player.InputHandler = cc.Class.extend({
         }
 
         return found.val;
+    },
+
+    shiftMouseDownEvent: function() {
+        return this.mouseDownEvents_.shift();
     },
 });
 
