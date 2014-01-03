@@ -4,6 +4,7 @@
  */
 
 bq.entity.EntityState = {
+    // TODO 名前がめんどくさすぎるので、entityState削除
 
     /**
      * Entityの状況

@@ -81,6 +81,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
         frameCache.addSpriteFrames(s_PlayerWalkingPlist, s_PlayerWalkingImg);
 
         var player = new bq.entity.Player();
+
         // TODO: ログイン成功時にユーザ情報を返してもらうか、ここでuserIdをサーバに投げてユーザ情報を取るAPIを叩くとかすると良さそう
         player.setProfile({name: userId});
         player.showName();

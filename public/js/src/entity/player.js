@@ -8,7 +8,6 @@
  */
 bq.entity.Player = bq.entity.Entity.extend({
     moveSpeed: 4,                // 1frameの移動量(px)
-    animationSpeed:0.15,         // delay on animation
     state: bq.entity.EntityState.Mode.stop,           // 動いてるとか止まってるとかの状態
     POSITION_SEND_INTERVAL: 0.15,// 位置情報を何秒ごとに送信するか
     prevPos_: {x: 0, y: 0},      // 前回送信時の座標
@@ -16,15 +15,16 @@ bq.entity.Player = bq.entity.Entity.extend({
 
     ctor:function () {
         this._super('b0_0.png', this.getKeyFrameMap_());
+        this.currentDirection = bq.entity.EntityState.Direction.bottom;
+
         this.socket = bq.Socket.getInstance();
         this.inputHandler = new bq.entity.Player.InputHandler();
-        this.currentDirection = bq.entity.EntityState.Direction.bottom;
         this.scheduleUpdate();
         this.schedule(this.sendPosition, this.POSITION_SEND_INTERVAL);
     },
 
     /** @override */
-    update: function() {
+    update: function () {
         var direction = this.inputHandler.getDirection();
 
         if (direction) {
