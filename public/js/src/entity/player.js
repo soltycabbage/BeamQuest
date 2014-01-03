@@ -116,75 +116,25 @@ bq.entity.Player = bq.entity.Entity.extend({
 });
 
 bq.entity.Player.InputHandler = cc.Class.extend({
-    downKeys_: [], // 今押されているキーのリスト (max2)
-    dx: 0, // プレイヤーx方向移動量(px)
-    dy: 0, // プレイヤーy方向移動量(px)
-
-    ctor: function(player) {
-        this.player_ = player;
-    },
+    downKeys_: [],        // 押されているキーのリスト
+    mouseDownEvents_: [], // クリックイベント
 
     /** @override */
     onKeyDown: function(key) {
-
-        var startWalking = function(dx, dy) {
-            this.dx = dx;
-            this.dy = dy;
-            this.addDownKey_(key);
-            var dir = this.convertDirectionFromKeys_(this.downKeys_);
-            this.player_.updateAnimation(bq.entity.EntityState.Mode.walking,dir);
-        }.bind(this);
-
-        switch (key) {
-            // 重複多いのでリファクタリングした結果ｗｗｗｗｗ
-            case cc.KEY.a:
-                startWalking(-this.player_.moveSpeed, this.dy);
-                break;
-
-            case cc.KEY.s:
-                startWalking(this.dx, -this.player_.moveSpeed);
-                break;
-
-            case cc.KEY.d:
-                startWalking(this.player_.moveSpeed, this.dy);
-                break;
-
-            case cc.KEY.w:
-                startWalking(this.dx, this.player_.moveSpeed);
-                break;
-
-            default:
-                break;
-        }
+        this.addDownKey_(key);
     },
 
     /** @override */
     onKeyUp: function(key) {
         this.removeDownKey_(key);
+    },
 
-        if (this.downKeys_.length > 0) {
-            // return;
-            // TODO: 移動で引っかかるのをどうにかする
-        }
-        switch (key) {
-            case cc.KEY.a:
-            case cc.KEY.d:
-                this.dx = 0;
-                // 押しているキーが０でない場合まだ歩いている
-                var sts = (this.downKeys_.length == 0) ? bq.entity.EntityState.Mode.stop : null;
-                var dir = this.convertDirectionFromKeys_(this.downKeys_);
-                this.player_.updateAnimation(sts,dir);
-                break;
-            case cc.KEY.s:
-            case cc.KEY.w:
-                this.dy = 0;
-                var dir = this.convertDirectionFromKeys_(this.downKeys_);
-                var sts = (this.downKeys_.length == 0) ? bq.entity.EntityState.Mode.stop : null;
-                this.player_.updateAnimation(sts,dir);
-                break;
-            default:
-                break;
-        }
+    /**
+     *
+     * @param event
+     */
+    onMouseDown: function(event) {
+        this.mouseDownEvents_.push(event);
     },
 
     /**
@@ -193,18 +143,9 @@ bq.entity.Player.InputHandler = cc.Class.extend({
      * @private
      */
     addDownKey_: function(key) {
-        if (!_.contains(this.downKeys_, key) && this.downKeys_.length < 2) {
+        if (!_.contains(this.downKeys_, key)) {
             this.downKeys_.push(key);
         }
-    },
-
-    /**
-     *
-     * @param event
-     */
-    onMouseDown: function(event) {
-        // TODO 右クリックと左クリックで動作を変える
-        this.player_.shoot(event.getLocation());
     },
 
     /**
@@ -220,32 +161,31 @@ bq.entity.Player.InputHandler = cc.Class.extend({
      * @param {Array} downs
      * @return {bq.entity.EntityState.Direction} 見つからない場合null
      */
-    convertDirectionFromKeys_: function(downs) {
+    getDirection: function() {
+        var downs = this.downKeys_.slice(0, 2);
         var pairs = [
-            {key: [cc.KEY.s], val: bq.entity.EntityState.Direction.bottom},
-            {key: [cc.KEY.s,cc.KEY.d], val: bq.entity.EntityState.Direction.bottomright},
-            {key: [cc.KEY.d], val: bq.entity.EntityState.Direction.right},
+            {key: [cc.KEY.s],           val: bq.entity.EntityState.Direction.bottom},
+            {key: [cc.KEY.s, cc.KEY.d], val: bq.entity.EntityState.Direction.bottomright},
+            {key: [cc.KEY.d],           val: bq.entity.EntityState.Direction.right},
             {key: [cc.KEY.d, cc.KEY.w], val: bq.entity.EntityState.Direction.topright},
-            {key: [cc.KEY.w], val: bq.entity.EntityState.Direction.top},
+            {key: [cc.KEY.w],           val: bq.entity.EntityState.Direction.top},
             {key: [cc.KEY.w, cc.KEY.a], val: bq.entity.EntityState.Direction.topleft},
-            {key: [cc.KEY.a], val: bq.entity.EntityState.Direction.left},
+            {key: [cc.KEY.a],           val: bq.entity.EntityState.Direction.left},
             {key: [cc.KEY.a, cc.KEY.s], val: bq.entity.EntityState.Direction.bottomleft},
             {key: [cc.KEY.a, cc.KEY.d], val: null},
             {key: [cc.KEY.w, cc.KEY.s], val: null}
         ];
 
-        if ( downs.length == 0 ) {
-            // 押してない状態はnull (向いてる方向を維持）
-            return null;
-        }
-
         var found = _.find(pairs, function(pair) {
             return ( downs.length==1 && _.contains(downs, pair.key[0]) )
                 || ( downs.length==2 && _.contains(downs, pair.key[0]) && _.contains(downs, pair.key[1]) );
-        } );
+        });
+
+        if (_.isUndefined(found)) {
+            return null;
+        }
 
         return found.val;
-    }
-
+    },
 });
 
