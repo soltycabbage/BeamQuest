@@ -36,6 +36,15 @@ bq.Socket = cc.Class.extend({
             entityManager.hitEntity(data);
         });
 
+        // そのentity死んだよって
+        this.socket.on('notify:entity:kill', function(data) {
+            entityManager.killEntity(data);
+        });
+
+        // mobがPOPしたよって
+        this.socket.on('notify:entity:mob:pop', function(data) {
+            entityManager.popMob(data);
+        });
     },
 
     /**

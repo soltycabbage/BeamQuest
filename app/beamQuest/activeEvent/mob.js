@@ -6,42 +6,62 @@ var entitiesStore = require('beamQuest/store/entities'),
     mobModel = require('beamQuest/model/mob'),
     positionModel = require('beamQuest/model/position');
 
-exports.run = function() {
-    initMobs();
-
-    function initMobs() {
-        _.each(mapStore.getMaps(), function(map) {
-            spawnMob(map);
-        });
-    }
-
-    function spawnMob(map) {
-        for(var i = 0;i < map.maxMobCount; i++) {
-            // TODO: mapごとに出現モンスターとか決める
-            var position = randomPosition(map);
-            var mob = new mobModel({
-                id: 'mob_kamuraro_' + map.id + '_' + i,
-                name: 'カム太郎',
-                position: position
-            });
-            entitiesStore.addMob(map.id, mob);
-        }
-    }
-
-    /**
-     * @param {model.Map}
-     * @return {model.Position}
-     */
-    function randomPosition(map) {
-        var randX = Math.floor(Math.random() * map.size.width);
-        var randY = Math.floor(Math.random() * map.size.height);
-        var position = new positionModel({
-            mapId: map.id,
-            x: randX,
-            y: randY
-        });
-        return position;
-    }
-
-    // TODO: map.mobCount が一定数以下にならないように定期的にPOPさせる
+var Mob = function() {
 };
+
+Mob.POP_INTERVAL = 15000;
+
+Mob.prototype.run = function() {
+    this.initMobs_();
+    setInterval(this.initMobs_.bind(this), Mob.POP_INTERVAL);
+};
+
+/**
+ * マップごとにmobを配置していく
+ * @private
+ */
+Mob.prototype.initMobs_ = function() {
+    _.each(mapStore.getMaps(), function(map) {
+        this.spawnMob_(map);
+    }.bind(this));
+};
+
+/**
+ * Mapに決められたmobの最大数になるまでmobをpopさせる
+ * @param {model.Map} map
+ * @private
+ */
+Mob.prototype.spawnMob_ = function(map) {
+    var timeStamp = parseInt(new Date().getTime()/1);
+    for(var i = map.mobCount;i < map.maxMobCount; i++) {
+        // TODO: mapごとに出現モンスターとか決める
+        var position = this.randomPosition_(map);
+        var mob = new mobModel({
+            id: 'mob_kamuraro_' + map.id + '_' + i + '_' + timeStamp,
+            name: 'カム太郎',
+            position: position
+        });
+        entitiesStore.addMob(map, mob);
+    }
+};
+
+/**
+ * @param {model.Map}
+ * @return {model.Position}
+ * @private
+ */
+Mob.prototype.randomPosition_ = function(map) {
+    var randX = Math.floor(Math.random() * map.size.width);
+    var randY = Math.floor(Math.random() * map.size.height);
+    var position = new positionModel({
+        mapId: map.id,
+        x: randX,
+        y: randY
+    });
+    return position;
+};
+
+// TODO: map.mobCount が一定数以下にならないように定期的にPOPさせる
+
+var instance_ = new Mob();
+module.exports = instance_;
