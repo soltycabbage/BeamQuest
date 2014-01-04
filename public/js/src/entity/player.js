@@ -10,8 +10,7 @@ bq.entity.Player = bq.entity.Entity.extend({
     moveSpeed: 4,                // 1frameの移動量(px)
     animationSpeed:0.15,         // delay on animation
     state: bq.entity.EntityState.Mode.stop,           // 動いてるとか止まってるとかの状態
-    POSITION_SEND_INTERVAL: 5,   // 位置情報を何frameごとに送信するか
-    positionSendCount_: 0,       // 位置情報送信用カウンター
+    POSITION_SEND_INTERVAL: 0.15,// 位置情報を何秒ごとに送信するか
     prevPos_: {x: 0, y: 0},      // 前回送信時の座標
     beamId:[bq.Types.Beams.FIRE], // 装備しているビームのID
 
@@ -21,6 +20,7 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.inputHandler = new bq.entity.Player.InputHandler();
         this.currentDirection = bq.entity.EntityState.Direction.bottom;
         this.scheduleUpdate();
+        this.schedule(this.sendPosition, this.POSITION_SEND_INTERVAL);
     },
 
     /** @override */
@@ -47,19 +47,12 @@ bq.entity.Player = bq.entity.Entity.extend({
         if (mouseDown) {
             this.shoot(mouseDown.getLocation());
         }
-
-        // 位置情報をサーバに送信
-        if (this.positionSendCount_++ > this.POSITION_SEND_INTERVAL) {
-            this.positionSendCount_ = 0;
-            this.sendPosition();
-        }
     },
 
     /**
      * 自分の現在座標をサーバに送信する
      */
     sendPosition: function() {
-        if (!bq.baseLayer) {return;}
         var absolPos = this.getPosition();
         var posData = {
             userId: this.name,
