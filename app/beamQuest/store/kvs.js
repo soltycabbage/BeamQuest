@@ -14,6 +14,9 @@ var SessionStore = {
     },
     set: function (key, value) {
         this.session_[key] = value;
+    },
+    del: function (key) {
+        delete this.session_[key];
     }
 };
 
@@ -23,4 +26,8 @@ exports.get = function(key, callback) {
 
 exports.set = function(key, value) {
     SessionStore.set(key, value);
+};
+
+exports.del = function(key) {
+    SessionStore.del(key);
 };
