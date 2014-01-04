@@ -62,7 +62,7 @@ exports.listen = function(socket, io) {
         socket.on('disconnect', function() {
             entities.removePlayer(position.mapId, player);
             kvs.del('user:id:' + player.id);
-            io.sockets.emit('user:logout', {userId: player.id});
+            io.sockets.emit('notify:user:logout', {userId: player.id});
         });
     }
 
