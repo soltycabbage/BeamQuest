@@ -77,11 +77,29 @@ bq.EntityManager = cc.Class.extend({
     },
 
     /**
-     *
      * @private
      */
     handleBeamRemove_: function(evt) {
         delete this.beams_[evt.currentTarget.tag];
+    },
+
+    /**
+     * MobがPOPする時に呼ばれる
+     * @param {Object} data
+     */
+    popMob: function(data) {
+        this.createMob(data.mob);
+    },
+
+    /**
+     * Entityが死んだら呼ばれる
+     * TODO: いまんとこenemyだけ
+     * @param {Object} data
+     */
+    killEntity: function(data) {
+        var enemy = this.enemys_[data.entity.id];
+        enemy.kill();
+        delete this.enemys_[data.entity.id];
     },
 
     /**

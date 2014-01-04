@@ -40,6 +40,16 @@ Maps.prototype.getMaps = function() {
     return this.maps_;
 };
 
+/**
+ * @param {number} mapId
+ * @return {model.Map}
+ */
+Maps.prototype.getMapById = function(mapId) {
+    return _.find(this.maps_, function(map) {
+        return map.id === mapId;
+    }) || null;
+};
+
 var instance_ = new Maps();
 
 module.exports = instance_;

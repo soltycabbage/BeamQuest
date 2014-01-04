@@ -40,6 +40,15 @@ bq.Socket = cc.Class.extend({
             // TODO ログアウト時の動作
         });
 
+        // そのentity死んだよって
+        this.socket.on('notify:entity:kill', function(data) {
+            entityManager.killEntity(data);
+        });
+
+        // mobがPOPしたよって
+        this.socket.on('notify:entity:mob:pop', function(data) {
+            entityManager.popMob(data);
+        });
     },
 
     /**

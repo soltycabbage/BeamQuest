@@ -1,4 +1,5 @@
-var mapStore = require('beamQuest/store/maps');
+var mapStore = require('beamQuest/store/maps'),
+    entityListener = require('beamQuest/listener/entity');
 
 /**
  * ゲーム内のEntityの状態を保持しておくクラス
@@ -57,6 +58,7 @@ Entities.prototype.addPlayer = function(mapId, player) {
 };
 
 /**
+<<<<<<< HEAD
  * @param {number} mapId
  * @param {model.Player} player
  */
@@ -66,13 +68,26 @@ Entities.prototype.removePlayer = function(mapId, player) {
 };
 
 /**
- * @param {number} mapId
+ * @param {model.Map} map
  * @param {model.Mob} mob
  */
-Entities.prototype.addMob = function(mapId, mob) {
-    var mobs = this.mapMobs_[mapId] || [];
+Entities.prototype.addMob = function(map, mob) {
+    var mobs = this.mapMobs_[map.id] || [];
     if (!_.contains(mobs, mob.id)) {
         mobs[mob.id] = mob;
+        map.mobCount++;
+        entityListener.popMob(mob);
+    }
+};
+
+/**
+ * @param {model.Map} map
+ * @param {model.Mob} mob
+ */
+Entities.prototype.removeMob = function(map, mob) {
+    if (map && mob) {
+        map.mobCount--;
+        delete this.mapMobs_[map.id][mob.id];
     }
 };
 
@@ -81,6 +96,17 @@ Entities.prototype.addMob = function(mapId, mob) {
  */
 Entities.prototype.getMobs = function() {
     return this.mapMobs_;
+};
+
+/**
+ * @param {number mapId
+ * @param {string} mobId
+ * @return {model.Mob}
+ */
+Entities.prototype.getMobById = function(mapId, mobId) {
+    if (this.mapMobs_[mapId]) {
+        return this.mapMobs_[mapId][mobId] || null;
+    }
 };
 
 /**
@@ -130,6 +156,10 @@ Entities.prototype.updateMobStatus = function(mapId, mob) {
     var target = this.mapMobs_[mapId][mob.id];
     if (target) {
         target = mob;
+        if (target.hp < 0) { // 死
+            entityListener.kill(mob);
+            this.removeMob(mapStore.getMapById(mapId), mob);
+        }
     }
 };
 
