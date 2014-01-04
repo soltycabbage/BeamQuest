@@ -58,6 +58,15 @@ Entities.prototype.addPlayer = function(mapId, player) {
 
 /**
  * @param {number} mapId
+ * @param {model.Player} player
+ */
+Entities.prototype.removePlayer = function(mapId, player) {
+    var players = this.mapPlayers_[mapId] || [];
+    delete players[player.id];
+};
+
+/**
+ * @param {number} mapId
  * @param {model.Mob} mob
  */
 Entities.prototype.addMob = function(mapId, mob) {
