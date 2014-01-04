@@ -36,6 +36,10 @@ bq.Socket = cc.Class.extend({
             entityManager.hitEntity(data);
         });
 
+        this.socket.on('user:logout', function(data) {
+            // TODO ログアウト時の動作
+        });
+
     },
 
     /**
