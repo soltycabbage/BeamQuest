@@ -9,26 +9,39 @@ var entitiesStore = require('beamQuest/store/entities'),
 var Mob = function() {
 };
 
+Mob.POP_INTERVAL = 15000;
+
 Mob.prototype.run = function() {
     this.initMobs_();
+    setInterval(this.initMobs_.bind(this), Mob.POP_INTERVAL);
 };
 
+/**
+ * マップごとにmobを配置していく
+ * @private
+ */
 Mob.prototype.initMobs_ = function() {
     _.each(mapStore.getMaps(), function(map) {
         this.spawnMob_(map);
     }.bind(this));
 };
 
+/**
+ * Mapに決められたmobの最大数になるまでmobをpopさせる
+ * @param {model.Map} map
+ * @private
+ */
 Mob.prototype.spawnMob_ = function(map) {
-    for(var i = 0;i < map.maxMobCount; i++) {
+    var timeStamp = parseInt(new Date().getTime()/1);
+    for(var i = map.mobCount;i < map.maxMobCount; i++) {
         // TODO: mapごとに出現モンスターとか決める
         var position = this.randomPosition_(map);
         var mob = new mobModel({
-            id: 'mob_kamuraro_' + map.id + '_' + i,
+            id: 'mob_kamuraro_' + map.id + '_' + i + '_' + timeStamp,
             name: 'カム太郎',
             position: position
         });
-        entitiesStore.addMob(map.id, mob);
+        entitiesStore.addMob(map, mob);
     }
 };
 

@@ -58,13 +58,26 @@ Entities.prototype.addPlayer = function(mapId, player) {
 };
 
 /**
- * @param {number} mapId
+ * @param {model.Map} map
  * @param {model.Mob} mob
  */
-Entities.prototype.addMob = function(mapId, mob) {
-    var mobs = this.mapMobs_[mapId] || [];
+Entities.prototype.addMob = function(map, mob) {
+    var mobs = this.mapMobs_[map.id] || [];
     if (!_.contains(mobs, mob.id)) {
         mobs[mob.id] = mob;
+        map.mobCount++;
+        entityListener.popMob(mob);
+    }
+};
+
+/**
+ * @param {model.Map} map
+ * @param {model.Mob} mob
+ */
+Entities.prototype.removeMob = function(map, mob) {
+    if (map && mob) {
+        map.mobCount--;
+        delete this.mapMobs_[map.id][mob.id];
     }
 };
 
@@ -135,7 +148,7 @@ Entities.prototype.updateMobStatus = function(mapId, mob) {
         target = mob;
         if (target.hp < 0) { // 死
             entityListener.kill(mob);
-            delete this.mapMobs_[mapId][mob.id];
+            this.removeMob(mapStore.getMapById(mapId), mob);
         }
     }
 };

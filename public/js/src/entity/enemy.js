@@ -32,7 +32,7 @@ bq.entity.Enemy = bq.entity.Entity.extend({
     kill: function() {
         var fadeOut = cc.FadeOut.create(0.8);
         var blink = cc.Blink.create(1, 50);
-        var callFunc = cc.CallFunc.create(this.removeFromParent, this);
+        var callFunc = cc.CallFunc.create(this.removeFromParent.bind(this));
         this.runAction(cc.Sequence.create(cc.Spawn.create(fadeOut, blink), callFunc));
     },
 

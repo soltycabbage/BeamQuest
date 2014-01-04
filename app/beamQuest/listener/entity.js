@@ -11,6 +11,17 @@ Entity.prototype.listen = function(socket, io) {
 };
 
 /**
+ * mobがPOPするよってクライアントに伝える
+ * @param {model.Mob} mob
+ */
+Entity.prototype.popMob = function(mob) {
+    if (this.io_) {
+        var data = {mob: mob.toJSON()};
+        this.io_.sockets.emit('notify:entity:mob:pop', data);
+    }
+};
+
+/**
  * Entity殺すよってクライアントに伝える
  * @param {model.Entity} entity
  */

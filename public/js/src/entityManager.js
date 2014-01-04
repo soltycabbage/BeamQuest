@@ -84,6 +84,14 @@ bq.EntityManager = cc.Class.extend({
     },
 
     /**
+     * MobがPOPする時に呼ばれる
+     * @param {Object} data
+     */
+    popMob: function(data) {
+        this.createMob(data.mob);
+    },
+
+    /**
      * Entityが死んだら呼ばれる
      * TODO: いまんとこenemyだけ
      * @param {Object} data
