@@ -12,7 +12,7 @@ exports.start = function(io) {
     mobEvent.run();
 
     io.sockets.on('connection', function(socket) {
-        login.listen(socket);
+        login.listen(socket, io);
         world.listen(socket);
         beam.listen(socket, io);
         entity.listen(socket, io);

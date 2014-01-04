@@ -3,7 +3,7 @@ var kvs = require('beamQuest/store/kvs'),
     positionModel = require('beamQuest/model/position'),
     entities = require('beamQuest/store/entities');
 
-exports.listen = function(socket) {
+exports.listen = function(socket, io) {
     socket.on('login', function(data) {
         var invalidErr = validateUserId_(data.userId);
         if (invalidErr) {
@@ -58,6 +58,12 @@ exports.listen = function(socket) {
             position: position
         });
         entities.addPlayer(position.mapId, player);
+
+        socket.on('disconnect', function() {
+            entities.removePlayer(position.mapId, player);
+            kvs.del('user:id:' + player.id);
+            io.sockets.emit('notify:user:logout', {userId: player.id});
+        });
     }
 
     /**

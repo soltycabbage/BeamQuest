@@ -36,6 +36,10 @@ bq.Socket = cc.Class.extend({
             entityManager.hitEntity(data);
         });
 
+        this.socket.on('notify:user:logout', function(data) {
+            // TODO ログアウト時の動作
+        });
+
         // そのentity死んだよって
         this.socket.on('notify:entity:kill', function(data) {
             entityManager.killEntity(data);
