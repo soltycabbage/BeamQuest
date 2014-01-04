@@ -27,17 +27,18 @@ exports.listen = function(socket, io) {
         // TODO: ほんとはクライアント側から指定されたビームtypeをそのまま使うべきではない
         //       サーバ側に保存してあるプレイヤーの装備しているビームを参照すべき
         var beam = bq.Params.getBeamParam(beamType);
-        var newEntity = _.clone(entity);
+        var newEntity = entities.getMobById(data.mapId, entity.id);
         var damage = -1 * (Math.floor(Math.random() * beam.atk/2) + beam.atk); // TODO: ダメージ計算
-        var newHp = entity.hp + damage;
+        var newHp = newEntity.hp + damage;
         newEntity.hp = newHp;
-        entities.updateMobStatus(data.mapId, newEntity);
+
         io.sockets.emit('notify:beam:hit', {
             entity: newEntity,
             beamTag: data.tag,
             hpAmount: damage,
             beamPos: {x: data.x, y: data.y}
         });
+        entities.updateMobStatus(data.mapId, newEntity);
     }
 
     /**

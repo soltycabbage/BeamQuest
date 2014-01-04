@@ -77,11 +77,21 @@ bq.EntityManager = cc.Class.extend({
     },
 
     /**
-     *
      * @private
      */
     handleBeamRemove_: function(evt) {
         delete this.beams_[evt.currentTarget.tag];
+    },
+
+    /**
+     * Entityが死んだら呼ばれる
+     * TODO: いまんとこenemyだけ
+     * @param {Object} data
+     */
+    killEntity: function(data) {
+        var enemy = this.enemys_[data.entity.id];
+        enemy.kill();
+        delete this.enemys_[data.entity.id];
     },
 
     /**

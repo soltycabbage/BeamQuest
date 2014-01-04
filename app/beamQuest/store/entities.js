@@ -1,4 +1,5 @@
-var mapStore = require('beamQuest/store/maps');
+var mapStore = require('beamQuest/store/maps'),
+    entityListener = require('beamQuest/listener/entity');
 
 /**
  * ゲーム内のEntityの状態を保持しておくクラス
@@ -75,6 +76,17 @@ Entities.prototype.getMobs = function() {
 };
 
 /**
+ * @param {number mapId
+ * @param {string} mobId
+ * @return {model.Mob}
+ */
+Entities.prototype.getMobById = function(mapId, mobId) {
+    if (this.mapMobs_[mapId]) {
+        return this.mapMobs_[mapId][mobId] || null;
+    }
+};
+
+/**
  * @param {number} mapId
  * @return {Object}
  */
@@ -121,6 +133,10 @@ Entities.prototype.updateMobStatus = function(mapId, mob) {
     var target = this.mapMobs_[mapId][mob.id];
     if (target) {
         target = mob;
+        if (target.hp < 0) { // 死
+            entityListener.kill(mob);
+            delete this.mapMobs_[mapId][mob.id];
+        }
     }
 };
 
