@@ -13,8 +13,7 @@ bq.Beam = cc.Node.extend({
     speed_:10,                   // 進むスピード
     inc_:cc.p(0,0),              // 1回のupdateで進ませるピクセル数（xとy方向)
     active_:false,               // 発射中ならtrue
-    POSITION_SEND_INTERVAL: 3,   // 位置情報を何frameごとに送信するか
-    positionSendCount_: 0,       // 位置情報送信用カウンター
+    POSITION_SEND_INTERVAL: 0.1, // 位置情報を何秒ごとに送信するか
     prevPos_: {x: 0, y: 0},      // 前回送信時の座標
     enableSendPosition_: false,  // 位置情報を送信するかどうか
     shooterId_: null,            // ビームを打った人のID
@@ -32,6 +31,7 @@ bq.Beam = cc.Node.extend({
         }
         this.tag = tag;
         this.scheduleUpdate();
+        this.schedule(this.sendPosition, this.POSITION_SEND_INTERVAL);
     },
 
     /** @override */
@@ -41,11 +41,6 @@ bq.Beam = cc.Node.extend({
             var curr = this.getPosition();
             // ビームを少し進ませる
             this.setPosition(cc.pAdd(curr, this.inc_));
-            if (this.positionSendCount_++ > this.POSITION_SEND_INTERVAL) {
-                this.positionSendCount_ = 0;
-                this.sendPosition();
-            }
-
         }
 
     },
