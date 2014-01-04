@@ -58,7 +58,6 @@ Entities.prototype.addPlayer = function(mapId, player) {
 };
 
 /**
-<<<<<<< HEAD
  * @param {number} mapId
  * @param {model.Player} player
  */
