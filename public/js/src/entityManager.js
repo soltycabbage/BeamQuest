@@ -162,13 +162,15 @@ bq.EntityManager = cc.Class.extend({
      * @param {Object} mob
      */
     createMob: function(mob) {
-        var x = mob.position.x;
-        var y = mob.position.y;
+        var mobModel = new bq.model.Mob(mob);
+        var x = mobModel.position.x;
+        var y = mobModel.position.y;
         var enemy_id = 1;
         var enemy = new bq.entity.Enemy(enemy_id);
+        enemy.setModel(mobModel);
         enemy.setPosition(cc.p(x, y));
         bq.baseLayer.addChild(enemy, 50);
-        this.enemys_[mob.id] = enemy;
+        this.enemys_[mobModel.id] = enemy;
     }
 });
 

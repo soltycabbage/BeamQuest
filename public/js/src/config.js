@@ -20,6 +20,7 @@ var BQConfig = cc.Class.extend({
         this.tags = {
             BASE_LAYER: 0,
             PLAYER: 100,
+            EXP_LABEL: 101,
             CHAT: 500,
             DEBUG_PING: 1000000
         };
