@@ -1,8 +1,11 @@
-_ = require('underscore');
 var path     = require('path'),
     express  = require('express'),
     http     = require('http'),
-    socketIo = require('socket.io');
+    socketIo = require('socket.io'),
+    log4js   = require('log4js');
+
+_      = require('underscore');
+logger = log4js.getLogger();
 
 var app = express();
 
@@ -33,3 +36,4 @@ var io = socketIo.listen(server);
 var chat = require('beamQuest/main');
 chat.start(io);
 
+logger.info('BeamQuest start');
