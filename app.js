@@ -5,6 +5,11 @@ var path     = require('path'),
     socketIo = require('socket.io');
 
 var app = express();
+
+app.configure('development', function() {
+    app.use(express.errorHandler());
+});
+ 
 app.configure(function() {
     app.set('port', process.env.PORT || 3000);
     app.use(express.favicon());
@@ -15,11 +20,7 @@ app.configure(function() {
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
 });
- 
-app.configure('development', function() {
-    app.use(express.errorHandler());
-});
- 
+
 var server = http.createServer(app);
 server.listen(app.get('port'));
  
