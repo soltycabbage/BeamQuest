@@ -145,7 +145,7 @@ bq.EntityManager = cc.Class.extend({
         other.name = moveData.userId;
         other.showName(moveData.userId, true);
         other.setPosition(cc.p(moveData.x, moveData.y));
-        bq.baseLayer.addChild(other);
+        bq.baseLayer.addChild(other, bq.config.tags.PLAYER);
         this.otherPlayers_[moveData.userId] = other;
     },
 
