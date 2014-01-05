@@ -28,7 +28,10 @@ var cocos2dApp = cc.Application.extend({
         director.setAnimationInterval(1.0 / this.config['frameRate']);
 
         // initialize audio engine
-        cc.AudioEngine.getInstance().init("aac,mp3,ogg,wav");
+        var audioEngine = cc.AudioEngine.getInstance();
+        audioEngine.init("aac,mp3,ogg,wav");
+        audioEngine.setEffectsVolume(0.3);
+        audioEngine.setMusicVolume(0.3);
 
         //load resources
         cc.LoaderScene.preload(g_resources, function () {
