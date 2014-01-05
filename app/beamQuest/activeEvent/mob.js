@@ -36,9 +36,12 @@ Mob.prototype.spawnMob_ = function(map) {
     for(var i = map.mobCount;i < map.maxMobCount; i++) {
         // TODO: mapごとに出現モンスターとか決める
         var position = this.randomPosition_(map);
+        var mobType = bq.Params.Entities.KAMUTARO;
         var mob = new mobModel({
-            id: 'mob_kamuraro_' + map.id + '_' + i + '_' + timeStamp,
-            name: 'カム太郎',
+            id: mobType.id + '_' + map.id + '_' + i + '_' + timeStamp,
+            name: mobType.name,
+            hp: mobType.hp,
+            exp: mobType.exp,
             position: position
         });
         entitiesStore.addMob(map, mob);
