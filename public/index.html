@@ -16,5 +16,48 @@
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="cocos2d.js"></script>
+
+<div>
+    <h2>Debug Tools</h2>
+    <div>
+        <h3>音量調節</h3>
+        <div id="bq-debug-sound-volume-effect">
+            Effects: <a href="javascript:addEffectsVolume(0.1)">+0.1</a> / <a href="javascript:addEffectsVolume(-0.1)">-0.1</a>
+        </div>
+        <div id="bq-debug-sound-volume-music">
+            Music: <a href="javascript:addMusicVolume(0.1)">+0.1</a> / <a href="javascript:addMusicVolume(-0.1)">-0.1</a>
+        </div>
+        <script>
+            function addEffectsVolume(value) {
+                var a = cc.AudioEngine.getInstance();
+                a.setEffectsVolume(a.getEffectsVolume() + value);
+            }
+            function addMusicVolume(value) {
+                var a = cc.AudioEngine.getInstance();
+                a.setMusicVolume(a.getMusicVolume() + value);
+            }
+        </script>
+    </div>
+    <div>
+        <h3>プレイヤーの色</h3>
+        <div id="bq-debug-player-color">
+            #<input id="bq-debug-player-color-input" type="text" value="FFFFFF">
+            <button onclick="updatePlayerColor($('#bq-debug-player-color-input'))">変更</button>
+        </div>
+        <script>
+            function updatePlayerColor(input) {
+                var colorString = input.val();
+                if( /^[0-9a-fA-F]{6}$/.test(colorString) ) {
+                    var color = {
+                        red   : parseInt(colorString.substr(0,2), 16),
+                        green : parseInt(colorString.substr(2,2), 16),
+                        blue  : parseInt(colorString.substr(4,2), 16),
+                    };
+                    bq.player.setColor(cc.c3(color.red, color.green, color.blue));
+                }
+            }
+        </script>
+    </div>
+</div>
 </body>
 </html>
