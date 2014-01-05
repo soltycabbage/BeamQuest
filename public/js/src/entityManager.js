@@ -45,7 +45,7 @@ bq.EntityManager = cc.Class.extend({
      */
     chat: function(chatData) {
         var targetOther = this.otherPlayers_[chatData.userId];
-        targetOther.showMessage(chatData.message);
+        targetOther &&targetOther.showMessage(chatData.message);
     },
 
     /**
@@ -98,8 +98,10 @@ bq.EntityManager = cc.Class.extend({
      */
     killEntity: function(data) {
         var enemy = this.enemys_[data.entity.id];
-        enemy.kill();
-        delete this.enemys_[data.entity.id];
+        if (enemy) {
+            enemy.kill();
+            delete this.enemys_[data.entity.id];
+        }
     },
 
     /**
@@ -111,11 +113,13 @@ bq.EntityManager = cc.Class.extend({
         var enemy = this.enemys_[data.entity.id];
 
         // 右から当たったら左にダメージラベルがぴょーんて飛ぶ
-        var hitRight = (enemy.getPosition().x - data.beamPos.x) < 0;
-        enemy.updateHp(data.hpAmount, hitRight);
+        if (enemy) {
+            var hitRight = (enemy.getPosition().x - data.beamPos.x) < 0;
+            enemy.updateHp(data.hpAmount, hitRight);
+        }
 
         var beam = this.beams_[data.beamTag];
-        beam.dispose();
+        beam && beam.dispose();
     },
 
     /**
