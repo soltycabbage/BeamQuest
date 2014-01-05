@@ -152,10 +152,12 @@ bq.entity.Entity = cc.Sprite.extend({
         this.currentDirection = direction;
 
         var animation = this.getAnimationByNameDirection(state,direction);
+        animation.setTag('walk_');
 
-        // すでにあるアニメーションを削除
-        if ( this.getNumberOfRunningActions() > 0 ) {
-            this.stopAllActions();
+        // すでにactionManagerの管理下にある歩行アニメーションを削除
+        var oldAnimation = this.getActionByTag('walk_');
+        if (oldAnimation) {
+            this.stopAction(oldAnimation);
         }
         this.runAction(animation);
     },
