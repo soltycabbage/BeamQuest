@@ -33,6 +33,10 @@ server.listen(app.get('port'));
  
 var io = socketIo.listen(server);
 
+io.configure('production', function() {
+    io.set('log level', 1);
+});
+
 var chat = require('beamQuest/main');
 chat.start(io);
 
