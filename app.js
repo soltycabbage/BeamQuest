@@ -1,8 +1,8 @@
 _ = require('underscore');
-var path     = require('path')
-  , express  = require('express')
-  , http     = require('http')
-  , socketIo = require('socket.io');
+var path     = require('path'),
+    express  = require('express'),
+    http     = require('http'),
+    socketIo = require('socket.io');
 
 var app = express();
 app.configure(function() {
