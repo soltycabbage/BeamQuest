@@ -28,6 +28,7 @@
             'js/src/model/playerMove.js',
             'js/src/model/beamPos.js',
             'js/src/model/chat.js',
+            'js/src/model/mob.js',
 
             'js/src/entityManager.js',
             'js/src/socket/socket.js',

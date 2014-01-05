@@ -14,6 +14,7 @@ bq.entity.Entity = cc.Sprite.extend({
     collideRect_: null, // 当たり判定の範囲
     currentState:null,
     currentDirection:null,
+    model_: null,
 
     /**
      * @param {string} spriteFrameName *.plistの<key>に設定されてるframeName
@@ -37,6 +38,20 @@ bq.entity.Entity = cc.Sprite.extend({
         }
         var bbox = this.getBoundingBox();
         this.collideRect_ = cc.rect(0, 0, bbox.width, bbox.height);
+    },
+
+    /**
+     * @param {bq.model.Model}model
+     */
+    setModel: function(model) {
+        this.model_ = model;
+    },
+
+    /**
+     * @return {bq.model.Model}
+     */
+    getModel: function() {
+        return this.model_;
     },
 
     /**

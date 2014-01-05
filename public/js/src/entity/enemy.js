@@ -30,11 +30,31 @@ bq.entity.Enemy = bq.entity.Entity.extend({
      * 死にモーション
      */
     kill: function() {
+        this.popExpLabel_();
         var fadeOut = cc.FadeOut.create(0.8);
         var blink = cc.Blink.create(1, 50);
         var callFunc = cc.CallFunc.create(this.removeFromParent.bind(this));
         this.runAction(cc.Sequence.create(cc.Spawn.create(fadeOut, blink), callFunc));
     },
+
+    /**
+     * 消滅間際に獲得経験値をポーンって出す
+     * @private
+     */
+    popExpLabel_: function() {
+        var model = this.getModel();
+        if (model) {
+            var exp = model.exp;
+            var label = bq.Label.createWithShadow(exp + 'exp', 18);
+            var pos = this.getPosition();
+            var fadeOut = cc.FadeOut.create(1);
+            var moveTo = cc.MoveTo.create(1, cc.p(0, 40));
+            label.runAction(cc.Spawn.create(fadeOut, moveTo));
+            label.setPosition(pos.x, pos.y);
+            bq.baseLayer.addChild(label, bq.config.tags.EXP_LABEL);
+        }
+    },
+
 
     createAttackingAnimation: function() {
         var vibrate = bq.entity.Animation.createAnimation(this.getSpriteFrames_([5,6]));
