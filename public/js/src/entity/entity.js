@@ -66,10 +66,18 @@ bq.entity.Entity = cc.Sprite.extend({
     },
 
     /**
-     * @return {cc.rect}
+     * 獲得経験値をポーンって出す
+     * @param {number} exp
+     * @private
      */
-    getCollideRect: function() {
-        return this.collideRect_;
+    popExpLabel: function(exp) {
+        var label = bq.Label.createWithShadow(exp + 'exp', 18);
+        var pos = this.getPosition();
+        var fadeOut = cc.FadeOut.create(1);
+        var moveTo = cc.MoveTo.create(1, cc.p(0, 40));
+        label.runAction(cc.Spawn.create(fadeOut, moveTo));
+        label.setPosition(pos.x, pos.y);
+        bq.baseLayer.addChild(label, bq.config.tags.EXP_LABEL);
     },
 
     /**

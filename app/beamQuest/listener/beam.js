@@ -32,6 +32,12 @@ exports.listen = function(socket, io) {
         var newHp = newEntity.hp + damage;
         newEntity.hp = newHp;
 
+        // 攻撃を与えたユーザのIDをヘイトリストに突っ込む
+        // TODO: ヘイト値の導入
+        if (!_.contains(newEntity.hateList, data.shooterId)) {
+            newEntity.hateList.push(data.shooterId);
+        }
+
         io.sockets.emit('notify:beam:hit', {
             entity: newEntity,
             beamTag: data.tag,
