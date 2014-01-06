@@ -11,16 +11,15 @@ var app = express();
 
 app.configure('development', function() {
     app.use(express.errorHandler());
-    app.use(express.logger('dev'));
 });
  
 app.configure('production', function() {
-    app.use(express.logger('default'));
 });
 
 app.configure(function() {
     app.set('port', process.env.PORT || 3000);
     app.use(express.favicon());
+    app.use(log4js.connectLogger(logger, {level: log4js.levels.TRACE}));
     app.use(express.json());
     app.use(express.urlencoded());
     app.use(express.methodOverride());
