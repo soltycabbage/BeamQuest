@@ -12,7 +12,7 @@ var app = express();
 app.configure('development', function() {
     app.use(express.errorHandler());
 });
- 
+
 app.configure('production', function() {
 });
 
@@ -29,7 +29,7 @@ app.configure(function() {
 
 var server = http.createServer(app);
 server.listen(app.get('port'));
- 
+
 var io = socketIo.listen(server);
 
 io.configure('production', function() {
