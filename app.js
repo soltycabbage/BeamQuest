@@ -9,6 +9,8 @@ logger = log4js.getLogger('BeamQuest');
 
 var app = express();
 
+var expressLogWrapper = log4js.getLogger('express');
+
 app.configure('development', function() {
     app.use(express.errorHandler());
 });
@@ -16,10 +18,11 @@ app.configure('development', function() {
 app.configure('production', function() {
 });
 
+
 app.configure(function() {
     app.set('port', process.env.PORT || 3000);
     app.use(express.favicon());
-    app.use(log4js.connectLogger(logger, {level: log4js.levels.TRACE}));
+    app.use(log4js.connectLogger(expressLogWrapper, {level: log4js.levels.INFO}));
     app.use(express.json());
     app.use(express.urlencoded());
     app.use(express.methodOverride());
