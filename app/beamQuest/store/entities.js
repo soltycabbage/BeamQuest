@@ -51,10 +51,13 @@ Entities.prototype.init_ = function() {
  * @param {model.Player} player
  */
 Entities.prototype.addPlayer = function(mapId, player) {
-    var players = this.mapPlayers_[mapId] || [];
-    if (!_.contains(players, player.id)) {
+    var players = this.mapPlayers_[mapId] || [],
+        isAdd = !_.contains(players, player.id);
+
+    if (isAdd) {
         players[player.id] = player;
     }
+    logger.info('player add [mapId=' + mapId + ',playerId=' + player.id + ',isAdd=' + isAdd + ']');
 };
 
 /**
@@ -63,7 +66,14 @@ Entities.prototype.addPlayer = function(mapId, player) {
  */
 Entities.prototype.removePlayer = function(mapId, player) {
     var players = this.mapPlayers_[mapId] || [];
-    delete players[player.id];
+
+    if (players[player.id]) {
+        delete players[player.id];
+        logger.info('player remove [mapId=' + mapId + ',playerId=' + player.id + ']');
+    } else {
+        logger.warn('cannot remove player [mapId=' + mapId + ',playerId=' + player.id + ']');
+    }
+
 };
 
 /**
