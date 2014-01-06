@@ -10,7 +10,8 @@
     "express": "3.4.6",
     "socket.io": "0.9.16",
     "underscore": "1.5.2",
-    "redis": "0.9.1"
+    "redis": "0.9.1",
+    "log4js": "0.6.9"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
