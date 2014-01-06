@@ -5,7 +5,7 @@ var path     = require('path'),
     log4js   = require('log4js');
 
 _      = require('underscore');
-logger = log4js.getLogger();
+logger = log4js.getLogger('BeamQuest');
 
 var app = express();
 
@@ -40,4 +40,4 @@ io.configure('production', function() {
 var chat = require('beamQuest/main');
 chat.start(io);
 
-logger.info('BeamQuest start');
+logger.info('start');
