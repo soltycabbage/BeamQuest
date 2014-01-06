@@ -13,9 +13,11 @@ var expressLogWrapper = log4js.getLogger('express');
 
 app.configure('development', function() {
     app.use(express.errorHandler());
+    expressLogWrapper.setLevel('INFO');
 });
 
 app.configure('production', function() {
+    expressLogWrapper.setLevel('WARN');
 });
 
 
