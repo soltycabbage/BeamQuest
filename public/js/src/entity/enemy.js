@@ -30,9 +30,6 @@ bq.entity.Enemy = bq.entity.Entity.extend({
      * 死にモーション
      */
     kill: function() {
-        var model = this.getModel();
-        if (!model) { return; }
-        this.popExpLabel(model.exp);
         var fadeOut = cc.FadeOut.create(0.8);
         var blink = cc.Blink.create(1, 50);
         var callFunc = cc.CallFunc.create(this.removeFromParent.bind(this));
