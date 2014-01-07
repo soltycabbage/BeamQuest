@@ -8,6 +8,7 @@ var Entity = function() {
 Entity.prototype.listen = function(socket, io) {
     this.socket_ = socket;
     this.io_ = io;
+    this.entitiesStore_ = require('beamQuest/store/entities');
 };
 
 /**
@@ -28,6 +29,21 @@ Entity.prototype.popMob = function(mob) {
 Entity.prototype.kill = function(entity) {
     var data = {entity: entity.toJSON()};
     this.io_.sockets.emit('notify:entity:kill', data);
+    _.each(entity.hateList, function(playerId) {
+        this.addExp(playerId, entity);
+    }.bind(this));
+};
+
+/**
+ * entityのもつ経験値をplayerに与える
+ * @param {string} playerId
+ * @param {model.Entity} entity
+ */
+Entity.prototype.addExp = function(playerId, entity) {
+    var mapId = entity.position.mapId;
+    var player = this.entitiesStore_.getPlayerById(mapId, playerId);
+    player.exp += entity.exp;
+    player.socket.emit('user:status:exp:update', {exp: entity.exp});
 };
 
 

@@ -14,6 +14,7 @@ bq.entity.Entity = cc.Sprite.extend({
     collideRect_: null, // 当たり判定の範囲
     currentState:null,
     currentDirection:null,
+    model_: null,
 
     /**
      * @param {string} spriteFrameName *.plistの<key>に設定されてるframeName
@@ -40,6 +41,20 @@ bq.entity.Entity = cc.Sprite.extend({
     },
 
     /**
+     * @param {bq.model.Model}model
+     */
+    setModel: function(model) {
+        this.model_ = model;
+    },
+
+    /**
+     * @return {bq.model.Model}
+     */
+    getModel: function() {
+        return this.model_;
+    },
+
+    /**
      * Entityの頭上にキャラ名を表示する
      */
     showName: function() {
@@ -51,10 +66,18 @@ bq.entity.Entity = cc.Sprite.extend({
     },
 
     /**
-     * @return {cc.rect}
+     * 獲得経験値をポーンって出す
+     * @param {number} exp
+     * @private
      */
-    getCollideRect: function() {
-        return this.collideRect_;
+    popExpLabel: function(exp) {
+        var label = bq.Label.createWithShadow(exp + 'exp', 18);
+        var pos = this.getPosition();
+        var fadeOut = cc.FadeOut.create(1);
+        var moveTo = cc.MoveTo.create(1, cc.p(0, 40));
+        label.runAction(cc.Spawn.create(fadeOut, moveTo));
+        label.setPosition(pos.x, pos.y);
+        bq.baseLayer.addChild(label, bq.config.tags.EXP_LABEL);
     },
 
     /**

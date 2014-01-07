@@ -11,7 +11,7 @@ bq.Params = {
 
     Entities: {
         // Mobs
-        KAMUTARO: {hp: 100, atk: 10, exp: 10}
+        KAMUTARO: {id: 'mob_kamutaro', name: 'カム太郎', hp: 100, atk: 10, exp: 10}
     }
 };
 

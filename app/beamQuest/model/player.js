@@ -14,6 +14,12 @@ var Player = function(opt_data) {
     /** @type {number} */
     this.bp = this.data.bp || this.maxBp;
 
+    /** @type {number} */
+    this.exp = this.data.exp || 0;
+
+    /** @type {number} */
+    this.lv = this.data.lv || 1;
+
     /** @type {Socket} */
     this.socket = this.data.socket || null;
 };
@@ -26,6 +32,8 @@ Player.prototype.toJSON = function() {
     var json = Player.super_.prototype.toJSON.apply(this);
     json.maxBp =  this.maxBp;
     json.bp = this.bp;
+    json.exp = this.exp;
+    json.lv = this.lv;
     return json;
 };
 
