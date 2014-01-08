@@ -1,12 +1,13 @@
 /**
  * @fileoverview ビームの基底クラス
  */
+bq.beam = {};
 
 /**
  * @constructor
  * @extends {cc.Node}
  */
-bq.Beam = cc.Node.extend({
+bq.beam.Beam = cc.Node.extend({
     id: bq.Types.Beams.NORMAL,   // ビームID
     tag: '',                     // ビーム識別用タグ
     destination_:cc.p(0,0),      // {cc.p} 目標
@@ -107,16 +108,16 @@ bq.Beam = cc.Node.extend({
     },
 
     dispose: function() {
-        $(this).triggerHandler(bq.Beam.EventType.REMOVE);
+        $(this).triggerHandler(bq.beam.Beam.EventType.REMOVE);
         this.removeFromParent();
     }
 });
 
 /**
  * プリセットからビームを取り出す
- * @return {bq.Beam} プリセットされたビームを返す、キャッシュされたビームが尽きていた場合は不定（今のところnullを返す）
+ * @return {bq.beam.Beam} プリセットされたビームを返す、キャッシュされたビームが尽きていた場合は不定（今のところnullを返す）
  */
-bq.Beam.pop = function() {
+bq.beam.Beam.pop = function() {
     "use strict";
     if (bq.beams.length <= 0 ) {
         return null;
@@ -136,11 +137,11 @@ bq.Beam.pop = function() {
  * @param {bq.Types.Beams} beamType
  * @param {string} shooterId
  * @param {string} tag
- * @return {bq.Beam}
+ * @return {bq.beam.Beam}
  */
-bq.Beam.create = function(beamType, shooterId, tag) {
+bq.beam.Beam.create = function(beamType, shooterId, tag) {
     "use strict";
-    var beam =  new bq.Beam(beamType, shooterId, tag);
+    var beam =  new bq.beam.Beam(beamType, shooterId, tag);
 
     // パーティクルをセット
     var particle = null;
@@ -169,18 +170,18 @@ bq.Beam.create = function(beamType, shooterId, tag) {
  * @param {number} id
  * @param {cc.Layer} layer
  */
-bq.Beam.setup = function(id, layer, shooterId) {
+bq.beam.Beam.setup = function(id, layer, shooterId) {
     "use strict";
 
     var maxBeamCount = 5;
     _.times(maxBeamCount, function(i) {
-        var beam = bq.Beam.create(id, shooterId);
+        var beam = bq.beam.Beam.create(id, shooterId);
         bq.beams[i] = beam;
         layer.addChild(beam, 10);
     });
 
 };
 
-bq.Beam.EventType = {
+bq.beam.Beam.EventType = {
     REMOVE: 'remove'
 };

@@ -44,7 +44,8 @@
             'js/src/entity/animation.js',
             'js/src/entity/player.js',
             'js/src/entity/enemy.js',
-            'js/src/entity/beam.js',
+            'js/src/beam/beam.js',
+            'js/src/beam/sphereBeam.js',
             'js/src/ping.js',
             'js/src/camera.js',
 
