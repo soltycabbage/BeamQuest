@@ -48,6 +48,8 @@
             'js/src/ping.js',
             'js/src/camera.js',
 
+            'js/src/hud.js',
+
             // scene
             'js/src/scene/scene.js',
             'js/src/scene/login.js',

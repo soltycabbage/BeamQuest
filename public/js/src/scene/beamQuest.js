@@ -101,7 +101,11 @@ bq.scene.BeamQuestWorldScene = cc.Scene.extend({
         if (this.isAlreadyLogin_(bq.player.name)) {
             var layer = new bq.scene.BeamQuestWorld();
             layer.init();
-            this.addChild(layer);
+            this.addChild(layer, 0);
+
+            var hud = new bq.Hud();
+            layer.addChild(hud, 100);
+
             this.renderEntities_(1); // TODO: maoId
         } else {
             this.addChild(new LoginScene());
