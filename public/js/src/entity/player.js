@@ -201,6 +201,9 @@ bq.entity.Player.InputHandler = cc.Class.extend({
      * @return {bq.entity.EntityState.Direction} 見つからない場合null
      */
     getDirection: function() {
+        if(_.isEmpty(this.downKeys_)) {
+            return null;
+        }
         var downKeys = this.downKeys_.slice(0, 2);
         return this.getDirectionByDownKeys_(downKeys);
     },
@@ -233,6 +236,6 @@ bq.entity.Player.InputHandler = cc.Class.extend({
 
     shiftMouseDownEvent: function() {
         return this.mouseDownEvents_.shift();
-    },
+    }
 });
 
