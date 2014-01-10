@@ -42,8 +42,10 @@ Entity.prototype.kill = function(entity) {
 Entity.prototype.addExp = function(playerId, entity) {
     var mapId = entity.position.mapId;
     var player = this.entitiesStore_.getPlayerById(mapId, playerId);
-    player.exp += entity.exp;
-    player.socket.emit('user:status:exp:update', {exp: entity.exp});
+    if (player) {
+        player.exp += entity.exp;
+        player.socket.emit('user:status:exp:update', {exp: entity.exp});
+    }        
 };
 
 
