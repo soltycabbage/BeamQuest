@@ -12,6 +12,8 @@ var s_ChatTail = 'res/img/chat_tail.png';
 var s_PlayerWalkingImg = 'res/img/walk_anime.png';
 var s_beam0 = 'res/img/star.png';
 var s_smoke0 = 'res/img/smoke.png';
+var s_mute01 = 'res/img/mute01.png';
+var s_mute02 = 'res/img/mute02.png';
 
 // tmx
 var s_ShinjukuTmx = 'res/map/shinjuku.tmx';
@@ -33,6 +35,8 @@ var g_resources = [
     {type: 'image', src:s_PlayerWalkingImg},
     {type: 'image', src:s_beam0},
     {type: 'image', src:s_smoke0},
+    {type: 'image', src:s_mute01},
+    {type: 'image', src:s_mute02},
 
     //plist
     {type: 'plist', src:s_PlayerWalkingPlist},
