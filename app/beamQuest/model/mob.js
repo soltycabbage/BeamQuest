@@ -7,6 +7,7 @@ var util = require('util'),
  */
 var Mob = function(opt_data) {
     Entity.apply(this, arguments);
+    this.scheduleUpdate();
 
     /**
      * 獲得経験値的な
@@ -16,34 +17,53 @@ var Mob = function(opt_data) {
 
     /**
      * ヘイトリスト
-     * @type {Array.<string>}
+     * @type {Array.<Object.<entityId: string, hate: number>>}
      */
     this.hateList = [];
+
+    /**
+     * trueなら攻撃を受けるまで敵対行動を取らないタイプのmob
+     * @type {Boolean}
+     */
+    this.isPassive = true;
 };
 util.inherits(Mob, Entity);
 
 Mob.DEFAULT_EXP = 1;
 
 /** @override */
-Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
-    var hitResult = {};
+Mob.prototype.update = function() {
+    if (!_.isEmpty(this.hateList)) {
+        var a= 1;
+    }
+};
 
+/** @override */
+Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
     // TODO: ほんとはクライアント側から指定されたビームtypeをそのまま使うべきではない
     //       サーバ側に保存してあるプレイヤーの装備しているビームを参照すべき
     var beam = bq.Params.getBeamParam(beamType);
     var newEntity = entities.getMobById(mapId, this.id);
-    var damage = -1 * (Math.floor(Math.random() * beam.atk/2) + beam.atk); // TODO: ダメージ計算
+    var damage = Math.floor(Math.random() * beam.atk/2) + beam.atk; // TODO: ダメージ計算
     var newHp = newEntity.hp + damage;
     newEntity.hp = newHp;
 
     // 攻撃を与えたユーザのIDをヘイトリストに突っ込む
-        // TODO: ヘイト値の導入
-    if (!_.contains(newEntity.hateList, shooterId)) {
-        newEntity.hateList.push(shooterId);
+    var hateTarget = _.find(newEntity.hateList, function(h) {
+        return h.entityId === shooterId;
+    });
+    if (!hateTarget) {
+        newEntity.hateList.push({entityId: shooterId, hate: damage});
+    } else {
+        // ダメージ量がそのままヘイト値になる
+        hateTarget.hate += damage;
     }
+
+    // ヘイト値の大きい順にソートしておく
+    this.hateList = _.sortBy(this.hateList, function(h) {return -h.hate;});
     entities.updateMobStatus(mapId, newEntity);
-    hitResult.hpAmount = damage;
-    return hitResult;
+
+    return {hpAmount: -damage};
 };
 
 /** @override */
