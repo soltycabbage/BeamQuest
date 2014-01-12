@@ -25,6 +25,7 @@ Mob.prototype.run = function() {
     setInterval(this.initMobs_.bind(this), Mob.POP_INTERVAL);
 };
 
+/** @override */
 Mob.prototype.update = function() {
     // ここに毎ループの処理を書いてくよ
 };
