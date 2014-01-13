@@ -3,7 +3,7 @@
  */
 var entitiesStore = require('beamQuest/store/entities'),
     mapStore = require('beamQuest/store/maps'),
-    mobModel = require('beamQuest/model/mob'),
+    MobCtrl = require('beamQuest/ctrl/mob/mob'),
     positionModel = require('beamQuest/model/position'),
     ScheduleTarget = require('beamQuest/scheduleTarget'),
     util = require('util');
@@ -51,7 +51,7 @@ Mob.prototype.spawnMob_ = function(map) {
         // TODO: mapごとに出現モンスターとか決める
         var position = this.randomPosition_(map);
         var mobType = bq.Params.Entities.KAMUTARO;
-        var mob = new mobModel({
+        var mob = new MobCtrl({
             id: mobType.id + '_' + map.id + '_' + i + '_' + timeStamp,
             name: mobType.name,
             hp: mobType.hp,

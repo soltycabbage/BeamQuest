@@ -26,7 +26,7 @@ exports.listen = function(socket, io) {
     function updateEntityStatus_(entity, beamType, data) {
         var additionalHitResult = entity.beamHit(beamType, data.shooterId, data.mapId);
         var hitResult = {
-            entity: entity,
+            entity: entity.model.toJSON(),
             beamTag: data.tag,
             beamPos: {x: data.x, y: data.y}
         };
@@ -44,7 +44,7 @@ exports.listen = function(socket, io) {
         var mobs = entities.getMobs()[data.mapId] || {};
         var collideRect = {width: 32, height: 32}; // 当たり判定の範囲（これもビームごとに決められるようにしたい）
         return _.find(mobs, function(mob) {
-            return pointInRect_(beamPos, mob.position, collideRect);
+            return pointInRect_(beamPos, mob.model.position, collideRect);
         });
     }
 

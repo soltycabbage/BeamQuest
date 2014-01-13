@@ -13,48 +13,48 @@ Entity.prototype.listen = function(socket, io) {
 
 /**
  * mobがPOPするよってクライアントに伝える
- * @param {model.Mob} mob
+ * @param {ctrl.Mob} mob
  */
 Entity.prototype.popMob = function(mob) {
     if (this.io_) {
-        var data = {mob: mob.toJSON()};
+        var data = {mob: mob.model.toJSON()};
         this.io_.sockets.emit('notify:entity:mob:pop', data);
     }
 };
 
 /**
  * mobが動いたよってクライアントに伝える
- * @param {model.Mob} mob
+ * @param {ctrl.Mob} mob
  */
 Entity.prototype.moveMob = function(mob) {
     if (this.io_) {
-        this.io_.sockets.emit('notify:entity:mob:move', {mob: mob.toJSON()});
+        this.io_.sockets.emit('notify:entity:mob:move', {mob: mob.model.toJSON()});
     }
 };
 
 /**
- * Entity殺すよってクライアントに伝える
- * @param {model.Entity} entity
+ * Mob殺すよってクライアントに伝える
+ * @param {ctrl.Mob} mob
  */
-Entity.prototype.kill = function(entity) {
-    var data = {entity: entity.toJSON()};
+Entity.prototype.kill = function(mob) {
+    var data = {entity: mob.model.toJSON()};
     this.io_.sockets.emit('notify:entity:kill', data);
-    _.each(entity.hateList, function(playerId) {
-        this.addExp(playerId, entity);
+    _.each(mob.hateList, function(hate) {
+        this.addExp(hate.entityId, mob);
     }.bind(this));
 };
 
 /**
- * entityのもつ経験値をplayerに与える
+ * mobのもつ経験値をplayerに与える
  * @param {string} playerId
- * @param {model.Entity} entity
+ * @param {ctrl.Mob} mob
  */
-Entity.prototype.addExp = function(playerId, entity) {
-    var mapId = entity.position.mapId;
+Entity.prototype.addExp = function(playerId, mob) {
+    var mapId = mob.model.position.mapId;
     var player = this.entitiesStore_.getPlayerById(mapId, playerId);
     if (player) {
-        player.exp += entity.exp;
-        player.socket.emit('user:status:exp:update', {exp: entity.exp});
+        player.exp += mob.model.exp;
+        player.socket.emit('user:status:exp:update', {exp: mob.model.exp});
     }        
 };
 

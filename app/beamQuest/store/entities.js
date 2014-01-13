@@ -90,12 +90,12 @@ Entities.prototype.removePlayer = function(mapId, player) {
 
 /**
  * @param {model.Map} map
- * @param {model.Mob} mob
+ * @param {ctrl.Mob} mob
  */
 Entities.prototype.addMob = function(map, mob) {
     var mobs = this.mapMobs_[map.id] || [];
-    if (!_.contains(mobs, mob.id)) {
-        mobs[mob.id] = mob;
+    if (!_.contains(mobs, mob.model.id)) {
+        mobs[mob.model.id] = mob;
         map.mobCount++;
         this.entityListener_.popMob(mob);
     }
@@ -103,12 +103,12 @@ Entities.prototype.addMob = function(map, mob) {
 
 /**
  * @param {model.Map} map
- * @param {model.Mob} mob
+ * @param {ctrl.Mob} mob
  */
 Entities.prototype.removeMob = function(map, mob) {
     if (map && mob) {
         map.mobCount--;
-        delete this.mapMobs_[map.id][mob.id];
+        delete this.mapMobs_[map.id][mob.model.id];
     }
 };
 
@@ -122,7 +122,7 @@ Entities.prototype.getMobs = function() {
 /**
  * @param {number mapId
  * @param {string} mobId
- * @return {model.Mob}
+ * @return {ctrl.Mob}
  */
 Entities.prototype.getMobById = function(mapId, mobId) {
     if (this.mapMobs_[mapId]) {
@@ -152,7 +152,7 @@ Entities.prototype.getMobsJSON = function(mapId) {
     var json = {};
     var mobs = this.mapMobs_[mapId] || [];
     _.each(mobs, function(mob, key) {
-       json[key] = mob.toJSON();
+       json[key] = mob.model.toJSON();
     });
     return json;
 };
@@ -174,10 +174,10 @@ Entities.prototype.updatePlayerPosition = function(data) {
  * @param {model.Mob} ステータスを更新したmob
  */
 Entities.prototype.updateMobStatus = function(mapId, mob) {
-    var target = this.mapMobs_[mapId][mob.id];
+    var target = this.mapMobs_[mapId][mob.model.id];
     if (target) {
         target = mob;
-        if (target.hp < 0) { // 死
+        if (target.model.hp < 0) { // 死
             this.entityListener_.kill(mob);
             this.removeMob(mapStore.getMapById(mapId), mob);
         }
