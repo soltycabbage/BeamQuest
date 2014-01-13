@@ -35,16 +35,16 @@ var Mob = function(opt_data) {
     this.isPassive = true;
 
     /**
-     * 攻撃対象のEntityId
-     * @type {string}
+     * 攻撃対象のEntity
+     * @type {model.Entity}
      */
-    this.hateTargetId = null;
+    this.hateTarget = null;
 
     /**
      * どのくらいの距離を離れたら敵視を解除するか(px)
      * @type {Number}
      */
-    this.attackCancelDistance = 1000;
+    this.attackCancelDistance = 500;
 };
 util.inherits(Mob, Entity);
 
@@ -66,17 +66,17 @@ Mob.prototype.update = function() {
  * @param {model.Entity} entity
  */
 Mob.prototype.attackTo = function(entity) {
-    this.hateTargetId = entity.id;
-    this.moveTo(entity.position)
+    this.hateTarget = entity.id;
+    this.moveTo(this.hateTarget.position)
     // io.sockets.emit('notify:entity:mob:attackTo', {mob: this.toJSON(), target: entityId});
 };
 
 /**
  * 移動
- * @param {model.Position}
+ * @param {model.Position} targetPos
  */
-Mob.prototype.moveTo = function(pos) {
-    var v = {x: pos.x - this.position.x, y: pos.y - this.position.y};
+Mob.prototype.moveTo = function(targetPos) {
+    var v = {x: targetPos.x - this.position.x, y: targetPos.y - this.position.y};
     var distance = Math.sqrt(Math.pow(v.x,2) + Math.pow(v.y,2));
 
     // 一定距離離れたら攻撃を諦める
@@ -122,10 +122,10 @@ Mob.prototype.updatePosition = function() {
  */
 Mob.prototype.attackCancel = function() {
    this.hateList = _.reject(this.hateList, function(h) {
-       return h.entityId === this.hateTargetId;
+       return h.entityId === this.hateTarget.id;
    }.bind(this));
 
-    this.hateTargetId = null;
+    this.hateTarget = null;
 };
 
 /** @override */
