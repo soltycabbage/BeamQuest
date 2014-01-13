@@ -24,12 +24,12 @@ exports.listen = function(socket, io) {
     });
 
     function updateEntityStatus_(entity, beamType, data) {
-        var additionalHitResult = entity.beamHit(beamType, data.shooterId, data.mapId);
         var hitResult = {
             entity: entity.model.toJSON(),
             beamTag: data.tag,
             beamPos: {x: data.x, y: data.y}
         };
+        var additionalHitResult = entity.beamHit(beamType, data.shooterId, data.mapId);
         hitResult = _.extend(additionalHitResult, hitResult);
         io.sockets.emit('notify:beam:hit', hitResult);
     }
