@@ -23,6 +23,16 @@ Entity.prototype.popMob = function(mob) {
 };
 
 /**
+ * mobが動いたよってクライアントに伝える
+ * @param {model.Mob} mob
+ */
+Entity.prototype.moveMob = function(mob) {
+    if (this.io_) {
+        this.io_.sockets.emit('notify:entity:mob:move', {mob: mob.toJSON()});
+    }
+};
+
+/**
  * Entity殺すよってクライアントに伝える
  * @param {model.Entity} entity
  */

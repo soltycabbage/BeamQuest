@@ -53,6 +53,11 @@ bq.Socket = cc.Class.extend({
             entityManager.popMob(data);
         });
 
+        // mobの移動
+        this.socket.on('notify:entity:mob:move', function(data) {
+            entityManager.mobMoveTo(data);
+        });
+
         /**
          *  1対1の通信
          */

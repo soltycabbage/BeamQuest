@@ -190,6 +190,19 @@ bq.EntityManager = cc.Class.extend({
         enemy.setPosition(cc.p(x, y));
         bq.baseLayer.addChild(enemy, 50);
         this.enemys_[mobModel.id] = enemy;
+    },
+
+    /**
+     * mobの移動
+     * @param {Object}
+     */
+    mobMoveTo: function(data) {
+        var enemy =  this.enemys_[data.mob.id];
+        if (enemy) {
+            enemy.setPosition(cc.p(data.mob.position.x, data.mob.position.y));
+            // var act = cc.MoveTo.create(0.1, cc.p(data.mob.position.x, data.mob.position.y));
+            // enemy.runAction(act);
+        }
     }
 });
 
