@@ -109,6 +109,7 @@ Entities.prototype.removeMob = function(map, mob) {
     if (map && mob) {
         map.mobCount--;
         delete this.mapMobs_[map.id][mob.model.id];
+        mob.dispose();
     }
 };
 

@@ -33,6 +33,40 @@ Entity.prototype.moveMob = function(mob) {
 };
 
 /**
+ * mobが近接攻撃の構えを取ったよってクライアントに伝える
+ * @param {string} mobId
+ * @param {model.Position} srcPos
+ * @param {model.Position} destPos
+ * @param {number} range 射程距離(px)
+ * @param {number} castTime 発動までの時間(msec)
+ */
+Entity.prototype.startAttackShortRange = function(mobId, srcPos, destPos, range, castTime) {
+    if (this.io_) {
+        this.io_.sockets.emit('notify:entity:mob:startAttackShortRange',
+            {
+                mobId: mobId,
+                srcPos: srcPos,
+                destPos: destPos,
+                range: range,
+                castTime: castTime
+            });
+    }
+};
+
+/**
+ * hpの増減をクライアントに伝える
+ * @param {Array.<entityId: string, hpAmount: number>} hpAmounts
+ */
+Entity.prototype.updateHp = function(hpAmounts) {
+    if (this.io_) {
+        var data = {
+            hpAmounts: hpAmounts
+        };
+        this.io_.sockets.emit('notify:entity:hp:update', data);
+    }
+};
+
+/**
  * Mob殺すよってクライアントに伝える
  * @param {ctrl.Mob} mob
  */

@@ -21,9 +21,28 @@ var Mob = function(modelData) {
 
     /**
      * 移動速度
+     * TODO: このへんはmobの種類によって変えられるようにする
      * @type {number}
      */
     this.moveSpeed = 5;
+
+    /**
+     * 近接攻撃の射程(px)
+     * @type {Number}
+     */
+    this.attackShortRange = 50;
+
+    /**
+     * 中距離攻撃の射程(px)
+     * @type {Number}
+     */
+    this.attackMiddleRange = 200;
+
+    /**
+     * 遠距離攻撃の射程(px)
+     * @type {Number}
+     */
+    this.attackLongRange = 400;
 
     /**
      * ヘイトリスト
@@ -38,6 +57,26 @@ var Mob = function(modelData) {
     this.isPassive = true;
 
     /**
+     * FFのアクティブタイムバトル的な。activeTimeUp以上で行動開始
+     * @type {number}
+     * @private
+     */
+    this.activeTime_ = 0;
+
+    /**
+     * activeTimeがこの数値以上になったら攻撃等の動作を開始する
+     * @type {Number}
+     */
+    this.activeTimeUp = 100;
+
+    /**
+     * 行動中ならtrue
+     * @type {Boolean}
+     * @private
+     */
+    this.isActive_ = false;
+
+    /**
      * 攻撃対象のEntity
      * @type {model.Entity}
      */
@@ -50,8 +89,6 @@ var Mob = function(modelData) {
     this.attackCancelDistance = 500;
 };
 util.inherits(Mob, ScheduleTarget);
-
-Mob.DEFAULT_EXP = 1;
 
 /** @override */
 Mob.prototype.update = function() {
@@ -79,6 +116,10 @@ Mob.prototype.attackTo = function(entity) {
  * @param {model.Position} targetPos
  */
 Mob.prototype.moveTo = function(targetPos) {
+    if (this.isActive_) {
+        this.interval_ && clearInterval(this.interval_);
+        return;
+    }
     var v = {x: targetPos.x - this.model.position.x, y: targetPos.y - this.model.position.y};
     var distance = Math.sqrt(Math.pow(v.x,2) + Math.pow(v.y,2));
 
@@ -86,6 +127,13 @@ Mob.prototype.moveTo = function(targetPos) {
     if (distance > this.attackCancelDistance) {
         this.attackCancel();
     }
+
+    if (distance < this.attackShortRange) {
+        this.interval_ && clearInterval(this.interval_);
+        this.shortRangeAttack();
+        return;
+    }
+
     var step = Math.ceil(distance / this.moveSpeed);
     if (step <= 0) { return; }
     var count = 1;
@@ -118,6 +166,44 @@ Mob.prototype.updatePosition = function() {
         entity.model.position.y = this.model.position.y;
         entityListener.moveMob(entity);
     }
+};
+
+/**
+ * 近接攻撃をする
+ */
+Mob.prototype.shortRangeAttack = function() {
+    if (!this.isActive_ && this.hateTarget) {
+        this.isActive_ = true;
+        var srcPos = this.model.position;
+        var destPos = this.hateTarget.position;
+        var range = 100; // TODO: 攻撃の種類によって設定できるように
+        var castTime = 1000;
+        entityListener.startAttackShortRange(this.model.id, srcPos, destPos, range, castTime);
+
+        this.timeout_ = setTimeout(function() {
+            if (this.hateTarget) {
+                // TODO: 範囲内に対象がいるかどうかチェックする
+
+                // ダメージテキトー
+                entityListener.updateHp([{entityId: this.hateTarget.id, hpAmount: -10}]);
+            }
+            this.isActive_ = false;
+        }.bind(this), castTime);
+    }
+};
+
+/**
+ * 中距離攻撃をする
+ */
+Mob.prototype.middleRangeAttack = function() {
+
+};
+
+/**
+ * 遠距離攻撃をする
+ */
+Mob.prototype.longRangeAttack = function() {
+
 };
 
 /**
@@ -158,6 +244,17 @@ Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
     entityStore.updateMobStatus(mapId, newEntity);
 
     return {hpAmount: -damage};
+};
+
+/**
+ * メモリリークしないよう参照を切っとく
+ */
+Mob.prototype.dispose = function() {
+    delete this.hateList;
+    delete this.model;
+    this.interval_ && clearInterval(this.interval_);
+    this.timeout_ && clearTimeout(this.timeout_);
+    delete this;
 };
 
 module.exports = Mob;

@@ -203,6 +203,37 @@ bq.EntityManager = cc.Class.extend({
             // var act = cc.MoveTo.create(0.1, cc.p(data.mob.position.x, data.mob.position.y));
             // enemy.runAction(act);
         }
+    },
+
+    /**
+     * mobが近接攻撃の構えを取った
+     * @param {Object.<mob: Object, range: number, castTime: number>} data
+     */
+    startAttackShortRange: function(data) {
+        var enemy =  this.enemys_[data.mobId];
+        if (enemy) {
+            enemy.showMessage('ころちゅ')
+        }
+    },
+
+    /**
+     * hpに増減があった
+     * @param data
+     */
+    updateHp: function(data) {
+        _.forEach(data.hpAmounts, function(hpAmount) {
+            if (hpAmount.entityId === bq.player.name) {
+                bq.player.updateHp(hpAmount.hpAmount);
+            } else {
+                var enemy = this.enemys_[hpAmount.entityId];
+                var player = this.otherPlayers_[hpAmount.entityId];
+                if (enemy) {
+                    enemy.updateHp(hpAmount.hpAmount);
+                } else if (player) {
+                    player.updateHp(hpAmount.hpAmount);
+                }
+            }
+        }.bind(this));
     }
 });
 
