@@ -4,16 +4,30 @@
 var entitiesStore = require('beamQuest/store/entities'),
     mapStore = require('beamQuest/store/maps'),
     mobModel = require('beamQuest/model/mob'),
-    positionModel = require('beamQuest/model/position');
+    positionModel = require('beamQuest/model/position'),
+    ScheduleTarget = require('beamQuest/scheduleTarget'),
+    util = require('util');
 
+/**
+ * @constructor
+ * @extend {bq.ScheduleTarget}
+ */
 var Mob = function() {
+    ScheduleTarget.apply(this, arguments);
+    this.scheduleUpdate();
 };
+util.inherits(Mob, ScheduleTarget);
 
 Mob.POP_INTERVAL = 15000;
 
 Mob.prototype.run = function() {
     this.initMobs_();
     setInterval(this.initMobs_.bind(this), Mob.POP_INTERVAL);
+};
+
+/** @override */
+Mob.prototype.update = function() {
+    // ここに毎ループの処理を書いてくよ
 };
 
 /**
