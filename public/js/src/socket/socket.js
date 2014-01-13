@@ -63,7 +63,7 @@ bq.Socket = cc.Class.extend({
             entityManager.startAttackShortRange(data);
         });
 
-        // mobが近接攻撃の構えを取った
+        // hpに変動があった
         this.socket.on('notify:entity:hp:update', function(data) {
             entityManager.updateHp(data);
         });
