@@ -27,8 +27,8 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         tileMap.initWithTMXFile(bq.config.maps.area.SHINJUKU);
         tileMap.setPosition(cc.p(0,0));
         baseLayer.addChild(tileMap, 0);
-        var collisionDetector = new bq.SuperCollisionDetector(tileMap);
-        bq.collisionDetector = collisionDetector;
+        var mapManager = new bq.MapManager(tileMap, bq.config.maps.area.SHINJUKU);
+        bq.mapManager = mapManager;
 
         var chat = new bq.Chat();
 

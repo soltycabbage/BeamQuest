@@ -2,6 +2,21 @@
 <map version="1.0" orientation="orthogonal" width="60" height="50" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="mapset" tilewidth="32" tileheight="32">
   <image source="mapset.png" width="96" height="224"/>
+  <tile id="0">
+   <properties>
+    <property name="not_enterable" value="true"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="not_enterable" value="true"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="not_enterable" value="true"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="background" width="60" height="50">
   <data encoding="base64" compression="zlib">

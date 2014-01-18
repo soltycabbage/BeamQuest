@@ -37,7 +37,7 @@
 
             'js/src/chat.js',
             'js/src/inputHandler.js',
-            'js/src/superCollisionDetector.js',
+            'js/src/mapManager.js',
 
             // entity
             'js/src/entity/entity.js',

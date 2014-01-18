@@ -38,7 +38,7 @@ bq.entity.Player = bq.entity.Entity.extend({
             var directionVector = this.getNormalizedDirectionVector(direction);
             var moveDistance = cc.pMult(directionVector, this.moveSpeed);
             var nextPos = cc.pAdd(currentPosition, moveDistance);
-            if ( bq.collisionDetector.canMoveOnMap(nextPos)) {
+            if ( bq.mapManager.canMoveOnMap(nextPos)) {
                 this.setPosition(nextPos);
             }
             bq.camera.forceLook();
