@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="30" height="30" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="map_set" tilewidth="32" tileheight="32">
+  <image source="tile_village.png" trans="ffffff" width="640" height="480"/>
+  <terraintypes>
+   <terrain name="river" tile="-1"/>
+  </terraintypes>
+  <tile id="23" terrain="0,0,0,0"/>
+  <tile id="43" terrain="0,0,0,0"/>
+  <tile id="63" terrain="0,0,0,0"/>
+ </tileset>
+ <layer name="ground" width="30" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztl+EOgCAIhEne/52rvzfJEORa88etplSfcDhrInI8SC+1QYxHDa5473lHNlPmHFPIFeFUMnulD7Y4eWbVMfLdKPNXc7qCi92nmfvhn2Tt7TP5qe6HXcN4nSvUO++t4vfEzeQE16Iwx/Dk6HzK6KuMmke90RtHHssH1rOef6E3/sIYtn9unhN7YgPV
+  </data>
+ </layer>
+ <layer name="river" width="30" height="30">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMApGAT4gQQamBtAhA1PTXmqrHbV31N7hYi8xZQDMLGqqJadMoAZ2GCA8CugDAEjVGA0=
+  </data>
+ </layer>
+ <layer name="mura_ground" width="30" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgF1ASMUIwPMKHxHWnkFnxAm852IfsZ3f+UAHqEHTOUJtbdhOKfFEDNsCIVUCONUDMsqA1AbkP3IyMDcXl4FFAP4ErjdkBsC8X2VLbTkQF72QGyswqIxYBYFIgrqWw3Lr9qQu0TQ7Jbi4r24gKaSHbCMDXtZcYhHgTEaQwQf4JwKhAHY1FHi7wIsjsQirHZSQ6gRXlBTN1Gq3IKV7zR2l5CYLiUyxlAHArEWSPI3swBsHcUkAYAu+AMZw==
+  </data>
+ </layer>
+ <layer name="NoEntry_layer" width="30" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzll20OgjAMhvsH9Qp+XGHgGYBDeP+TCImNtb6rpXPzh2+yBJZmT7uWdfREdGw8hmUkaq8kuP3DF6JX30p1WsbZ4ObirrEfHm4NSa5lI9UZtr165zwNBnek93yu75OaOxjcnLTvOl4rFtZlw/perkfXABfZeW13DhtvriLxWkJ56sD8L86qf+DK75p7ArNnYI/mIkrq+dt1ldMonqcM99bAj1y8tdmRfUb9tIS7ta74niDvLkjoLCmpK3TWI6H+1YKL+lcJV/YAdPazUP9K9Py2dB6sXrx3e4fXlD7q/bD6e1RoTZ3/GlxUY5oTuUd9kmRwr9D5rxEvM6z/FOseVSqu59b/ZWs93wHiZhpx
+  </data>
+ </layer>
+</map>
