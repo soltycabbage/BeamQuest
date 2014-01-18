@@ -24,10 +24,10 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         bq.camera = this.camera;
 
         var tileMap = new cc.TMXTiledMap();
-        tileMap.initWithTMXFile(bq.config.maps.area.SHINJUKU);
+        tileMap.initWithTMXFile(bq.config.maps.area.START_MURA);
         tileMap.setPosition(cc.p(0,0));
         baseLayer.addChild(tileMap, 0);
-        var mapManager = new bq.MapManager(tileMap, bq.config.maps.area.SHINJUKU);
+        var mapManager = new bq.MapManager(tileMap, bq.config.maps.area.START_MURA);
         bq.mapManager = mapManager;
 
         var chat = new bq.Chat();
