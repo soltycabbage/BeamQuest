@@ -7,8 +7,8 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         this.setMouseEnabled(true);
 
         var size = cc.Director.getInstance().getWinSize();
-        cc.AudioEngine.getInstance().setEffectsVolume(0.5);
-        cc.AudioEngine.getInstance().setMusicVolume(0.5);
+        cc.AudioEngine.getInstance().setEffectsVolume(0.1);
+        cc.AudioEngine.getInstance().setMusicVolume(0.1);
 
         var baseLayer = cc.Layer.create();
         baseLayer.setPosition(cc.p(0,0));
