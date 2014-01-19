@@ -6,10 +6,9 @@ bq.MapManager = cc.Class.extend({
      *
      * @param {cc.TMXTiledMap} tileMap
      */
-    ctor:function (tileMap, tmxFile) {
+    ctor:function (tileMap) {
         'use strict';
         this.tileMap = tileMap;
-        this.mapInfo = cc.TMXMapInfo.create(tmxFile);
     },
 
     /**
@@ -18,8 +17,11 @@ bq.MapManager = cc.Class.extend({
      * @returns {boolean}
      */
     canMoveOnMap:function (pos) {
-        // TODO 入れないレイヤが決め打ちなので、レイヤーにno_enterableのプロパティがあったらとかにする
-        var layers = [this.tileMap.getLayer('noentry'), this.tileMap.getLayer('river')];
+        // レイヤーにno_enterableのプロパティがあったらそれは入れないレイヤー
+        var layers = _.select(this.tileMap.getChildren(), function(layer) {
+            return  (layer && layer.getProperties()['no_enterable'] === 'true')
+        } );
+
         var sizeY = this.tileMap.getTileSize().width * this.tileMap.getMapSize().width;
         // すべてのレイヤーになにもなかったら入れる
         return _.all(layers, function(layer) {

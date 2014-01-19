@@ -27,7 +27,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         tileMap.initWithTMXFile(bq.config.maps.area.START_MURA);
         tileMap.setPosition(cc.p(0,0));
         baseLayer.addChild(tileMap, 0);
-        var mapManager = new bq.MapManager(tileMap, bq.config.maps.area.START_MURA);
+        var mapManager = new bq.MapManager(tileMap);
         bq.mapManager = mapManager;
 
         var chat = new bq.Chat();
