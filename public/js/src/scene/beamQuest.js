@@ -14,11 +14,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         baseLayer.setPosition(cc.p(0,0));
         this.addChild(baseLayer, 1, bq.config.tags.BASE_LAYER);
 
-        bq.Beam.setup(bq.player.beamId[0], baseLayer, bq.player.name);
-
-        bq.player.setPosition(cc.p(size.width / 2, size.height / 2));
-        baseLayer.addChild(bq.player, 100, bq.config.tags.PLAYER);
-
         this.camera = new bq.Camera(baseLayer);
         this.camera.lookAt(bq.player);
         bq.camera = this.camera;
@@ -29,6 +24,11 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         baseLayer.addChild(tileMap, 0);
         var mapManager = new bq.MapManager(tileMap);
         bq.mapManager = mapManager;
+
+        bq.Beam.setup(bq.player.beamId[0], baseLayer, bq.player.name);
+
+        bq.player.setPosition(mapManager.getRespawnPoint());
+        baseLayer.addChild(bq.player, 100, bq.config.tags.PLAYER);
 
         var chat = new bq.Chat();
 

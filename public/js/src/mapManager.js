@@ -30,5 +30,21 @@ bq.MapManager = cc.Class.extend({
             return !gid;
         } );
 
+    },
+
+    /**
+     * このマップでのリスポーンポイントを返す
+     *
+     * @returns {cc.p}
+     */
+    getRespawnPoint: function() {
+        var objGroup = this.tileMap.getObjectGroup('respawn');
+        var respawnObj = objGroup && objGroup.objectNamed('respawn_point');
+        if ( respawnObj ) {
+            return cc.p(respawnObj.x, respawnObj.y);
+        } else {
+            // リスポーンポイントが指定されてない場合適当な場所
+            return cc.p(100,100);
+        }
     }
 });
