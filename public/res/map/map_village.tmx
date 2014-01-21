@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="30" height="30" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="map_set" tilewidth="32" tileheight="32">
+  <image source="tile_village.png" trans="ffffff" width="640" height="480"/>
+  <terraintypes>
+   <terrain name="river" tile="-1"/>
+  </terraintypes>
+  <tile id="23" terrain="0,0,0,0"/>
+  <tile id="43" terrain="0,0,0,0"/>
+  <tile id="63" terrain="0,0,0,0"/>
+ </tileset>
+ <layer name="ground" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+2X4Q6AIAiESd7/nau/N8kQ5Frzx62mVJ9wOGsicjxIL7VBjEcNrnjveUc2U+YcU8gV4VQye6UPtjh5ZtUx8t0o81dzuoKL3aeZ++GfZO3tM/mp7oddw3idK9Q7763i98TN5ATXojDH8OTofMroq4yaR73RG0ceywfWs55/oTf+whi2f26eE685VFsQDgAA
+  </data>
+ </layer>
+ <layer name="river" width="30" height="30">
+  <properties>
+   <property name="no_enterable"  value="true"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAWjYBSMglEwCkYBPiBBBqYG0CEDU9NeaqsdtXfU3uFiLzFlAMwsXOUCIbX4zKSkXCBHvwOZGBlQqn8U0A4AAG5jiJIQDgAA
+  </data>
+ </layer>
+ <layer name="mura_ground" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAXUBIxQjA8wofEdaeQWfECbznYh+xnd/5QAeoQdM5Qm1t2E4p8UQM2wIhVQI41QMyyoDUBuQ/cjIwNxeXgUUA/gSuN2QGwLxfZUttORAXvZAbKzCojFgFgUiCupbDcuv2pC7RNDsluLivbiAppIdsIwNe1lxiEeBMRpDBB/gnAqEAdjUUeLvAiyOxCKsdlJDqBFeUFM3UarcgpXvNHaXkJguJTLGUAcCsRZI8jezAGwdxSQBgAZspT2EA4AAA==
+  </data>
+ </layer>
+ <layer name="noentry" width="30" height="30">
+  <properties>
+   <property name="no_enterable" value="true"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+WXbQ6CMAyG+wf1Cn5cYeAZgEN4/5MIiY21vqulc/OHb7IElmZPu5Z19ER0bDyGZSRqryS4/cMXolffSnVaxtng5uKusR8ebg1JrmUj1Rm2vXrnPA0Gd6T3fK7vk5o7GNyctO86XisW1mXD+l6uR9cAF9l5bXcOG2+uIvFaQnnqwPwvzqp/4MrvmnsCs2dgj+YiSur523WV0yiepwz31sCPXLy12ZF9Rv20hLu1rvieIO8uSOgsKakrdNYjof7Vgov6VwlX9gB09rNQ/0r0/LZ0HqxevHd7h9eUPur9sPp7VGhNnf8aXFRjmhO5R32SZHCv0PmvES8zrP8U6x5VKq7n1v9laz3fAbCTb8gQDgAA
+  </data>
+ </layer>
+ <objectgroup name="respawn" width="30" height="30">
+  <object name="respawn_point" x="487" y="644" width="19" height="23"/>
+ </objectgroup>
+</map>

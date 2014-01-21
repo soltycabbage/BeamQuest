@@ -37,7 +37,10 @@ bq.entity.Player = bq.entity.Entity.extend({
             var currentPosition = bq.player.getPosition();
             var directionVector = this.getNormalizedDirectionVector(direction);
             var moveDistance = cc.pMult(directionVector, this.moveSpeed);
-            this.setPosition(cc.pAdd(currentPosition, moveDistance));
+            var nextPos = cc.pAdd(currentPosition, moveDistance);
+            if ( bq.mapManager.canMoveOnMap(nextPos)) {
+                this.setPosition(nextPos);
+            }
             bq.camera.forceLook();
 
             if (this.moveSpeed + 1 < this.maxMoveSpeed) { // 歩き始め
