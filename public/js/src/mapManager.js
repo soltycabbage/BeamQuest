@@ -17,6 +17,11 @@ bq.MapManager = cc.Class.extend({
      * @returns {boolean}
      */
     canMoveOnMap:function (pos) {
+        // 画面外に出ようとしてたら問答無用でfalse
+        if (pos.x < 0 || pos.y < 0) {
+            return false;
+        }
+
         // レイヤーにno_enterableのプロパティがあったらそれは入れないレイヤー
         var layers = _.select(this.tileMap.getChildren(), function(layer) {
             return  (layer && layer.getProperties()['no_enterable'] === 'true')
