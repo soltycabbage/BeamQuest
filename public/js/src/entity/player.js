@@ -217,7 +217,14 @@ bq.entity.Player.InputHandler = cc.Class.extend({
             return null;
         }
         var downKeys = this.downKeys_.slice(0, 2);
-        return this.getDirectionByDownKeys_(downKeys);
+        var direction = this.getDirectionByDownKeys_(downKeys);
+
+        // getDirectionByDownKeysが想定していないキーのペア( macのcmdキーとか )
+        // だとずっとnullが返り続けて動けなくなるのでdownKeys_をリセットする
+        if (!direction) {
+            this.downKeys_ = [];
+        }
+        return direction;
     },
 
     getDirectionByDownKeys_: _.memoize(function(downKeys) {
