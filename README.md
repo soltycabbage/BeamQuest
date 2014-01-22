@@ -1,4 +1,4 @@
-# MMOツクール
+# BeamQuestOnline
 
 ブラウザで動くちっさいMMO作ってみようぜプロジェクト。
 

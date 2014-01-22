@@ -37,7 +37,10 @@ bq.entity.Player = bq.entity.Entity.extend({
             var currentPosition = bq.player.getPosition();
             var directionVector = this.getNormalizedDirectionVector(direction);
             var moveDistance = cc.pMult(directionVector, this.moveSpeed);
-            this.setPosition(cc.pAdd(currentPosition, moveDistance));
+            var nextPos = cc.pAdd(currentPosition, moveDistance);
+            if ( bq.mapManager.canMoveOnMap(nextPos)) {
+                this.setPosition(nextPos);
+            }
             bq.camera.forceLook();
 
             if (this.moveSpeed + 1 < this.maxMoveSpeed) { // 歩き始め
@@ -214,7 +217,14 @@ bq.entity.Player.InputHandler = cc.Class.extend({
             return null;
         }
         var downKeys = this.downKeys_.slice(0, 2);
-        return this.getDirectionByDownKeys_(downKeys);
+        var direction = this.getDirectionByDownKeys_(downKeys);
+
+        // getDirectionByDownKeysが想定していないキーのペア( macのcmdキーとか )
+        // だとずっとnullが返り続けて動けなくなるのでdownKeys_をリセットする
+        if (!direction) {
+            this.downKeys_ = [];
+        }
+        return direction;
     },
 
     getDirectionByDownKeys_: _.memoize(function(downKeys) {

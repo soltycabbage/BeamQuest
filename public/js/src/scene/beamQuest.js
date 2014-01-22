@@ -7,26 +7,29 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         this.setMouseEnabled(true);
 
         var size = cc.Director.getInstance().getWinSize();
-        cc.AudioEngine.getInstance().setEffectsVolume(0.5);
-        cc.AudioEngine.getInstance().setMusicVolume(0.5);
+        cc.AudioEngine.getInstance().setEffectsVolume(0.1);
+        cc.AudioEngine.getInstance().setMusicVolume(0.1);
 
         var baseLayer = cc.Layer.create();
         baseLayer.setPosition(cc.p(0,0));
         this.addChild(baseLayer, 1, bq.config.tags.BASE_LAYER);
-
-        bq.Beam.setup(bq.player.beamId[0], baseLayer, bq.player.name);
-
-        bq.player.setPosition(cc.p(size.width / 2, size.height / 2));
-        baseLayer.addChild(bq.player, 100, bq.config.tags.PLAYER);
 
         this.camera = new bq.Camera(baseLayer);
         this.camera.lookAt(bq.player);
         bq.camera = this.camera;
 
         var tileMap = new cc.TMXTiledMap();
-        tileMap.initWithTMXFile(bq.config.maps.area.SHINJUKU);
+        tileMap.initWithTMXFile(bq.config.maps.area.START_MURA);
         tileMap.setPosition(cc.p(0,0));
         baseLayer.addChild(tileMap, 0);
+        var mapManager = new bq.MapManager(tileMap);
+        bq.mapManager = mapManager;
+
+        bq.Beam.setup(bq.player.beamId[0], baseLayer, bq.player.name);
+
+        bq.player.setPosition(mapManager.getRespawnPoint());
+        baseLayer.addChild(bq.player, 100, bq.config.tags.PLAYER);
+
         var chat = new bq.Chat();
 
         bq.baseLayer = baseLayer;
