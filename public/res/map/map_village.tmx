@@ -16,7 +16,7 @@
  </layer>
  <layer name="river" width="30" height="30">
   <properties>
-   <property name="no_enterable"  value="true"/>
+   <property name="no_enterable" value="true"/>
   </properties>
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA2NgGAWjYBSMglEwCkYBPiBBBqYG0CEDU9NeaqsdtXfU3uFiLzFlAMwsXOUCIbX4zKSkXCBHvwOZGBlQqn8U0A4AAG5jiJIQDgAA
@@ -36,6 +36,6 @@
   </data>
  </layer>
  <objectgroup name="respawn" width="30" height="30">
-  <object name="respawn_point" x="487" y="644" width="19" height="23"/>
+  <object name="respawn_point" x="701" y="239" width="19" height="23"/>
  </objectgroup>
 </map>

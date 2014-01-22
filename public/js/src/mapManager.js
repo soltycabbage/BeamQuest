@@ -24,9 +24,10 @@ bq.MapManager = cc.Class.extend({
 
         var sizeY = this.tileMap.getTileSize().width * this.tileMap.getMapSize().width;
         // すべてのレイヤーになにもなかったら入れる
+        var tileSize = bq.config.maps.TILE_SIZE;
         return _.all(layers, function(layer) {
-            var gid = layer.getTileGIDAt(cc.p(Math.floor(pos.x/32), Math.floor((sizeY-pos.y)/32)));
-            // cc.log(pos.x + " " + pos.y + " " +  gid + " " );
+            var gid = layer.getTileGIDAt(cc.p(Math.floor(pos.x/tileSize),
+                Math.floor((sizeY-pos.y)/tileSize)));
             return !gid;
         } );
 
