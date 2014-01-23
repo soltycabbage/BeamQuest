@@ -62,9 +62,6 @@ Entity.prototype.updateHp = function(hpAmounts) {
         var data = {
             hpAmounts: hpAmounts
         };
-        _.each(hpAmounts, function(amount) {
-            amount.entity.updateHp(amount.hpAmount);
-        });
         this.io_.sockets.emit('notify:entity:hp:update', data);
     }
 };
