@@ -55,13 +55,16 @@ Entity.prototype.startAttackShortRange = function(mobId, srcPos, destPos, range,
 
 /**
  * hpの増減をクライアントに伝える
- * @param {Array.<entityId: string, hpAmount: number>} hpAmounts
+ * @param {Array.<entity: model.Entity, hpAmount: number>} hpAmounts
  */
 Entity.prototype.updateHp = function(hpAmounts) {
     if (this.io_) {
         var data = {
             hpAmounts: hpAmounts
         };
+        _.each(hpAmounts, function(amount) {
+            amount.entity.updateHp(amount.hpAmount);
+        });
         this.io_.sockets.emit('notify:entity:hp:update', data);
     }
 };
@@ -70,9 +73,9 @@ Entity.prototype.updateHp = function(hpAmounts) {
  * Mob殺すよってクライアントに伝える
  * @param {ctrl.Mob} mob
  */
-Entity.prototype.kill = function(mob) {
+Entity.prototype.killMob = function(mob) {
     var data = {entity: mob.model.toJSON()};
-    this.io_.sockets.emit('notify:entity:kill', data);
+    this.io_.sockets.emit('notify:entity:mob:kill', data);
     _.each(mob.hateList, function(hate) {
         this.addExp(hate.entityId, mob);
     }.bind(this));

@@ -106,11 +106,10 @@ bq.EntityManager = cc.Class.extend({
     },
 
     /**
-     * Entityが死んだら呼ばれる
-     * TODO: いまんとこenemyだけ
+     * mobが死んだら呼ばれる
      * @param {Object} data
      */
-    killEntity: function(data) {
+    killMob: function(data) {
         var enemy = this.enemys_[data.entity.id];
         if (enemy) {
             enemy.kill();
@@ -218,15 +217,15 @@ bq.EntityManager = cc.Class.extend({
 
     /**
      * hpに増減があった
-     * @param data
+     * @param {Array.<Object}data
      */
     updateHp: function(data) {
         _.forEach(data.hpAmounts, function(hpAmount) {
-            if (hpAmount.entityId === bq.player.name) {
+            if (hpAmount.entity.id === bq.player.name) {
                 bq.player.updateHp(hpAmount.hpAmount);
             } else {
-                var enemy = this.enemys_[hpAmount.entityId];
-                var player = this.otherPlayers_[hpAmount.entityId];
+                var enemy = this.enemys_[hpAmount.entity.id];
+                var player = this.otherPlayers_[hpAmount.entity.id];
                 if (enemy) {
                     enemy.updateHp(hpAmount.hpAmount);
                 } else if (player) {

@@ -179,7 +179,7 @@ Entities.prototype.updateMobStatus = function(mapId, mob) {
     if (target) {
         target = mob;
         if (target.model.hp < 0) { // 死
-            this.entityListener_.kill(mob);
+            this.entityListener_.killMob(mob);
             this.removeMob(mapStore.getMapById(mapId), mob);
         }
     }

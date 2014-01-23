@@ -185,7 +185,7 @@ Mob.prototype.shortRangeAttack = function() {
                 // TODO: 範囲内に対象がいるかどうかチェックする
 
                 // ダメージテキトー
-                entityListener.updateHp([{entityId: this.hateTarget.id, hpAmount: -10}]);
+                entityListener.updateHp([{entity: this.hateTarget, hpAmount: -10}]);
             }
             this.isActive_ = false;
         }.bind(this), castTime);
