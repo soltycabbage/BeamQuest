@@ -87,8 +87,8 @@ Entity.prototype.addExp = function(playerId, mob) {
     var mapId = mob.model.position.mapId;
     var player = this.entitiesStore_.getPlayerById(mapId, playerId);
     if (player) {
-        player.exp += mob.model.exp;
-        player.socket.emit('user:status:exp:update', {exp: mob.model.exp});
+        player.model.exp += mob.model.exp;
+        player.model.socket.emit('user:status:exp:update', {exp: mob.model.exp});
     }        
 };
 

@@ -1,23 +1,19 @@
 var util = require('util'),
-    Entity = require('beamQuest/model/entity'),
+    EntityCtrl = require('beamQuest/ctrl/entity'),
     entityStore = require('beamQuest/store/entities'),
-    entityListener = require('beamQuest/listener/entity'),
-    MobModel = require('beamQuest/model/mob'),
-    ScheduleTarget = require('beamQuest/scheduleTarget');
+    entityListener = require('beamQuest/listener/entity');
 
 /**
+ * すべてのmobの基底クラス
+ * 基本的なAIなどはここに書く。
+ * プレイヤーとの距離（近距離、中距離、遠距離）によって攻撃パターンが変化する。
+ * 特殊なAIを実装したい場合は新たにクラスを作ってこのクラスを継承し、各種メソッドをoverrideすること。
  * @constructor
- * @param {Object} modelData
  * @extends {bq.ScheduleTarget}
  */
-var Mob = function(modelData) {
-    ScheduleTarget.apply(this, arguments);
+var Mob = function() {
+    EntityCtrl.apply(this, arguments);
     this.scheduleUpdate();
-
-    /**
-     * @type {model.Mob}
-     */
-    this.model = new MobModel(modelData);
 
     /**
      * 移動速度
@@ -78,7 +74,7 @@ var Mob = function(modelData) {
 
     /**
      * 攻撃対象のEntity
-     * @type {model.Entity}
+     * @type {ctrl.Entity}
      */
     this.hateTarget = null;
 
@@ -88,7 +84,7 @@ var Mob = function(modelData) {
      */
     this.attackCancelDistance = 500;
 };
-util.inherits(Mob, ScheduleTarget);
+util.inherits(Mob, EntityCtrl);
 
 /** @override */
 Mob.prototype.update = function() {
@@ -103,12 +99,11 @@ Mob.prototype.update = function() {
 
 /**
  * 指定IDに敵対行動を取る
- * @param {model.Entity} entity
+ * @param {ctrl.Entity} entity
  */
 Mob.prototype.attackTo = function(entity) {
     this.hateTarget = entity;
-    this.moveTo(this.hateTarget.position)
-    // io.sockets.emit('notify:entity:mob:attackTo', {mob: this.toJSON(), target: entityId});
+    this.moveTo(this.hateTarget.model.position)
 };
 
 /**
@@ -175,7 +170,7 @@ Mob.prototype.shortRangeAttack = function() {
     if (!this.isActive_ && this.hateTarget) {
         this.isActive_ = true;
         var srcPos = this.model.position;
-        var destPos = this.hateTarget.position;
+        var destPos = this.hateTarget.model.position;
         var range = 100; // TODO: 攻撃の種類によって設定できるように
         var castTime = 1000;
         entityListener.startAttackShortRange(this.model.id, srcPos, destPos, range, castTime);
@@ -185,7 +180,7 @@ Mob.prototype.shortRangeAttack = function() {
                 // TODO: 範囲内に対象がいるかどうかチェックする
 
                 // ダメージテキトー
-                entityListener.updateHp([{entity: this.hateTarget, hpAmount: -10}]);
+                entityListener.updateHp([{entity: this.hateTarget.model, hpAmount: -10}]);
             }
             this.isActive_ = false;
         }.bind(this), castTime);
@@ -211,7 +206,7 @@ Mob.prototype.longRangeAttack = function() {
  */
 Mob.prototype.attackCancel = function() {
    this.hateList = _.reject(this.hateList, function(h) {
-       return h.entityId === this.hateTarget.id;
+       return h.entityId === this.hateTarget.model.id;
    }.bind(this));
 
     this.hateTarget = null;
