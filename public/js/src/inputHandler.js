@@ -6,7 +6,8 @@ bq.InputHandler = cc.Class.extend({
         'onMouseDown',
         'onMouseUp',
         'onRightMouseDown',
-        'onRightMouseUp'
+        'onRightMouseUp',
+        'onTouchesEnded'
     ],
 
     ctor: function() {

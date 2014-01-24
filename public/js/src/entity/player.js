@@ -23,6 +23,8 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.inputHandler = new bq.entity.Player.InputHandler();
         this.scheduleUpdate();
         this.schedule(this.sendPosition, this.POSITION_SEND_INTERVAL);
+
+        $(this.inputHandler).on(bq.entity.Player.InputHandler.EventType.TOUCH_END, this.handleTouchEnd_.bind(this));
     },
 
     /** @override */
@@ -163,7 +165,11 @@ bq.entity.Player = bq.entity.Entity.extend({
         directionVectors[d.left]        = cc.p(-1,  0);
         directionVectors[d.bottomleft]  = cc.p(-1, -1);
         return cc.pNormalize(directionVectors[direction]);
-    })
+    }),
+
+    handleTouchEnd_: function(evt, touchData) {
+        this.shoot(touchData.getLocation());
+    }
 });
 
 bq.entity.Player.InputHandler = cc.Class.extend({
@@ -242,6 +248,14 @@ bq.entity.Player.InputHandler = cc.Class.extend({
         this.mouseDownEvents_.push(event);
     },
 
+    /** @override */
+    onTouchesEnded: function(event) {
+        if (!_.isEmpty(event)) {
+            var touchEvt = event[0];
+            $(this).triggerHandler(bq.entity.Player.InputHandler.EventType.TOUCH_END, touchEvt);
+        }
+    },
+
     /**
      * 同時押し時に滑らかに移動させたいので現在押されているキーをリストに登録して管理する
      * @param {Event} key
@@ -312,3 +326,11 @@ bq.entity.Player.InputHandler = cc.Class.extend({
     }
 });
 
+/**
+ * InputHandlerが発火するイベント一覧
+ * TODO: mousedownもここに入れた方がよさげ
+ * @const
+ */
+bq.entity.Player.InputHandler.EventType = {
+    TOUCH_END: 'touchend'
+};
