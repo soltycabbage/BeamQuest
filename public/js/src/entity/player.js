@@ -170,6 +170,60 @@ bq.entity.Player.InputHandler = cc.Class.extend({
     downKeys_: [],        // 押されているキーのリスト
     mouseDownEvents_: [], // クリックイベント
 
+    ctor: function() {
+        this.init();
+    },
+
+    init: function() {
+        var platform = cc.Application.getInstance().getTargetPlatform();
+      //  if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
+            this.initVirtualPad_();
+      //  }
+    },
+
+    /**
+     * バーチャルパッドの初期化
+     * @private
+     */
+    initVirtualPad_: function() {
+        var handler = this;
+
+        var getBtnSetting = function(key) {
+            return {
+                stroke: 10,
+                opacity: '1',
+                stroke: 0,
+                touchStart: function() {
+                    handler.addDownKey_(key);
+                },
+                touchEnd: function() {
+                    handler.removeDownKey_(key);
+                }
+            }
+        };
+
+        var up = getBtnSetting(cc.KEY.w);
+        up.height = '15%';
+        var down = getBtnSetting(cc.KEY.s);
+        down.height = '15%';
+        var left = getBtnSetting(cc.KEY.a);
+        left.width = '15%';
+        var right = getBtnSetting(cc.KEY.d);
+        right.width = '15%';
+        GameController.init({
+            right: {
+                type: 'dpad',
+                dpad: {
+                    up: up,
+                    down: down,
+                    left: left,
+                    right: right
+                }
+            },
+            left: false
+        });
+    },
+
     /** @override */
     onKeyDown: function(key) {
         this.addDownKey_(key);

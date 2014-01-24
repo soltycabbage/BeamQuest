@@ -12,12 +12,9 @@ var s_ChatTail = 'res/img/chat_tail.png';
 var s_PlayerWalkingImg = 'res/img/walk_anime.png';
 var s_beam0 = 'res/img/star.png';
 var s_smoke0 = 'res/img/smoke.png';
-var s_dpad = 'res/img/dpad.png';
-var s_pad = 'res/img/pad.png';
 
 // tmx
 var s_ShinjukuTmx = 'res/map/shinjuku.tmx';
-var s_MapSet= 'res/map/mapset.png';
 var s_VillageTmx = 'res/map/map_village.tmx';
 var s_VillageMapSet= 'res/map/tile_village.png';
 
