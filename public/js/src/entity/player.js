@@ -176,9 +176,9 @@ bq.entity.Player.InputHandler = cc.Class.extend({
 
     init: function() {
         var platform = cc.Application.getInstance().getTargetPlatform();
-      //  if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
+        if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
             this.initVirtualPad_();
-      //  }
+        }
     },
 
     /**
