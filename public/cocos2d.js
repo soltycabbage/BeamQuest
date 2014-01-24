@@ -19,6 +19,7 @@
             'js/lib/jquery-min.js',
             'js/lib/underscore-min.js',
             'js/lib/md5.js',
+	    'js/lib/ControlsOverlay.js',
 
             // resources
             'js/src/resource.js',
