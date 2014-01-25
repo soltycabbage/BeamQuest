@@ -18,7 +18,7 @@ exports.listen = function(socket, io) {
     }
 
     function login_(loginData) {
-        var respond_ = function(result) { socket.emit('login:receive', result) };
+        var respond_ = function(result) { socket.emit('login:receive', result); };
         userStore.find(loginData.userId, function(error, userData) {
             if (error) {
                 return respond_(error);

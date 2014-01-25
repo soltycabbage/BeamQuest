@@ -15,7 +15,7 @@ util.inherits(Player, EntityCtrl);
 
 Player.prototype.update = function() {
     this.updateCount_++;
-    if (this.updateCount_ % 300 == 0) {
+    if (this.updateCount_ % 300 === 0) {
         userStore.save(this);
     }
 };
