@@ -5,7 +5,8 @@ var params = require('beamQuest/params'),
     beam = require('beamQuest/listener/beam'),
     entity = require('beamQuest/listener/entity'),
     entities = require('beamQuest/store/entities'),
-    mobEvent = require('beamQuest/activeEvent/mob'),
+    mapStore = require('beamQuest/store/maps'),
+    FieldMapCtrl = require('beamQuest/ctrl/fieldMap'),
     scheduler = require('beamQuest/scheduler');
 
 exports.start = function(io) {
@@ -13,8 +14,9 @@ exports.start = function(io) {
         STEP_INTERVAL: 30 // mainループの間隔(msec)
     };
 
-    // active event
-    mobEvent.run();
+    _.each(mapStore.getMaps(), function(map) {
+        new FieldMapCtrl(map);
+    }.bind(this));
 
     io.sockets.on('connection', function(socket) {
         login.listen(socket, io);

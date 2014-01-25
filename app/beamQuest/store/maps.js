@@ -1,4 +1,4 @@
-var mapModel = require('beamQuest/model/map');
+var mapModel = require('beamQuest/model/fieldMap');
 
 /**
  * ゲーム内のマップの状態を保持しておくクラス
