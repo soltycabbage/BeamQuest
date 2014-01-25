@@ -30,8 +30,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         var mapManager = new bq.MapManager(tileMap);
         bq.mapManager = mapManager;
 
-        bq.Beam.setup(bq.player.beamId[0], baseLayer, bq.player.name);
-
         baseLayer.addChild(bq.player, 100, bq.config.tags.PLAYER);
 
         var chat = new bq.Chat();
