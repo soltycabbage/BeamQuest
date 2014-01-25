@@ -8,12 +8,26 @@
 <body>
 <div id="bq-canvas-container">
     <canvas id="gameCanvas" width="1040" height="620"></canvas>
+    <div class="bq-menu">
+        <div class="bq-message-container">
+            <div id="bq-message-log">
+            </div>
+            <form id="bq-chat-form">
+                <input id="bq-chat-input"><input type="submit" value="say" id="bq-chat-submit">
+            </form>
+
+        </div>
+        <div class="bq-bar-container">
+            <div id="bq-hp-bar">
+                <div id="bq-hp-bar-value"></div>
+            </div>
+            <div id="bq-bp-bar">
+                <div id="bq-bp-bar-value"></div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="bq-menu">
-    <form id="bq-chat-form">
-        <input id="bq-chat-input"><input type="submit" value="say" id="bq-chat-submit">
-    </form>
-</div>
+
 <script src="/socket.io/socket.io.js"></script>
 <script src="cocos2d.js"></script>
 </body>
