@@ -82,11 +82,11 @@ bq.EntityManager = cc.Class.extend({
      */
     beamShoot: function(beamPos) {
         // TODO: ほんとはここじゃなくてentityに定義されたshoot()関数的なやつを呼ぶのがいい。
-        var beam = bq.Beam.create(beamPos.beamId, beamPos.shooterId, beamPos.tag);
+        var beam = bq.beam.Beam.create(beamPos.beamId, beamPos.shooterId, beamPos.tag);
         bq.baseLayer.addChild(beam, 10);
         cc.AudioEngine.getInstance().playEffect(s_SeBeamA);
         beam.initDestination(beamPos.src, beamPos.dest);
-        $(beam).on(bq.Beam.EventType.REMOVE, $.proxy(this.handleBeamRemove_, this));
+        $(beam).on(bq.beam.Beam.EventType.REMOVE, $.proxy(this.handleBeamRemove_, this));
         this.beams_[beamPos.tag] = beam;
     },
 
