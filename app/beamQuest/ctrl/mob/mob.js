@@ -103,7 +103,7 @@ Mob.prototype.update = function() {
  */
 Mob.prototype.attackTo = function(entity) {
     this.hateTarget = entity;
-    this.moveTo(this.hateTarget.model.position)
+    this.moveTo(this.hateTarget.model.position);
 };
 
 /**
@@ -205,9 +205,9 @@ Mob.prototype.longRangeAttack = function() {
  * 敵対行動を中止する
  */
 Mob.prototype.attackCancel = function() {
-   this.hateList = _.reject(this.hateList, function(h) {
-       return h.entityId === this.hateTarget.model.id;
-   }.bind(this));
+    this.hateList = _.reject(this.hateList, function(h) {
+        return h.entityId === this.hateTarget.model.id;
+    }.bind(this));
 
     this.hateTarget = null;
 };

@@ -42,6 +42,7 @@
             'js/src/chat.js',
             'js/src/inputHandler.js',
             'js/src/mapManager.js',
+            'js/src/messageLog.js',
 
             // entity
             'js/src/entity/entity.js',
@@ -49,7 +50,7 @@
             'js/src/entity/animation.js',
             'js/src/entity/player.js',
             'js/src/entity/enemy.js',
-            'js/src/entity/beam.js',
+            'js/src/beam/beam.js',
             'js/src/ping.js',
             'js/src/camera.js',
 
@@ -83,7 +84,7 @@
             s.src = c.SingleEngineFile;
         }
         else if (c.engineDir && !c.SingleEngineFile) {
-            s.src = c.engineDir + 'platform/jsloader.js';
+            s.src = c.engineDir + 'jsloader.js';
         }
         else {
             alert('You must specify either the single engine file OR the engine directory in "cocos2d.js"');

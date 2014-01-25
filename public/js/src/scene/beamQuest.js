@@ -5,11 +5,11 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         this._super();
         this.setKeyboardEnabled(true);
         var platform = cc.Application.getInstance().getTargetPlatform();
-       // if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
+        if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
             this.setTouchEnabled(true);
-       // } else {
-         //   this.setMouseEnabled(true);
-       // }
+        } else {
+            this.setMouseEnabled(true);
+        }
 
         cc.AudioEngine.getInstance().setEffectsVolume(0.1);
         cc.AudioEngine.getInstance().setMusicVolume(0.1);
@@ -22,6 +22,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         this.camera.lookAt(bq.player);
         bq.camera = this.camera;
 
+        // TODO position.mapIdからロードするマップを取得する
         var tileMap = new cc.TMXTiledMap();
         tileMap.initWithTMXFile(bq.config.maps.area.START_MURA);
         tileMap.setPosition(cc.p(0,0));
@@ -29,9 +30,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         var mapManager = new bq.MapManager(tileMap);
         bq.mapManager = mapManager;
 
-        bq.Beam.setup(bq.player.beamId[0], baseLayer, bq.player.name);
-
-        bq.player.setPosition(mapManager.getRespawnPoint());
         baseLayer.addChild(bq.player, 100, bq.config.tags.PLAYER);
 
         var chat = new bq.Chat();
@@ -111,7 +109,7 @@ bq.scene.BeamQuestWorldScene = cc.Scene.extend({
             this.addChild(layer);
             this.renderEntities_(1); // TODO: maoId
         } else {
-            this.addChild(new LoginScene());
+            this.addChild(new bq.scene.LoginScene());
         }
     },
 
@@ -137,5 +135,3 @@ bq.scene.BeamQuestWorldScene = cc.Scene.extend({
         return !!userId;
     }
 });
-
-

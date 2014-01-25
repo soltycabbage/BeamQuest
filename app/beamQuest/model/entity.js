@@ -11,6 +11,9 @@ var util = require('util'),
 var Entity = function(opt_data) {
     Model.apply(this, arguments);
 
+    /** @type {string} */
+    this.hash = this.data.hash;
+
     /** @type {number} */
     this.id = this.data.id;
 
@@ -40,6 +43,7 @@ Entity.DEFAULT_MAX_HP = 100;
 /** @override */
 Entity.prototype.toJSON = function() {
     var json = {};
+    json.hash = this.hash;
     json.id = this.id;
     json.name = this.name;
     json.maxHp = this.maxHp;

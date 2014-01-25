@@ -50,12 +50,10 @@ bq.scene.LoginLayer = cc.Layer.extend({
         }
 
         soc.tryLogin(userId, hash, function(data) {
-            if (data.result === this.status.CREATE) {
+            if (data.result === this.status.SUCCESS) {
                 sys.localStorage.setItem('userHash:' + userId, hash);
-                this.welcomeToBeamQuestWorld_(userId);
-            } else if (data.result === this.status.SUCCESS) {
                 console.log(userId + 'がログインしました。');
-                this.welcomeToBeamQuestWorld_(userId);
+                this.welcomeToBeamQuestWorld_(userId, data);
             } else if (data.result === this.status.ERROR) {
                 this.loginFailed_(data.message);
             }
@@ -67,8 +65,8 @@ bq.scene.LoginLayer = cc.Layer.extend({
      * @param {string} userId
      * @private
      */
-    welcomeToBeamQuestWorld_: function(userId) {
-        this.initPlayer_(userId);
+    welcomeToBeamQuestWorld_: function(userId, data) {
+        this.initPlayer_(userId, data);
         bq.Socket.getInstance().initAfterLogin();
         cc.Director.getInstance().replaceScene(new bq.scene.BeamQuestWorldScene());
     },
@@ -78,13 +76,15 @@ bq.scene.LoginLayer = cc.Layer.extend({
      * @param {string} userId
      * @private
      */
-    initPlayer_: function(userId) {
+    initPlayer_: function(userId, data) {
         // TODO: このクラスでframeCacheにセットするのはハイパー違和感があるので初期設定用のクラスとか作ってやりたい
         // init frame cache
         var frameCache = cc.SpriteFrameCache.getInstance();
         frameCache.addSpriteFrames(s_PlayerWalkingPlist, s_PlayerWalkingImg);
 
         var player = new bq.entity.Player();
+        var position = data.position;
+        player.setPosition(cc.p(position.x, position.y));
 
         // TODO: ログイン成功時にユーザ情報を返してもらうか、ここでuserIdをサーバに投げてユーザ情報を取るAPIを叩くとかすると良さそう
         player.setProfile({name: userId});

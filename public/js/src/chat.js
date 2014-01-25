@@ -37,5 +37,7 @@ bq.Chat = cc.Class.extend({
         if (value.length === 0) {return;}
         bq.Socket.getInstance().sendChat({userId: bq.player.name, message: value});
         bq.player.showMessage(value);
+        var msgLog = bq.MessageLog.getInstance();
+        msgLog.addChatMsg(bq.player.name + ': ' + value);
     }
 });

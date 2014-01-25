@@ -37,7 +37,7 @@ bq.entity.Entity = cc.Sprite.extend({
             this.showName(this.name, true);
         }
         var bbox = this.getBoundingBox();
-        this.collideRect_ = cc.rect(0, 0, bbox.width, bbox.height);
+        this.collideRect_ = cc.rect(0, 0, bbox.getWidth(), bbox.getHeight());
     },
 
     /**
@@ -58,10 +58,10 @@ bq.entity.Entity = cc.Sprite.extend({
      * Entityの頭上にキャラ名を表示する
      */
     showName: function() {
-        var size = this.getBoundingBox().size;
+        var rect = this.getBoundingBox();
         var label = bq.Label.createWithShadow(this.name);
 
-        label.setPosition(cc.p(size.width / 2, size.height + 3));
+        label.setPosition(cc.p(rect.getWidth() / 2, rect.getHeight() + 3));
         this.addChild(label);
     },
 
@@ -87,24 +87,24 @@ bq.entity.Entity = cc.Sprite.extend({
      */
     showMessage: function(msg) {
         this.removeChatRect_(this.chatRect);
-        var size = this.getBoundingBox().size;
+        var rect = this.getBoundingBox();
 
         // 吹き出し
         var msgRect = cc.Sprite.create();
         msgRect.setTextureRect(cc.rect(0, 0, msg.length * 12 + 20, 20));
         msgRect.setColor(cc.c3b(0, 0, 0));
         msgRect.setOpacity(200);
-        msgRect.setPosition(cc.p(size.width / 2, size.height + 30));
+        msgRect.setPosition(cc.p(rect.getWidth() / 2, rect.getHeight() + 30));
 
         // label
         var tt = bq.Label.create(msg);
-        tt.setPosition(cc.p(msgRect.getBoundingBox().size.width / 2, 10));
+        tt.setPosition(cc.p(msgRect.getBoundingBox().getWidth() / 2, 10));
 
         // 吹き出しのしっぽみたいなやつ
         var tail = cc.Sprite.create(s_ChatTail);
         tail.setColor(cc.c3b(0, 0, 0));
         tail.setOpacity(200);
-        tail.setPosition(cc.p(msgRect.getBoundingBox().size.width / 2, -3));
+        tail.setPosition(cc.p(msgRect.getBoundingBox().getWidth() / 2, -3));
 
         msgRect.addChild(tt);
         msgRect.addChild(tail, -100);
@@ -192,8 +192,8 @@ bq.entity.Entity = cc.Sprite.extend({
     popDamageLabel_: function(amount, popLeft) {
         var damage = Math.abs(amount);
         var label = bq.Label.createWithShadow(damage, 20);
-        var size = this.getBoundingBox();
-        label.setPosition(cc.p(size.width/2, size.height));
+        var rect = this.getBoundingBox();
+        label.setPosition(cc.p(rect.getWidth()/2, rect.getHeight()));
         var d = popLeft ? -1 : 1;
         var action = cc.JumpTo.create(1.5, cc.p(d * 200, -100), 100, 1);
         var fadeOut = cc.FadeOut.create(1.5);
