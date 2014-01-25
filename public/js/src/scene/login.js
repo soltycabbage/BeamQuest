@@ -8,6 +8,10 @@ bq.scene.LoginLayer = cc.Layer.extend({
         this._super();
         this.setKeyboardEnabled(true);
         this.setMouseEnabled(true);
+        var platform = cc.Application.getInstance().getTargetPlatform();
+        if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
+            this.setTouchEnabled(true);
+        }
         this.defaultPlaceHolder_ = '< click here >';
     },
 
@@ -126,6 +130,14 @@ bq.scene.LoginLayer = cc.Layer.extend({
     onKeyUp: function(key) {
         if (key === cc.KEY.enter) {
             this.processLogin_(this.nameField_.getContentText());
+        }
+    },
+
+    /** @override */
+    onTouchesEnded: function() {
+        var userName = window.prompt('キャラクター名を入力してください', '');
+        if (userName) {
+            this.processLogin_(userName);
         }
     },
 

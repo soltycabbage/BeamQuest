@@ -23,6 +23,8 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.inputHandler = new bq.entity.Player.InputHandler();
         this.scheduleUpdate();
         this.schedule(this.sendPosition, this.POSITION_SEND_INTERVAL);
+
+        $(this.inputHandler).on(bq.entity.Player.InputHandler.EventType.TOUCH_END, this.handleTouchEnd_.bind(this));
     },
 
     /** @override */
@@ -163,12 +165,70 @@ bq.entity.Player = bq.entity.Entity.extend({
         directionVectors[d.left]        = cc.p(-1,  0);
         directionVectors[d.bottomleft]  = cc.p(-1, -1);
         return cc.pNormalize(directionVectors[direction]);
-    })
+    }),
+
+    handleTouchEnd_: function(evt, touchData) {
+        this.shoot(touchData.getLocation());
+    }
 });
 
 bq.entity.Player.InputHandler = cc.Class.extend({
     downKeys_: [],        // 押されているキーのリスト
     mouseDownEvents_: [], // クリックイベント
+
+    ctor: function() {
+        this.init();
+    },
+
+    init: function() {
+        var platform = cc.Application.getInstance().getTargetPlatform();
+        if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
+            this.initVirtualPad_();
+        }
+    },
+
+    /**
+     * バーチャルパッドの初期化
+     * @private
+     */
+    initVirtualPad_: function() {
+        var handler = this;
+
+        var getBtnSetting = function(key) {
+            return {
+                stroke: 10,
+                opacity: '1',
+                stroke: 0,
+                touchStart: function() {
+                    handler.addDownKey_(key);
+                },
+                touchEnd: function() {
+                    handler.removeDownKey_(key);
+                }
+            }
+        };
+
+        var up = getBtnSetting(cc.KEY.w);
+        up.height = '15%';
+        var down = getBtnSetting(cc.KEY.s);
+        down.height = '15%';
+        var left = getBtnSetting(cc.KEY.a);
+        left.width = '15%';
+        var right = getBtnSetting(cc.KEY.d);
+        right.width = '15%';
+        GameController.init({
+            right: {
+                type: 'dpad',
+                dpad: {
+                    up: up,
+                    down: down,
+                    left: left,
+                    right: right
+                }
+            },
+            left: false
+        });
+    },
 
     /** @override */
     onKeyDown: function(key) {
@@ -186,6 +246,14 @@ bq.entity.Player.InputHandler = cc.Class.extend({
      */
     onMouseDown: function(event) {
         this.mouseDownEvents_.push(event);
+    },
+
+    /** @override */
+    onTouchesEnded: function(event) {
+        if (!_.isEmpty(event)) {
+            var touchEvt = event[0];
+            $(this).triggerHandler(bq.entity.Player.InputHandler.EventType.TOUCH_END, touchEvt);
+        }
     },
 
     /**
@@ -258,3 +326,11 @@ bq.entity.Player.InputHandler = cc.Class.extend({
     }
 });
 
+/**
+ * InputHandlerが発火するイベント一覧
+ * TODO: mousedownもここに入れた方がよさげ
+ * @const
+ */
+bq.entity.Player.InputHandler.EventType = {
+    TOUCH_END: 'touchend'
+};
