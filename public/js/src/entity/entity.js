@@ -22,7 +22,7 @@ bq.entity.Entity = cc.Sprite.extend({
     ctor: function(spriteFrameName, frameMap) {
         this._super();
         var spriteFrame = cc.SpriteFrameCache.getInstance().getSpriteFrame(spriteFrameName);
-        spriteFrame && this.initWithSpriteFrame(spriteFrame);
+        spriteFrame && this.initWithSpriteFrame(spriteFrame); // TODO initWithSpriteFrameName ? iwg
         if ( frameMap ) {
             this.animations = bq.entity.Animation.createAnimations(frameMap);
         }

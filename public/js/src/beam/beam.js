@@ -8,7 +8,7 @@ bq.beam = {};
  * @extends {cc.Node}
  */
 bq.beam.Beam = cc.Node.extend({
-    id: bq.Types.Beams.NORMAL,   // ビームID
+    id: bq.Types.Beams.NORMAL0,   // ビームID
     tag: '',                     // ビーム識別用タグ
     destination_:cc.p(0,0),      // {cc.p} 目標
     speed_:10,                   // 進むスピード
@@ -39,9 +39,11 @@ bq.beam.Beam = cc.Node.extend({
     update: function(dt) {
         "use strict";
         if ( this.active_ ) {
+            var rotate = -1.0 * ( cc.RADIANS_TO_DEGREES(cc.pToAngle( this.inc_ )) -90);
             var curr = this.getPosition();
             // ビームを少し進ませる
             this.setPosition(cc.pAdd(curr, this.inc_));
+            this.setRotation(rotate);
         }
 
     },
@@ -143,22 +145,48 @@ bq.beam.Beam.create = function(beamType, shooterId, tag) {
     "use strict";
     var beam =  new bq.beam.Beam(beamType, shooterId, tag);
 
-    // パーティクルをセット
-    var particle = null;
+    // パーティクルとテクスチャをセット
+    var particle;
+    var textureName;
     var type = bq.Types.Beams;
     switch (beamType) {
-        case type.NORMAL:
-            particle = cc.ParticleMeteor.create();
+        case type.NORMAL0:
+            textureName = "simple_beam_0.png";
+            break;
+        case type.NORMAL1:
+            textureName = "simple_beam_1.png";
+            break;
+        case type.NORMAL2:
+            textureName = "simple_beam_2.png";
+            break;
+        case type.NORMAL3:
+            textureName = "simple_beam_3.png";
             break;
         case type.FIRE:
             particle = cc.ParticleSun.create();
             break;
+        case type.METEOR:
+            particle = cc.ParticleMeteor.create();
+            break;
     }
 
-    var myTexture = cc.TextureCache.getInstance().textureForKey(s_beam0);
-    particle.setTexture(myTexture);
-    particle.setPosition(cc.p(0, 0));
-    beam.addChild(particle);
+    if ( !textureName ) { // particleない人はこっち
+        textureName = s_beam0;
+    }
+    var myTexture = cc.TextureCache.getInstance().textureForKey(textureName);
+
+    if ( particle) {
+        particle.setTexture(myTexture);
+        particle.setPosition(cc.p(0,0));
+        beam.addChild(particle);
+
+    } else {
+        var sp = cc.SpriteFrameCache.getInstance().getSpriteFrame(textureName);
+        var cl = cc.Sprite.createWithSpriteFrame(sp);
+
+        beam.addChild(cl);
+        beam.setPosition(cc.p(0,0));
+    }
     beam.disable();
 
     return beam;
@@ -173,9 +201,10 @@ bq.beam.Beam.create = function(beamType, shooterId, tag) {
 bq.beam.Beam.setup = function(id, layer, shooterId) {
     "use strict";
 
-    var maxBeamCount = 5;
+    var maxBeamCount = 1;
     _.times(maxBeamCount, function(i) {
         var beam = bq.beam.Beam.create(id, shooterId);
+        bq.beams[i] && bq.beams[i].removeFromParent(true); // TODO need ?
         bq.beams[i] = beam;
         layer.addChild(beam, 10);
     });

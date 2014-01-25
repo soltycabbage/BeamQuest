@@ -10,8 +10,9 @@ bq.beams = [];
 var s_Player = 'res/img/player.png';
 var s_ChatTail = 'res/img/chat_tail.png';
 var s_PlayerWalkingImg = 'res/img/walk_anime.png';
-var s_beam0 = 'res/img/star.png';
-var s_smoke0 = 'res/img/smoke.png';
+var s_beam0 = 'res/img/star.png'; // TODO s_Beam0 にする (iwg)
+var s_SimpleBeamImg = 'res/img/simple_beam.png';
+var s_smoke0 = 'res/img/smoke.png'; // TODO s_Smoke0 にする (iwg)
 
 // tmx
 var s_ShinjukuTmx = 'res/map/shinjuku.tmx';
@@ -20,6 +21,7 @@ var s_VillageMapSet= 'res/map/tile_village.png';
 
 // plist
 var s_PlayerWalkingPlist = 'res/img/walk_anime.plist';
+var s_SimpleBeamPlist = 'res/img/simple_beam.plist';
 
 // sounds
 var s_BgmField = 'res/sounds/Field.m4a';
@@ -34,9 +36,11 @@ var g_resources = [
     {type: 'image', src:s_PlayerWalkingImg},
     {type: 'image', src:s_beam0},
     {type: 'image', src:s_smoke0},
+    {type: 'image', src:s_SimpleBeamImg},
 
     //plist
     {type: 'plist', src:s_PlayerWalkingPlist},
+    {type: 'plist', src:s_SimpleBeamPlist},
 
     //fnt
 
