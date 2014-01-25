@@ -15,7 +15,8 @@ var s_smoke0 = 'res/img/smoke.png';
 
 // tmx
 var s_ShinjukuTmx = 'res/map/shinjuku.tmx';
-var s_MapSet= 'res/map/mapset.png';
+var s_VillageTmx = 'res/map/map_village.tmx';
+var s_VillageMapSet= 'res/map/tile_village.png';
 
 // plist
 var s_PlayerWalkingPlist = 'res/img/walk_anime.plist';
@@ -28,7 +29,7 @@ var s_SeDamage = 'res/sounds/Damage.ogg';
 var g_resources = [
     //img
     {type: 'image', src:s_Player},
-    {type: 'image', src:s_MapSet},
+    {type: 'image', src:s_VillageMapSet},
     {type: 'image', src:s_ChatTail},
     {type: 'image', src:s_PlayerWalkingImg},
     {type: 'image', src:s_beam0},
@@ -40,7 +41,7 @@ var g_resources = [
     //fnt
 
     //tmx
-    {type: 'tmx', src:s_ShinjukuTmx},
+    {type: 'tmx', src:s_VillageTmx},
 
     //bgm
     {type:"bgm",src:s_BgmField},

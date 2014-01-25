@@ -5,9 +5,14 @@ var params = require('beamQuest/params'),
     beam = require('beamQuest/listener/beam'),
     entity = require('beamQuest/listener/entity'),
     entities = require('beamQuest/store/entities'),
-    mobEvent = require('beamQuest/activeEvent/mob');
+    mobEvent = require('beamQuest/activeEvent/mob'),
+    scheduler = require('beamQuest/scheduler');
 
 exports.start = function(io) {
+    var config = {
+        STEP_INTERVAL: 30 // mainループの間隔(msec)
+    };
+
     // active event
     mobEvent.run();
 
@@ -32,5 +37,12 @@ exports.start = function(io) {
 
         socket.emit('connected');
     });
+
+
+    function main() {
+        scheduler.update();
+    }
+
+    setInterval(main, config.STEP_INTERVAL);
 };
 

@@ -19,6 +19,7 @@
             'js/lib/jquery-min.js',
             'js/lib/underscore-min.js',
             'js/lib/md5.js',
+            'js/lib/gamecontroller.min.js',
 
             // resources
             'js/src/resource.js',
@@ -37,6 +38,7 @@
 
             'js/src/chat.js',
             'js/src/inputHandler.js',
+            'js/src/mapManager.js',
 
             // entity
             'js/src/entity/entity.js',
@@ -45,7 +47,6 @@
             'js/src/entity/player.js',
             'js/src/entity/enemy.js',
             'js/src/beam/beam.js',
-            'js/src/beam/sphereBeam.js',
             'js/src/ping.js',
             'js/src/camera.js',
 

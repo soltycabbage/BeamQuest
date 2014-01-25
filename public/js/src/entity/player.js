@@ -7,11 +7,13 @@
  * @extends {bq.Entity}
  */
 bq.entity.Player = bq.entity.Entity.extend({
-    moveSpeed: 4,                // 1frameの移動量(px)
-    state: bq.entity.EntityState.Mode.stop,           // 動いてるとか止まってるとかの状態
-    POSITION_SEND_INTERVAL: 0.15,// 位置情報を何秒ごとに送信するか
-    prevPos_: {x: 0, y: 0},      // 前回送信時の座標
-    beamId:[bq.Types.Beams.FIRE], // 装備しているビームのID
+    maxMoveSpeed: 6,                         // 1frameの最大移動量(px)
+    minMoveSpeed: 1,                         // 歩き始めの移動量
+    moveSpeed: 4,                            // 現時点での移動量
+    state: bq.entity.EntityState.Mode.stop,  // 動いてるとか止まってるとかの状態
+    POSITION_SEND_INTERVAL: 0.15,            // 位置情報を何秒ごとに送信するか
+    prevPos_: {x: 0, y: 0},                  // 前回送信時の座標
+    beamId:[bq.Types.Beams.FIRE],            // 装備しているビームのID
 
     ctor:function () {
         this._super('b0_0.png', this.getKeyFrameMap_());
@@ -21,6 +23,8 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.inputHandler = new bq.entity.Player.InputHandler();
         this.scheduleUpdate();
         this.schedule(this.sendPosition, this.POSITION_SEND_INTERVAL);
+
+        $(this.inputHandler).on(bq.entity.Player.InputHandler.EventType.TOUCH_END, this.handleTouchEnd_.bind(this));
     },
 
     /** @override */
@@ -35,10 +39,20 @@ bq.entity.Player = bq.entity.Entity.extend({
             var currentPosition = bq.player.getPosition();
             var directionVector = this.getNormalizedDirectionVector(direction);
             var moveDistance = cc.pMult(directionVector, this.moveSpeed);
-            this.setPosition(cc.pAdd(currentPosition, moveDistance));
-        }
-        else {
+            var nextPos = cc.pAdd(currentPosition, moveDistance);
+            if ( bq.mapManager.canMoveOnMap(nextPos)) {
+                this.setPosition(nextPos);
+            }
+            bq.camera.forceLook();
+
+            if (this.moveSpeed + 1 < this.maxMoveSpeed) { // 歩き始め
+                this.moveSpeed++;
+            } else {
+                this.moveSpeed = this.maxMoveSpeed;
+            }
+        } else {
             // ストップ
+            this.moveSpeed = this.minMoveSpeed;
             this.updateAnimation(bq.entity.EntityState.Mode.stop, this.currentDirection);
         }
 
@@ -151,12 +165,70 @@ bq.entity.Player = bq.entity.Entity.extend({
         directionVectors[d.left]        = cc.p(-1,  0);
         directionVectors[d.bottomleft]  = cc.p(-1, -1);
         return cc.pNormalize(directionVectors[direction]);
-    })
+    }),
+
+    handleTouchEnd_: function(evt, touchData) {
+        this.shoot(touchData.getLocation());
+    }
 });
 
 bq.entity.Player.InputHandler = cc.Class.extend({
     downKeys_: [],        // 押されているキーのリスト
     mouseDownEvents_: [], // クリックイベント
+
+    ctor: function() {
+        this.init();
+    },
+
+    init: function() {
+        var platform = cc.Application.getInstance().getTargetPlatform();
+        if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
+            this.initVirtualPad_();
+        }
+    },
+
+    /**
+     * バーチャルパッドの初期化
+     * @private
+     */
+    initVirtualPad_: function() {
+        var handler = this;
+
+        var getBtnSetting = function(key) {
+            return {
+                stroke: 10,
+                opacity: '1',
+                stroke: 0,
+                touchStart: function() {
+                    handler.addDownKey_(key);
+                },
+                touchEnd: function() {
+                    handler.removeDownKey_(key);
+                }
+            }
+        };
+
+        var up = getBtnSetting(cc.KEY.w);
+        up.height = '15%';
+        var down = getBtnSetting(cc.KEY.s);
+        down.height = '15%';
+        var left = getBtnSetting(cc.KEY.a);
+        left.width = '15%';
+        var right = getBtnSetting(cc.KEY.d);
+        right.width = '15%';
+        GameController.init({
+            right: {
+                type: 'dpad',
+                dpad: {
+                    up: up,
+                    down: down,
+                    left: left,
+                    right: right
+                }
+            },
+            left: false
+        });
+    },
 
     /** @override */
     onKeyDown: function(key) {
@@ -174,6 +246,14 @@ bq.entity.Player.InputHandler = cc.Class.extend({
      */
     onMouseDown: function(event) {
         this.mouseDownEvents_.push(event);
+    },
+
+    /** @override */
+    onTouchesEnded: function(event) {
+        if (!_.isEmpty(event)) {
+            var touchEvt = event[0];
+            $(this).triggerHandler(bq.entity.Player.InputHandler.EventType.TOUCH_END, touchEvt);
+        }
     },
 
     /**
@@ -201,8 +281,18 @@ bq.entity.Player.InputHandler = cc.Class.extend({
      * @return {bq.entity.EntityState.Direction} 見つからない場合null
      */
     getDirection: function() {
+        if(_.isEmpty(this.downKeys_)) {
+            return null;
+        }
         var downKeys = this.downKeys_.slice(0, 2);
-        return this.getDirectionByDownKeys_(downKeys);
+        var direction = this.getDirectionByDownKeys_(downKeys);
+
+        // getDirectionByDownKeysが想定していないキーのペア( macのcmdキーとか )
+        // だとずっとnullが返り続けて動けなくなるのでdownKeys_をリセットする
+        if (!direction) {
+            this.downKeys_ = [];
+        }
+        return direction;
     },
 
     getDirectionByDownKeys_: _.memoize(function(downKeys) {
@@ -233,6 +323,14 @@ bq.entity.Player.InputHandler = cc.Class.extend({
 
     shiftMouseDownEvent: function() {
         return this.mouseDownEvents_.shift();
-    },
+    }
 });
 
+/**
+ * InputHandlerが発火するイベント一覧
+ * TODO: mousedownもここに入れた方がよさげ
+ * @const
+ */
+bq.entity.Player.InputHandler.EventType = {
+    TOUCH_END: 'touchend'
+};

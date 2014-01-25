@@ -10,7 +10,7 @@ var Entities = function() {
      * マップごとのプレイヤー一覧
      * @typedef {
      *    mapId: {
-     *       userId: model.Player
+     *       userId: ctrl.Player
      *    }
      * }
      * @private
@@ -49,22 +49,22 @@ Entities.prototype.init_ = function() {
 
 /**
  * @param {number} mapId
- * @param {model.Player} player
+ * @param {ctrl.Player} player
  */
 Entities.prototype.addPlayer = function(mapId, player) {
     var players = this.mapPlayers_[mapId] || [],
-        isAdd = !_.contains(players, player.id);
+        isAdd = !_.contains(players, player.model.id);
 
     if (isAdd) {
-        players[player.id] = player;
+        players[player.model.id] = player;
     }
-    logger.info('player add [mapId=' + mapId + ',playerId=' + player.id + ',isAdd=' + isAdd + ']');
+    logger.info('player add [mapId=' + mapId + ',playerId=' + player.model.id + ',isAdd=' + isAdd + ']');
 };
 
 /**
  * @param {number} mapId
  * @param {string} playerId
- * @return {model.Player}
+ * @return {ctrl.Player}
  */
 Entities.prototype.getPlayerById = function(mapId, playerId) {
     if (this.mapPlayers_[mapId]) {
@@ -74,28 +74,28 @@ Entities.prototype.getPlayerById = function(mapId, playerId) {
 
 /**
  * @param {number} mapId
- * @param {model.Player} player
+ * @param {ctrl.Player} player
  */
 Entities.prototype.removePlayer = function(mapId, player) {
     var players = this.mapPlayers_[mapId] || [];
 
-    if (players[player.id]) {
-        delete players[player.id];
-        logger.info('player remove [mapId=' + mapId + ',playerId=' + player.id + ']');
+    if (players[player.model.id]) {
+        delete players[player.model.id];
+        logger.info('player remove [mapId=' + mapId + ',playerId=' + player.model.id + ']');
     } else {
-        logger.warn('cannot remove player [mapId=' + mapId + ',playerId=' + player.id + ']');
+        logger.warn('cannot remove player [mapId=' + mapId + ',playerId=' + player.model.id + ']');
     }
 
 };
 
 /**
  * @param {model.Map} map
- * @param {model.Mob} mob
+ * @param {ctrl.Mob} mob
  */
 Entities.prototype.addMob = function(map, mob) {
     var mobs = this.mapMobs_[map.id] || [];
-    if (!_.contains(mobs, mob.id)) {
-        mobs[mob.id] = mob;
+    if (!_.contains(mobs, mob.model.id)) {
+        mobs[mob.model.id] = mob;
         map.mobCount++;
         this.entityListener_.popMob(mob);
     }
@@ -103,12 +103,13 @@ Entities.prototype.addMob = function(map, mob) {
 
 /**
  * @param {model.Map} map
- * @param {model.Mob} mob
+ * @param {ctrl.Mob} mob
  */
 Entities.prototype.removeMob = function(map, mob) {
     if (map && mob) {
         map.mobCount--;
-        delete this.mapMobs_[map.id][mob.id];
+        delete this.mapMobs_[map.id][mob.model.id];
+        mob.dispose();
     }
 };
 
@@ -122,7 +123,7 @@ Entities.prototype.getMobs = function() {
 /**
  * @param {number mapId
  * @param {string} mobId
- * @return {model.Mob}
+ * @return {ctrl.Mob}
  */
 Entities.prototype.getMobById = function(mapId, mobId) {
     if (this.mapMobs_[mapId]) {
@@ -138,7 +139,7 @@ Entities.prototype.getPlayersJSON = function(mapId) {
     var json = {};
     var players = this.mapPlayers_[mapId] || [];
     _.each(players, function(player, key) {
-       json[key] = player.toJSON();
+       json[key] = player.model.toJSON();
     });
     return json;
 };
@@ -152,7 +153,7 @@ Entities.prototype.getMobsJSON = function(mapId) {
     var json = {};
     var mobs = this.mapMobs_[mapId] || [];
     _.each(mobs, function(mob, key) {
-       json[key] = mob.toJSON();
+       json[key] = mob.model.toJSON();
     });
     return json;
 };
@@ -163,22 +164,22 @@ Entities.prototype.getMobsJSON = function(mapId) {
 Entities.prototype.updatePlayerPosition = function(data) {
     var player = this.mapPlayers_[data.mapId][data.userId];
     if (player) {
-        player.position.mapId = data.mapId;
-        player.position.x = data.x;
-        player.position.y = data.y;
+        player.model.position.mapId = data.mapId;
+        player.model.position.x = data.x;
+        player.model.position.y = data.y;
     }
 };
 
 /**
  * @param {number} mapId
- * @param {model.Mob} ステータスを更新したmob
+ * @param {ctrl.Mob} ステータスを更新したmob
  */
 Entities.prototype.updateMobStatus = function(mapId, mob) {
-    var target = this.mapMobs_[mapId][mob.id];
+    var target = this.mapMobs_[mapId][mob.model.id];
     if (target) {
         target = mob;
-        if (target.hp < 0) { // 死
-            this.entityListener_.kill(mob);
+        if (target.model.hp < 0) { // 死
+            this.entityListener_.killMob(mob);
             this.removeMob(mapStore.getMapById(mapId), mob);
         }
     }

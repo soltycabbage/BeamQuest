@@ -1,4 +1,5 @@
 var kvs = require('beamQuest/store/kvs'),
+    playerCtrl = require('beamQuest/ctrl/player'),
     playerModel = require('beamQuest/model/player'),
     positionModel = require('beamQuest/model/position'),
     entities = require('beamQuest/store/entities');
@@ -51,12 +52,14 @@ exports.listen = function(socket, io) {
             y: 200
         });
 
-        var player = new playerModel({
+        var player = new playerCtrl();
+        var model = new playerModel({
             id: userId,
             name: userId,
             socket: socket,
             position: position
         });
+        player.setModel(model);
         entities.addPlayer(position.mapId, player);
 
         socket.on('disconnect', function() {

@@ -43,14 +43,29 @@ bq.Socket = cc.Class.extend({
             // TODO ログアウト時の動作
         });
 
-        // そのentity死んだよって
-        this.socket.on('notify:entity:kill', function(data) {
-            entityManager.killEntity(data);
+        // そのmob死んだよって
+        this.socket.on('notify:entity:mob:kill', function(data) {
+            entityManager.killMob(data);
         });
 
         // mobがPOPしたよって
         this.socket.on('notify:entity:mob:pop', function(data) {
             entityManager.popMob(data);
+        });
+
+        // mobの移動
+        this.socket.on('notify:entity:mob:move', function(data) {
+            entityManager.mobMoveTo(data);
+        });
+
+        // mobが近接攻撃の構えを取った
+        this.socket.on('notify:entity:mob:startAttackShortRange', function(data) {
+            entityManager.startAttackShortRange(data);
+        });
+
+        // hpに変動があった
+        this.socket.on('notify:entity:hp:update', function(data) {
+            entityManager.updateHp(data);
         });
 
         /**

@@ -106,11 +106,10 @@ bq.EntityManager = cc.Class.extend({
     },
 
     /**
-     * Entityが死んだら呼ばれる
-     * TODO: いまんとこenemyだけ
+     * mobが死んだら呼ばれる
      * @param {Object} data
      */
-    killEntity: function(data) {
+    killMob: function(data) {
         var enemy = this.enemys_[data.entity.id];
         if (enemy) {
             enemy.kill();
@@ -190,6 +189,50 @@ bq.EntityManager = cc.Class.extend({
         enemy.setPosition(cc.p(x, y));
         bq.baseLayer.addChild(enemy, 50);
         this.enemys_[mobModel.id] = enemy;
+    },
+
+    /**
+     * mobの移動
+     * @param {Object}
+     */
+    mobMoveTo: function(data) {
+        var enemy =  this.enemys_[data.mob.id];
+        if (enemy) {
+            enemy.setPosition(cc.p(data.mob.position.x, data.mob.position.y));
+            // var act = cc.MoveTo.create(0.1, cc.p(data.mob.position.x, data.mob.position.y));
+            // enemy.runAction(act);
+        }
+    },
+
+    /**
+     * mobが近接攻撃の構えを取った
+     * @param {Object.<mob: Object, range: number, castTime: number>} data
+     */
+    startAttackShortRange: function(data) {
+        var enemy =  this.enemys_[data.mobId];
+        if (enemy) {
+            enemy.showMessage('ころちゅ')
+        }
+    },
+
+    /**
+     * hpに増減があった
+     * @param {Array.<Object}data
+     */
+    updateHp: function(data) {
+        _.forEach(data.hpAmounts, function(hpAmount) {
+            if (hpAmount.entity.id === bq.player.name) {
+                bq.player.updateHp(hpAmount.hpAmount);
+            } else {
+                var enemy = this.enemys_[hpAmount.entity.id];
+                var player = this.otherPlayers_[hpAmount.entity.id];
+                if (enemy) {
+                    enemy.updateHp(hpAmount.hpAmount);
+                } else if (player) {
+                    player.updateHp(hpAmount.hpAmount);
+                }
+            }
+        }.bind(this));
     }
 });
 
