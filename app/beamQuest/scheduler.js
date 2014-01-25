@@ -23,7 +23,7 @@ bq.Scheduler.prototype.add = function(target) {
  * @param {bq.ScheduleTarget} target
  */
 bq.Scheduler.prototype.remove = function(target) {
-    this.targets_ = _.reject(this.targets_, function(element) { element === target});
+    this.targets_ = _.reject(this.targets_, function(element) { return element === target });
 };
 
 /**
