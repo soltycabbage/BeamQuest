@@ -1,6 +1,7 @@
 /**
  * @fileoverview オンメモリのKVS的なやつ。redisに置き換える？
  */
+var redis = require('redis');
 
 var SessionStore = {
     session_: {},
@@ -20,14 +21,11 @@ var SessionStore = {
     }
 };
 
-exports.get = function(key, callback) {
-    SessionStore.get(key, callback);
-};
-
-exports.set = function(key, value) {
-    SessionStore.set(key, value);
-};
-
-exports.del = function(key) {
-    SessionStore.del(key);
-};
+exports.createClient = function() {
+    logger.info(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+        return SessionStore;
+    } else {
+        return redis.createClient();
+    }
+}

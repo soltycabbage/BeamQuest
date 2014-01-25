@@ -1,7 +1,7 @@
-var redis = require('redis');
+var kvs = require('beamQuest/store/kvs');
 
 var UserStore = function() {
-    this.store = redis.createClient();
+    this.store = kvs.createClient();
     this.getStoreKey_ = function(userId) {
         return "user:" + userId;
     };
