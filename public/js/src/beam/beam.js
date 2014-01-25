@@ -132,6 +132,48 @@ bq.beam.Beam.pop = function() {
     return be;
 };
 
+bq.beam.Beam.createParticleBeam = function(beamType, shooterId, tag) {
+    "use strict";
+    var beam =  new bq.beam.Beam(beamType, shooterId, tag);
+    // パーティクルとテクスチャをセット
+    // TODO これもっとうまく書く方法あるはずだし、別のクラスgameType?に移した方がいい
+    var beamType2Partile = {};
+    beamType2Partile[bq.Types.Beams.FIRE] = cc.ParticleSun;
+    beamType2Partile[bq.Types.Beams.METEOR] = cc.ParticleMeteor;
+
+    var particle = beamType2Partile[beamType];
+    var myTexture = cc.TextureCache.getInstance().textureForKey(s_beam0);
+
+    particle.setTexture(myTexture);
+    particle.setPosition(cc.p(0,0));
+    beam.addChild(particle);
+    beam.disable();
+
+    return beam;
+}
+
+bq.beam.Beam.createSpriteBeam = function(beamType, shooterId, tag) {
+    "use strict";
+    var beam =  new bq.beam.Beam(beamType, shooterId, tag);
+
+    var beamType2textureName = {};
+    // TODO これもっとうまく書く方法あるはずだし、別のクラスgameType?に移した方がいい
+    beamType2textureName[ bq.Types.Beams.NORMAL0] =  "simple_beam_0.png";
+    beamType2textureName[ bq.Types.Beams.NORMAL1] =  "simple_beam_1.png";
+    beamType2textureName[ bq.Types.Beams.NORMAL2] =  "simple_beam_2.png";
+    beamType2textureName[ bq.Types.Beams.NORMAL3] =  "simple_beam_3.png";
+
+    var spriteName = beamType2textureName[beamType];
+
+    var sp = cc.SpriteFrameCache.getInstance().getSpriteFrame(spriteName);
+    var cl = cc.Sprite.createWithSpriteFrame(sp);
+
+    beam.addChild(cl);
+    beam.setPosition(cc.p(0,0));
+
+    return beam;
+}
+
 /**
  * Beamのファクトリ
  * 引数id にあうパーティクルのビームを作成する
@@ -143,50 +185,16 @@ bq.beam.Beam.pop = function() {
  */
 bq.beam.Beam.create = function(beamType, shooterId, tag) {
     "use strict";
-    var beam =  new bq.beam.Beam(beamType, shooterId, tag);
+    var beam;
 
-    // パーティクルとテクスチャをセット
-    var particle;
-    var textureName;
     var type = bq.Types.Beams;
-    switch (beamType) {
-        case type.NORMAL0:
-            textureName = "simple_beam_0.png";
-            break;
-        case type.NORMAL1:
-            textureName = "simple_beam_1.png";
-            break;
-        case type.NORMAL2:
-            textureName = "simple_beam_2.png";
-            break;
-        case type.NORMAL3:
-            textureName = "simple_beam_3.png";
-            break;
-        case type.FIRE:
-            particle = cc.ParticleSun.create();
-            break;
-        case type.METEOR:
-            particle = cc.ParticleMeteor.create();
-            break;
-    }
-
-    if ( !textureName ) { // particleない人はこっち
-        textureName = s_beam0;
-    }
-    var myTexture = cc.TextureCache.getInstance().textureForKey(textureName);
-
-    if ( particle) {
-        particle.setTexture(myTexture);
-        particle.setPosition(cc.p(0,0));
-        beam.addChild(particle);
-
+    if (_.contains([type.FIRE, type.METEOR], beamType) ) {
+        beam = bq.beam.Beam.createParticleBeam(beamType, shooterId, tag);
     } else {
-        var sp = cc.SpriteFrameCache.getInstance().getSpriteFrame(textureName);
-        var cl = cc.Sprite.createWithSpriteFrame(sp);
-
-        beam.addChild(cl);
-        beam.setPosition(cc.p(0,0));
+        beam = bq.beam.Beam.createSpriteBeam(beamType, shooterId, tag);
     }
+
+
     beam.disable();
 
     return beam;
