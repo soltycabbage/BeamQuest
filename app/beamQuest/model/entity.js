@@ -37,6 +37,16 @@ util.inherits(Entity, Model);
 
 Entity.DEFAULT_MAX_HP = 100;
 
+/**
+ * ビームが当たったら呼ばれる
+ * @param {bq.Types.Beam} beamType
+ * @param {string} shooterId
+ * @param {string} mapId
+ */
+Entity.prototype.beamHit = function(beamType, shooterId, mapId) {
+
+};
+
 /** @override */
 Entity.prototype.toJSON = function() {
     var json = {};

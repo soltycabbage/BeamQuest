@@ -24,27 +24,14 @@ exports.listen = function(socket, io) {
     });
 
     function updateEntityStatus_(entity, beamType, data) {
-        // TODO: ほんとはクライアント側から指定されたビームtypeをそのまま使うべきではない
-        //       サーバ側に保存してあるプレイヤーの装備しているビームを参照すべき
-        var beam = bq.Params.getBeamParam(beamType);
-        var newEntity = entities.getMobById(data.mapId, entity.id);
-        var damage = -1 * (Math.floor(Math.random() * beam.atk/2) + beam.atk); // TODO: ダメージ計算
-        var newHp = newEntity.hp + damage;
-        newEntity.hp = newHp;
-
-        // 攻撃を与えたユーザのIDをヘイトリストに突っ込む
-        // TODO: ヘイト値の導入
-        if (!_.contains(newEntity.hateList, data.shooterId)) {
-            newEntity.hateList.push(data.shooterId);
-        }
-
-        io.sockets.emit('notify:beam:hit', {
-            entity: newEntity,
+        var hitResult = {
+            entity: entity.model.toJSON(),
             beamTag: data.tag,
-            hpAmount: damage,
             beamPos: {x: data.x, y: data.y}
-        });
-        entities.updateMobStatus(data.mapId, newEntity);
+        };
+        var additionalHitResult = entity.beamHit(beamType, data.shooterId, data.mapId);
+        hitResult = _.extend(additionalHitResult, hitResult);
+        io.sockets.emit('notify:beam:hit', hitResult);
     }
 
     /**
@@ -57,7 +44,7 @@ exports.listen = function(socket, io) {
         var mobs = entities.getMobs()[data.mapId] || {};
         var collideRect = {width: 32, height: 32}; // 当たり判定の範囲（これもビームごとに決められるようにしたい）
         return _.find(mobs, function(mob) {
-            return pointInRect_(beamPos, mob.position, collideRect);
+            return pointInRect_(beamPos, mob.model.position, collideRect);
         });
     }
 

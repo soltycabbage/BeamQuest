@@ -1,5 +1,7 @@
 var util = require('util'),
-    Entity = require('beamQuest/model/entity');
+    Entity = require('beamQuest/model/entity'),
+    entityStore = require('beamQuest/store/entities'),
+    entityListener = require('beamQuest/listener/entity');
 
 /**
  * @constructor
@@ -15,10 +17,16 @@ var Mob = function(opt_data) {
     this.exp = this.data.exp || Mob.DEFAULT_EXP;
 
     /**
-     * ヘイトリスト
-     * @type {Array.<string>}
+     * 移動速度
+     * @type {number}
      */
-    this.hateList = [];
+    this.moveSpeed = 5;
+
+    /**
+     * trueなら攻撃を受けるまで敵対行動を取らないタイプのmob
+     * @type {Boolean}
+     */
+    this.isPassive = true;
 };
 util.inherits(Mob, Entity);
 
@@ -28,7 +36,6 @@ Mob.DEFAULT_EXP = 1;
 Mob.prototype.toJSON = function() {
     var json = Mob.super_.prototype.toJSON.apply(this);
     json.exp = this.exp;
-    json.hateList = this.hateList;
     return json;
 };
 

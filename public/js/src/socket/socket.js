@@ -53,6 +53,21 @@ bq.Socket = cc.Class.extend({
             entityManager.popMob(data);
         });
 
+        // mobの移動
+        this.socket.on('notify:entity:mob:move', function(data) {
+            entityManager.mobMoveTo(data);
+        });
+
+        // mobが近接攻撃の構えを取った
+        this.socket.on('notify:entity:mob:startAttackShortRange', function(data) {
+            entityManager.startAttackShortRange(data);
+        });
+
+        // hpに変動があった
+        this.socket.on('notify:entity:hp:update', function(data) {
+            entityManager.updateHp(data);
+        });
+
         /**
          *  1対1の通信
          */
