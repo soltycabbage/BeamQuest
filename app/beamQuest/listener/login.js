@@ -5,28 +5,33 @@ var playerModel = require('beamQuest/model/player'),
 var kvs = require('redis').createClient();
 
 exports.listen = function(socket, io) {
-    socket.on('login', function(data) {
+    socket.on('login', onLogin);
+
+    function onLogin(data) {
         var invalidErr = validateUserId_(data.userId);
         if (invalidErr) {
             socket.emit('login:receive', invalidErr);
             return;
         }
+        login_(data);
+    }
 
-        kvs.get('user:id:' + data.userId, function(err, val) {
-            var result = {};
-            if (!val) { // IDとハッシュが登録されていない
-                kvs.set('user:id:' + data.userId, data.hash);
-                addLoginUser_(data.userId);
-                result = {result: 'create'};
-            } else if (val == data.hash) { // IDとハッシュが一致
-                addLoginUser_(data.userId);
-                result = {result: 'success'};
-            } else { // IDは存在するけどハッシュが違う
-                result = {result: 'error', message: 'すでに存在するキャラクターです。'};
+    function login_(loginData) {
+        var userKey = 'user:' + loginData.userId;
+        kvs.get(userKey, function(err, val) {
+            var respond_ = function(result) { socket.emit('login:receive', result) };
+            var userData = (val) ? JSON.parse(val) : null;
+
+            if (userData && userData.hash !== loginData.hash) {
+                return respond_({result: 'error', message: 'すでに存在するキャラクターです。'});
             }
-            socket.emit('login:receive', result);
+
+            var player = (userData) ? createPlayer_(userData) : createNewPlayer_(loginData);
+            addLoginUser_(player);
+
+            return respond_({result: 'success'});
         });
-    });
+    }
 
     /**
      * @param {string} userId
@@ -41,39 +46,45 @@ exports.listen = function(socket, io) {
         return result;
     }
 
+    function createPlayer_(userData) {
+        var model = new playerModel(userData);
+        model.position = new positionModel(model.position);
+        var player = new playerCtrl();
+        player.setModel(model);
+        return player;
+    }
+
+    function createNewPlayer_(loginData) {
+        logger.info('createNewPlayer');
+        var position = new positionModel({
+            mapId: 1,
+            x: 200,
+            y: 200
+        });
+        var model = new playerModel({
+            hash: loginData.hash,
+            id: loginData.userId,
+            name: loginData.userId,
+            socket: socket,
+            position: position
+        });
+        var player = new playerCtrl();
+        player.setModel(model);
+        return player;
+    }
+
     /**
      * @param {string} userId
      * @private
      */
-    function addLoginUser_(userId) {
-        var position = new positionModel({
-            mapId: 1, // TODO: ログアウト時の位置を記憶しておいてセットする
-            x: 200,
-            y: 200
-        });
-
-        var player = new playerCtrl();
-        var model = new playerModel({
-            id: userId,
-            name: userId,
-            socket: socket,
-            position: position
-        });
-        player.setModel(model);
+    function addLoginUser_(player) {
+        var model = player.model;
+        var position = model.position;
         entities.addPlayer(position.mapId, player);
 
         socket.on('disconnect', function() {
             entities.removePlayer(position.mapId, player);
-            kvs.del('user:id:' + player.id);
             io.sockets.emit('notify:user:logout', {userId: player.id});
         });
-    }
-
-    /**
-     * ログイン中の全ユーザを返す
-     * @return {Object}
-     */
-    function getLoginUsers() {
-        return loginUsers_;
     }
 };
