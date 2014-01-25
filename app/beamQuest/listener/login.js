@@ -1,7 +1,8 @@
 var playerModel = require('beamQuest/model/player'),
     playerCtrl = require('beamQuest/ctrl/player'),
     positionModel = require('beamQuest/model/position'),
-    entities = require('beamQuest/store/entities');
+    entities = require('beamQuest/store/entities'),
+    userStore = require('beamQuest/store/userStore');
 var kvs = require('redis').createClient();
 
 exports.listen = function(socket, io) {
@@ -17,10 +18,11 @@ exports.listen = function(socket, io) {
     }
 
     function login_(loginData) {
-        var userKey = 'user:' + loginData.userId;
-        kvs.get(userKey, function(err, val) {
-            var respond_ = function(result) { socket.emit('login:receive', result) };
-            var userData = (val) ? JSON.parse(val) : null;
+        var respond_ = function(result) { socket.emit('login:receive', result) };
+        userStore.find(loginData.userId, function(error, userData) {
+            if (error) {
+                return respond_(error);
+            }
 
             if (userData && userData.hash !== loginData.hash) {
                 return respond_({result: 'error', message: 'すでに存在するキャラクターです。'});

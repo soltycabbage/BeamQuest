@@ -1,0 +1,25 @@
+var redis = require('redis');
+
+var UserStore = function() {
+    this.store = redis.createClient();
+    this.getStoreKey_ = function(userId) {
+        return "user:" + userId;
+    };
+};
+
+UserStore.prototype.find = function(userId, callback) {
+    var storeKey = this.getStoreKey_(userId);
+    this.store.get(storeKey, function(err, val) {
+        var userData = (val) ? JSON.parse(val) : null;
+        callback(userData);
+    });
+};
+
+UserStore.prototype.save = function(user) {
+    var storeKey = this.getStoreKey_(user.id);
+    this.store.set(storeKey, JSON.stringify(user.model.toJSON()));
+};
+
+var instance_ = new UserStore();
+module.exports = instance_;
+
