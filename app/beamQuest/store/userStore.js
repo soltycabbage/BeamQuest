@@ -9,15 +9,19 @@ var UserStore = function() {
 
 UserStore.prototype.find = function(userId, callback) {
     var storeKey = this.getStoreKey_(userId);
-    this.store.get(storeKey, function(err, val) {
+    this.store.get(storeKey, function(error, val) {
+        if (error) {
+            callback(error);
+        }
         var userData = (val) ? JSON.parse(val) : null;
-        callback(userData);
+        callback(null, userData);
     });
 };
 
 UserStore.prototype.save = function(user) {
-    var storeKey = this.getStoreKey_(user.id);
-    this.store.set(storeKey, JSON.stringify(user.model.toJSON()));
+    var storeKey = this.getStoreKey_(user.model.id);
+    var data = JSON.stringify(user.model.toJSON());
+    this.store.set(storeKey, data);
 };
 
 var instance_ = new UserStore();

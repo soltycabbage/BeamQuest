@@ -50,10 +50,8 @@ bq.scene.LoginLayer = cc.Layer.extend({
         }
 
         soc.tryLogin(userId, hash, function(data) {
-            if (data.result === this.status.CREATE) {
+            if (data.result === this.status.SUCCESS) {
                 sys.localStorage.setItem('userHash:' + userId, hash);
-                this.welcomeToBeamQuestWorld_(userId);
-            } else if (data.result === this.status.SUCCESS) {
                 console.log(userId + 'がログインしました。');
                 this.welcomeToBeamQuestWorld_(userId);
             } else if (data.result === this.status.ERROR) {

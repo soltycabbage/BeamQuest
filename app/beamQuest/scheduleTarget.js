@@ -14,6 +14,13 @@ bq.ScheduleTarget.prototype.scheduleUpdate = function() {
 };
 
 /**
+ * 登録したupdate()スケジュールを削除したい場合はこれを呼ぶ
+ */
+bq.ScheduleTarget.prototype.unscheduleUpdate = function() {
+    this.scheduler_.remove(this);
+};
+
+/**
  * 毎ループ実行される
  * @protected
  */

@@ -50,6 +50,7 @@ exports.listen = function(socket, io) {
 
     function createPlayer_(userData) {
         var model = new playerModel(userData);
+        model.socket = socket;
         model.position = new positionModel(model.position);
         var player = new playerCtrl();
         player.setModel(model);
@@ -57,7 +58,6 @@ exports.listen = function(socket, io) {
     }
 
     function createNewPlayer_(loginData) {
-        logger.info('createNewPlayer');
         var position = new positionModel({
             mapId: 1,
             x: 200,
@@ -83,9 +83,11 @@ exports.listen = function(socket, io) {
         var model = player.model;
         var position = model.position;
         entities.addPlayer(position.mapId, player);
+        player.scheduleUpdate();
 
         socket.on('disconnect', function() {
             entities.removePlayer(position.mapId, player);
+            player.unscheduleUpdate();
             io.sockets.emit('notify:user:logout', {userId: player.id});
         });
     }

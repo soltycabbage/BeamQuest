@@ -19,6 +19,14 @@ bq.Scheduler.prototype.add = function(target) {
 };
 
 /**
+ * クラスをスケジューラーから削除する
+ * @param {bq.ScheduleTarget} target
+ */
+bq.Scheduler.prototype.remove = function(target) {
+    this.targets_ = _.reject(this.targets_, function(element) { element === target});
+};
+
+/**
  * スケジューラーに登録されたクラスが持つupdate()メソッドを順次呼んでいく
  */
 bq.Scheduler.prototype.update = function() {
