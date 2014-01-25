@@ -15,6 +15,12 @@ var Map = function(opt_data) {
     this.name = this.data.name || Map.DEFAULT_NAME;
 
     /**
+     * tmx ファイル
+     * @type {null|*}
+     */
+    this.tmxObj = this.data.tmxObj || null;
+
+    /**
      * マップサイズ
      * @type {Object.<width:number, height: number>}
      */

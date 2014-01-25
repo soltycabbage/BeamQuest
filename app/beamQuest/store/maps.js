@@ -1,4 +1,5 @@
-var mapModel = require('beamQuest/model/fieldMap');
+var mapModel = require('beamQuest/model/fieldMap'),
+    tmx = require('tmx-parser');
 
 /**
  * ゲーム内のマップの状態を保持しておくクラス
@@ -23,14 +24,29 @@ var Maps = function() {
  */
 Maps.prototype.init_ = function() {
     // NOTE マップ情報の保存先がまだ決まってないので直接書いてる。将来的にはファイルorDBから取ってくる？
-    var map = new mapModel({
-        id: 1,
-        name: 'しんじゅく',
-        maxMobCount: 10,
-        mobCount: 0,
-        size: {width: 1000, height: 1000} // 超テキトー
-    });
-    this.maps_.push(map);
+    var self = this;
+    var mapFunc = function(err, m){
+        if (err) throw err;
+        var map = new mapModel({
+            id: 1,
+            name: '村',
+            maxMobCount: 10,
+            mobCount: 0,
+            objTmx: m,
+            size: {width: m.width * m.tileWidth, height: m.height * m.tileHeight}
+        });
+        self.maps_.push(map);
+    };
+    tmx.parseFile('public/res/map/map_village.tmx', mapFunc);
+
+//    var map = new mapModel({
+//        id: 1,
+//        name: 'しんじゅく',
+//        maxMobCount: 10,
+//        mobCount: 0,
+//        size: {width: 1000, height: 1000} // 超テキトー
+//    });
+//    this.maps_.push(map);
 };
 
 /**
