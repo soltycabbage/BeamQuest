@@ -31,7 +31,7 @@ exports.listen = function(socket, io) {
             var player = (userData) ? createPlayer_(userData) : createNewPlayer_(loginData);
             addLoginUser_(player);
 
-            return respond_({result: 'success'});
+            return respond_({result: 'success', position: player.model.position});
         });
     }
 
@@ -58,10 +58,11 @@ exports.listen = function(socket, io) {
     }
 
     function createNewPlayer_(loginData) {
+        // TODO mapManager.getRespawnPoint的な奴で初期ポジションを取得する
         var position = new positionModel({
             mapId: 1,
-            x: 200,
-            y: 200
+            x: 700,
+            y: 700
         });
         var model = new playerModel({
             hash: loginData.hash,
