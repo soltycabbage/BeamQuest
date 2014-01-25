@@ -45,7 +45,11 @@ bq.EntityManager = cc.Class.extend({
      */
     chat: function(chatData) {
         var targetOther = this.otherPlayers_[chatData.userId];
-        targetOther &&targetOther.showMessage(chatData.message);
+        if (targetOther) {
+            var msgLog = bq.MessageLog.getInstance();
+            msgLog.addChatMsg(chatData.userId + ': ' + chatData.message);
+            targetOther.showMessage(chatData.message);
+        }
     },
 
     /**
