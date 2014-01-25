@@ -5,11 +5,11 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         this._super();
         this.setKeyboardEnabled(true);
         var platform = cc.Application.getInstance().getTargetPlatform();
-       // if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
+        if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
             this.setTouchEnabled(true);
-       // } else {
-         //   this.setMouseEnabled(true);
-       // }
+        } else {
+            this.setMouseEnabled(true);
+        }
 
         cc.AudioEngine.getInstance().setEffectsVolume(0.1);
         cc.AudioEngine.getInstance().setMusicVolume(0.1);
