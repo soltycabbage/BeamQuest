@@ -1,17 +1,5 @@
-bq.model.Mob = bq.model.extend({
+bq.model.Mob = bq.model.Entity.extend({
     ctor: function(json) {
-        /** @type {string} */
-        this.id;
-
-        /** @type {string} */
-        this.name;
-
-        /** @type {number} */
-        this.maxHp;
-
-        /** @type {number} */
-        this.hp;
-
         /** @type {number} */
         this.exp;
 
@@ -23,10 +11,7 @@ bq.model.Mob = bq.model.extend({
 
     /** @override */
     parse: function(json) {
-        this.id = json['id'];
-        this.name = json['name'];
-        this.maxHp = json['maxHp'];
-        this.hp = json['hp'];
+        this._super(json);
         this.exp = json['exp'];
         this.position = cc.p(json['position'].x, json['position'].y);
     }

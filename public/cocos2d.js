@@ -26,6 +26,9 @@
 
             // models
             'js/src/model/model.js',
+            'js/src/model/position.js',
+            'js/src/model/entity.js',
+            'js/src/model/player.js',
             'js/src/model/playerMove.js',
             'js/src/model/beamPos.js',
             'js/src/model/chat.js',
