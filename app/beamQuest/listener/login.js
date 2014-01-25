@@ -3,7 +3,7 @@ var playerModel = require('beamQuest/model/player'),
     positionModel = require('beamQuest/model/position'),
     entities = require('beamQuest/store/entities'),
     userStore = require('beamQuest/store/userStore');
-var kvs = require('redis').createClient();
+var kvs = require('beamQuest/store/kvs').createClient();
 
 exports.listen = function(socket, io) {
     socket.on('login', onLogin);
