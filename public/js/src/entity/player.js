@@ -119,6 +119,28 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.socket.shootBeam(json);
     },
 
+    /** @override */
+    updateHp: function(hpAmount) {
+        this._super(hpAmount);
+        if (hpAmount < 0) {
+            this.gainHpBar_(hpAmount);
+        }
+    },
+
+    /**
+     * HPバーを減らす
+     * @param {number} amount HP減少量
+     * @private
+     */
+    gainHpBar_: function(amount) {
+        var bar = $('#bq-hp-bar-background');
+        var valueBar = $('#bq-hp-bar-value');
+        var barWidth = bar.width();
+        var gainWidth = Math.floor(barWidth / this.getModel().maxHp) * amount;
+        var w = valueBar.width();
+        valueBar.width(w + gainWidth);
+    },
+
     /**
      * 各種値を設定する
      * @param {Object} data
