@@ -20,6 +20,9 @@ var Player = function(opt_data) {
     /** @type {number} */
     this.lv = this.data.lv || 1;
 
+    /** @type {boolean} */
+    this.isDeath = !!this.data.isDeath;
+
     /** @type {Socket} */
     this.socket = this.data.socket || null;
 };
@@ -34,6 +37,7 @@ Player.prototype.toJSON = function() {
     json.bp = this.bp;
     json.exp = this.exp;
     json.lv = this.lv;
+    json.isDeath = this.isDeath;
     return json;
 };
 

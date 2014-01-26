@@ -83,6 +83,12 @@ var Mob = function() {
      * @type {Number}
      */
     this.attackCancelDistance = 500;
+
+    /**
+     * 攻撃をキャンセルした時とかに戻る位置
+     * @type {model.Position}
+     */
+    this.startPos = null;
 };
 util.inherits(Mob, EntityCtrl);
 
@@ -91,7 +97,13 @@ Mob.prototype.update = function() {
     if (!_.isEmpty(this.hateList)) {
         var targetId = this.hateList[0].entityId;
         var targetEntity = entityStore.getPlayerById(this.model.position.mapId, targetId);
-        if (targetEntity) { // ターゲットが同じマップ内にいるなら攻撃を仕掛ける
+        if (targetEntity && targetEntity.model.isDeath) {
+            this.hateList.shift();
+            if (_.isEmpty(this.hateList) && this.startPos) {
+                // 敵対キャラを殺し尽くした時などは元の位置に戻っていく・・・
+                this.moveTo(this.startPos);
+            }
+        } else if (targetEntity) { // ターゲットが同じマップ内にいるなら攻撃を仕掛ける
             this.attackTo(targetEntity);
         }
     }
@@ -180,7 +192,7 @@ Mob.prototype.shortRangeAttack = function() {
                 // TODO: 範囲内に対象がいるかどうかチェックする
 
                 // ダメージテキトー
-                entityListener.updateHp([{entity: this.hateTarget.model, hpAmount: -10}]);
+                this.hateTarget.updateHp(-10);
             }
             this.isActive_ = false;
         }.bind(this), castTime);

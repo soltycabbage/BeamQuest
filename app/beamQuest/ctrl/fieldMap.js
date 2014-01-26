@@ -49,6 +49,7 @@ FieldMap.prototype.spawnMob_ = function() {
             position: position
         });
         mob.setModel(mobModel);
+        mob.startPos = _.clone(position);
         entitiesStore.addMob(this.map, mob);
     }
 };

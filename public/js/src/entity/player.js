@@ -120,25 +120,42 @@ bq.entity.Player = bq.entity.Entity.extend({
     },
 
     /** @override */
-    updateHp: function(hpAmount) {
-        this._super(hpAmount);
-        if (hpAmount < 0) {
-            this.gainHpBar_(hpAmount);
-        }
+    updateHp: function(hpData) {
+        this._super(hpData);
+        this.updateHpBar_(hpData);
     },
 
     /**
-     * HPバーを減らす
-     * @param {number} amount HP減少量
+     * HPバーを増減する
+     * @param {Object} hpData HP増減情報
      * @private
      */
-    gainHpBar_: function(amount) {
+    updateHpBar_: function(hpData) {
+        var amount = hpData.hpAmount;
         var bar = $('#bq-hp-bar-background');
         var valueBar = $('#bq-hp-bar-value');
-        var barWidth = bar.width();
-        var gainWidth = Math.floor(barWidth / this.getModel().maxHp) * amount;
+        var maxWidth = bar.width();
+        var gainWidth = Math.floor(maxWidth / this.getModel().maxHp) * amount;
         var w = valueBar.width();
-        valueBar.width(w + gainWidth);
+        if (w + gainWidth >= maxWidth) {
+            valueBar.width(maxWidth);
+        } else {
+            valueBar.width(w + gainWidth);
+        }
+
+        this.initHpBar(hpData);
+    },
+
+    /**
+     * 現在HPにあわせてHPバーを伸縮する
+     * @private
+     */
+    initHpBar: function(opt_hpData) {
+        var currentHp = opt_hpData ? opt_hpData.entity.hp : this.getModel().hp
+        var bar = $('#bq-hp-bar-background');
+        var valueBar = $('#bq-hp-bar-value');
+        var maxWidth = bar.width();
+        valueBar.width(maxWidth * currentHp / this.getModel().maxHp);
     },
 
     /**

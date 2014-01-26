@@ -132,7 +132,7 @@ bq.EntityManager = cc.Class.extend({
         // 右から当たったら左にダメージラベルがぴょーんて飛ぶ
         if (enemy) {
             var hitRight = (enemy.getPosition().x - data.beamPos.x) < 0;
-            enemy.updateHp(data.hpAmount, hitRight);
+            enemy.updateHp({entity: data.entity, hpAmount: data.hpAmount}, hitRight);
         }
 
         var beam = this.beams_[data.beamTag];
@@ -221,19 +221,19 @@ bq.EntityManager = cc.Class.extend({
 
     /**
      * hpに増減があった
-     * @param {Array.<Object}data
+     * @param {Array.<Object>} data
      */
     updateHp: function(data) {
-        _.forEach(data.hpAmounts, function(hpAmount) {
-            if (hpAmount.entity.id === bq.player.name) {
-                bq.player.updateHp(hpAmount.hpAmount);
+        _.forEach(data.hpDatas, function(hpData) {
+            if (hpData.entity.id === bq.player.name) {
+                bq.player.updateHp(hpData);
             } else {
-                var enemy = this.enemys_[hpAmount.entity.id];
-                var player = this.otherPlayers_[hpAmount.entity.id];
+                var enemy = this.enemys_[hpData.entity.id];
+                var player = this.otherPlayers_[hpData.entity.id];
                 if (enemy) {
-                    enemy.updateHp(hpAmount.hpAmount);
+                    enemy.updateHp(hpData);
                 } else if (player) {
-                    player.updateHp(hpAmount.hpAmount);
+                    player.updateHp(hpData);
                 }
             }
         }.bind(this));

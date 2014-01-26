@@ -172,10 +172,11 @@ bq.entity.Entity = cc.Sprite.extend({
     },
 
     /**
-     * @param {number} amount HP変化量
+     * @param {Object} hpData HP変動データ
      * @param {number} opt_popLeft trueならダメージラベルが左に飛ぶよ
      */
-    updateHp: function(amount, opt_popLeft) {
+    updateHp: function(hpData, opt_popLeft) {
+        var amount = hpData.hpAmount;
         if (amount < 0) { // ダメージ
             cc.AudioEngine.getInstance().playEffect(s_SeDamage);
             this.popDamageLabel_(amount, !!opt_popLeft);

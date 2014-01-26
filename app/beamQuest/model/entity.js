@@ -30,7 +30,7 @@ var Entity = function(opt_data) {
      * 現在HP
      * @type {number}
      */
-    this.hp = this.data.hp || this.maxHp;
+    this.hp = _.isUndefined(this.data.hp) ? this.maxHp : this.data.hp;
 
 
     /** @type {model.Position} */
