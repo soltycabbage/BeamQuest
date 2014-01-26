@@ -12,7 +12,7 @@ bq.Socket = cc.Class.extend({
      */
     initAfterLogin: function() {
         var entityManager = bq.EntityManager.getInstance();
-
+        var beamManager = bq.BeamManager.getInstance();
         /**
          *  ブロードキャストされてきたやつ
          */
@@ -31,7 +31,7 @@ bq.Socket = cc.Class.extend({
         // ビーム発射
         this.socket.on('notify:beam:shoot', function(data) {
             var beamPos = new bq.model.BeamPos(data);
-            entityManager.beamShoot(beamPos);
+            beamManager.beamShoot(beamPos);
         });
 
         // エンティティにビームヒット
@@ -46,7 +46,7 @@ bq.Socket = cc.Class.extend({
 
         // マップ上のものにビームヒット
         this.socket.on('notify:beam:hit:object', function(data) {
-            entityManager.disposeBeam(data);
+            beamManager.disposeBeam(data);
         });
 
 

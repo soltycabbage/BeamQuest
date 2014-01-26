@@ -6,7 +6,6 @@ bq.EntityManager = cc.Class.extend({
     otherPlayers_: {},
     enemys_: {},
     npcs_: {},
-    beams_: {},
     ctor: function() {
     },
 
@@ -90,7 +89,7 @@ bq.EntityManager = cc.Class.extend({
      * @private
      */
     handleBeamRemove_: function(evt) {
-        delete this.beams_[evt.currentTarget.tag];
+        delete bq.BeamManager.getInstance().beams_[evt.currentTarget.tag];
     },
 
     /**
@@ -151,15 +150,9 @@ bq.EntityManager = cc.Class.extend({
             enemy.updateHp({entity: data.entity, hpAmount: data.hpAmount}, hitRight);
         }
 
-        var beam = this.beams_[data.beamTag];
-        beam && beam.dispose();
+        bq.BeamManager.getInstance().disposeBeam(data);
     },
 
-    // TODO とりあえずまー。beamManager的なのに移す
-    disposeBeam: function(data) {
-      var beam = this.beams_[data.beamTag];
-      beam && beam.dispose();
-    },
 
     /**
      * @param {Object}
