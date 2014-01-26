@@ -43,6 +43,11 @@ bq.Socket = cc.Class.extend({
             // TODO ログアウト時の動作
         });
 
+        // そのplayer死んだよって
+        this.socket.on('notify:entity:player:kill', function(data) {
+            entityManager.killPlayer(data);
+        });
+
         // そのmob死んだよって
         this.socket.on('notify:entity:mob:kill', function(data) {
             entityManager.killMob(data);
@@ -111,6 +116,13 @@ bq.Socket = cc.Class.extend({
      */
     sendBeamPosition: function(pos) {
         this.socket.emit('beam:position:update', pos);
+    },
+
+    /**
+     * 復活したよって伝える
+     */
+    sendRespawn: function(player) {
+        this.socket.emit('user:respawn', player);
     },
 
     /**

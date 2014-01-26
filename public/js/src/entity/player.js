@@ -119,6 +119,45 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.socket.shootBeam(json);
     },
 
+    /** @override */
+    updateHp: function(hpData) {
+        this._super(hpData);
+        this.updateHpBar_(hpData);
+    },
+
+    /**
+     * HPバーを増減する
+     * @param {Object} hpData HP増減情報
+     * @private
+     */
+    updateHpBar_: function(hpData) {
+        var amount = hpData.hpAmount;
+        var bar = $('#bq-hp-bar-background');
+        var valueBar = $('#bq-hp-bar-value');
+        var maxWidth = bar.width();
+        var gainWidth = Math.floor(maxWidth / this.getModel().maxHp) * amount;
+        var w = valueBar.width();
+        if (w + gainWidth >= maxWidth) {
+            valueBar.width(maxWidth);
+        } else {
+            valueBar.width(w + gainWidth);
+        }
+
+        this.initHpBar(hpData.entity.hp);
+    },
+
+    /**
+     * 現在HPにあわせてHPバーを伸縮する
+     * @private
+     */
+    initHpBar: function(opt_hp) {
+        var currentHp = _.isUndefined(opt_hp) ? this.getModel().hp : opt_hp;
+        var bar = $('#bq-hp-bar-background');
+        var valueBar = $('#bq-hp-bar-value');
+        var maxWidth = bar.width();
+        valueBar.width(maxWidth * currentHp / this.getModel().maxHp);
+    },
+
     /**
      * 各種値を設定する
      * @param {Object} data
@@ -126,6 +165,24 @@ bq.entity.Player = bq.entity.Entity.extend({
     setProfile: function(data) {
         this.name = data.name;
     },
+
+    /** @override */
+    kill: function(){
+        var fadeOut = cc.FadeOut.create(0.8);
+        var blink = cc.Blink.create(1, 50);
+        var callFunc = cc.CallFunc.create(this.respawn.bind(this));
+        this.runAction(cc.Sequence.create(cc.Spawn.create(fadeOut, blink), callFunc));
+    },
+
+    /** 復活処理 */
+    respawn: function() {
+        window.alert('あなたは死にました。復活地点に戻ります。');
+        this.socket.sendRespawn(this.getModel());
+        this.setPosition(bq.mapManager.getRespawnPoint());
+        var fadeIn = cc.FadeIn.create(0.8);
+        this.runAction(fadeIn);
+    },
+
 
     getKeyFrameMap_: function () {
         return  {

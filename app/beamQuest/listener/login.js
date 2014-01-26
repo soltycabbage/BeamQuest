@@ -31,7 +31,7 @@ exports.listen = function(socket, io) {
             var player = (userData) ? createPlayer_(userData) : createNewPlayer_(loginData);
             addLoginUser_(player);
 
-            return respond_({result: 'success', position: player.model.position});
+            return respond_({result: 'success', player: player.model.toJSON()});
         });
     }
 

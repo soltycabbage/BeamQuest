@@ -9,6 +9,8 @@ Entity.prototype.listen = function(socket, io) {
     this.socket_ = socket;
     this.io_ = io;
     this.entitiesStore_ = require('beamQuest/store/entities');
+
+    this.socket_.on('user:respawn', this.handleRespawn.bind(this));
 };
 
 /**
@@ -57,12 +59,9 @@ Entity.prototype.startAttackShortRange = function(mobId, srcPos, destPos, range,
  * hpの増減をクライアントに伝える
  * @param {Array.<entity: model.Entity, hpAmount: number>} hpAmounts
  */
-Entity.prototype.updateHp = function(hpAmounts) {
+Entity.prototype.updateHp = function(data) {
     if (this.io_) {
-        var data = {
-            hpAmounts: hpAmounts
-        };
-        this.io_.sockets.emit('notify:entity:hp:update', data);
+        this.io_.sockets.emit('notify:entity:hp:update', {hpDatas: data});
     }
 };
 
@@ -92,6 +91,29 @@ Entity.prototype.addExp = function(playerId, mob) {
     }        
 };
 
+/**
+ * player死んだよってクライアントに伝える
+ * @param player
+ */
+Entity.prototype.killPlayer = function(player) {
+    var data = {entity: player.model.toJSON()};
+    this.io_.sockets.emit('notify:entity:player:kill', data);
+};
+
+/**
+ * プレイヤーが復活したよ
+ * @param {Object} data
+ */
+Entity.prototype.handleRespawn = function(data) {
+    if (data) {
+        var mapId = data.position.mapId;
+        var playerId = data.id;
+        var player = this.entitiesStore_.getPlayerById(mapId, playerId);
+        if (player) {
+            player.respawn();
+        }
+    }
+};
 
 var instance_ = new Entity();
 module.exports = instance_;

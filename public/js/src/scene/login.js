@@ -85,12 +85,13 @@ bq.scene.LoginLayer = cc.Layer.extend({
         frameCache.addSpriteFrames(s_SimpleBeamPlist, s_SimpleBeamImg);
 
         var player = new bq.entity.Player();
-        var position = data.position;
+        var position = data.player.position;
         player.setPosition(cc.p(position.x, position.y));
 
-        // TODO: ログイン成功時にユーザ情報を返してもらうか、ここでuserIdをサーバに投げてユーザ情報を取るAPIを叩くとかすると良さそう
+        player.setModel(new bq.model.Player(data.player));
         player.setProfile({name: userId});
         player.showName();
+        player.initHpBar();
         bq.player = player;
     },
 

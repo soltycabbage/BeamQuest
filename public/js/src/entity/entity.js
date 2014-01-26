@@ -82,6 +82,16 @@ bq.entity.Entity = cc.Sprite.extend({
     },
 
     /**
+     * 死にモーション
+     */
+    kill: function() {
+        var fadeOut = cc.FadeOut.create(0.8);
+        var blink = cc.Blink.create(1, 50);
+        var callFunc = cc.CallFunc.create(this.removeFromParent.bind(this));
+        this.runAction(cc.Sequence.create(cc.Spawn.create(fadeOut, blink), callFunc));
+    },
+
+    /**
      * entityの頭らへんに吹き出しを出す
      * @param {string} msg
      */
@@ -172,10 +182,11 @@ bq.entity.Entity = cc.Sprite.extend({
     },
 
     /**
-     * @param {number} amount HP変化量
+     * @param {Object} hpData HP変動データ
      * @param {number} opt_popLeft trueならダメージラベルが左に飛ぶよ
      */
-    updateHp: function(amount, opt_popLeft) {
+    updateHp: function(hpData, opt_popLeft) {
+        var amount = hpData.hpAmount;
         if (amount < 0) { // ダメージ
             cc.AudioEngine.getInstance().playEffect(s_SeDamage);
             this.popDamageLabel_(amount, !!opt_popLeft);
