@@ -8,7 +8,7 @@ bq.beam = {};
  * @extends {cc.Node}
  */
 bq.beam.Beam = cc.Node.extend({
-    id: bq.Types.Beams.NORMAL,   // ビームID
+    id: bq.Types.Beams.NORMAL0,   // ビームID
     tag: '',                     // ビーム識別用タグ
     destination_:cc.p(0,0),      // {cc.p} 目標
     speed_:10,                   // 進むスピード
@@ -39,9 +39,11 @@ bq.beam.Beam = cc.Node.extend({
     update: function(dt) {
         "use strict";
         if ( this.active_ ) {
+            var rotate = -1.0 * ( cc.RADIANS_TO_DEGREES(cc.pToAngle( this.inc_ )) -90);
             var curr = this.getPosition();
             // ビームを少し進ませる
             this.setPosition(cc.pAdd(curr, this.inc_));
+            this.setRotation(rotate);
         }
 
     },
@@ -130,6 +132,48 @@ bq.beam.Beam.pop = function() {
     return be;
 };
 
+bq.beam.Beam.createParticleBeam = function(beamType, shooterId, tag) {
+    "use strict";
+    var beam =  new bq.beam.Beam(beamType, shooterId, tag);
+    // パーティクルとテクスチャをセット
+    // TODO これもっとうまく書く方法あるはずだし、別のクラスgameType?に移した方がいい
+    var beamType2Partile = {};
+    beamType2Partile[bq.Types.Beams.FIRE] = cc.ParticleSun;
+    beamType2Partile[bq.Types.Beams.METEOR] = cc.ParticleMeteor;
+
+    var particle = beamType2Partile[beamType];
+    var myTexture = cc.TextureCache.getInstance().textureForKey(s_beam0);
+
+    particle.setTexture(myTexture);
+    particle.setPosition(cc.p(0,0));
+    beam.addChild(particle);
+    beam.disable();
+
+    return beam;
+}
+
+bq.beam.Beam.createSpriteBeam = function(beamType, shooterId, tag) {
+    "use strict";
+    var beam =  new bq.beam.Beam(beamType, shooterId, tag);
+
+    var beamType2textureName = {};
+    // TODO これもっとうまく書く方法あるはずだし、別のクラスgameType?に移した方がいい
+    beamType2textureName[ bq.Types.Beams.NORMAL0] =  "simple_beam_0.png";
+    beamType2textureName[ bq.Types.Beams.NORMAL1] =  "simple_beam_1.png";
+    beamType2textureName[ bq.Types.Beams.NORMAL2] =  "simple_beam_2.png";
+    beamType2textureName[ bq.Types.Beams.NORMAL3] =  "simple_beam_3.png";
+
+    var spriteName = beamType2textureName[beamType];
+
+    var sp = cc.SpriteFrameCache.getInstance().getSpriteFrame(spriteName);
+    var cl = cc.Sprite.createWithSpriteFrame(sp);
+
+    beam.addChild(cl);
+    beam.setPosition(cc.p(0,0));
+
+    return beam;
+}
+
 /**
  * Beamのファクトリ
  * 引数id にあうパーティクルのビームを作成する
@@ -141,24 +185,16 @@ bq.beam.Beam.pop = function() {
  */
 bq.beam.Beam.create = function(beamType, shooterId, tag) {
     "use strict";
-    var beam =  new bq.beam.Beam(beamType, shooterId, tag);
+    var beam;
 
-    // パーティクルをセット
-    var particle = null;
     var type = bq.Types.Beams;
-    switch (beamType) {
-        case type.NORMAL:
-            particle = cc.ParticleMeteor.create();
-            break;
-        case type.FIRE:
-            particle = cc.ParticleSun.create();
-            break;
+    if (_.contains([type.FIRE, type.METEOR], beamType) ) {
+        beam = bq.beam.Beam.createParticleBeam(beamType, shooterId, tag);
+    } else {
+        beam = bq.beam.Beam.createSpriteBeam(beamType, shooterId, tag);
     }
 
-    var myTexture = cc.TextureCache.getInstance().textureForKey(s_beam0);
-    particle.setTexture(myTexture);
-    particle.setPosition(cc.p(0, 0));
-    beam.addChild(particle);
+
     beam.disable();
 
     return beam;
@@ -173,9 +209,10 @@ bq.beam.Beam.create = function(beamType, shooterId, tag) {
 bq.beam.Beam.setup = function(id, layer, shooterId) {
     "use strict";
 
-    var maxBeamCount = 5;
+    var maxBeamCount = 1;
     _.times(maxBeamCount, function(i) {
         var beam = bq.beam.Beam.create(id, shooterId);
+        bq.beams[i] && bq.beams[i].removeFromParent(true); // TODO need ?
         bq.beams[i] = beam;
         layer.addChild(beam, 10);
     });

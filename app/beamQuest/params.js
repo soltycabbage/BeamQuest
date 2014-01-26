@@ -5,8 +5,16 @@ require('shared/js/gameTypes');
 
 bq.Params = {
     Beams: {
-        NORMAL: {atk: 10, speed: 10, bp: 10},
+        METEOR: {atk: 10, speed: 10, bp: 10},
         FIRE: {atk: 10, speed: 10, bp: 10}
+    },
+    Beams: {
+        NORMAL0: {atk: 1, speed: 1, bp: 1},
+        NORMAL1: {atk: 1, speed: 1, bp: 1},
+        NORMAL2: {atk: 1, speed: 1, bp: 1},
+        NORMAL3: {atk: 1, speed: 1, bp: 1},
+        FIRE: {atk: 10, speed: 10, bp: 10},
+        METEOR: {atk: 10, speed: 10, bp: 10}
     },
 
     Entities: {
