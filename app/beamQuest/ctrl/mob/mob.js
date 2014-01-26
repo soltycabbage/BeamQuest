@@ -100,8 +100,9 @@ Mob.prototype.update = function() {
         if (targetEntity && targetEntity.model.isDeath) {
             this.hateList.shift();
             if (_.isEmpty(this.hateList) && this.startPos) {
-                // 敵対キャラを殺し尽くした時などは元の位置に戻っていく・・・
-                this.moveTo(this.startPos);
+                // 敵対キャラを殺し尽くしたら元の位置に戻っていく・・・
+                this.isActive_ = false;
+                this.moveTo(this.startPos, 50);
             }
         } else if (targetEntity) { // ターゲットが同じマップ内にいるなら攻撃を仕掛ける
             this.attackTo(targetEntity);
@@ -121,8 +122,9 @@ Mob.prototype.attackTo = function(entity) {
 /**
  * 移動
  * @param {model.Position} targetPos
+ * @param {number=} opt_speed intervalの間隔(msec)
  */
-Mob.prototype.moveTo = function(targetPos) {
+Mob.prototype.moveTo = function(targetPos, opt_speed) {
     if (this.isActive_) {
         this.interval_ && clearInterval(this.interval_);
         return;
@@ -140,7 +142,7 @@ Mob.prototype.moveTo = function(targetPos) {
         this.shortRangeAttack();
         return;
     }
-
+    var interval = opt_speed || 300;
     var step = Math.ceil(distance / this.moveSpeed);
     if (step <= 0) { return; }
     var count = 1;
@@ -160,7 +162,7 @@ Mob.prototype.moveTo = function(targetPos) {
         } else {
             clearInterval(this.interval_);
         }
-    }.bind(this), 300);
+    }.bind(this), interval);
 };
 
 /**
@@ -192,7 +194,7 @@ Mob.prototype.shortRangeAttack = function() {
                 // TODO: 範囲内に対象がいるかどうかチェックする
 
                 // ダメージテキトー
-                var damage = -10 + Math.floor(-40 * Math.random());
+                var damage = -10 + Math.floor(-10 * Math.random());
                 this.hateTarget.updateHp(damage);
             }
             this.isActive_ = false;
