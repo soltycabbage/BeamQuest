@@ -29,6 +29,7 @@
  </layer>
  <layer name="noentry" width="30" height="30">
   <properties>
+   <property name="beam_no_passable" value="true"/>
    <property name="no_enterable" value="true"/>
   </properties>
   <data encoding="base64" compression="gzip">

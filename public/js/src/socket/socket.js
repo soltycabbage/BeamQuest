@@ -34,8 +34,8 @@ bq.Socket = cc.Class.extend({
             entityManager.beamShoot(beamPos);
         });
 
-        // ビームヒット
-        this.socket.on('notify:beam:hit', function(data) {
+        // エンティティにビームヒット
+        this.socket.on('notify:beam:hit:entity', function(data) {
             entityManager.hitEntity(data);
         });
 
@@ -43,6 +43,12 @@ bq.Socket = cc.Class.extend({
         this.socket.on('notify:user:login', function(data) {
             entityManager.login(data);
         });
+
+        // マップ上のものにビームヒット
+        this.socket.on('notify:beam:hit:object', function(data) {
+            entityManager.disposeBeam(data);
+        });
+
 
         // 他プレイヤーがログアウトしたよって
         this.socket.on('notify:user:logout', function(data) {

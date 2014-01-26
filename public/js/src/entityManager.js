@@ -155,6 +155,12 @@ bq.EntityManager = cc.Class.extend({
         beam && beam.dispose();
     },
 
+    // TODO とりあえずまー。beamManager的なのに移す
+    disposeBeam: function(data) {
+      var beam = this.beams_[data.beamTag];
+      beam && beam.dispose();
+    },
+
     /**
      * @param {Object}
      */
