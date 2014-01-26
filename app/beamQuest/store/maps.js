@@ -1,4 +1,5 @@
-var mapModel = require('beamQuest/model/fieldMap');
+var mapModel = require('beamQuest/model/fieldMap'),
+    tmx = require('tmx-parser');
 
 /**
  * ゲーム内のマップの状態を保持しておくクラス
@@ -28,9 +29,15 @@ Maps.prototype.init_ = function() {
         name: 'しんじゅく',
         maxMobCount: 10,
         mobCount: 0,
-        size: {width: 1000, height: 1000} // 超テキトー
     });
     this.maps_.push(map);
+
+    tmx.parseFile('public/res/map/map_village.tmx', function(err, m) {
+        if (err) throw err;
+
+        map.objTmx = m;
+        map.size = {width: m.width * m.tileWidth, height: m.height * m.tileHeight};
+    });
 };
 
 /**
