@@ -119,6 +119,13 @@ bq.Socket = cc.Class.extend({
     },
 
     /**
+     * 復活したよって伝える
+     */
+    sendRespawn: function(player) {
+        this.socket.emit('user:respawn', player);
+    },
+
+    /**
      * マップ上に存在する全Entityの一覧を要求する
      * @param {number} mapId
      * @param {Function} callback

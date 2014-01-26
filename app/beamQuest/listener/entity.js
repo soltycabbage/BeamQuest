@@ -9,6 +9,8 @@ Entity.prototype.listen = function(socket, io) {
     this.socket_ = socket;
     this.io_ = io;
     this.entitiesStore_ = require('beamQuest/store/entities');
+
+    this.socket_.on('user:respawn', this.handleRespawn.bind(this));
 };
 
 /**
@@ -96,6 +98,21 @@ Entity.prototype.addExp = function(playerId, mob) {
 Entity.prototype.killPlayer = function(player) {
     var data = {entity: player.model.toJSON()};
     this.io_.sockets.emit('notify:entity:player:kill', data);
+};
+
+/**
+ * プレイヤーが復活したよ
+ * @param {Object} data
+ */
+Entity.prototype.handleRespawn = function(data) {
+    if (data) {
+        var mapId = data.position.mapId;
+        var playerId = data.id;
+        var player = this.entitiesStore_.getPlayerById(mapId, playerId);
+        if (player) {
+            player.respawn();
+        }
+    }
 };
 
 var instance_ = new Entity();

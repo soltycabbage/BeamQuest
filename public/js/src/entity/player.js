@@ -168,9 +168,21 @@ bq.entity.Player = bq.entity.Entity.extend({
 
     /** @override */
     kill: function(){
-        this._super();
-        window.alert('あなたは死にました。復活地点に戻ります。');
+        var fadeOut = cc.FadeOut.create(0.8);
+        var blink = cc.Blink.create(1, 50);
+        var callFunc = cc.CallFunc.create(this.respawn.bind(this));
+        this.runAction(cc.Sequence.create(cc.Spawn.create(fadeOut, blink), callFunc));
     },
+
+    /** 復活処理 */
+    respawn: function() {
+        window.alert('あなたは死にました。復活地点に戻ります。');
+        this.socket.sendRespawn(this.getModel());
+        this.setPosition(bq.mapManager.getRespawnPoint());
+        var fadeIn = cc.FadeIn.create(0.8);
+        this.runAction(fadeIn);
+    },
+
 
     getKeyFrameMap_: function () {
         return  {

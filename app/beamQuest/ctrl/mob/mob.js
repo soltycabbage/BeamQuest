@@ -192,7 +192,8 @@ Mob.prototype.shortRangeAttack = function() {
                 // TODO: 範囲内に対象がいるかどうかチェックする
 
                 // ダメージテキトー
-                this.hateTarget.updateHp(-10);
+                var damage = -10 + Math.floor(-40 * Math.random());
+                this.hateTarget.updateHp(damage);
             }
             this.isActive_ = false;
         }.bind(this), castTime);

@@ -47,6 +47,12 @@ Player.prototype.update = function() {
     }
 };
 
+Player.prototype.respawn = function() {
+    this.model.isDeath = false;
+    this.model.hp = this.model.maxHp;
+    this.updateHp(this.model.hp);
+};
+
 /** @override */
 Player.prototype.death = function() {
     if (!this.model.isDeath) {
