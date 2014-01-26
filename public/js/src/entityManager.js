@@ -122,6 +122,19 @@ bq.EntityManager = cc.Class.extend({
     },
 
     /**
+     * playerが死んだら呼ばれる
+     * @param {Object} data
+     */
+    killPlayer: function(data) {
+        var player = this.otherPlayers_[data.entity.name];
+        if (player) {
+            player.kill();
+        } else if (bq.player.name === data.entity.name) {
+            bq.player.kill();
+        }
+    },
+
+    /**
      * Entityにビームが当たったら呼ばれる
      * TODO: いまんとこenemyだけ
      * @param {Object} data

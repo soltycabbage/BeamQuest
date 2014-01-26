@@ -32,11 +32,14 @@ Entity.prototype.updateHp = function(amount) {
         this.model.hp = this.model.maxHp;
     } else if (expectHp <= 0) { // HP0以下
         this.model.hp = 0;
-        this.death();
     } else {
         this.model.hp = expectHp;
     }
     entityListener.updateHp([{entity: this.model, hpAmount: amount}]);
+
+    if (this.model.hp <= 0) {
+        this.death();
+    }
 };
 
 /**

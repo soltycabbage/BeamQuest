@@ -143,15 +143,15 @@ bq.entity.Player = bq.entity.Entity.extend({
             valueBar.width(w + gainWidth);
         }
 
-        this.initHpBar(hpData);
+        this.initHpBar(hpData.entity.hp);
     },
 
     /**
      * 現在HPにあわせてHPバーを伸縮する
      * @private
      */
-    initHpBar: function(opt_hpData) {
-        var currentHp = opt_hpData ? opt_hpData.entity.hp : this.getModel().hp
+    initHpBar: function(opt_hp) {
+        var currentHp = _.isUndefined(opt_hp) ? this.getModel().hp : opt_hp;
         var bar = $('#bq-hp-bar-background');
         var valueBar = $('#bq-hp-bar-value');
         var maxWidth = bar.width();
@@ -164,6 +164,12 @@ bq.entity.Player = bq.entity.Entity.extend({
      */
     setProfile: function(data) {
         this.name = data.name;
+    },
+
+    /** @override */
+    kill: function(){
+        this._super();
+        window.alert('あなたは死にました。復活地点に戻ります。');
     },
 
     getKeyFrameMap_: function () {

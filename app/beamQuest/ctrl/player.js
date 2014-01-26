@@ -49,8 +49,10 @@ Player.prototype.update = function() {
 
 /** @override */
 Player.prototype.death = function() {
-    entityListener.killPlayer(this);
-    this.model.isDeath = true;
+    if (!this.model.isDeath) {
+        entityListener.killPlayer(this);
+        this.model.isDeath = true;
+    }
 };
 
 module.exports = Player;
