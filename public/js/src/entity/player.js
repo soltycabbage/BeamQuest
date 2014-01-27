@@ -131,19 +131,30 @@ bq.entity.Player = bq.entity.Entity.extend({
      * @private
      */
     updateHpBar_: function(hpData) {
-        var amount = hpData.hpAmount;
-        var bar = $('#bq-hp-bar-background');
-        var valueBar = $('#bq-hp-bar-value');
-        var maxWidth = bar.width();
-        var gainWidth = Math.floor(maxWidth / this.getModel().maxHp) * amount;
-        var w = valueBar.width();
-        if (w + gainWidth >= maxWidth) {
-            valueBar.width(maxWidth);
-        } else {
-            valueBar.width(w + gainWidth);
+        var barBg = $('#bq-hp-bar-background'); // 外枠
+        var valueBar = $('#bq-hp-bar-value'); // 赤い部分
+        var maxWidth = barBg.width(); // 最大HP分のバーの長さ
+        var currentHp = hpData.entity.hp;
+
+        var resultWidth = Math.floor(maxWidth * currentHp / this.getModel().maxHp);
+        var gainWidth = valueBar.width() - resultWidth + 2;
+
+        var bar = $('#bq-hp-bar');
+        if (gainWidth > 0) { // ダメージ
+            var gainBar = $('#bq-hp-bar-gain');
+            if (gainBar) {
+                gainBar.remove();
+            }
+            gainBar = $('<div/>').attr('id', 'bq-hp-bar-gain');
+            gainBar.css('left', valueBar.width() - gainWidth + 'px');
+            gainBar.width(gainWidth);
+            barBg.append(gainBar);
+            gainBar.animate({width: 0},  {duration: 200, easing: 'swing'});
+            valueBar.width(resultWidth);
+        } else { // 回復
+            valueBar.animate({width: resultWidth},  {duration: 100, easing: 'swing'});
         }
 
-        this.initHpBar(hpData.entity.hp);
     },
 
     /**
