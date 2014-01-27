@@ -10,6 +10,9 @@ var FieldMap = function(map) {
     this.scheduleUpdate();
 
     this.map = map;
+
+    this.initMobs_();
+    setInterval(this.initMobs_.bind(this), FieldMap.POP_INTERVAL);
 };
 util.inherits(FieldMap, EntityCtrl);
 
@@ -17,8 +20,7 @@ FieldMap.POP_INTERVAL = 15000;
 
 /** @override */
 FieldMap.prototype.update = function() {
-    this.initMobs_();
-    setInterval(this.initMobs_.bind(this), FieldMap.POP_INTERVAL);
+    // ここに毎ループの処理を書いてくよ
 };
 
 /**
