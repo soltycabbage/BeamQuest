@@ -253,6 +253,11 @@ bq.entity.Player.InputHandler = cc.Class.extend({
         if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
             this.initVirtualPad_();
         }
+
+        // ゲーム画面からフォーカスが外れたら移動しっぱなしになることがあるので押下キーリストを初期化する
+        $(cc.canvas).blur(function() {
+            this.downKeys_ = [];
+        }.bind(this));
     },
 
     /**
