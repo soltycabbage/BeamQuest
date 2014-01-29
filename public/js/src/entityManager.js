@@ -57,26 +57,11 @@ bq.EntityManager = cc.Class.extend({
      * @param {bq.model.PlayerMove} moveData
      */
     moveTo: function(moveData) {
-        if (!this.otherPlayers_[moveData.userId]) {
+        var otherPlayer = this.otherPlayers_[moveData.userId];
+        if (!otherPlayer) {
             this.createOtherPlayer(moveData);
         } else {
-            var otherPlayer = this.otherPlayers_[moveData.userId];
-            var move = cc.MoveTo.create(0.2, cc.p(moveData.x, moveData.y));
-
-            if (otherPlayer.currentState == bq.entity.EntityState.Mode.walking) {
-                // 走ってる状態だったら移動だけ（アニメーションは更新しない）
-                otherPlayer.runAction(move);
-            } else {
-                otherPlayer.updateAnimation(bq.entity.EntityState.Mode.walking, null);
-                // 移動したあと急に止めるとアニメーションが不自然になるので少し遅延を入れる
-                var delay = cc.DelayTime.create(0.2);
-                var changeAnime = cc.CallFunc.create(function () {
-                    otherPlayer.updateAnimation(bq.entity.EntityState.Mode.stop, null)
-                });
-
-                var act = cc.Sequence.create([move, delay, changeAnime]);
-                otherPlayer.runAction(act);
-            }
+            otherPlayer.moveTo(cc.p(moveData.x, moveData.y));
         }
     },
 
