@@ -82,6 +82,36 @@ bq.entity.Entity = cc.Sprite.extend({
     },
 
     /**
+     * 指定位置に移動する
+     * @param {cc.p} pos
+     */
+    moveTo: function(pos) {
+        var moveActTag = 'entity_move_' + this.name;
+        var move = cc.MoveTo.create(0.2, pos);
+        if (this.currentState == bq.entity.EntityState.Mode.walking) {
+            var runningMoveAct = this.getActionByTag(moveActTag);
+            if (runningMoveAct) {
+                this.stopAction(runningMoveAct);
+                delete runningMoveAct;
+            }
+
+            // 走ってる状態だったら移動だけ（アニメーションは更新しない）
+            move.setTag(moveActTag);
+            this.runAction(move);
+        } else {
+            this.updateAnimation(bq.entity.EntityState.Mode.walking, null);
+            // 移動したあと急に止めるとアニメーションが不自然になるので少し遅延を入れる
+            var delay = cc.DelayTime.create(0.2);
+            var changeAnime = cc.CallFunc.create(function () {
+                this.updateAnimation(bq.entity.EntityState.Mode.stop, null)
+            }.bind(this));
+
+            var act = cc.Sequence.create([move, delay, changeAnime]);
+            this.runAction(act);
+        }
+    },
+    
+    /**
      * 死にモーション
      */
     kill: function() {
