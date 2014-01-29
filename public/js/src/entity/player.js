@@ -29,6 +29,11 @@ bq.entity.Player = bq.entity.Entity.extend({
 
     /** @override */
     update: function () {
+        if (this.currentState === bq.entity.EntityState.Mode.death) {
+            // 死んでいたらなにもできない。人生と同じ。
+            return;
+        }
+
         var direction = this.inputHandler.getDirection();
 
         if (direction) {
@@ -179,17 +184,20 @@ bq.entity.Player = bq.entity.Entity.extend({
 
     /** @override */
     kill: function(){
+        this.currentState = bq.entity.EntityState.Mode.death;
+        bq.MessageLog.getInstance().addSystemMsg('あなたは死にました。復活地点に戻ります。');
         var fadeOut = cc.FadeOut.create(0.8);
         var blink = cc.Blink.create(1, 50);
         var callFunc = cc.CallFunc.create(this.respawn.bind(this));
         this.runAction(cc.Sequence.create(cc.Spawn.create(fadeOut, blink), callFunc));
     },
 
-    /** 復活処理 */
+    /** @override */
     respawn: function() {
-        window.alert('あなたは死にました。復活地点に戻ります。');
+        this.currentState = bq.entity.EntityState.Mode.stop;
         this.socket.sendRespawn(this.getModel());
         this.setPosition(bq.mapManager.getRespawnPoint());
+        this.sendPosition();
         var fadeIn = cc.FadeIn.create(0.8);
         this.runAction(fadeIn);
     },

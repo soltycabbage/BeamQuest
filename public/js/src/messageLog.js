@@ -19,13 +19,33 @@ bq.MessageLog = cc.Class.extend({
         this.maxDisplaySize_ = 4;
     },
 
+    /**
+     * チャット
+     * @param {string} msg
+     */
     addChatMsg: function(msg) {
         this.add_(msg);
     },
 
-    add_: function(msg) {
+    /**
+     * システムメッセージ
+     * @param {string} msg
+     */
+    addSystemMsg: function(msg) {
+        this.add_(msg, '#ff0'); // 黄色
+    },
+
+
+    /**
+     * @param {string} msg
+     * @param {string=} opt_color 文字色(#000)
+     * @private
+     */
+    add_: function(msg, opt_color) {
+        var color = opt_color || '#fff';
         var valueEl = $('<div/>').addClass('bq-message-log-value');
         valueEl.text(msg);
+        valueEl.css('color', color);
         this.logDisplayed.append(valueEl);
 
         var values = $('.bq-message-log-value');

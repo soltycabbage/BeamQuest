@@ -128,9 +128,20 @@ bq.EntityManager = cc.Class.extend({
     killPlayer: function(data) {
         var player = this.otherPlayers_[data.entity.name];
         if (player) {
-            player.kill();
+            player.kill(true);
         } else if (bq.player.name === data.entity.name) {
             bq.player.kill();
+        }
+    },
+
+    /**
+     * 他playerが復活したら呼ばれる
+     * @param {Object} data
+     */
+    respawnOtherPlayer: function(data) {
+        var player = this.otherPlayers_[data.entity.name];
+        if (player) {
+            player.respawn();
         }
     },
 

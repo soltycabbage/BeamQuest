@@ -48,6 +48,11 @@ bq.Socket = cc.Class.extend({
             entityManager.killPlayer(data);
         });
 
+        // そのplayer生き返ったよって
+        this.socket.on('notify:entity:player:respawn', function(data) {
+            entityManager.respawnOtherPlayer(data);
+        });
+
         // そのmob死んだよって
         this.socket.on('notify:entity:mob:kill', function(data) {
             entityManager.killMob(data);

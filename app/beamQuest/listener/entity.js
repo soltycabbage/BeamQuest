@@ -111,6 +111,8 @@ Entity.prototype.handleRespawn = function(data) {
         var player = this.entitiesStore_.getPlayerById(mapId, playerId);
         if (player) {
             player.respawn();
+            var data = {entity: player.model.toJSON()};
+            this.socket_.broadcast.emit('notify:entity:player:respawn', data);
         }
     }
 };

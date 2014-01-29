@@ -84,11 +84,22 @@ bq.entity.Entity = cc.Sprite.extend({
     /**
      * 死にモーション
      */
-    kill: function() {
+    kill: function(opt_skipRemove) {
         var fadeOut = cc.FadeOut.create(0.8);
         var blink = cc.Blink.create(1, 50);
-        var callFunc = cc.CallFunc.create(this.removeFromParent.bind(this));
+        var callFunc = cc.CallFunc.create(function() {
+            if(!opt_skipRemove) {
+                this.removeFromParent();
+            }
+        }.bind(this));
+
         this.runAction(cc.Sequence.create(cc.Spawn.create(fadeOut, blink), callFunc));
+    },
+
+    /** 復活処理 */
+    respawn: function() {
+        var fadeIn = cc.FadeIn.create(0.8);
+        this.runAction(fadeIn);
     },
 
     /**
