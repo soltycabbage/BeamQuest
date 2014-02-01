@@ -7,8 +7,12 @@ var entities = require('beamQuest/store/entities');
 exports.listen = function(socket, io) {
     socket.on('beam:shoot', function(data) {
         var result = data;
-        result.success = true;
-        io.sockets.emit('notify:beam:shoot', result);
+        var shooter = entities.getPlayerById(data.mapId, data.shooterId);
+        // ビーム発射要請を出したユーザとsocketのIDが一致しないとビームは発射できない
+        if (shooter && shooter.model.socket.id === this.id) {
+            result.success = true;
+            io.sockets.emit('notify:beam:shoot', result);
+        }
     });
 
     /**
