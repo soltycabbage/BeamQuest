@@ -91,7 +91,7 @@ exports.listen = function(socket, io) {
             userStore.save(player);
             entities.removePlayer(position.mapId, player);
             player.unscheduleUpdate();
-            io.sockets.emit('notify:user:logout', {'userId': player.model.id});
+            socket.broadcast.emit('notify:user:logout', {'userId': player.model.id});
         });
     }
 };
