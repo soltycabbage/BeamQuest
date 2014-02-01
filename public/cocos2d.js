@@ -44,6 +44,11 @@
             'js/src/mapManager.js',
             'js/src/messageLog.js',
 
+            // HUD
+            'js/src/hud/hudItem.js',
+            'js/src/hud/hpBpBar.js',
+            'js/src/hud/hud.js',
+
             // entity
             'js/src/entity/entity.js',
             'js/src/entity/entityState.js',

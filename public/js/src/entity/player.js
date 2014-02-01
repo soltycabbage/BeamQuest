@@ -23,7 +23,7 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.inputHandler = new bq.entity.Player.InputHandler();
         this.scheduleUpdate();
         this.schedule(this.sendPosition, this.POSITION_SEND_INTERVAL);
-
+        this.hud_ = bq.Hud.getInstance();
         $(this.inputHandler).on(bq.entity.Player.InputHandler.EventType.TOUCH_END, this.handleTouchEnd_.bind(this));
     },
 
@@ -127,51 +127,11 @@ bq.entity.Player = bq.entity.Entity.extend({
     /** @override */
     updateHp: function(hpData) {
         this._super(hpData);
-        this.updateHpBar_(hpData);
+        this.hud_.updateHpBar(hpData.entity.hp, this.model_);
     },
 
-    /**
-     * HPバーを増減する
-     * @param {Object} hpData HP増減情報
-     * @private
-     */
-    updateHpBar_: function(hpData) {
-        var barBg = $('#bq-hp-bar-background'); // 外枠
-        var valueBar = $('#bq-hp-bar-value'); // 赤い部分
-        var maxWidth = barBg.width(); // 最大HP分のバーの長さ
-        var currentHp = hpData.entity.hp;
-
-        var resultWidth = Math.floor(maxWidth * currentHp / this.getModel().maxHp);
-        var gainWidth = valueBar.width() - resultWidth + 2;
-
-        var bar = $('#bq-hp-bar');
-        if (gainWidth > 0) { // ダメージ
-            var gainBar = $('#bq-hp-bar-gain');
-            if (gainBar) {
-                gainBar.remove();
-            }
-            gainBar = $('<div/>').attr('id', 'bq-hp-bar-gain');
-            gainBar.css('left', valueBar.width() - gainWidth + 'px');
-            gainBar.width(gainWidth);
-            barBg.append(gainBar);
-            gainBar.animate({width: 0},  {duration: 200, easing: 'swing'});
-            valueBar.width(resultWidth);
-        } else { // 回復
-            valueBar.animate({width: resultWidth},  {duration: 100, easing: 'swing'});
-        }
-
-    },
-
-    /**
-     * 現在HPにあわせてHPバーを伸縮する
-     * @private
-     */
-    initHpBar: function(opt_hp) {
-        var currentHp = _.isUndefined(opt_hp) ? this.getModel().hp : opt_hp;
-        var bar = $('#bq-hp-bar-background');
-        var valueBar = $('#bq-hp-bar-value');
-        var maxWidth = bar.width();
-        valueBar.width(maxWidth * currentHp / this.getModel().maxHp);
+    initHp: function() {
+        this.hud_.initHpBar(this.model_.hp, this.model_.maxHp);
     },
 
     /**
