@@ -258,14 +258,29 @@ bq.EntityManager = cc.Class.extend({
     logout: function(data) {
         var logoutPlayer =  this.otherPlayers_[data.userId];
         if (logoutPlayer) {
-            var now = new Date();
-            var msg = ('0' + now.getHours()).slice(-2) + ':' +
-                ('0' + now.getMinutes()).slice(-2) + ' ' + data.userId + ' がログアウトした。';
-            bq.MessageLog.getInstance().addSystemMsg(msg);
+            this.announceLogInOutMsg_(data.userId, 'がログアウトした。');
             logoutPlayer.removeFromParent();
             this.removeOtherPlayer(data.userId);
         }
+    },
+
+    login: function(data) {
+        this.announceLogInOutMsg_(data.userId, 'がログインした。');
+    },
+
+    /**
+     *
+     * @param {string} userId
+     * @param {string} suffix 〜がログインした　みたいな
+     * @private
+     */
+    announceLogInOutMsg_: function(userId, suffix) {
+        var now = new Date();
+        var msg = ('0' + now.getHours()).slice(-2) + ':' +
+            ('0' + now.getMinutes()).slice(-2) + ' ' + userId + ' ' + suffix;
+        bq.MessageLog.getInstance().addSystemMsg(msg);
     }
+
 });
 
 

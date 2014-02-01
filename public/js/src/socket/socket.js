@@ -39,6 +39,12 @@ bq.Socket = cc.Class.extend({
             entityManager.hitEntity(data);
         });
 
+        // 他プレイヤーがログインしたよって
+        this.socket.on('notify:user:login', function(data) {
+            entityManager.login(data);
+        });
+
+        // 他プレイヤーがログアウトしたよって
         this.socket.on('notify:user:logout', function(data) {
             entityManager.logout(data);
         });
