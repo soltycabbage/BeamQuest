@@ -25,6 +25,13 @@ bq.EntityManager = cc.Class.extend({
         }, this));
     },
 
+
+    removeOtherPlayer: function(id) {
+        if (this.otherPlayers_[id]) {
+            delete this.otherPlayers_[id];
+        }
+    },
+
     /**
      * @return {Object}
      */
@@ -246,6 +253,18 @@ bq.EntityManager = cc.Class.extend({
                 }
             }
         }.bind(this));
+    },
+
+    logout: function(data) {
+        var logoutPlayer =  this.otherPlayers_[data.userId];
+        if (logoutPlayer) {
+            var now = new Date();
+            var msg = ('0' + now.getHours()).slice(-2) + ':' +
+                ('0' + now.getMinutes()).slice(-2) + ' ' + data.userId + ' がログアウトした。';
+            bq.MessageLog.getInstance().addSystemMsg(msg);
+            logoutPlayer.removeFromParent();
+            this.removeOtherPlayer(data.userId);
+        }
     }
 });
 

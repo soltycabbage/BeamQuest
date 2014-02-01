@@ -86,10 +86,12 @@ exports.listen = function(socket, io) {
         entities.addPlayer(position.mapId, player);
         player.scheduleUpdate();
 
+        // 接続が切れたらログアウト扱い
         socket.on('disconnect', function() {
+            userStore.save(player);
             entities.removePlayer(position.mapId, player);
             player.unscheduleUpdate();
-            io.sockets.emit('notify:user:logout', {userId: player.id});
+            io.sockets.emit('notify:user:logout', {'userId': player.model.id});
         });
     }
 };

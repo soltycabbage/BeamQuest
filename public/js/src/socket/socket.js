@@ -40,7 +40,7 @@ bq.Socket = cc.Class.extend({
         });
 
         this.socket.on('notify:user:logout', function(data) {
-            // TODO ログアウト時の動作
+            entityManager.logout(data);
         });
 
         // そのplayer死んだよって
