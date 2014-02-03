@@ -3,4 +3,4 @@
  * @constructor
  */
 bq.hud = {};
-bq.hud.HudItem = cc.Class.extend({});
+bq.hud.HudItem = cc.Node.extend({});

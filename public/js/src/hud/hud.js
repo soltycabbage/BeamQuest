@@ -2,7 +2,7 @@
  * HUD
  * @constructor
  */
-bq.Hud = cc.Class.extend({
+bq.Hud = cc.Node.extend({
     ctor: function() {
         this.container_ = $('#bq-hud');
         this.hpBpBar_ = new bq.hud.HpBpBar();
