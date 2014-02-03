@@ -97,6 +97,8 @@ bq.scene.LoginLayer = cc.Layer.extend({
         player.showName();
         player.initHp();
         bq.player = player;
+        var hud = bq.Hud.getInstance();
+        hud.initPlayer(player);
     },
 
     /**

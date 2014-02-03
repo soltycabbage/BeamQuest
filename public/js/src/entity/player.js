@@ -23,7 +23,6 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.inputHandler = new bq.entity.Player.InputHandler();
         this.scheduleUpdate();
         this.schedule(this.sendPosition, this.POSITION_SEND_INTERVAL);
-        this.hud_ = bq.Hud.getInstance();
         $(this.inputHandler).on(bq.entity.Player.InputHandler.EventType.TOUCH_END, this.handleTouchEnd_.bind(this));
     },
 
@@ -127,11 +126,11 @@ bq.entity.Player = bq.entity.Entity.extend({
     /** @override */
     updateHp: function(hpData) {
         this._super(hpData);
-        this.hud_.updateHpBar(hpData.entity.hp, this.model_);
+        $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_HP, [hpData.entity.hp, this.model_]);
     },
 
     initHp: function() {
-        this.hud_.initHpBar(this.model_.hp, this.model_.maxHp);
+        $(this).triggerHandler(bq.entity.Player.EventType.INIT_HP, [this.model_.hp, this.model_.maxHp]);
     },
 
     /**
@@ -207,6 +206,16 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.shoot(touchData.getLocation());
     }
 });
+
+/**
+ * Playerが発火するイベント一覧
+ * @enum
+ */
+bq.entity.Player.EventType = {
+    INIT_HP: 'inithp',
+    UPDATE_HP: 'updatehp',
+    UPDATE_BP: 'updatebp'
+};
 
 bq.entity.Player.InputHandler = cc.Class.extend({
     downKeys_: [],        // 押されているキーのリスト
