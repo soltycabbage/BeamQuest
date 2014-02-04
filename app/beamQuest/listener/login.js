@@ -85,11 +85,14 @@ exports.listen = function(socket, io) {
         var position = model.position;
         entities.addPlayer(position.mapId, player);
         player.scheduleUpdate();
+        socket.broadcast.emit('notify:user:login', {'userId': model.id});
 
+        // 接続が切れたらログアウト扱い
         socket.on('disconnect', function() {
+            userStore.save(player);
             entities.removePlayer(position.mapId, player);
             player.unscheduleUpdate();
-            io.sockets.emit('notify:user:logout', {userId: player.id});
+            socket.broadcast.emit('notify:user:logout', {'userId': player.model.id});
         });
     }
 };
