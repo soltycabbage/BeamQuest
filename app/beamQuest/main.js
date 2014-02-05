@@ -7,7 +7,8 @@ var params = require('beamQuest/params'),
     entities = require('beamQuest/store/entities'),
     mapStore = require('beamQuest/store/maps'),
     FieldMapCtrl = require('beamQuest/ctrl/fieldMap'),
-    scheduler = require('beamQuest/scheduler');
+    scheduler = require('beamQuest/scheduler'),
+    usage = require('usage');
 
 exports.start = function(io) {
     var config = {
@@ -45,6 +46,15 @@ exports.start = function(io) {
         scheduler.update();
     }
 
+    function logUsage() {
+        "use strict";
+
+        usage.lookup(process.pid, function(err, result) {
+            logger.debug('cpu: ' + result.cpu + ', memory: ' + result.memory);
+        });
+    }
+
     setInterval(main, config.STEP_INTERVAL);
+    setInterval(logUsage, 1000);
 };
 
