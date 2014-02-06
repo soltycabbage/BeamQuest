@@ -40,6 +40,12 @@ util.inherits(Entity, Model);
 
 Entity.DEFAULT_MAX_HP = 100;
 
+/**
+ * HP の増減を行う
+ * 減らす場合は負の数を指定
+ *
+ * @param {number} amount
+ */
 Entity.prototype.addHp = function(amount) {
     this.hp = Math.max(0, Math.min(this.maxHp, this.hp + amount));
     this.emit('addHp', amount);
