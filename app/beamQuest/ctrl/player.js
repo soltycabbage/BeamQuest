@@ -39,7 +39,7 @@ Player.prototype.update = function() {
     if (!this.model.isDeath && this.updateCount_ % this.autoHealInterval_ === 0 &&
         this.model.hp < this.model.maxHp) {
         var amount = this.model.maxHp / this.autoHealRatio_;
-        this.model.emit('hp', amount);
+        this.updateHp(amount);
     }
 
     if (this.updateCount_ >= Number.MAX_VALUE) {
@@ -49,7 +49,8 @@ Player.prototype.update = function() {
 
 Player.prototype.respawn = function() {
     this.model.isDeath = false;
-    this.model.emit('hp', this.model.maxHp);
+    this.model.hp = this.model.maxHp;
+    this.updateHp(this.model.hp);
 };
 
 /** @override */
