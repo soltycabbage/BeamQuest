@@ -41,14 +41,7 @@ util.inherits(Entity, Model);
 Entity.DEFAULT_MAX_HP = 100;
 
 Entity.prototype.addHp = function(amount) {
-    var expectHp = this.hp + amount;
-    if (expectHp > this.maxHp) {
-        this.hp = this.maxHp;
-    } else if (expectHp <= 0) { // HP0以下
-        this.hp = 0;
-    } else {
-        this.hp = expectHp;
-    }
+    this.hp = Math.max(0, Math.min(this.maxHp, this.hp + amount));
     this.emit('updateHp', this, amount);
 }
 
