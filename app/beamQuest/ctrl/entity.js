@@ -22,13 +22,18 @@ util.inherits(Entity, ScheduleTarget);
 Entity.prototype.setModel = function(model) {
     this.model = model;
 
-    this.model.on('updateHp', function(model, amount) {
-        entityListener.updateHp([{entity: model, hpAmount: amount}]);
+    this.model.on('addHp', _.bind(this.handleAddHp_, this));
+};
 
-        if (model.hp <= 0) {
-            this.death();
-        }
-    }.bind(this));
+/**
+ * @param {number} amount
+ * @private
+ */
+Entity.prototype.handleAddHp_ = function(amount) {
+    entityListener.updateHp([{entity: this.model, hpAmount: amount}]);
+    if (this.model.hp <= 0) {
+        this.death();
+    }
 };
 
 /**
