@@ -35,6 +35,12 @@ var Entity = function(opt_data) {
 
     /** @type {model.Position} */
     this.position = this.data.position || new positionModel();
+
+    this.on('hp', function(amount) {
+        this.emit('hp:before', this);
+        this.hp = Math.max(0, Math.min(this.maxHp, this.hp + amount));
+        this.emit('hp:after', this, amount);
+    }.bind(this));
 };
 util.inherits(Entity, Model);
 

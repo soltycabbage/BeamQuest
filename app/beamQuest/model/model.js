@@ -1,17 +1,16 @@
 var util = require('util'),
-    ScheduleTarget = require('beamQuest/scheduleTarget');
+    events = require('events');
 
 /**
  * model全般の基底クラス
  * @param {Object=} opt_data
  * @constructor
- * @extends {bq.ScheduleTarget}
+ * @extends {events.EventEmitter}
  */
 var Model = function(opt_data) {
-    ScheduleTarget.apply(this, arguments);
     this.data = opt_data || {};
 };
-util.inherits(Model, ScheduleTarget);
+util.inherits(Model, events.EventEmitter);
 
 Model.prototype.toJSON = function() {
     return {};
