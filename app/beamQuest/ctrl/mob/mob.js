@@ -195,7 +195,7 @@ Mob.prototype.shortRangeAttack = function() {
 
                 // ダメージテキトー
                 var damage = -10 + Math.floor(-10 * Math.random());
-                this.hateTarget.updateHp(damage);
+                this.hateTarget.model.addHp(damage);
             }
             this.isActive_ = false;
         }.bind(this), castTime);

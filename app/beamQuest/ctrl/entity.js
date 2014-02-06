@@ -21,22 +21,16 @@ util.inherits(Entity, ScheduleTarget);
  */
 Entity.prototype.setModel = function(model) {
     this.model = model;
+
+    this.model.on('addHp', _.bind(this.handleAddHp_, this));
 };
 
 /**
- * 現在HPを増減する
+ * @param {number} amount
+ * @private
  */
-Entity.prototype.updateHp = function(amount) {
-    var expectHp = this.model.hp + amount;
-    if (expectHp > this.model.maxHp) {
-        this.model.hp = this.model.maxHp;
-    } else if (expectHp <= 0) { // HP0以下
-        this.model.hp = 0;
-    } else {
-        this.model.hp = expectHp;
-    }
+Entity.prototype.handleAddHp_ = function(amount) {
     entityListener.updateHp([{entity: this.model, hpAmount: amount}]);
-
     if (this.model.hp <= 0) {
         this.death();
     }
