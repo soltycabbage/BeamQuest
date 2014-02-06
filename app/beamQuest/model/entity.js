@@ -43,7 +43,7 @@ Entity.DEFAULT_MAX_HP = 100;
 Entity.prototype.addHp = function(amount) {
     this.hp = Math.max(0, Math.min(this.maxHp, this.hp + amount));
     this.emit('addHp', amount);
-}
+};
 
 /** @override */
 Entity.prototype.toJSON = function() {
