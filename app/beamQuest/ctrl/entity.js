@@ -32,13 +32,6 @@ Entity.prototype.setModel = function(model) {
 };
 
 /**
- * 現在HPを増減する
- */
-Entity.prototype.updateHp = function(amount) {
-    this.model.addHp(amount);
-};
-
-/**
  * 死亡フラグ
  * @protected
  */
