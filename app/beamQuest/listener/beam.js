@@ -82,7 +82,6 @@ exports.listen = function(socket, io) {
 
         var tileSize = map.objTmx.tileWidth;
         var sizeY = map.objTmx.height;
-        var sizeX = map.objTmx.width;
 
         var passables = _.select(map.objTmx.layers, function(layer) {
             //console.log(layer);
