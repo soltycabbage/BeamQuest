@@ -30,6 +30,12 @@ var cocos2dApp = cc.Application.extend({
         // initialize audio engine
         cc.AudioEngine.getInstance().init("aac,mp3,ogg,wav");
 
+        // initialize sound manager
+        bq.soundManager = new bq.SoundManager({
+            musicVolume:  0.1,
+            effectVolume: 0.1
+        });
+
         //load resources
         cc.LoaderScene.preload(g_resources, function () {
             // preload sprite frames
