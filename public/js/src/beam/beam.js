@@ -168,8 +168,8 @@ bq.beam.Beam.createSpriteBeam = function(beamType, shooterId, tag) {
     var cl = cc.Sprite.createWithSpriteFrame(sp);
 
     var anime = bq.entity.Animation.createAnimation(frames, 0.5);
-    var animation = cc.RepeatForever.create(cc.Animate.create(anime));
-    cl.runAction(animation);
+    var animation = anime && cc.RepeatForever.create(cc.Animate.create(anime));
+    animation && cl.runAction(animation);
 
     beam.addChild(cl);
     beam.setPosition(cc.p(0,0));
