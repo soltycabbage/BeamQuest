@@ -18,7 +18,6 @@ bq.Types = {
         NORMAL0: 'normal0',
         NORMAL1: 'normal1',
         NORMAL2: 'normal2',
-        NORMAL3: 'normal3',
         FIRE: 'fire',
         METEOR: 'meteor'
     }
