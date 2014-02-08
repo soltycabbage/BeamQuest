@@ -82,6 +82,7 @@ exports.listen = function(socket, io) {
 
         var tileSize = map.objTmx.tileWidth;
         var sizeY = map.objTmx.height;
+        var sizeX = map.objTmx.width;
 
         var passables = _.select(map.objTmx.layers, function(layer) {
             //console.log(layer);
@@ -91,7 +92,7 @@ exports.listen = function(socket, io) {
 
         var objs= _.select(passables, function(layer){
             var gid = layer.tileAt(Math.floor(beamPos.x/tileSize),
-                sizeY - Math.floor((beamPos.y)/tileSize));
+                sizeY -1 -  Math.floor((beamPos.y)/tileSize));
             return gid;
         });
         return objs && objs[0];
