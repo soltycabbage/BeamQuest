@@ -35,6 +35,7 @@
             'js/src/model/mob.js',
 
             'js/src/entityManager.js',
+            'js/src/soundManager.js',
             'js/src/socket/socket.js',
             'js/src/config.js',
             'js/src/bqLabel.js',

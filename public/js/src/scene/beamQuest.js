@@ -11,9 +11,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
             this.setMouseEnabled(true);
         }
 
-        cc.AudioEngine.getInstance().setEffectsVolume(0.1);
-        cc.AudioEngine.getInstance().setMusicVolume(0.1);
-
         var baseLayer = cc.Layer.create();
         baseLayer.setPosition(cc.p(0,0));
         this.addChild(baseLayer, 1, bq.config.tags.BASE_LAYER);
@@ -51,7 +48,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
 
         this.initPing_();
 
-        cc.AudioEngine.getInstance().playMusic(s_BgmField, true);
+        bq.soundManager.playMusic(s_BgmField, true);
         return true;
     },
 
