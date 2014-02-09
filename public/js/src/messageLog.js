@@ -58,7 +58,7 @@ bq.MessageLog = cc.Class.extend({
     }
 });
 
-var instance_ = new bq.MessageLog();
+bq.MessageLog.instance_ = new bq.MessageLog();
 bq.MessageLog.getInstance = function() {
-    return instance_;
+    return bq.MessageLog.instance_;
 };

@@ -20,15 +20,15 @@ body {
     -webkit-user-select: none;
 }
 
-.bq-message-container {
+#bq-message-container {
     display: inline-block;
 }
 
-.bq-bar-container {
+#bq-bar-container {
     display: inline-block;
 }
 
-.bq-menu {
+#bq-hud {
     width: 800px;
     position: absolute;
     bottom: 0;

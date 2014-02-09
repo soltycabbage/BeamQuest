@@ -18,7 +18,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
     onEnter: function() {
         this._super();
         var size = cc.Director.getInstance().getWinSize();
-        var title = bq.Label.createWithShadow('- Beam Quest -', 50);
+        var title = bq.Label.createWithShadow('- Beam Quest Online -', 50);
         title.setPosition(cc.p(size.width/2, size.height - 100));
         this.addChild(title);
 
@@ -66,6 +66,10 @@ bq.scene.LoginLayer = cc.Layer.extend({
      * @private
      */
     welcomeToBeamQuestWorld_: function(userId, data) {
+        // HUD有効
+        var hud = bq.Hud.getInstance();
+        hud.enable(true);
+
         this.initPlayer_(userId, data);
         bq.Socket.getInstance().initAfterLogin();
         cc.Director.getInstance().replaceScene(new bq.scene.BeamQuestWorldScene());
@@ -91,8 +95,10 @@ bq.scene.LoginLayer = cc.Layer.extend({
         player.setModel(new bq.model.Player(data.player));
         player.setProfile({name: userId});
         player.showName();
-        player.initHpBar();
+        player.initHp();
         bq.player = player;
+        var hud = bq.Hud.getInstance();
+        hud.initPlayer(player);
     },
 
     /**
