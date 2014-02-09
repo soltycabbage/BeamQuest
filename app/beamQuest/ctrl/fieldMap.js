@@ -12,7 +12,7 @@ var FieldMap = function(map) {
     this.map = map;
 
     this.initMobs_();
-    setInterval(this.initMobs_.bind(this), FieldMap.POP_INTERVAL);
+    setInterval(this.spawnMob_.bind(this), FieldMap.POP_INTERVAL);
 };
 util.inherits(FieldMap, EntityCtrl);
 

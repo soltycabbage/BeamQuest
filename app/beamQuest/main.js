@@ -11,36 +11,49 @@ var params = require('beamQuest/params'),
     usage = require('usage');
 
 exports.start = function(io) {
-    var config = {
-        STEP_INTERVAL: 30 // mainループの間隔(msec)
-    };
+    /**
+     * 依存関係のある初期化処理を逐次実行する
+     * @private
+     */
+    function initDependencies_() {
+        var mapDeferred = mapStore.init();
+        mapDeferred.then(init_);
+    }
 
-    _.each(mapStore.getMaps(), function(map) {
-        new FieldMapCtrl(map);
-    }.bind(this));
+    function init_() {
+        entities.init();
+        var config = {
+            STEP_INTERVAL: 30 // mainループの間隔(msec)
+        };
 
-    io.sockets.on('connection', function(socket) {
-        login.listen(socket, io);
-        world.listen(socket);
-        beam.listen(socket, io);
-        entity.listen(socket, io);
-        ping.listen(socket);
+        _.each(mapStore.getMaps(), function(map) {
+            new FieldMapCtrl(map);
+        }.bind(this));
 
-        // チャット
-        socket.on('message:update', function(data) {
-            socket.broadcast.emit('notify:message', data);
+        io.sockets.on('connection', function(socket) {
+            login.listen(socket, io);
+            world.listen(socket);
+            beam.listen(socket, io);
+            entity.listen(socket, io);
+            ping.listen(socket);
+
+            // チャット
+            socket.on('message:update', function(data) {
+                socket.broadcast.emit('notify:message', data);
+            });
+
+            // プレイヤーが移動したら位置情報が送られてくる
+            socket.on('user:position:update', function(data) {
+                entities.updatePlayerPosition(data);
+                // 自分以外の全プレイヤーにブロードキャスト
+                socket.broadcast.emit('notify:user:move', data);
+            });
+
+            socket.emit('connected');
         });
-
-        // プレイヤーが移動したら位置情報が送られてくる
-        socket.on('user:position:update', function(data) {
-            entities.updatePlayerPosition(data);
-            // 自分以外の全プレイヤーにブロードキャスト
-            socket.broadcast.emit('notify:user:move', data);
-        });
-
-        socket.emit('connected');
-    });
-
+        setInterval(main, config.STEP_INTERVAL);
+        setInterval(logUsage, 1000);
+    }
 
     function main() {
         scheduler.update();
@@ -54,7 +67,6 @@ exports.start = function(io) {
         });
     }
 
-    setInterval(main, config.STEP_INTERVAL);
-    setInterval(logUsage, 1000);
+    initDependencies_();
 };
 

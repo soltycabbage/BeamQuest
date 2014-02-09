@@ -10,6 +10,7 @@
     "express": "3.4.6",
     "socket.io": "0.9.16",
     "underscore": "1.5.2",
+    "deferred": "0.6.8",
     "redis": "0.9.1",
     "log4js": "0.6.9",
     "tmx-parser": "1.2.0",

@@ -1,4 +1,5 @@
-var mapStore = require('beamQuest/store/maps');
+var mapStore = require('beamQuest/store/maps'),
+    deferred = require('deferred');
 
 
 /**
@@ -32,19 +33,20 @@ var Entities = function() {
     this.mapNpcs_ = {};
 
     this.entityListener_ = require('beamQuest/listener/entity');
-    this.init_();
 };
 
 /**
- * @private
+ * @return {deferred.promise}
  */
-Entities.prototype.init_ = function() {
+Entities.prototype.init = function() {
+    var d = deferred();
     _.each(mapStore.getMaps(), function(map) {
         this.mapPlayers_[map.id] = {};
         this.mapMobs_[map.id] = {};
         this.mapNpcs_[map.id] = {};
 
     }.bind(this));
+    return d.resolve();
 };
 
 /**
