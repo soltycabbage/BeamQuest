@@ -26,7 +26,7 @@ Maps.prototype.init_ = function() {
     // NOTE マップ情報の保存先がまだ決まってないので直接書いてる。将来的にはファイルorDBから取ってくる？
     var map = new mapModel({
         id: 1,
-        name: 'しんじゅく',
+        name: 'しんじゅく', // TODO 最初の村の名前は? (iwg)
         maxMobCount: 10,
         mobCount: 0,
     });

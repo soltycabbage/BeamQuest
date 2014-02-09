@@ -12,7 +12,7 @@ bq.Socket = cc.Class.extend({
      */
     initAfterLogin: function() {
         var entityManager = bq.EntityManager.getInstance();
-
+        var beamManager = bq.BeamManager.getInstance();
         /**
          *  ブロードキャストされてきたやつ
          */
@@ -31,17 +31,22 @@ bq.Socket = cc.Class.extend({
         // ビーム発射
         this.socket.on('notify:beam:shoot', function(data) {
             var beamPos = new bq.model.BeamPos(data);
-            entityManager.beamShoot(beamPos);
+            beamManager.beamShoot(beamPos);
         });
 
-        // ビームヒット
-        this.socket.on('notify:beam:hit', function(data) {
+        // エンティティにビームヒット
+        this.socket.on('notify:beam:hit:entity', function(data) {
             entityManager.hitEntity(data);
         });
 
         // 他プレイヤーがログインしたよって
         this.socket.on('notify:user:login', function(data) {
             entityManager.login(data);
+        });
+
+        // マップ上のものにビームヒット
+        this.socket.on('notify:beam:hit:object', function(data) {
+            beamManager.disposeBeam(data);
         });
 
         // 他プレイヤーがログアウトしたよって

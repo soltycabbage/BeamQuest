@@ -43,6 +43,7 @@
             'js/src/chat.js',
             'js/src/inputHandler.js',
             'js/src/mapManager.js',
+            'js/src/beamManager.js',
             'js/src/messageLog.js',
 
             // entity

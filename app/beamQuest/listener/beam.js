@@ -3,6 +3,7 @@
  */
 
 var entities = require('beamQuest/store/entities');
+var maps = require('beamQuest/store/maps');
 
 exports.listen = function(socket, io) {
     socket.on('beam:shoot', function(data) {
@@ -21,6 +22,11 @@ exports.listen = function(socket, io) {
         if (entity) {
             updateEntityStatus_(entity, data.beamId, data);
         }
+        // ビーム対オブジェクト
+        var obj = isHitObject_(data);
+        if ( obj ) {
+            updateObjStatus_(obj, data.beamId, data);
+        }
     });
 
     function updateEntityStatus_(entity, beamType, data) {
@@ -31,7 +37,7 @@ exports.listen = function(socket, io) {
         };
         var additionalHitResult = entity.beamHit(beamType, data.shooterId, data.mapId);
         hitResult = _.extend(additionalHitResult, hitResult);
-        io.sockets.emit('notify:beam:hit', hitResult);
+        io.sockets.emit('notify:beam:hit:entity', hitResult);
     }
 
     /**
@@ -63,4 +69,40 @@ exports.listen = function(socket, io) {
         return startX < targetPoint.x && targetPoint.x < endX &&
             startY < targetPoint.y && targetPoint.y < endY;
     }
+
+    /**
+     * オブジェクトにあたっていたら対象のEntityを返す
+     * @return {model.Mob}
+     * @private
+     */
+    function isHitObject_(data) {
+        var beamPos = {x: data.x, y: data.y};
+
+        var map = maps.getMapById(data.mapId) || {};
+
+        var tileSize = map.objTmx.tileWidth;
+        var sizeY = map.objTmx.height;
+
+        var passables = _.select(map.objTmx.layers, function(layer) {
+            //console.log(layer);
+            return layer && layer.type === 'tile' && layer.properties['beam_no_passable'] === 'true';
+        } );
+
+
+        var objs= _.select(passables, function(layer){
+            var gid = layer.tileAt(Math.floor(beamPos.x/tileSize),
+                sizeY -1 -  Math.floor((beamPos.y)/tileSize));
+            return gid;
+        });
+        return objs && objs[0];
+    }
+
+    function updateObjStatus_(obj, beamType, data) {
+        var hitResult = {
+            // obj のIDとか入れる？
+            beamTag: data.tag
+        };
+        io.sockets.emit('notify:beam:hit:object', hitResult);
+    }
+
 };
