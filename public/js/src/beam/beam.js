@@ -150,7 +150,7 @@ bq.beam.Beam.createParticleBeam = function(beamType, shooterId, tag) {
     beam.disable();
 
     return beam;
-}
+};
 
 bq.beam.Beam.createSpriteBeam = function(beamType, shooterId, tag) {
     "use strict";
@@ -175,7 +175,7 @@ bq.beam.Beam.createSpriteBeam = function(beamType, shooterId, tag) {
     beam.setPosition(cc.p(0,0));
 
     return beam;
-}
+};
 
 /**
  * Beamのファクトリ
