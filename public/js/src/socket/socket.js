@@ -49,7 +49,6 @@ bq.Socket = cc.Class.extend({
             beamManager.disposeBeam(data);
         });
 
-
         // 他プレイヤーがログアウトしたよって
         this.socket.on('notify:user:logout', function(data) {
             entityManager.logout(data);

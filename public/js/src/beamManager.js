@@ -28,17 +28,27 @@ bq.BeamManager = cc.Class.extend({
         bq.soundManager.playEffect(s_SeBeamA);
 
         beam.initDestination(beamPos.src, beamPos.dest);
-        $(beam).on(bq.beam.Beam.EventType.REMOVE, $.proxy(this.handleBeamRemove_, this));
+        $(beam).on(bq.beam.Beam.EventType.REMOVE, $.proxy(this.handleRemove_, this));
         this.beams_[beamPos.tag] = beam;
     },
 
-    // TODO とりあえずまー。beamManager的なのに移す
-    disposeBeam: function(data) {
-        var beam = this.beams_[data.beamTag];
-        beam && beam.dispose();
+    /**
+     * @param {Event} evt
+     * @private
+     */
+    handleRemove_: function(evt) {
+        if (this.beams_[evt.currentTarget.tag]) {
+            delete this.beams_[evt.currentTarget.tag];
+        }
     },
 
-
+    /**
+     * @param {string} eamTag
+     */
+    disposeBeam: function(beamTag) {
+        var beam = this.beams_[beamTag];
+        beam && beam.dispose();
+    }
 });
 
 bq.BeamManager.instance_ = new bq.BeamManager();
