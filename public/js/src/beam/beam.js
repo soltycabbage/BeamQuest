@@ -150,7 +150,7 @@ bq.beam.Beam.createParticleBeam = function(beamType, shooterId, tag) {
     beam.disable();
 
     return beam;
-}
+};
 
 bq.beam.Beam.createSpriteBeam = function(beamType, shooterId, tag) {
     "use strict";
@@ -158,21 +158,24 @@ bq.beam.Beam.createSpriteBeam = function(beamType, shooterId, tag) {
 
     var beamType2textureName = {};
     // TODO これもっとうまく書く方法あるはずだし、別のクラスgameType?に移した方がいい
-    beamType2textureName[ bq.Types.Beams.NORMAL0] =  "simple_beam_0.png";
-    beamType2textureName[ bq.Types.Beams.NORMAL1] =  "simple_beam_1.png";
-    beamType2textureName[ bq.Types.Beams.NORMAL2] =  "simple_beam_2.png";
-    beamType2textureName[ bq.Types.Beams.NORMAL3] =  "simple_beam_3.png";
+    beamType2textureName[ bq.Types.Beams.NORMAL0] =  ["large1.png","large2.png","large3.png","large4.png"];
+    beamType2textureName[ bq.Types.Beams.NORMAL1] =  ["long1.png","long2.png","long3.png","long4.png"];
+    beamType2textureName[ bq.Types.Beams.NORMAL2] =  ["small1.png","small2.png","small3.png"];
 
-    var spriteName = beamType2textureName[beamType];
+    var frames = beamType2textureName[beamType];
 
-    var sp = cc.SpriteFrameCache.getInstance().getSpriteFrame(spriteName);
+    var sp = cc.SpriteFrameCache.getInstance().getSpriteFrame("large1.png");
     var cl = cc.Sprite.createWithSpriteFrame(sp);
+
+    var anime = bq.entity.Animation.createAnimation(frames, 0.05);
+    var animation = anime && cc.RepeatForever.create(cc.Animate.create(anime));
+    animation && cl.runAction(animation);
 
     beam.addChild(cl);
     beam.setPosition(cc.p(0,0));
 
     return beam;
-}
+};
 
 /**
  * Beamのファクトリ

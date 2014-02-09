@@ -4,57 +4,148 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>simple_beam_0.png</key>
+            <key>large1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,2},{20,59}}</string>
+                <string>{{2,2},{20,32}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{20,59}}</string>
+                <string>{{0,0},{20,32}}</string>
                 <key>sourceSize</key>
-                <string>{20,59}</string>
+                <string>{20,32}</string>
             </dict>
-            <key>simple_beam_1.png</key>
+            <key>large2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{24,2},{20,62}}</string>
+                <string>{{24,2},{20,32}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{20,62}}</string>
+                <string>{{0,0},{20,32}}</string>
                 <key>sourceSize</key>
-                <string>{20,62}</string>
+                <string>{20,32}</string>
             </dict>
-            <key>simple_beam_2.png</key>
+            <key>large3.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{46,2},{18,29}}</string>
+                <string>{{2,36},{20,32}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{18,29}}</string>
+                <string>{{0,0},{20,32}}</string>
                 <key>sourceSize</key>
-                <string>{18,29}</string>
+                <string>{20,32}</string>
             </dict>
-            <key>simple_beam_3.png</key>
+            <key>large4.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{66,2},{45,58}}</string>
+                <string>{{24,36},{20,32}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{45,58}}</string>
+                <string>{{0,0},{20,32}}</string>
                 <key>sourceSize</key>
-                <string>{45,58}</string>
+                <string>{20,32}</string>
+            </dict>
+            <key>long1.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{46,36},{8,32}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{8,32}}</string>
+                <key>sourceSize</key>
+                <string>{8,32}</string>
+            </dict>
+            <key>long2.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,70},{8,32}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{8,32}}</string>
+                <key>sourceSize</key>
+                <string>{8,32}</string>
+            </dict>
+            <key>long3.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{12,70},{8,32}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{8,32}}</string>
+                <key>sourceSize</key>
+                <string>{8,32}</string>
+            </dict>
+            <key>long4.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{22,70},{8,32}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{8,32}}</string>
+                <key>sourceSize</key>
+                <string>{8,32}</string>
+            </dict>
+            <key>small1.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{32,70},{4,12}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{4,12}}</string>
+                <key>sourceSize</key>
+                <string>{4,12}</string>
+            </dict>
+            <key>small2.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{38,70},{4,12}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{4,12}}</string>
+                <key>sourceSize</key>
+                <string>{4,12}</string>
+            </dict>
+            <key>small3.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{44,70},{4,12}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{4,12}}</string>
+                <key>sourceSize</key>
+                <string>{4,12}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -64,9 +155,9 @@
             <key>realTextureFileName</key>
             <string>simple_beam.png</string>
             <key>size</key>
-            <string>{128,128}</string>
+            <string>{64,128}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:eda4f867d4bb8521753fff11a006f819:64d9a29eebf4e56842a78ef61b44b538:bb5b1fd0c101b385fb7d2c7a04661a3f$</string>
+            <string>$TexturePacker:SmartUpdate:aea76b0de834f4e0472ecf0932d93237:5b41872e2fe559e72efb0e72376d4ca0:bb5b1fd0c101b385fb7d2c7a04661a3f$</string>
             <key>textureFileName</key>
             <string>simple_beam.png</string>
         </dict>

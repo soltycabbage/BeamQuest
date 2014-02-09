@@ -12,7 +12,6 @@ bq.Params = {
         NORMAL0: {atk: 5, speed: 1, bp: 1},
         NORMAL1: {atk: 5, speed: 1, bp: 1},
         NORMAL2: {atk: 5, speed: 1, bp: 1},
-        NORMAL3: {atk: 5, speed: 1, bp: 1},
         FIRE: {atk: 10, speed: 10, bp: 10},
         METEOR: {atk: 10, speed: 10, bp: 10}
     },

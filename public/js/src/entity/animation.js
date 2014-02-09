@@ -21,9 +21,9 @@ bq.entity.Animation.createAnimations = function (keyFrameMap) {
     return animations;
 };
 
-bq.entity.Animation.createAnimation = function (frames) {
+bq.entity.Animation.createAnimation = function (frames, delay) {
     var animation = cc.Animation.create();
-    animation.setDelayPerUnit(0.1);
+    animation.setDelayPerUnit(delay || 0.1);
 
     var frameCache = cc.SpriteFrameCache.getInstance();
     _.forEach(frames, function (i) {
