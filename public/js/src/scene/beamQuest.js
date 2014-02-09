@@ -21,7 +21,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
 
         // TODO position.mapIdからロードするマップを取得する
         var tileMap = new cc.TMXTiledMap();
-        tileMap.initWithTMXFile(bq.config.maps.area.START_MURA);
+        tileMap.initWithTMXFile(bq.config.maps.area.SMALL_MURA);
         tileMap.setPosition(cc.p(0,0));
         baseLayer.addChild(tileMap, 0);
         var mapManager = new bq.MapManager(tileMap);
