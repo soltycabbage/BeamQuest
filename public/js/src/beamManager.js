@@ -43,10 +43,10 @@ bq.BeamManager = cc.Class.extend({
     },
 
     /**
-     * @param {string} eamTag
+     * @param {Object} data
      */
-    disposeBeam: function(beamTag) {
-        var beam = this.beams_[beamTag];
+    disposeBeam: function(data) {
+        var beam = this.beams_[data.beamTag];
         beam && beam.dispose();
     }
 });
