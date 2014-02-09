@@ -167,7 +167,7 @@ bq.beam.Beam.createSpriteBeam = function(beamType, shooterId, tag) {
     var sp = cc.SpriteFrameCache.getInstance().getSpriteFrame("large1.png");
     var cl = cc.Sprite.createWithSpriteFrame(sp);
 
-    var anime = bq.entity.Animation.createAnimation(frames, 0.5);
+    var anime = bq.entity.Animation.createAnimation(frames, 0.05);
     var animation = anime && cc.RepeatForever.create(cc.Animate.create(anime));
     animation && cl.runAction(animation);
 
