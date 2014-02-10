@@ -9,6 +9,7 @@ bq.hud.HpBpBar = bq.hud.HudItem.extend({
         this.valueHpBar_ = $('#bq-hp-bar-value'); // 赤い部分
     },
 
+    /** @override */
     enable: function(enabled) {
         this.container_.hide(enabled);
     },

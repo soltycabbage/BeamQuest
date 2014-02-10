@@ -20,6 +20,9 @@ var Player = function(opt_data) {
     /** @type {number} */
     this.lv = this.data.lv || 1;
 
+    /** @type {number} */
+    this.nextExp = bq.Params.Exp[this.lv + 1];
+
     /** @type {boolean} */
     this.isDeath = !!this.data.isDeath;
 
@@ -36,6 +39,7 @@ Player.prototype.toJSON = function() {
     json.maxBp =  this.maxBp;
     json.bp = this.bp;
     json.exp = this.exp;
+    json.nextExp = this.nextExp;
     json.lv = this.lv;
     json.isDeath = this.isDeath;
     return json;

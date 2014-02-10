@@ -133,6 +133,19 @@ bq.entity.Player = bq.entity.Entity.extend({
         $(this).triggerHandler(bq.entity.Player.EventType.INIT_HP, [this.model_.hp, this.model_.maxHp]);
     },
 
+    initExp: function() {
+        $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_EXP, [this.model_.exp, this.model_.nextExp]);
+    },
+
+    /**
+     * @param {Object.<exp: number, currentExp: number, nextExp: number> data
+     */
+    updateExp: function(data) {
+        this.popExpLabel(data.exp);
+        this.model_.addExp(data.exp);
+        $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_EXP, [data.currentExp, data.nextExp]);
+    },
+
     /**
      * 各種値を設定する
      * @param {Object} data
@@ -214,7 +227,8 @@ bq.entity.Player = bq.entity.Entity.extend({
 bq.entity.Player.EventType = {
     INIT_HP: 'inithp',
     UPDATE_HP: 'updatehp',
-    UPDATE_BP: 'updatebp'
+    UPDATE_BP: 'updatebp',
+    UPDATE_EXP: 'updateexp'
 };
 
 bq.entity.Player.InputHandler = cc.Class.extend({

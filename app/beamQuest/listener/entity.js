@@ -86,9 +86,18 @@ Entity.prototype.addExp = function(playerId, mob) {
     var mapId = mob.model.position.mapId;
     var player = this.entitiesStore_.getPlayerById(mapId, playerId);
     if (player) {
-        player.model.exp += mob.model.exp;
-        player.model.socket.emit('user:status:exp:update', {exp: mob.model.exp});
+        player.addExp(mob.model.exp);
+        player.model.socket.emit('user:status:exp:update', {
+            exp: mob.model.exp, currentExp: player.model.exp, nextExp: player.model.nextExp});
     }        
+};
+
+/**
+ * レベルアップしたよってクライアントに伝える
+ * @param {Array.<entity: model.Entity, hpAmount: number>} hpAmounts
+ */
+Entity.prototype.levelUp = function(data) {
+
 };
 
 /**
