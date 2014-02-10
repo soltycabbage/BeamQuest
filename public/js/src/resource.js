@@ -16,8 +16,11 @@ var s_smoke0 = 'res/img/smoke.png'; // TODO s_Smoke0 にする (iwg)
 
 // tmx
 var s_ShinjukuTmx = 'res/map/shinjuku.tmx';
-var s_VillageTmx = 'res/map/map_village.tmx';
-var s_VillageMapSet= 'res/map/tile_village.png';
+var s_ShinjukuMapSet= 'res/map/shinjuku_mapset.png';
+var s_StartVillageTmx = 'res/map/map_village.tmx';
+var s_StartVillageMapSet= 'res/map/tile_village.png';
+var s_SmallVillageTmx = 'res/map/map_small_village.tmx'; 
+var s_SmallVillageMapSet = 'res/map/tile_small_village.png'; 
 
 // plist
 var s_PlayerWalkingPlist = 'res/img/walk_anime.plist';
@@ -31,7 +34,9 @@ var s_SeDamage = 'res/sounds/Damage.ogg';
 var g_resources = [
     //img
     {type: 'image', src:s_Player},
-    {type: 'image', src:s_VillageMapSet},
+    //{type: 'image', src:s_ShinjukuMapSet},
+    {type: 'image', src:s_StartVillageMapSet},
+    {type: 'image', src:s_SmallVillageMapSet},
     {type: 'image', src:s_ChatTail},
     {type: 'image', src:s_PlayerWalkingImg},
     {type: 'image', src:s_beam0},
@@ -45,7 +50,9 @@ var g_resources = [
     //fnt
 
     //tmx
-    {type: 'tmx', src:s_VillageTmx},
+    //{type: 'tmx', src:s_ShinjukuTmx},
+    {type: 'tmx', src:s_StartVillageTmx},
+    {type: 'tmx', src:s_SmallVillageTmx},
 
     //bgm
     {type:"bgm",src:s_BgmField},
