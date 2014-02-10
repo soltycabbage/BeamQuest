@@ -7,6 +7,7 @@ bq.hud.HpBpBar = bq.hud.HudItem.extend({
         this.container_ = $('#bq-bar-container');
         this.backGroundHpBar_ = $('#bq-hp-bar-background'); // 外枠
         this.valueHpBar_ = $('#bq-hp-bar-value'); // 赤い部分
+        this.valueHpText_ = $('#bq-hp-bar-value-text'); // HPの数値部分
     },
 
     /** @override */
@@ -39,6 +40,8 @@ bq.hud.HpBpBar = bq.hud.HudItem.extend({
         } else { // 回復
             this.valueHpBar_.animate({width: resultWidth},  {duration: 100, easing: 'swing'});
         }
+
+        this.valueHpText_.text(currentHp + '/' + player.maxHp);
     },
 
     /**
@@ -50,5 +53,6 @@ bq.hud.HpBpBar = bq.hud.HudItem.extend({
     initHpBar: function(currentHp, maxHp) {
         var maxWidth = this.backGroundHpBar_.width();
         this.valueHpBar_.width(maxWidth * currentHp / maxHp);
+        this.valueHpText_.text(currentHp + '/' + maxHp);
     }
 });
