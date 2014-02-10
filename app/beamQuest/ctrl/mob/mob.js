@@ -20,7 +20,7 @@ var Mob = function() {
      * TODO: このへんはmobの種類によって変えられるようにする
      * @type {number}
      */
-    this.moveSpeed = 5;
+    this.moveSpeed = 3;
 
     /**
      * 近接攻撃の射程(px)
@@ -66,7 +66,7 @@ var Mob = function() {
     this.activeTimeUp = 100;
 
     /**
-     * 行動中ならtrue
+     * 行動中(攻撃モーション中 etc）ならtrue
      * @type {Boolean}
      * @private
      */
