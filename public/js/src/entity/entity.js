@@ -262,7 +262,7 @@ bq.entity.Entity = cc.Sprite.extend({
      * @private
      */
     popNoDamageLabel_: function(popLeft) {
-        var label = bq.Label.createWithShadow('ノーダメやで', 20);
+        var label = bq.Label.createWithShadow('Ineffective!', 20);
         var rect = this.getBoundingBox();
         label.setPosition(cc.p(rect.getWidth()/2, rect.getHeight()));
         var d = popLeft ? -1 : 1;
