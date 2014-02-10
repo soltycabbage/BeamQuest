@@ -50,12 +50,13 @@ bq.Hud = cc.Node.extend({
 
     /**
      * @param {Event} evt
+     * @param {number} prevExp
      * @param {number} currentExp
      * @param {number} nextExp
      * @private
      */
-    handleUpdateExp_: function(evt, currentExp, nextExp) {
-        this.expBar_.updateExpBar(currentExp, nextExp);
+    handleUpdateExp_: function(evt, prevExp, currentExp, nextExp) {
+        this.expBar_.updateExpBar(prevExp, currentExp, nextExp);
     }
 });
 

@@ -65,7 +65,7 @@ Player.prototype.death = function() {
  * @param {number} exp
  */
 Player.prototype.addExp = function(exp) {
-    this.model.exp += exp;
+    this.model.addExp(exp);
     this.checkExp_();
 };
 
@@ -85,7 +85,7 @@ Player.prototype.checkExp_ = function() {
  * レベルを1上げる
  */
 Player.prototype.levelUp = function() {
-    this.model.lv++;
+    this.model.addLevel(1);
     // TODO: レベルアップの処理を書く
     console.log('Level' + this.model.lv);
     this.checkExp_();
