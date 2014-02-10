@@ -234,7 +234,8 @@ bq.entity.Entity = cc.Sprite.extend({
         } else if (amount > 0) { // 回復
             // TODO
         } else { // ノーダメやで
-            // TODO
+            bq.soundManager.playEffect(s_SeNoDamage);
+            this.popNoDamageLabel_(!!opt_popLeft);
         }
     },
 
@@ -244,6 +245,24 @@ bq.entity.Entity = cc.Sprite.extend({
     popDamageLabel_: function(amount, popLeft) {
         var damage = Math.abs(amount);
         var label = bq.Label.createWithShadow(damage, 20);
+        var rect = this.getBoundingBox();
+        label.setPosition(cc.p(rect.getWidth()/2, rect.getHeight()));
+        var d = popLeft ? -1 : 1;
+        var action = cc.JumpTo.create(1.5, cc.p(d * 200, -100), 100, 1);
+        var fadeOut = cc.FadeOut.create(1.5);
+        this.addChild(label);
+        label.runAction(cc.Sequence.create(cc.Spawn.create(action, fadeOut),
+            cc.CallFunc.create(function() {
+                label.removeFromParent();
+            })));
+    },
+
+    /**
+     * ノーダメの時のラベルを出す
+     * @private
+     */
+    popNoDamageLabel_: function(popLeft) {
+        var label = bq.Label.createWithShadow('ノーダメやで', 20);
         var rect = this.getBoundingBox();
         label.setPosition(cc.p(rect.getWidth()/2, rect.getHeight()));
         var d = popLeft ? -1 : 1;

@@ -73,6 +73,13 @@ var Mob = function() {
     this.isActive_ = false;
 
     /**
+     * 敵対行動を中止して攻撃開始位置に戻っている間true
+     * @type {Boolean}
+     * @private
+     */
+    this.isCancelAttacking_ = false;
+
+    /**
      * 攻撃対象のEntity
      * @type {ctrl.Entity}
      */
@@ -125,18 +132,26 @@ Mob.prototype.attackTo = function(entity) {
  * @param {number=} opt_speed intervalの間隔(msec)
  */
 Mob.prototype.moveTo = function(targetPos, opt_speed) {
-    if (this.isActive_) {
+    if (this.isActive_) { // 攻撃動作中の時はmoveTo命令が来ても無視する
         this.interval_ && clearInterval(this.interval_);
         return;
     }
+
+    // ターゲットまでの距離を計算
     var v = {x: targetPos.x - this.model.position.x, y: targetPos.y - this.model.position.y};
     var distance = Math.sqrt(Math.pow(v.x,2) + Math.pow(v.y,2));
 
-    // 一定距離離れたら攻撃を諦める
-    if (distance > this.attackCancelDistance) {
-        this.attackCancel();
+    // 攻撃開始地点から一定距離離れたら攻撃を諦めて攻撃開始地点に戻る
+    if (this.startPos && !this.isCancelAttacking_) {
+        var vv = {x: this.model.position.x - this.startPos.x, y: this.model.position.y - this.startPos.y};
+        var distanceFromStartPos = Math.sqrt(Math.pow(vv.x,2) + Math.pow(vv.y,2));
+        if (distanceFromStartPos > this.attackCancelDistance) {
+            this.attackCancel();
+            return;
+        }
     }
 
+    // 近距離攻撃の射程に入ったら攻撃動作に入る
     if (distance < this.attackShortRange) {
         this.interval_ && clearInterval(this.interval_);
         this.shortRangeAttack();
@@ -160,6 +175,7 @@ Mob.prototype.moveTo = function(targetPos, opt_speed) {
             this.model.position.y += vy;
             this.updatePosition();
         } else {
+            this.isCancelAttacking_ = false;
             clearInterval(this.interval_);
         }
     }.bind(this), interval);
@@ -220,30 +236,37 @@ Mob.prototype.longRangeAttack = function() {
  * 敵対行動を中止する
  */
 Mob.prototype.attackCancel = function() {
+    this.isCancelAttacking_ = true;
     this.hateList = _.reject(this.hateList, function(h) {
         return h.entityId === this.hateTarget.model.id;
     }.bind(this));
 
     this.hateTarget = null;
+    this.model.addHp(this.model.maxHp);
+    if (_.isEmpty(this.hateList) && this.startPos) {
+        this.isActive_ = false;
+        this.moveTo(this.startPos, 50);
+    }
 };
 
 /** @override */
 Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
+    if (this.isCancelAttacking_) {
+        return {hpAmount: 0};
+    }
+
     // TODO: ほんとはクライアント側から指定されたビームtypeをそのまま使うべきではない
     //       サーバ側に保存してあるプレイヤーの装備しているビームを参照すべき
     var beam = bq.Params.getBeamParam(beamType);
-    var newEntity = entityStore.getMobById(mapId, this.model.id);
     var damage = Math.floor(Math.random() * beam.atk/2) + beam.atk; // TODO: ダメージ計算
-    var newHp = newEntity.model.hp - damage;
-    newEntity.model.hp = newHp;
 
     // 攻撃を与えたユーザのIDをヘイトリストに突っ込む
-    var hateTarget = _.find(newEntity.hateList, function(h) {
+    var hateTarget = _.find(this.hateList, function(h) {
         return h.entityId === shooterId;
     });
 
     if (!hateTarget) {
-        newEntity.hateList.push({entityId: shooterId, hate: damage});
+        this.hateList.push({entityId: shooterId, hate: damage});
     } else {
         // ダメージ量がそのままヘイト値になる
         hateTarget.hate += damage;
@@ -251,9 +274,18 @@ Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
 
     // ヘイト値の大きい順にソートしておく
     this.hateList = _.sortBy(this.hateList, function(h) {return -h.hate;});
-    entityStore.updateMobStatus(mapId, newEntity);
-
+    this.model.addHp(-damage);
     return {hpAmount: -damage};
+};
+
+/**
+ * @override
+ */
+Mob.prototype.handleAddHp = function(amount) {
+    if (this.model.hp <= 0) { // 死
+        entityListener.killMob(this);
+        entityStore.removeMob(this);
+    }
 };
 
 /**

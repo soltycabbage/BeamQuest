@@ -30,6 +30,7 @@ var s_SimpleBeamPlist = 'res/img/simple_beam.plist';
 var s_BgmField = 'res/sounds/Field.m4a';
 var s_SeBeamA = 'res/sounds/BeamA.m4a';
 var s_SeDamage = 'res/sounds/Damage.ogg';
+var s_SeNoDamage = 'res/sounds/NoDamage.mp3';
 
 var g_resources = [
     //img
