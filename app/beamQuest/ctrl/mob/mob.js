@@ -2,7 +2,8 @@ var util = require('util'),
     EntityCtrl = require('beamQuest/ctrl/entity'),
     entityStore = require('beamQuest/store/entities'),
     entityListener = require('beamQuest/listener/entity'),
-    MathUtil = require('beamQuest/math');
+    distance = require('beamQuest/math/euclideanDistance'),
+    manhattanDistance = require('beamQuest/math/manhattanDistance');
 
 /**
  * すべてのmobの基底クラス
@@ -139,11 +140,11 @@ Mob.prototype.moveTo = function(targetPos, opt_speed) {
     }
 
     // ターゲットまでの距離を計算
-    var distance = MathUtil.euclideanDistance(this.model.position, targetPos);
+    var dist = distance(this.model.position, targetPos);
 
     // 攻撃開始地点から一定距離離れたら攻撃を諦めて攻撃開始地点に戻る
     if (this.startPos && !this.isCancelAttacking_) {
-        var distanceFromStartPos = MathUtil.euclideanDistance(this.startPos, this.model.position);
+        var distanceFromStartPos = distance(this.startPos, this.model.position);
         if (distanceFromStartPos > this.attackCancelDistance) {
             this.attackCancel();
             return;
@@ -151,16 +152,16 @@ Mob.prototype.moveTo = function(targetPos, opt_speed) {
     }
 
     // 近距離攻撃の射程に入ったら攻撃動作に入る
-    if (distance < this.attackShortRange) {
+    if (dist < this.attackShortRange) {
         this.interval_ && clearInterval(this.interval_);
         this.shortRangeAttack();
         return;
     }
     var interval = opt_speed || 300;
-    var step = Math.ceil(distance / this.moveSpeed);
+    var step = Math.ceil(dist / this.moveSpeed);
     if (step <= 0) { return; }
     var count = 1;
-    var v = MathUtil.manhattanDistance(this.model.position, targetPos);
+    var v = manhattanDistance(this.model.position, targetPos);
     var vx = Math.ceil(v.x / step);
     var vy = Math.ceil(v.y / step);
 
