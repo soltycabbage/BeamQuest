@@ -65,13 +65,13 @@ Player.prototype.update = function() {
     // 自動回復(HP)
     if (!this.model.isDeath && this.updateCount_ % this.autoHpHealInterval_ === 0 &&
         this.model.hp < this.model.maxHp) {
-        this.model.addHp(this.model.maxHp / this.autoHpHealRatio_);
+        this.model.addHp(Math.ceil(this.model.maxHp / this.autoHpHealRatio_));
     }
 
     // 自動回復(BP)
     if (!this.model.isDeath && this.updateCount_ % this.autoBpHealInterval_ === 0 &&
         this.model.bp < this.model.maxBp) {
-        this.model.addBp(this.model.maxBp / this.autoBpHealRatio_)
+        this.model.addBp(Math.ceil(this.model.maxBp / this.autoBpHealRatio_))
     }
 
     if (this.updateCount_ >= Number.MAX_VALUE) {
