@@ -16,6 +16,8 @@ bq.Hud = cc.Node.extend({
     initPlayer: function(player) {
         $(player).on(bq.entity.Player.EventType.INIT_HP, _.bind(this.handleInitHp_, this));
         $(player).on(bq.entity.Player.EventType.UPDATE_HP, _.bind(this.handleUpdateHp_, this));
+        $(player).on(bq.entity.Player.EventType.INIT_BP, _.bind(this.handleInitBp_, this));
+        $(player).on(bq.entity.Player.EventType.UPDATE_BP, _.bind(this.handleUpdateBp_, this));
         $(player).on(bq.entity.Player.EventType.UPDATE_EXP, _.bind(this.handleUpdateExp_, this));
     },
 
@@ -47,6 +49,25 @@ bq.Hud = cc.Node.extend({
         this.hpBpBar_.initHpBar(currentHp, maxHp);
     },
 
+    /**
+     * @param {Event} evt
+     * @param {number} currentBp
+     * @param {bq.model.Player} playerModel
+     * @private
+     */
+    handleUpdateBp_: function(evt, currentBp, playerModel) {
+        this.hpBpBar_.updateBpBar(currentBp, playerModel);
+    },
+
+    /**
+     * @param {Event} evt
+     * @param {number} currentBp
+     * @param {number} maxHp
+     * @private
+     */
+    handleInitBp_: function(evt, currentBp, maxBp) {
+        this.hpBpBar_.initBpBar(currentBp, maxBp);
+    },
 
     /**
      * @param {Event} evt

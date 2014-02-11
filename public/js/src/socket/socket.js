@@ -97,6 +97,15 @@ bq.Socket = cc.Class.extend({
             bq.player.updateExp(data);
         });
 
+        // BPに変動があったよって
+        this.socket.on('user:status:bp:update', function(data) {
+            bq.player.updateBp(data);
+        });
+
+        // BPが足りないよって
+        this.socket.on('user:status:bp:lack', function(data) {
+            bq.player.showMessage('BP足りひん'); // TODO 適切なアナウンスにする
+        });
     },
 
     /**

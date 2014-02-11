@@ -13,21 +13,48 @@ var Player = function() {
     this.updateCount_ = 0;
 
     /**
-     * 自動回復の間隔
+     * HP自動回復の間隔(step)
      * @type {number}
      * @private
      */
-    this.autoHealInterval_ = 100;
+    this.autoHpHealInterval_ = 100;
 
     /**
-     * 1回の自動回復の回復量(%)
+     * BP自動回復の間隔(step)
+     * @type {number}
+     * @private
+     */
+    this.autoBpHealInterval_ = 30;
+
+    /**
+     * 1回の自動回復のHP回復量(%)
      * 戦闘中とかは%を小さくしたいね
      * @type {Number}
      * @private
      */
-    this.autoHealRatio_ = 10;
+    this.autoHpHealRatio_ = 10;
+
+    /**
+     * 1回の自動回復のBP回復量(%)
+     * @type {Number}
+     * @private
+     */
+    this.autoBpHealRatio_ = 10;
 };
 util.inherits(Player, EntityCtrl);
+
+/** @override */
+Player.prototype.setModel = function(model) {
+    Player.super_.prototype.setModel.call(this, model);
+    this.model.on('addBp', _.bind(this.handleAddBp_, this));
+};
+
+/**
+ * @private
+ */
+Player.prototype.handleAddBp_ = function(amount) {
+    entityListener.updateBp({entity: this.model, bpAmount: amount});
+};
 
 Player.prototype.update = function() {
     this.updateCount_++;
@@ -35,11 +62,16 @@ Player.prototype.update = function() {
         userStore.save(this);
     }
 
-    // 自動回復
-    if (!this.model.isDeath && this.updateCount_ % this.autoHealInterval_ === 0 &&
+    // 自動回復(HP)
+    if (!this.model.isDeath && this.updateCount_ % this.autoHpHealInterval_ === 0 &&
         this.model.hp < this.model.maxHp) {
-        var amount = this.model.maxHp / this.autoHealRatio_;
-        this.model.addHp(amount);
+        this.model.addHp(this.model.maxHp / this.autoHpHealRatio_);
+    }
+
+    // 自動回復(BP)
+    if (!this.model.isDeath && this.updateCount_ % this.autoBpHealInterval_ === 0 &&
+        this.model.bp < this.model.maxBp) {
+        this.model.addBp(this.model.maxBp / this.autoBpHealRatio_)
     }
 
     if (this.updateCount_ >= Number.MAX_VALUE) {
