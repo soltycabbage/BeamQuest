@@ -104,11 +104,11 @@ Entities.prototype.addMob = function(map, mob) {
 };
 
 /**
- * @param {model.Map} map
  * @param {ctrl.Mob} mob
  */
-Entities.prototype.removeMob = function(map, mob) {
-    if (map && mob) {
+Entities.prototype.removeMob = function(mob) {
+    var map = mapStore.getMapById(mob.model.position.mapId);
+    if (map) {
         map.mobCount--;
         delete this.mapMobs_[map.id][mob.model.id];
         mob.dispose();
@@ -169,21 +169,6 @@ Entities.prototype.updatePlayerPosition = function(data) {
         player.model.position.mapId = data.mapId;
         player.model.position.x = data.x;
         player.model.position.y = data.y;
-    }
-};
-
-/**
- * @param {number} mapId
- * @param {ctrl.Mob} ステータスを更新したmob
- */
-Entities.prototype.updateMobStatus = function(mapId, mob) {
-    var target = this.mapMobs_[mapId][mob.model.id];
-    if (target) {
-        target = mob;
-        if (target.model.hp < 0) { // 死
-            this.entityListener_.killMob(mob);
-            this.removeMob(mapStore.getMapById(mapId), mob);
-        }
     }
 };
 
