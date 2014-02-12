@@ -142,7 +142,7 @@ bq.beam.Beam.createParticleBeam = function(beamType, shooterId, tag) {
     beamType2Partile[bq.Types.Beams.METEOR] = cc.ParticleMeteor;
 
     var particle = beamType2Partile[beamType];
-    var myTexture = cc.TextureCache.getInstance().textureForKey(s_beam0);
+    var myTexture = cc.TextureCache.getInstance().textureForKey(s_Beam0);
 
     particle.setTexture(myTexture);
     particle.setPosition(cc.p(0,0));
