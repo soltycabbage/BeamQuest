@@ -21,15 +21,17 @@ body {
 }
 
 #bq-message-container {
-    display: inline-block;
+    position: absolute;
+    bottom: 0px;
 }
 
 #bq-bar-container {
-    display: inline-block;
+    position: absolute;
+    left: 275px;
+    bottom: 11px;
 }
 
 #bq-hud {
-    width: 800px;
     position: absolute;
     bottom: 0;
     left: 10px;
