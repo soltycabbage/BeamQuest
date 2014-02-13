@@ -13,6 +13,7 @@ var s_ImgPlayerWalking = 'res/img/player/walk.png';
 var s_ImgBeam0         = 'res/img/beam/star.png';
 var s_ImgSimpleBeam    = 'res/img/beam/simple.png';
 var s_ImgSmoke0        = 'res/img/beam/smoke.png';
+var s_ImgPlayerMisc    = 'res/img/player/misc.png';
 
 // tmx
 var s_ShinjukuTmx        =  'res/map/shinjuku.tmx';
@@ -25,6 +26,7 @@ var s_SmallVillageMapSet =  'res/map/tile_small_village.png';
 // plist
 var s_PlistPlayerWalking =  'res/img/player/walk.plist';
 var s_PlistSimpleBeam    =  'res/img/beam/simple.plist';
+var s_PlistPlayerMisc    =  'res/img/player/misc.plist';
 
 // sounds
 var s_BgmField = 'res/sounds/Field.m4a';
@@ -47,6 +49,7 @@ var g_resources = [
     //plist
     {type: 'plist', src:s_PlistPlayerWalking},
     {type: 'plist', src:s_PlistSimpleBeam},
+    {type: 'plist', src:s_PlistPlayerMisc},
 
     //fnt
 

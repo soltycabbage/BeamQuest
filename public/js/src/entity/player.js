@@ -145,10 +145,36 @@ bq.entity.Player = bq.entity.Entity.extend({
     kill: function(){
         this.currentState = bq.entity.EntityState.Mode.death;
         bq.MessageLog.getInstance().addSystemMsg('あなたは死にました。復活地点に戻ります。');
+        this.stopForeverAnimation();
+
+        // 死亡モーション＊くるくるまわってぱたっと倒れる
+        var frameCache = cc.SpriteFrameCache.getInstance();
+        var rotateFrames = this.getKeyFrameMap_()['rotate'];
+        var rotateAnimation = cc.Animation.create();
+        rotateAnimation.setDelayPerUnit(0.03);
+        rotateAnimation.setLoops(5);
+        _.forEach(rotateFrames, function(rotateFrame) {
+            rotateAnimation.addSpriteFrame(frameCache.getSpriteFrame(rotateFrame));
+        });
+        var deathFrames = this.getKeyFrameMap_()['death'];
+        var deathAnimation = cc.Animation.create();
+        deathAnimation.setDelayPerUnit(0.1);
+        _.forEach(deathFrames, function(deathFrame) {
+            deathAnimation.addSpriteFrame(frameCache.getSpriteFrame(deathFrame));
+        });
+
         var fadeOut = cc.FadeOut.create(0.8);
         var blink = cc.Blink.create(1, 50);
+        var delay = cc.DelayTime.create(1);
         var callFunc = cc.CallFunc.create(this.respawn.bind(this));
-        this.runAction(cc.Sequence.create(cc.Spawn.create(fadeOut, blink), callFunc));
+        this.runAction(cc.Sequence.create(
+            cc.Animate.create(rotateAnimation),  // くるくるまわって
+            cc.Animate.create(deathAnimation),   // ぱたっと倒れて
+            delay, // 1秒待って
+            cc.Spawn.create(fadeOut, blink),     // 点滅しながら消えていく
+            delay,
+            callFunc
+        ));
     },
 
     /** @override */
@@ -179,7 +205,9 @@ bq.entity.Player = bq.entity.Entity.extend({
             step_top:         ["b4_4.png", "b4_5.png", "b4_6.png", "b4_7.png"],
             step_topleft:     ["b5_4.png", "b5_5.png", "b5_6.png", "b5_7.png"],
             step_left:        ["b6_4.png", "b6_5.png", "b6_6.png", "b6_7.png"],
-            step_bottomleft:  ["b7_4.png", "b7_5.png", "b7_6.png", "b7_7.png"]
+            step_bottomleft:  ["b7_4.png", "b7_5.png", "b7_6.png", "b7_7.png"],
+            rotate:           ["b0_0.png", "b1_0.png","b2_0.png", "b3_0.png","b4_0.png", "b5_0.png","b6_0.png", "b7_0.png"],
+            death:            ["playerMisc0_0.png","playerMisc0_1.png","playerMisc0_2.png","playerMisc0_3.png"]
         };
     },
 

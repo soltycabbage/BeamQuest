@@ -85,8 +85,8 @@ bq.scene.LoginLayer = cc.Layer.extend({
         // init frame cache
         var frameCache = cc.SpriteFrameCache.getInstance();
         frameCache.addSpriteFrames(s_PlistPlayerWalking, s_ImgPlayerWalking);
-        // FIXME ハイパー違和感2、誰か直して〜
         frameCache.addSpriteFrames(s_PlistSimpleBeam, s_ImgSimpleBeam);
+        frameCache.addSpriteFrames(s_PlistPlayerMisc, s_ImgPlayerMisc);
 
         var player = new bq.entity.Player();
         var position = data.player.position;
