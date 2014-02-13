@@ -152,7 +152,7 @@ bq.entity.Entity = cc.Sprite.extend({
         tt.setPosition(cc.p(msgRect.getBoundingBox().getWidth() / 2, 10));
 
         // 吹き出しのしっぽみたいなやつ
-        var tail = cc.Sprite.create(s_ChatTail);
+        var tail = cc.Sprite.create(s_ImgChatTail);
         tail.setColor(cc.c3b(0, 0, 0));
         tail.setOpacity(200);
         tail.setPosition(cc.p(msgRect.getBoundingBox().getWidth() / 2, -3));
