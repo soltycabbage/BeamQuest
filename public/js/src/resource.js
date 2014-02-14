@@ -33,6 +33,8 @@ var s_SeDamage = 'res/sounds/Damage.ogg';
 var s_SeNoDamage = 'res/sounds/NoDamage.mp3';
 
 var g_resources = [
+    // Note. 各種接頭辞をつけてね。(ex. 画像ならs_Img)
+
     //img
     {type: 'image', src:s_ImgPlayer},
     //{type: 'image', src:s_ShinjukuMapSet},
