@@ -184,7 +184,7 @@ bq.entity.Entity = cc.Sprite.extend({
         if (this.animations[key] ) {
             return this.animations[key];
         } else {
-            cc.log(key + "　is not found");
+            cc.log(key + " is not found");
             return null;
         }
      },
