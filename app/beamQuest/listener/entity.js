@@ -99,9 +99,9 @@ Entity.prototype.addExp = function(playerId, mob) {
         player.addExp(mob.model.exp);
         player.model.socket.emit('user:status:exp:update', {
             exp: mob.model.exp,
-            prevExp: player.model.prevExp,
+            prevLvExp: player.model.prevLvExp,
             currentExp: player.model.exp,
-            nextExp: player.model.nextExp});
+            nextLvExp: player.model.nextLvExp});
     }        
 };
 

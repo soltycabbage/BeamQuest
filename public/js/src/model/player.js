@@ -16,13 +16,13 @@ bq.model.Player = bq.model.Entity.extend({
          * 前のレベルまでに必要な経験値
          * @type {number}
          */
-        this.prevExp;
+        this.prevLvExp;
 
         /**
          * 次のレベルまでに必要な経験値
          * @type {number}
          */
-        this.nextExp;
+        this.nextLvExp;
 
         /** @type {number} */
         this.lv;
@@ -42,8 +42,8 @@ bq.model.Player = bq.model.Entity.extend({
         this.maxBp = json['maxBp'];
         this.bp = json['bp'];
         this.exp = json['exp'];
-        this.prevExp = json['prevExp'];
-        this.nextExp = json['nextExp'];
+        this.prevLvExp = json['prevLvExp'];
+        this.nextLvExp = json['nextLvExp'];
         this.lv = json['lv'];
     }
 });

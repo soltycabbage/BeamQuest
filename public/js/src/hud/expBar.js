@@ -14,13 +14,13 @@ bq.hud.ExpBar = bq.hud.HudItem.extend({
     },
 
     /**
-     * @param {number} prevExp
+     * @param {number} prevLvExp
      * @param {number} currentExp
-     * @param {number} nextExp
+     * @param {number} nextLvExp
      */
-    updateExpBar: function(prevExp, currentExp, nextExp) {
-        var s = nextExp - prevExp;
-        var k = currentExp - prevExp;
+    updateExpBar: function(prevLvExp, currentExp, nextLvExp) {
+        var s = nextLvExp - prevLvExp;
+        var k = currentExp - prevLvExp;
         var ratio = Math.floor(k / s * 100);
         this.valueBar_.width(ratio + '%');
         this.container_.infoBox({

@@ -27,13 +27,13 @@ var Player = function(opt_data) {
      * 前回のレベルアップ時に必要だった経験値数
      * @type {number}
      */
-    this.prevExp = bq.Params.Exp[this.lv];
+    this.prevLvExp = bq.Params.Exp[this.lv];
 
     /**
      * 次のレベルまでに必要な経験値
      * @type {number}
      */
-    this.nextExp = bq.Params.Exp[this.lv + 1];
+    this.nextLvExp = bq.Params.Exp[this.lv + 1];
 
     /** @type {boolean} */
     this.isDeath = !!this.data.isDeath;
@@ -65,16 +65,16 @@ Player.prototype.addExp = function(exp) {
  */
 Player.prototype.addLevel = function(lv) {
     this.lv += lv;
-    this.updatePrevNextExp_();
+    this.updatePrevNextLvExp_();
 };
 
 /**
  * 前/次レベルまでに必要な経験値を更新する
  * @private
  */
-Player.prototype.updatePrevNextExp_ = function() {
-    this.prevExp = bq.Params.Exp[this.lv];
-    this.nextExp = bq.Params.Exp[this.lv + 1];
+Player.prototype.updatePrevNextLvExp_ = function() {
+    this.prevLvExp = bq.Params.Exp[this.lv];
+    this.nextLvExp = bq.Params.Exp[this.lv + 1];
 };
 
 
@@ -84,8 +84,8 @@ Player.prototype.toJSON = function() {
     json.maxBp =  this.maxBp;
     json.bp = this.bp;
     json.exp = this.exp;
-    json.prevExp = this.prevExp;
-    json.nextExp = this.nextExp;
+    json.prevLvExp = this.prevLvExp;
+    json.nextLvExp = this.nextLvExp;
     json.lv = this.lv;
     json.isDeath = this.isDeath;
     return json;

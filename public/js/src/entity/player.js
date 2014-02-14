@@ -142,16 +142,16 @@ bq.entity.Player = bq.entity.Entity.extend({
     },
 
     initExp: function() {
-        $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_EXP, [this.model_.prevExp, this.model_.exp, this.model_.nextExp]);
+        $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_EXP, [this.model_.prevLvExp, this.model_.exp, this.model_.nextLvExp]);
     },
 
     /**
-     * @param {Object.<exp: number, prevExp: number, currentExp: number, nextExp: number> data
+     * @param {Object.<exp: number, prevLvExp: number, currentExp: number, nextLvExp: number> data
      */
     updateExp: function(data) {
         this.popExpLabel(data.exp);
         this.model_.addExp(data.exp);
-        $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_EXP, [data.prevExp, data.currentExp, data.nextExp]);
+        $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_EXP, [data.prevLvExp, data.currentExp, data.nextLvExp]);
     },
 
     /**
