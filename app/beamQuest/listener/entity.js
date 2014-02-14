@@ -66,6 +66,16 @@ Entity.prototype.updateHp = function(data) {
 };
 
 /**
+ * bpの増減をクライアントに伝える
+ * @param {Object.<entity: model.Player, bpAmount: number>} data
+ */
+Entity.prototype.updateBp = function(data) {
+    if (this.io_) {
+        this.socket_.emit('user:status:bp:update', data);
+    }
+};
+
+/**
  * Mob殺すよってクライアントに伝える
  * @param {ctrl.Mob} mob
  */

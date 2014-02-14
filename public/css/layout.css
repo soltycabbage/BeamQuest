@@ -3,6 +3,11 @@
     src: url(../res/fonts/pixelMplus.ttf) format("truetype");
 }
 
+@font-face {
+    font-family: spacie;
+    src: url(../res/fonts/spacie.ttf) format("truetype");
+}
+
 body {
     padding: 0px;
     border: 0px;
@@ -99,6 +104,17 @@ body {
     border-bottom-right-radius: 2px;
 }
 
+#bq-bp-bar-gain {
+    position: absolute;
+    background: #c5fffd;
+    z-index: 100;
+    width: 140px;
+    height: 22px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    bottom: 0;
+}
+
 #bq-hp-bar-background,
 #bq-bp-bar-background {
     height: 23px;
@@ -107,6 +123,7 @@ body {
     opacity: 0.7;
     position: absolute;
     left: 38px;
+    bottom: -2px;
 }
 
 #bq-hp-bar-value,
@@ -117,6 +134,19 @@ body {
     border-radius: 2px;
     height: 22px;
     width: 260px;
+    bottom: -2px;
+}
+
+#bq-hp-bar-value-text,
+#bq-bp-bar-value-text {
+    z-index: 110;
+    font-family: spacie;
+    position: absolute;
+    right: 4px;
+    bottom: -1px;
+    font-size: 14px;
+    color: #FFF;
+    text-shadow: 2px 2px #272525;
 }
 
 #bq-hp-bar-value {

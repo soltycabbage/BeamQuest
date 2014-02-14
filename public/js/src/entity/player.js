@@ -133,6 +133,14 @@ bq.entity.Player = bq.entity.Entity.extend({
         $(this).triggerHandler(bq.entity.Player.EventType.INIT_HP, [this.model_.hp, this.model_.maxHp]);
     },
 
+    updateBp: function(bpData) {
+        $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_BP, [bpData.entity.bp, this.model_]);
+    },
+
+    initBp: function() {
+        $(this).triggerHandler(bq.entity.Player.EventType.INIT_BP, [this.model_.bp, this.model_.maxBp]);
+    },
+
     initExp: function() {
         $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_EXP, [this.model_.prevExp, this.model_.exp, this.model_.nextExp]);
     },
@@ -226,6 +234,7 @@ bq.entity.Player = bq.entity.Entity.extend({
  */
 bq.entity.Player.EventType = {
     INIT_HP: 'inithp',
+    INIT_BP: 'initbp',
     UPDATE_HP: 'updatehp',
     UPDATE_BP: 'updatebp',
     UPDATE_EXP: 'updateexp'

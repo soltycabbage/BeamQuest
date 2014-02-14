@@ -46,6 +46,14 @@ util.inherits(Player, Entity);
 Player.DEFAULT_MAX_BP = 10;
 
 /**
+ * @param {number} amount
+ */
+Player.prototype.addBp = function(amount) {
+    this.bp = Math.max(0, Math.min(this.maxBp, this.bp + amount));
+    this.emit('addBp', amount);
+};
+
+/**
  * @param {number} exp
  */
 Player.prototype.addExp = function(exp) {
