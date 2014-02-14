@@ -70,8 +70,8 @@ Entity.prototype.updateHp = function(data) {
  * @param {Object.<entity: model.Player, bpAmount: number>} data
  */
 Entity.prototype.updateBp = function(data) {
-    if (this.io_) {
-        this.socket_.emit('user:status:bp:update', data);
+    if (this.io_ && data.entity) {
+        data.entity.socket.emit('user:status:bp:update', data);
     }
 };
 
