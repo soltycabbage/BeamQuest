@@ -98,15 +98,15 @@ Player.prototype.death = function() {
  */
 Player.prototype.addExp = function(exp) {
     this.model.addExp(exp);
-    this.checkExp_();
+    this.tryLevelUp_();
 };
 
 /**
- * 現在の経験値を調べる。
+ * 現在の経験値を調べて、
  * 次のレベルまでに必要な経験値に達していたらレベルアップする
  * @private
  */
-Player.prototype.checkExp_ = function() {
+Player.prototype.tryLevelUp_ = function() {
     var nextLevelExp = bq.Params.Exp[this.model.lv + 1];
     if (this.model.exp >= nextLevelExp) {
         this.levelUp();
@@ -120,7 +120,7 @@ Player.prototype.levelUp = function() {
     this.model.addLevel(1);
     // TODO: レベルアップの処理を書く
     console.log('Level' + this.model.lv);
-    this.checkExp_();
+    this.tryLevelUp_();
 };
 
 module.exports = Player;
