@@ -6,6 +6,8 @@
 // 設定値とかを入れる。
 bq.beams = [];
 
+// Note. 各種接頭辞をつけてね。(ex. 画像ならs_Img)
+
 // img
 var s_ImgPlayer        = 'res/img/player.png';
 var s_ImgChatTail      = 'res/img/chat_tail.png';
@@ -15,6 +17,7 @@ var s_ImgSimpleBeam    = 'res/img/beam/simple.png';
 var s_ImgSmoke0        = 'res/img/beam/smoke.png';
 
 // tmx
+// TODO s_Tmx, s_Tile はじまりにへんこー
 var s_ShinjukuTmx        =  'res/map/shinjuku.tmx';
 var s_ShinjukuMapSet     =  'res/map/shinjuku_mapset.png';
 var s_StartVillageTmx    =  'res/map/map_village.tmx';
@@ -33,8 +36,6 @@ var s_SeDamage = 'res/sounds/Damage.ogg';
 var s_SeNoDamage = 'res/sounds/NoDamage.mp3';
 
 var g_resources = [
-    // Note. 各種接頭辞をつけてね。(ex. 画像ならs_Img)
-
     //img
     {type: 'image', src:s_ImgPlayer},
     //{type: 'image', src:s_ShinjukuMapSet},
