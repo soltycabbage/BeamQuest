@@ -89,6 +89,8 @@ bq.scene.LoginLayer = cc.Layer.extend({
         frameCache.addSpriteFrames(s_SimpleBeamPlist, s_SimpleBeamImg);
 
         var player = new bq.entity.Player();
+        var hud = bq.Hud.getInstance();
+        hud.initPlayer(player);
         var position = data.player.position;
         player.setPosition(cc.p(position.x, position.y));
 
@@ -96,9 +98,10 @@ bq.scene.LoginLayer = cc.Layer.extend({
         player.setProfile({name: userId});
         player.showName();
         player.initHp();
+        player.initBp();
+        player.initExp();
         bq.player = player;
-        var hud = bq.Hud.getInstance();
-        hud.initPlayer(player);
+
     },
 
     /**

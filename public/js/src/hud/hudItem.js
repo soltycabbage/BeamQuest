@@ -3,4 +3,12 @@
  * @constructor
  */
 bq.hud = {};
-bq.hud.HudItem = cc.Node.extend({});
+bq.hud.HudItem = cc.Node.extend({
+    /**
+     * @param {boolean} enabled
+     * @protected
+     */
+    enable: function(enabled) {
+        // must override
+    }
+});

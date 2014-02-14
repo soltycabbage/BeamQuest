@@ -6,8 +6,23 @@ bq.model.Player = bq.model.Entity.extend({
         /** @type {number} */
         this.bp;
 
-        /** @type {number} */
+        /**
+         * 現在の経験値
+         * @type {number}
+         */
         this.exp;
+
+        /**
+         * 前のレベルまでに必要な経験値
+         * @type {number}
+         */
+        this.prevLvExp;
+
+        /**
+         * 次のレベルまでに必要な経験値
+         * @type {number}
+         */
+        this.nextLvExp;
 
         /** @type {number} */
         this.lv;
@@ -15,11 +30,20 @@ bq.model.Player = bq.model.Entity.extend({
         this._super(json);
     },
 
+    /**
+     * @param {number} exp
+     */
+    addExp: function(exp) {
+        this.exp += exp;
+    },
+
     parse: function(json) {
         this._super(json);
         this.maxBp = json['maxBp'];
         this.bp = json['bp'];
         this.exp = json['exp'];
+        this.prevLvExp = json['prevLvExp'];
+        this.nextLvExp = json['nextLvExp'];
         this.lv = json['lv'];
     }
 });

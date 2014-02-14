@@ -94,10 +94,18 @@ bq.Socket = cc.Class.extend({
          */
         // 経験値貰ったよって
         this.socket.on('user:status:exp:update', function(data) {
-            bq.player.popExpLabel(data.exp);
-            // TODO:システムメッセージに表示する。
+            bq.player.updateExp(data);
         });
 
+        // BPに変動があったよって
+        this.socket.on('user:status:bp:update', function(data) {
+            bq.player.updateBp(data);
+        });
+
+        // BPが足りないよって
+        this.socket.on('user:status:bp:lack', function(data) {
+            bq.player.showMessage('BP足りひん'); // TODO 適切なアナウンスにする
+        });
     },
 
     /**

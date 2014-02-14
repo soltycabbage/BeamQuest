@@ -20,6 +20,7 @@
             'js/lib/underscore-min.js',
             'js/lib/md5.js',
             'js/lib/gamecontroller.min.js',
+            'js/lib/jquery.mouseinfobox.js',
 
             // resources
             'js/src/resource.js',
@@ -49,6 +50,7 @@
             // HUD
             'js/src/hud/hudItem.js',
             'js/src/hud/hpBpBar.js',
+            'js/src/hud/expBar.js',
             'js/src/hud/hud.js',
 
             // entity
