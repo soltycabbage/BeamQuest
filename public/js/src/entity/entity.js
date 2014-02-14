@@ -176,6 +176,18 @@ bq.entity.Entity = cc.Sprite.extend({
         }
     },
 
+    /**
+     * @param {string} key
+     * @returns {bq.Animate}
+     */
+    getAnimationByKey: function(key) {
+        if (this.animations[key] ) {
+            return this.animations[key];
+        } else {
+            cc.log(key + " is not found");
+            return null;
+        }
+     },
 
     /**
      *
@@ -185,11 +197,7 @@ bq.entity.Entity = cc.Sprite.extend({
      */
     getAnimationByNameDirection: function(name, direction) {
         var key = name + "_" + direction;
-        if ( this.animations[key] ) {
-            return this.animations[key];
-        } else {
-            cc.log(key + "　is not found");
-        }
+        return this.getAnimationByKey(key);
      },
 
     /**
@@ -212,13 +220,9 @@ bq.entity.Entity = cc.Sprite.extend({
         this.currentDirection = direction;
 
         var animation = this.getAnimationByNameDirection(state,direction);
-        animation.setTag('walk_');
+        animation.setTag('walk');
 
-        // すでにactionManagerの管理下にある歩行アニメーションを削除
-        var oldAnimation = this.getActionByTag('walk_');
-        if (oldAnimation) {
-            this.stopAction(oldAnimation);
-        }
+        this.stopForeverAnimation();
         this.runAction(animation);
     },
 
@@ -236,6 +240,16 @@ bq.entity.Entity = cc.Sprite.extend({
         } else { // ノーダメやで
             bq.soundManager.playEffect(s_SeNoDamage);
             this.popNoDamageLabel_(!!opt_popLeft);
+        }
+    },
+
+    /**
+     * 常に動いているアニメーション(歩行アニメーションとか)を止める
+     */
+    stopForeverAnimation: function() {
+        var walkAnimation = this.getActionByTag('walk');
+        if (walkAnimation) {
+            this.stopAction(walkAnimation);
         }
     },
 

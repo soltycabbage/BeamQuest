@@ -55,19 +55,6 @@ var Mob = function() {
     this.isPassive = true;
 
     /**
-     * FFのアクティブタイムバトル的な。activeTimeUp以上で行動開始
-     * @type {number}
-     * @private
-     */
-    this.activeTime_ = 0;
-
-    /**
-     * activeTimeがこの数値以上になったら攻撃等の動作を開始する
-     * @type {Number}
-     */
-    this.activeTimeUp = 100;
-
-    /**
      * 行動中(攻撃モーション中 etc）ならtrue
      * @type {Boolean}
      * @private
@@ -111,7 +98,7 @@ Mob.prototype.update = function() {
             if (_.isEmpty(this.hateList) && this.startPos) {
                 // 敵対キャラを殺し尽くしたら元の位置に戻っていく・・・
                 this.isActive_ = false;
-                this.moveTo(this.startPos, 50);
+                this.attackCancel();
             }
         } else if (targetEntity) { // ターゲットが同じマップ内にいるなら攻撃を仕掛ける
             this.attackTo(targetEntity);
