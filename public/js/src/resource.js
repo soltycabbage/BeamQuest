@@ -6,25 +6,28 @@
 // 設定値とかを入れる。
 bq.beams = [];
 
+// Note. 各種接頭辞をつけてね。(ex. 画像ならs_Img)
+
 // img
-var s_Player = 'res/img/player.png';
-var s_ChatTail = 'res/img/chat_tail.png';
-var s_PlayerWalkingImg = 'res/img/walk_anime.png';
-var s_beam0 = 'res/img/star.png'; // TODO s_Beam0 にする (iwg)
-var s_SimpleBeamImg = 'res/img/simple_beam.png';
-var s_smoke0 = 'res/img/smoke.png'; // TODO s_Smoke0 にする (iwg)
+var s_ImgPlayer        = 'res/img/player.png';
+var s_ImgChatTail      = 'res/img/chat_tail.png';
+var s_ImgPlayerWalking = 'res/img/player/walk.png';
+var s_ImgBeam0         = 'res/img/beam/star.png';
+var s_ImgSimpleBeam    = 'res/img/beam/simple.png';
+var s_ImgSmoke0        = 'res/img/beam/smoke.png';
 
 // tmx
-var s_ShinjukuTmx = 'res/map/shinjuku.tmx';
-var s_ShinjukuMapSet= 'res/map/shinjuku_mapset.png';
-var s_StartVillageTmx = 'res/map/map_village.tmx';
-var s_StartVillageMapSet= 'res/map/tile_village.png';
-var s_SmallVillageTmx = 'res/map/map_small_village.tmx'; 
-var s_SmallVillageMapSet = 'res/map/tile_small_village.png'; 
+// TODO s_Tmx, s_Tile はじまりにへんこー
+var s_ShinjukuTmx        =  'res/map/shinjuku.tmx';
+var s_ShinjukuMapSet     =  'res/map/shinjuku_mapset.png';
+var s_StartVillageTmx    =  'res/map/map_village.tmx';
+var s_StartVillageMapSet =  'res/map/tile_village.png';
+var s_SmallVillageTmx    =  'res/map/map_small_village.tmx';
+var s_SmallVillageMapSet =  'res/map/tile_small_village.png';
 
 // plist
-var s_PlayerWalkingPlist = 'res/img/walk_anime.plist';
-var s_SimpleBeamPlist = 'res/img/simple_beam.plist';
+var s_PlistPlayerWalking =  'res/img/player/walk.plist';
+var s_PlistSimpleBeam    =  'res/img/beam/simple.plist';
 
 // sounds
 var s_BgmField = 'res/sounds/Field.m4a';
@@ -34,19 +37,19 @@ var s_SeNoDamage = 'res/sounds/NoDamage.mp3';
 
 var g_resources = [
     //img
-    {type: 'image', src:s_Player},
+    {type: 'image', src:s_ImgPlayer},
     //{type: 'image', src:s_ShinjukuMapSet},
     {type: 'image', src:s_StartVillageMapSet},
     {type: 'image', src:s_SmallVillageMapSet},
-    {type: 'image', src:s_ChatTail},
-    {type: 'image', src:s_PlayerWalkingImg},
-    {type: 'image', src:s_beam0},
-    {type: 'image', src:s_smoke0},
-    {type: 'image', src:s_SimpleBeamImg},
+    {type: 'image', src:s_ImgChatTail},
+    {type: 'image', src:s_ImgPlayerWalking},
+    {type: 'image', src:s_ImgBeam0},
+    {type: 'image', src:s_ImgSmoke0},
+    {type: 'image', src:s_ImgSimpleBeam},
 
     //plist
-    {type: 'plist', src:s_PlayerWalkingPlist},
-    {type: 'plist', src:s_SimpleBeamPlist},
+    {type: 'plist', src:s_PlistPlayerWalking},
+    {type: 'plist', src:s_PlistSimpleBeam},
 
     //fnt
 

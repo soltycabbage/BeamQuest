@@ -84,9 +84,9 @@ bq.scene.LoginLayer = cc.Layer.extend({
         // TODO: このクラスでframeCacheにセットするのはハイパー違和感があるので初期設定用のクラスとか作ってやりたい
         // init frame cache
         var frameCache = cc.SpriteFrameCache.getInstance();
-        frameCache.addSpriteFrames(s_PlayerWalkingPlist, s_PlayerWalkingImg);
+        frameCache.addSpriteFrames(s_PlistPlayerWalking, s_ImgPlayerWalking);
         // FIXME ハイパー違和感2、誰か直して〜
-        frameCache.addSpriteFrames(s_SimpleBeamPlist, s_SimpleBeamImg);
+        frameCache.addSpriteFrames(s_PlistSimpleBeam, s_ImgSimpleBeam);
 
         var player = new bq.entity.Player();
         var hud = bq.Hud.getInstance();
