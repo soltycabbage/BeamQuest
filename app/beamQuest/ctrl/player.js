@@ -119,7 +119,7 @@ Player.prototype.tryLevelUp_ = function() {
 Player.prototype.levelUp = function() {
     this.model.addLevel(1);
     // TODO: レベルアップの処理を書く
-    console.log('Level' + this.model.lv);
+    logger.info('player levelUp [playerId=' + this.model.id + ', level=' + this.model.lv +']');
     this.tryLevelUp_();
 };
 
