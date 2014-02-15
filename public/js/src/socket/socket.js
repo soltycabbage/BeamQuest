@@ -89,6 +89,11 @@ bq.Socket = cc.Class.extend({
             entityManager.updateHp(data);
         });
 
+        // レベルアップしたよって
+        this.socket.on('notify:entity:player:levelup', function(data) {
+            var model = new bq.model.Player(data);
+            entityManager.levelUp(model);
+        });
         /**
          *  1対1の通信
          */

@@ -104,13 +104,16 @@ Player.prototype.addExp = function(exp) {
 /**
  * 現在の経験値を調べて、
  * 次のレベルまでに必要な経験値に達していたらレベルアップする
+ * @return {boolean} レベルアップできたらtrue
  * @private
  */
 Player.prototype.tryLevelUp_ = function() {
     var nextLevelExp = bq.Params.Exp[this.model.lv + 1];
     if (this.model.exp >= nextLevelExp) {
         this.levelUp();
+        return true;
     }
+    return false;
 };
 
 /**
@@ -118,9 +121,11 @@ Player.prototype.tryLevelUp_ = function() {
  */
 Player.prototype.levelUp = function() {
     this.model.addLevel(1);
-    // TODO: レベルアップの処理を書く
     logger.info('player levelUp [playerId=' + this.model.id + ', level=' + this.model.lv +']');
-    this.tryLevelUp_();
+    var chainLevelUp = this.tryLevelUp_(); // もらう経験値次第ではレベルが2以上アップする可能性があるので
+    if (!chainLevelUp) {
+        entityListener.levelUp(this.model);
+    }
 };
 
 module.exports = Player;

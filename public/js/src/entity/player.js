@@ -163,8 +163,12 @@ bq.entity.Player = bq.entity.Entity.extend({
         $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_EXP, [data.prevLvExp, data.currentExp, data.nextLvExp]);
     },
 
-    initLevel: function() {
-        $(this).triggerHandler(bq.entity.Player.EventType.INIT_LEVEL, [this.model_.lv]);
+    /**
+     * @param {number=} opt_level
+     */
+    initLevel: function(opt_level) {
+        var level = opt_level || this.model_.lv;
+        $(this).triggerHandler(bq.entity.Player.EventType.INIT_LEVEL, [level]);
     },
 
     /**

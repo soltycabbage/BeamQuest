@@ -107,10 +107,10 @@ Entity.prototype.addExp = function(playerId, mob) {
 
 /**
  * レベルアップしたよってクライアントに伝える
- * @param {Array.<entity: model.Entity, hpAmount: number>} hpAmounts
+ * @param {model.Player} playerModel
  */
-Entity.prototype.levelUp = function(data) {
-
+Entity.prototype.levelUp = function(playerModel) {
+    this.io_.sockets.emit('notify:entity:player:levelup', playerModel);
 };
 
 /**
