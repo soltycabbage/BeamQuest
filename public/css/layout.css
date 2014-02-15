@@ -209,8 +209,11 @@ body {
 #bq-level {
     font-family: spacie;
     position: absolute;
-    bottom: 62px;
+    bottom: 64px;
     left: 276px;
     color: #FFFFFF;
     text-shadow: 3px 1px 3px #363636;
+    padding: 0px 12px;
+    background: rgba(23, 27, 25, 0.6);
+    border-radius: 2px;
 }
