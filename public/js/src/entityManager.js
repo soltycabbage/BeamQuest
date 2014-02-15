@@ -240,6 +240,7 @@ bq.EntityManager = cc.Class.extend({
     levelUp: function(model) {
         if (model.id === bq.player.name) {
             bq.player.setModel(model);
+            bq.player.levelUp();
         }
         var msg = model.id + ' はレベル' + model.lv + 'になった！';
         bq.MessageLog.getInstance().addStatusMsg(msg);

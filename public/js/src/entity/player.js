@@ -227,6 +227,13 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.runAction(fadeIn);
     },
 
+    /**
+     * レベルアップのエフェクト
+     */
+    levelUp: function() {
+        // TODO エフェクト処理を書く
+        bq.soundManager.playEffect(s_SeLevelUp);
+    },
 
     getKeyFrameMap_: function () {
         return  {
