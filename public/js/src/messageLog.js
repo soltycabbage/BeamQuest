@@ -40,7 +40,7 @@ bq.MessageLog = cc.Class.extend({
      * @param {string} msg
      */
     addStatusMsg: function(msg) {
-        this.add_(msg, '#ff0'); //
+        this.add_(msg, '#0ff'); //
     },
 
     /**
