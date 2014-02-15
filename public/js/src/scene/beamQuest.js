@@ -48,7 +48,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
 
         this.initPing_();
 
-        bq.soundManager.playMusic(s_BgmField, true);
+        //bq.soundManager.playMusic(s_BgmField, true);
         return true;
     },
 
