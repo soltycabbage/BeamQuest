@@ -27,6 +27,15 @@ bq.entity.Player = bq.entity.Entity.extend({
     },
 
     /** @override */
+    setModel: function(model) {
+        this._super(model);
+        this.initHp();
+        this.initBp();
+        this.initExp();
+        this.initLevel();
+    },
+
+    /** @override */
     update: function () {
         if (this.currentState === bq.entity.EntityState.Mode.death) {
             // 死んでいたらなにもできない。人生と同じ。
@@ -154,6 +163,10 @@ bq.entity.Player = bq.entity.Entity.extend({
         $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_EXP, [data.prevLvExp, data.currentExp, data.nextLvExp]);
     },
 
+    initLevel: function() {
+        $(this).triggerHandler(bq.entity.Player.EventType.INIT_LEVEL, [this.model_.lv]);
+    },
+
     /**
      * 各種値を設定する
      * @param {Object} data
@@ -265,6 +278,7 @@ bq.entity.Player = bq.entity.Entity.extend({
 bq.entity.Player.EventType = {
     INIT_HP: 'inithp',
     INIT_BP: 'initbp',
+    INIT_LEVEL: 'updatelevel',
     UPDATE_HP: 'updatehp',
     UPDATE_BP: 'updatebp',
     UPDATE_EXP: 'updateexp'

@@ -51,6 +51,7 @@
             'js/src/hud/hudItem.js',
             'js/src/hud/hpBpBar.js',
             'js/src/hud/expBar.js',
+            'js/src/hud/level.js',
             'js/src/hud/hud.js',
 
             // entity

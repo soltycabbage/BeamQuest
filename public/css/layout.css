@@ -205,3 +205,12 @@ body {
     padding: 4px;
     font-size: 10px;
 }
+
+#bq-level {
+    font-family: spacie;
+    position: absolute;
+    bottom: 62px;
+    left: 276px;
+    color: #FFFFFF;
+    text-shadow: 3px 1px 3px #363636;
+}

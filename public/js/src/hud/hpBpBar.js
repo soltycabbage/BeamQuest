@@ -90,7 +90,7 @@ bq.hud.HpBpBar = bq.hud.HudItem.extend({
     },
 
     /**
-     * 現在HPにあわせてHPバーを伸縮する
+     * 現在BPにあわせてBPバーを伸縮する
      * @param {numer} currentBp
      * @param {numer} maxBp
      * @private

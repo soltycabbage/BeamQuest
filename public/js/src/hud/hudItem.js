@@ -4,11 +4,21 @@
  */
 bq.hud = {};
 bq.hud.HudItem = cc.Node.extend({
+    ctor: function() {
+        /**
+         * @type {jQuery.Element}
+         * @protected
+         */
+        this.container_;
+    },
+
     /**
      * @param {boolean} enabled
      * @protected
      */
     enable: function(enabled) {
-        // must override
+        if (this.container_) {
+            this.container_.hide(enabled);
+        }
     }
 });
