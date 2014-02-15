@@ -11,10 +11,10 @@ exports.listen = function(socket, io) {
         result.success = true;
         var player = entities.getPlayerById(data.mapId, data.shooterId);
         if (player) {
-            var bpCost = 1; // @TODO ビームから消費BPを取得
-            // var beam = player.getBeam(); こんな感じでビームの種類を取りたい @TODO
-            if (bpCost <= player.model.bp) {
-                player.model.addBp(-bpCost);
+            var beam =  player.model.beam;
+            result.beamId = beam.id;
+            if (beam.bp <= player.model.bp) {
+                player.model.addBp(-beam.bp);
             } else {
                 // BPが足りないのでビームは撃てないよみたいなアナウンスを入れる
                 socket.emit('user:status:bp:lack');

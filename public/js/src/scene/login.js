@@ -99,6 +99,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
         player.showName();
         player.initHp();
         player.initBp();
+        player.initBeam();
         player.initExp();
         bq.player = player;
 

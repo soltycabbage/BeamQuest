@@ -5,15 +5,11 @@ require('shared/js/gameTypes');
 
 bq.Params = {
     Beams: {
-        METEOR: {atk: 10, speed: 10, bp: 10},
-        FIRE: {atk: 10, speed: 10, bp: 10}
-    },
-    Beams: {
-        NORMAL0: {atk: 5, speed: 1, bp: 1},
-        NORMAL1: {atk: 5, speed: 1, bp: 1},
-        NORMAL2: {atk: 5, speed: 1, bp: 1},
-        FIRE: {atk: 10, speed: 10, bp: 10},
-        METEOR: {atk: 10, speed: 10, bp: 10}
+        NORMAL0: {id:'normal0',  atk: 5, speed: 1, bp: 1}, // TODO このIDはbq.Types.beamsと一緒
+        NORMAL1: {id:'normal1', atk: 5, speed: 1, bp: 1},
+        NORMAL2: {id:'normal2', atk: 5, speed: 1, bp: 1},
+        FIRE: {id:'fire', atk: 10, speed: 10, bp: 10},
+        METEOR: {id:'meteor', atk: 10, speed: 10, bp: 10}
     },
 
     Entities: {
