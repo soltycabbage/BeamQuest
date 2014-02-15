@@ -32,10 +32,12 @@ var s_PlistSimpleBeam    =  'res/img/beam/simple.plist';
 var s_PlistPlayerMisc    =  'res/img/player/misc.plist';
 
 // sounds
-var s_BgmField = 'res/sounds/Field.m4a';
-var s_SeBeamA = 'res/sounds/BeamA.m4a';
-var s_SeDamage = 'res/sounds/Damage.ogg';
-var s_SeNoDamage = 'res/sounds/NoDamage.mp3';
+var s_BgmField       = 'res/sounds/Field.m4a';
+var s_SeBeamA        = 'res/sounds/BeamA.m4a';
+var s_SeDamage       = 'res/sounds/Damage.ogg';
+var s_SeNoDamage     = 'res/sounds/NoDamage.mp3';
+var s_SeDeath1       = 'res/sounds/Death1.m4a';
+var s_SeDeath2       = 'res/sounds/Death2.m4a';
 
 var g_resources = [
     //img

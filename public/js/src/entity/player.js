@@ -169,6 +169,7 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.stopForeverAnimation();
 
         // 死亡モーション＊くるくるまわってぱたっと倒れる
+        bq.soundManager.playEffect(s_SeDeath1);
         var frameCache = cc.SpriteFrameCache.getInstance();
         var rotateFrames = this.getKeyFrameMap_()['rotate'];
         var rotateAnimation = cc.Animation.create();
@@ -190,6 +191,7 @@ bq.entity.Player = bq.entity.Entity.extend({
         var callFunc = cc.CallFunc.create(this.respawn.bind(this));
         this.runAction(cc.Sequence.create(
             cc.Animate.create(rotateAnimation),  // くるくるまわって
+            cc.CallFunc.create(function() {bq.soundManager.playEffect(s_SeDeath2);}),
             cc.Animate.create(deathAnimation),   // ぱたっと倒れて
             delay, // 1秒待って
             cc.Spawn.create(fadeOut, blink),     // 点滅しながら消えていく
