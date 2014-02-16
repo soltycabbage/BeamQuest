@@ -115,7 +115,6 @@ bq.entity.Player = bq.entity.Entity.extend({
             mapId: 1, // TODO mapId
             src: {x: src.x, y: src.y},
             dest: {x: dest.x, y: dest.y},
-            // beamId: this.model_.beamId, // TODO セットする人がいないのでundefinedになってる。セットするところを作る
             tag: parseInt(new Date().getTime()) + this.name
          };
 
