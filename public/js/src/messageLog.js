@@ -35,6 +35,13 @@ bq.MessageLog = cc.Class.extend({
         this.add_(msg, '#ff0'); // 黄色
     },
 
+    /**
+     * 状況などのアナウンス（レベルアップとか）
+     * @param {string} msg
+     */
+    addStatusMsg: function(msg) {
+        this.add_(msg, '#0ff'); //
+    },
 
     /**
      * @param {string} msg

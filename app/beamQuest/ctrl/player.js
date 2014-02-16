@@ -97,30 +97,37 @@ Player.prototype.death = function() {
  * @param {number} exp
  */
 Player.prototype.addExp = function(exp) {
+    var lvUpCount = this.getLevelUpCount_(exp, this.model.lv + 1);
     this.model.addExp(exp);
-    this.tryLevelUp_();
-};
-
-/**
- * 現在の経験値を調べて、
- * 次のレベルまでに必要な経験値に達していたらレベルアップする
- * @private
- */
-Player.prototype.tryLevelUp_ = function() {
-    var nextLevelExp = bq.Params.Exp[this.model.lv + 1];
-    if (this.model.exp >= nextLevelExp) {
-        this.levelUp();
+    if (lvUpCount) {
+        this.levelUp_(lvUpCount);
     }
 };
 
 /**
- * レベルを1上げる
+ * 追加される経験値でどのくらいレベルが上がるのかを返す
+ * @param {number} exp 新た獲得する経験値
+ * @param {number} nextLevel
+ * @return {number} レベル上昇値
+ * @private
  */
-Player.prototype.levelUp = function() {
-    this.model.addLevel(1);
-    // TODO: レベルアップの処理を書く
+Player.prototype.getLevelUpCount_ = function(exp, nextLevel) {
+    var nextLevelExp = bq.Params.Exp[nextLevel];
+    if (!nextLevelExp || this.model.exp + exp < nextLevelExp) {
+        return 0;
+    }
+    return 1 + this.getLevelUpCount_(exp, nextLevel + 1);
+};
+
+/**
+ * レベルを上げる
+ * @param {number} lvUpCount
+ * @private
+ */
+Player.prototype.levelUp_ = function(lvUpCount) {
+    this.model.addLevel(lvUpCount);
     logger.info('player levelUp [playerId=' + this.model.id + ', level=' + this.model.lv +']');
-    this.tryLevelUp_();
+    entityListener.levelUp(this.model);
 };
 
 module.exports = Player;

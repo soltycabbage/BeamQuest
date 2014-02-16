@@ -233,6 +233,19 @@ bq.EntityManager = cc.Class.extend({
         }.bind(this));
     },
 
+    /**
+     * レベルアップした
+     * @param {bq.model.Player} model
+     */
+    levelUp: function(model) {
+        if (model.id === bq.player.name) {
+            bq.player.setModel(model);
+            bq.player.levelUp();
+        }
+        var msg = model.id + ' はレベル' + model.lv + 'になった！';
+        bq.MessageLog.getInstance().addStatusMsg(msg);
+    },
+
     logout: function(data) {
         var logoutPlayer =  this.otherPlayers_[data.userId];
         if (logoutPlayer) {

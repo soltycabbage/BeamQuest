@@ -97,9 +97,6 @@ bq.scene.LoginLayer = cc.Layer.extend({
         player.setModel(new bq.model.Player(data.player));
         player.setProfile({name: userId});
         player.showName();
-        player.initHp();
-        player.initBp();
-        player.initExp();
         bq.player = player;
 
     },

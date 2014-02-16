@@ -27,6 +27,15 @@ bq.entity.Player = bq.entity.Entity.extend({
     },
 
     /** @override */
+    setModel: function(model) {
+        this._super(model);
+        this.initHp();
+        this.initBp();
+        this.initExp();
+        this.initLevel();
+    },
+
+    /** @override */
     update: function () {
         if (this.currentState === bq.entity.EntityState.Mode.death) {
             // 死んでいたらなにもできない。人生と同じ。
@@ -155,6 +164,14 @@ bq.entity.Player = bq.entity.Entity.extend({
     },
 
     /**
+     * @param {number=} opt_level
+     */
+    initLevel: function(opt_level) {
+        var level = opt_level || this.model_.lv;
+        $(this).triggerHandler(bq.entity.Player.EventType.INIT_LEVEL, [level]);
+    },
+
+    /**
      * 各種値を設定する
      * @param {Object} data
      */
@@ -210,6 +227,13 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.runAction(fadeIn);
     },
 
+    /**
+     * レベルアップのエフェクト
+     */
+    levelUp: function() {
+        // TODO エフェクト処理を書く
+        bq.soundManager.playEffect(s_SeLevelUp);
+    },
 
     getKeyFrameMap_: function () {
         return  {
@@ -265,6 +289,7 @@ bq.entity.Player = bq.entity.Entity.extend({
 bq.entity.Player.EventType = {
     INIT_HP: 'inithp',
     INIT_BP: 'initbp',
+    INIT_LEVEL: 'updatelevel',
     UPDATE_HP: 'updatehp',
     UPDATE_BP: 'updatebp',
     UPDATE_EXP: 'updateexp'

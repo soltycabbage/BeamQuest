@@ -7,6 +7,7 @@ bq.Hud = cc.Node.extend({
         this.container_ = $('#bq-hud');
         this.hpBpBar_ = new bq.hud.HpBpBar();
         this.expBar_ = new bq.hud.ExpBar();
+        this.level_ = new bq.hud.Level();
     },
 
     /**
@@ -19,6 +20,7 @@ bq.Hud = cc.Node.extend({
         $(player).on(bq.entity.Player.EventType.INIT_BP, _.bind(this.handleInitBp_, this));
         $(player).on(bq.entity.Player.EventType.UPDATE_BP, _.bind(this.handleUpdateBp_, this));
         $(player).on(bq.entity.Player.EventType.UPDATE_EXP, _.bind(this.handleUpdateExp_, this));
+        $(player).on(bq.entity.Player.EventType.INIT_LEVEL, _.bind(this.handleInitLevel_, this));
     },
 
     enable: function(enabled) {
@@ -78,6 +80,15 @@ bq.Hud = cc.Node.extend({
      */
     handleUpdateExp_: function(evt, prevLvExp, currentExp, nextLvExp) {
         this.expBar_.updateExpBar(prevLvExp, currentExp, nextLvExp);
+    },
+
+    /**
+     * @param {Event} evt
+     * @param {number} level
+     * @private
+     */
+    handleInitLevel_: function(evt, level) {
+        this.level_.initLevel(level);
     }
 });
 
