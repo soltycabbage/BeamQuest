@@ -77,18 +77,20 @@ bq.beam.Beam = cc.Node.extend({
      * srcからdestまで飛ぶように設定する。呼び出したあとは画面に表示されて飛ぶ
      * @param {cc.p} src 発射開始座標
      * @param {cc.p} dest 到着予定座標
+     * @param {number} speed スピード
+     * @param {number} lifetime ビームの生存時間
      */
-    initDestination: function (src, dest) {
+    initDestination: function (src, dest, speed, lifetime) {
         "use strict";
         this.enable();
         this.destination_ = dest;
         this.setPosition(src);
         var v = cc.pSub(dest, src);
         var vn = cc.pNormalize(v);
-        this.inc_ = cc.pMult(vn, this.speed_);
+        this.inc_ = cc.pMult(vn, speed || this.speed_); // TODO this.speed_消してもいいよ
 
         // duration秒後にこのビームを消去する
-        var duration = 2;
+        var duration = lifetime || 2;
         var remove = cc.CallFunc.create(this.dispose, this);
         var seq = cc.Sequence.create(cc.FadeIn.create(duration) , remove);
         this.runAction(seq);

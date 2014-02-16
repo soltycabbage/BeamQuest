@@ -13,6 +13,8 @@ exports.listen = function(socket, io) {
         if (player) {
             var beam =  player.model.beam;
             result.beamId = beam.id;
+            result.beamSpeed = beam.speed;
+            result.beamDuration = beam.duration;
             if (beam.bp <= player.model.bp) {
                 player.model.addBp(-beam.bp);
             } else {

@@ -9,14 +9,14 @@ bq.Params = {
          *   id : gameTypes.jsに定義されてるid
          *   atk: 攻撃力
          *   speed: ビームの進むスピード
-         *   lifetime: ビームの生存時間(sec)
+         *   duration: ビームの生存時間(sec)
          *   bp: 消費ポイント
          */
-        NORMAL0:{id: bq.Types.Beams.NORMAL0, atk: 5,  speed: 1,  lifetime: 0.5, bp: 1},
-        NORMAL1:{id: bq.Types.Beams.NORMAL1, atk: 5,  speed: 1,  lifetime: 0.2, bp: 1},
-        NORMAL2:{id: bq.Types.Beams.NORMAL2, atk: 5,  speed: 1,  lifetime: 0.3, bp: 1},
-        FIRE:   {id: bq.Types.Beams.FIRE,    atk: 10, speed: 10, lifetime: 1, bp: 10},
-        METEOR: {id: bq.Types.Beams.METEOR,  atk: 10, speed: 10, lifetime: 1, bp: 10}
+        NORMAL0:{id: bq.Types.Beams.NORMAL0, atk: 10, speed: 5,  duration: 0.5, bp: 1},
+        NORMAL1:{id: bq.Types.Beams.NORMAL1, atk: 10, speed: 5,  duration: 0.5, bp: 1},
+        NORMAL2:{id: bq.Types.Beams.NORMAL2, atk: 10, speed: 5,  duration: 1.0, bp: 1},
+        FIRE:   {id: bq.Types.Beams.FIRE,    atk: 30, speed: 10, duration: 1.5, bp: 10},
+        METEOR: {id: bq.Types.Beams.METEOR,  atk: 40, speed: 10, duration: 1.5, bp: 10}
     },
 
     Entities: {
