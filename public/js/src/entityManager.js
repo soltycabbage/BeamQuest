@@ -129,6 +129,7 @@ bq.EntityManager = cc.Class.extend({
             enemy.updateHp({entity: data.entity, hpAmount: data.hpAmount}, hitRight);
         }
 
+        // ビームを消す
         bq.BeamManager.getInstance().disposeBeam(data);
     },
 

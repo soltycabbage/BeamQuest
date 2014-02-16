@@ -144,14 +144,6 @@ bq.entity.Player = bq.entity.Entity.extend({
         $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_EXP, [this.model_.prevLvExp, this.model_.exp, this.model_.nextLvExp]);
     },
 
-    initBeam: function() {
-        // 今のとこなにもなし
-    },
-
-    updateBeam: function() {
-        // 今のとこなにもなし
-    },
-
     /**
      * @param {Object.<exp: number, prevLvExp: number, currentExp: number, nextLvExp: number> data
      */

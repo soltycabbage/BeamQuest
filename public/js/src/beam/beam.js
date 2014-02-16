@@ -45,7 +45,6 @@ bq.beam.Beam = cc.Node.extend({
             this.setPosition(cc.pAdd(curr, this.inc_));
             this.setRotation(rotate);
         }
-
     },
 
     /**

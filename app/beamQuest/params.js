@@ -5,11 +5,18 @@ require('shared/js/gameTypes');
 
 bq.Params = {
     Beams: {
-        NORMAL0: {id:'normal0',  atk: 5, speed: 1, bp: 1}, // TODO このIDはbq.Types.beamsと一緒
-        NORMAL1: {id:'normal1', atk: 5, speed: 1, bp: 1},
-        NORMAL2: {id:'normal2', atk: 5, speed: 1, bp: 1},
-        FIRE: {id:'fire', atk: 10, speed: 10, bp: 10},
-        METEOR: {id:'meteor', atk: 10, speed: 10, bp: 10}
+        /*
+         *   id : gameTypes.jsに定義されてるid
+         *   atk: 攻撃力
+         *   speed: ビームの進むスピード
+         *   lifetime: ビームの生存時間(sec)
+         *   bp: 消費ポイント
+         */
+        NORMAL0:{id: bq.Types.Beams.NORMAL0, atk: 5,  speed: 1,  lifetime: 0.5, bp: 1},
+        NORMAL1:{id: bq.Types.Beams.NORMAL1, atk: 5,  speed: 1,  lifetime: 0.2, bp: 1},
+        NORMAL2:{id: bq.Types.Beams.NORMAL2, atk: 5,  speed: 1,  lifetime: 0.3, bp: 1},
+        FIRE:   {id: bq.Types.Beams.FIRE,    atk: 10, speed: 10, lifetime: 1, bp: 10},
+        METEOR: {id: bq.Types.Beams.METEOR,  atk: 10, speed: 10, lifetime: 1, bp: 10}
     },
 
     Entities: {
