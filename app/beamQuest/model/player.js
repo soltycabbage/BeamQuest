@@ -38,6 +38,9 @@ var Player = function(opt_data) {
     /** @type {boolean} */
     this.isDeath = !!this.data.isDeath;
 
+    /** @type{Beam} */
+    this.beam = bq.Params.Beams.NORMAL1;
+
     /** @type {Socket} */
     this.socket = this.data.socket || null;
 };

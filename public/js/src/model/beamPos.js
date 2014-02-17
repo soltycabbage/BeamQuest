@@ -12,8 +12,14 @@ bq.model.BeamPos = bq.model.extend({
         /** @type {cc.p} */
         this.dest;
 
-        /** @type {bq.Types.Beams} */
+        /** @type {string} */
         this.beamId;
+
+        /** @type {number} */
+        this.beamSpeed;
+
+        /** @type {number} */
+        this.beamDuration;
 
         /**
          * ビーム識別用タグ
@@ -30,6 +36,8 @@ bq.model.BeamPos = bq.model.extend({
         this.src = cc.p(json['src'].x, json['src'].y);
         this.dest = cc.p(json['dest'].x, json['dest'].y);
         this.beamId = json['beamId'];
+        this.beamSpeed = json['beamSpeed'];
+        this.beamDuration = json['beamDuration'];
         this.tag = json['tag'];
     }
 });

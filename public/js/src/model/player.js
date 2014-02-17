@@ -27,6 +27,9 @@ bq.model.Player = bq.model.Entity.extend({
         /** @type {number} */
         this.lv;
 
+        /** 装備してるビーム */
+        this.beam;
+
         this._super(json);
     },
 
@@ -45,5 +48,6 @@ bq.model.Player = bq.model.Entity.extend({
         this.prevLvExp = json['prevLvExp'];
         this.nextLvExp = json['nextLvExp'];
         this.lv = json['lv'];
+        this.beam = json['beam'];
     }
 });

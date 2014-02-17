@@ -11,7 +11,6 @@ bq.beam.Beam = cc.Node.extend({
     id: bq.Types.Beams.NORMAL0,   // ビームID
     tag: '',                     // ビーム識別用タグ
     destination_:cc.p(0,0),      // {cc.p} 目標
-    speed_:10,                   // 進むスピード
     inc_:cc.p(0,0),              // 1回のupdateで進ませるピクセル数（xとy方向)
     active_:false,               // 発射中ならtrue
     POSITION_SEND_INTERVAL: 0.1, // 位置情報を何秒ごとに送信するか
@@ -45,7 +44,6 @@ bq.beam.Beam = cc.Node.extend({
             this.setPosition(cc.pAdd(curr, this.inc_));
             this.setRotation(rotate);
         }
-
     },
 
     /**
@@ -78,21 +76,22 @@ bq.beam.Beam = cc.Node.extend({
      * srcからdestまで飛ぶように設定する。呼び出したあとは画面に表示されて飛ぶ
      * @param {cc.p} src 発射開始座標
      * @param {cc.p} dest 到着予定座標
+     * @param {number} speed スピード
+     * @param {number} duration ビームの生存時間
      */
-    initDestination: function (src, dest) {
+    initDestination: function (src, dest, speed, duration) {
         "use strict";
         this.enable();
         this.destination_ = dest;
         this.setPosition(src);
         var v = cc.pSub(dest, src);
         var vn = cc.pNormalize(v);
-        this.inc_ = cc.pMult(vn, this.speed_);
+        this.inc_ = cc.pMult(vn, speed);
 
         // duration秒後にこのビームを消去する
-        var duration = 2;
         var remove = cc.CallFunc.create(this.dispose, this);
-        var seq = cc.Sequence.create(cc.FadeIn.create(duration) , remove);
-        this.runAction(seq);
+        var sequence = cc.Sequence.create(cc.FadeIn.create(duration) , remove);
+        this.runAction(sequence);
     },
 
     enable: function() {

@@ -25,9 +25,10 @@ bq.BeamManager = cc.Class.extend({
         var beam = bq.beam.Beam.create(beamPos.beamId, beamPos.shooterId, beamPos.tag);
 
         bq.baseLayer.addChild(beam, 10);
+
         bq.soundManager.playEffect(s_SeBeamA);
 
-        beam.initDestination(beamPos.src, beamPos.dest);
+        beam.initDestination(beamPos.src, beamPos.dest, beamPos.beamSpeed, beamPos.beamDuration);
         $(beam).on(bq.beam.Beam.EventType.REMOVE, $.proxy(this.handleRemove_, this));
         this.beams_[beamPos.tag] = beam;
     },
