@@ -21,6 +21,7 @@ bq.EntityManager = cc.Class.extend({
             });
             this.createOtherPlayers(players);
             this.createMobs(data.mobs);
+            bq.MessageLog.getInstance().addSystemMsg('この辺にはオンラインの他プレイヤーが' + players.length + '人いるようだ。');
         }, this));
     },
 
