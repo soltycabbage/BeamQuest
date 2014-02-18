@@ -39,6 +39,8 @@ var s_SeNoDamage     = 'res/sounds/NoDamage.mp3';
 var s_SeDeath1       = 'res/sounds/Death1.m4a';
 var s_SeDeath2       = 'res/sounds/Death2.m4a';
 var s_SeLevelUp      = 'res/sounds/LevelUp.m4a';
+var s_SeLogin        = 'res/sounds/Login.m4a';
+var s_SeLogout       = 'res/sounds/Logout.m4a';
 
 var g_resources = [
     //img
@@ -65,8 +67,7 @@ var g_resources = [
     {type: 'tmx', src:s_SmallVillageTmx},
 
     //bgm
-    {type:"bgm",src:s_BgmField},
-    {type:"bgm",src:s_SeBeamA}
+    {type:"bgm",src:s_BgmField}
 
     //effect
 ];

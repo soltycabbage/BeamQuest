@@ -254,11 +254,13 @@ bq.EntityManager = cc.Class.extend({
             this.announceLogInOutMsg_(data.userId, 'がログアウトした。');
             logoutPlayer.removeFromParent();
             this.removeOtherPlayer(data.userId);
+            bq.soundManager.playEffect(s_SeLogout);
         }
     },
 
     login: function(data) {
         this.announceLogInOutMsg_(data.userId, 'がログインした。');
+        bq.soundManager.playEffect(s_SeLogin);
     },
 
     /**
