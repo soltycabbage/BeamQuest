@@ -91,6 +91,7 @@ Player.prototype.toJSON = function() {
     json.nextLvExp = this.nextLvExp;
     json.lv = this.lv;
     json.isDeath = this.isDeath;
+    json.beam = this.beam;
     return json;
 };
 

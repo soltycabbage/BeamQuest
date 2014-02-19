@@ -211,7 +211,7 @@ bq.EntityManager = cc.Class.extend({
     mobTargetTo: function(data) {
         var enemy =  this.enemys_[data.mob.id];
         if (enemy) {
-            enemy.targetTo(data.entity);
+            enemy.targetTo(data.target);
         }
     },
 

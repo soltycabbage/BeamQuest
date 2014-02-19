@@ -26,6 +26,13 @@ bq.entity.Enemy = bq.entity.Entity.extend({
         }
     },
 
+    /**
+     * タゲったらニョーンってラインを伸ばす
+     */
+    targetTo: function(target) {
+        // TODO: ラインを伸ばす処理
+    },
+
     createAttackingAnimation: function() {
         var vibrate = bq.entity.Animation.createAnimation(this.getSpriteFrames_([5,6]));
         vibrate.setDelayPerUnit(0.1);

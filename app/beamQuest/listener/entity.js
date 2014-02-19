@@ -36,10 +36,11 @@ Entity.prototype.moveMob = function(mob) {
 
 /**
  * mobがタゲったよってクライアントに伝える
- * @param player
+ * @param {ctrl.Mob} mob
+ * @param {ctrl.Entity} entity
  */
-Entity.prototype.targetTo = function(player) {
-    var data = {entity: player.model.toJSON()};
+Entity.prototype.targetTo = function(mob, entity) {
+    var data = {mob: mob.model.toJSON(), target: entity.model.toJSON()};
     this.io_.sockets.emit('notify:entity:mob:targetTo', data);
 };
 

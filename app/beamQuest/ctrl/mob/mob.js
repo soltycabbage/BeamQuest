@@ -111,11 +111,12 @@ Mob.prototype.update = function() {
  * @param {ctrl.Entity} entity
  */
 Mob.prototype.attackTo = function(entity) {
+    if (this.hateTarget !== entity) {
+        entityListener.targetTo(this, entity);
+    }
     this.hateTarget = entity;
     this.moveTo(this.hateTarget.model.position);
-    if (this.hateTarget !== entity) {
-        entityListener.targetTo(entity);
-    }
+
 };
 
 /**
