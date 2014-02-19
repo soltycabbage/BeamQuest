@@ -113,6 +113,9 @@ Mob.prototype.update = function() {
 Mob.prototype.attackTo = function(entity) {
     this.hateTarget = entity;
     this.moveTo(this.hateTarget.model.position);
+    if (this.hateTarget !== entity) {
+        entityListener.targetTo(entity);
+    }
 };
 
 /**

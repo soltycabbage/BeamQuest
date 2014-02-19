@@ -205,6 +205,17 @@ bq.EntityManager = cc.Class.extend({
     },
 
     /**
+     * mobがタゲった
+     * @param {Object}
+     */
+    mobTargetTo: function(data) {
+        var enemy =  this.enemys_[data.mob.id];
+        if (enemy) {
+            enemy.targetTo(data.entity);
+        }
+    },
+
+    /**
      * mobが近接攻撃の構えを取った
      * @param {Object.<mob: Object, range: number, castTime: number>} data
      */

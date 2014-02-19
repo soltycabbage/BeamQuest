@@ -79,6 +79,11 @@ bq.Socket = cc.Class.extend({
             entityManager.mobMoveTo(data);
         });
 
+        // mobがタゲった
+        this.socket.on('notify:entity:mob:targetTo', function(data) {
+            entityManager.mobTargetTo(data);
+        });
+
         // mobが近接攻撃の構えを取った
         this.socket.on('notify:entity:mob:startAttackShortRange', function(data) {
             entityManager.startAttackShortRange(data);

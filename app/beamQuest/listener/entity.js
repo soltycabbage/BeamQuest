@@ -35,6 +35,15 @@ Entity.prototype.moveMob = function(mob) {
 };
 
 /**
+ * mobがタゲったよってクライアントに伝える
+ * @param player
+ */
+Entity.prototype.targetTo = function(player) {
+    var data = {entity: player.model.toJSON()};
+    this.io_.sockets.emit('notify:entity:mob:targetTo', data);
+};
+
+/**
  * mobが近接攻撃の構えを取ったよってクライアントに伝える
  * @param {string} mobId
  * @param {model.Position} srcPos
