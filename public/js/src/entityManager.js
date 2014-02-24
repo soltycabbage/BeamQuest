@@ -210,8 +210,14 @@ bq.EntityManager = cc.Class.extend({
      */
     mobTargetTo: function(data) {
         var enemy =  this.enemys_[data.mob.id];
-        if (enemy) {
-            enemy.targetTo(data.target);
+        var target;
+        if (data.target.id === bq.player.name) {
+            target = bq.player;
+        } else {
+            target = this.otherPlayers_[data.target.id];
+        }
+        if (enemy && target) {
+            enemy.targetTo(target);
         }
     },
 

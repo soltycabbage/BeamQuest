@@ -26,11 +26,19 @@ bq.entity.Enemy = bq.entity.Entity.extend({
         }
     },
 
+    /** @override */
+    kill: function(opt_skipRemove) {
+        this._super(opt_skipRemove);
+        this.targetLine_.removeFromParent();
+    },
+
     /**
      * タゲったらニョーンってラインを伸ばす
+     * @param {bq.entity.Entity} target
      */
     targetTo: function(target) {
-        // TODO: ラインを伸ばす処理
+        this.targetLine_ = new bq.entity.TargetLine(this, target);
+        this.targetLine_.drawLine();
     },
 
     createAttackingAnimation: function() {
