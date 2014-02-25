@@ -26,7 +26,7 @@ Maps.prototype.init = function() {
     var map = new mapModel({
         id: 1,
         name: 'しんじゅく', // TODO 最初の村の名前は? (iwg)
-        maxMobCount: 10,
+        maxMobCount: 30,
         mobCount: 0
     });
 

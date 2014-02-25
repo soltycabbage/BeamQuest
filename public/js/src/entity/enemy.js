@@ -26,6 +26,21 @@ bq.entity.Enemy = bq.entity.Entity.extend({
         }
     },
 
+    /** @override */
+    kill: function(opt_skipRemove) {
+        this._super(opt_skipRemove);
+        this.targetLine_.removeFromParent();
+    },
+
+    /**
+     * タゲったらニョーンってラインを伸ばす
+     * @param {bq.entity.Entity} target
+     */
+    targetTo: function(target) {
+        this.targetLine_ = new bq.entity.TargetLine(this, target);
+        this.targetLine_.drawLine();
+    },
+
     createAttackingAnimation: function() {
         var vibrate = bq.entity.Animation.createAnimation(this.getSpriteFrames_([5,6]));
         vibrate.setDelayPerUnit(0.1);

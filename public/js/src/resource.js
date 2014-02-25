@@ -41,6 +41,7 @@ var s_SeDeath2       = 'res/sounds/Death2.m4a';
 var s_SeLevelUp      = 'res/sounds/LevelUp.m4a';
 var s_SeLogin        = 'res/sounds/Login.m4a';
 var s_SeLogout       = 'res/sounds/Logout.m4a';
+var s_SeTargetLine   = 'res/sounds/TargetLine.m4a';
 
 var g_resources = [
     //img

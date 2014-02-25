@@ -205,6 +205,23 @@ bq.EntityManager = cc.Class.extend({
     },
 
     /**
+     * mobがタゲった
+     * @param {Object}
+     */
+    mobTargetTo: function(data) {
+        var enemy =  this.enemys_[data.mob.id];
+        var target;
+        if (data.target.id === bq.player.name) {
+            target = bq.player;
+        } else {
+            target = this.otherPlayers_[data.target.id];
+        }
+        if (enemy && target) {
+            enemy.targetTo(target);
+        }
+    },
+
+    /**
      * mobが近接攻撃の構えを取った
      * @param {Object.<mob: Object, range: number, castTime: number>} data
      */

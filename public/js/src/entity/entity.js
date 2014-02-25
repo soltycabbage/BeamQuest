@@ -11,7 +11,6 @@ bq.entity.Entity = cc.Sprite.extend({
     DEFAULT_NAME: 'entity',
     name: 'entity', // entityの名前
     chatRect: null, // チャット吹き出しのSprite
-    collideRect_: null, // 当たり判定の範囲
     currentState:null,
     currentDirection:null,
     model_: null,
@@ -36,8 +35,6 @@ bq.entity.Entity = cc.Sprite.extend({
         if (this.DEFAULT_NAME !== this.name) {
             this.showName(this.name, true);
         }
-        var bbox = this.getBoundingBox();
-        this.collideRect_ = cc.rect(0, 0, bbox.getWidth(), bbox.getHeight());
     },
 
     /**
