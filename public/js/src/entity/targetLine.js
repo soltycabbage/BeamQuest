@@ -66,7 +66,7 @@ bq.entity.TargetLine = cc.Node.extend({
         this.isActive_ = false;
 
         this.scheduleUpdate();
-        this.schedule(this.clearLine, 3.0, 0, 0);
+        this.schedule(this.clearLine, 2.0, 0, 0);
         bq.baseLayer.addChild(this);
     },
 
@@ -85,7 +85,10 @@ bq.entity.TargetLine = cc.Node.extend({
      */
     drawLine: function() {
         this.initLine_();
-        bq.soundManager.playEffect(s_SeTargetLine);
+        if (this.target_ === bq.player) {
+            // 自分がタゲられた時のみ音を鳴らす
+            bq.soundManager.playEffect(s_SeTargetLine);
+        }
         this.isActive_ = true;
     },
 
@@ -101,6 +104,7 @@ bq.entity.TargetLine = cc.Node.extend({
             this.tail_.removeFromParent();
             this.head_.removeFromParent();
             this.line_.removeFromParent();
+            this.removeFromParent();
         }.bind(this));
 
         this.runAction(cc.Sequence.create(fadeOut, callFunc));
@@ -141,7 +145,7 @@ bq.entity.TargetLine = cc.Node.extend({
         this.head_.setPosition(cc.pAdd(p1, cc.pMult(pSub, ratio)));
 
         this.line_.clear();
-        this.line_.drawSegment(this.tail_.getPosition(), this.head_.getPosition(), 2, cc.c4f(1, 0, 0, 0.6));
-        this.line_.drawSegment(this.tail_.getPosition(), this.head_.getPosition(), 1, cc.c4f(1, 0.8, 0.8, 0.7));
+        this.line_.drawSegment(this.tail_.getPosition(), this.head_.getPosition(), 2, cc.c4f(1, 0, 0, 1 - 0.7 * ratio));
+        this.line_.drawSegment(this.tail_.getPosition(), this.head_.getPosition(), 1, cc.c4f(1, 0.8, 0.8, 1 - 0.7 * ratio));
     }
 });
