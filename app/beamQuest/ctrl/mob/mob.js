@@ -249,7 +249,7 @@ Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
 
     // TODO: ほんとはクライアント側から指定されたビームtypeをそのまま使うべきではない
     //       サーバ側に保存してあるプレイヤーの装備しているビームを参照すべき
-    var beam = bq.Params.getBeamParam(beamType);
+    var beam = bq.params.Beams[beamType.toUpperCase()];
     var damage = Math.floor(Math.random() * beam.atk/2) + beam.atk; // TODO: ダメージ計算
 
     // 攻撃を与えたユーザのIDをヘイトリストに突っ込む
