@@ -69,8 +69,16 @@ Player.prototype.updateStatus = function() {
     // TODO: 装備品によるステータス更新
     // TODO: バフ、デバフによるステータス更新
 
-    this.maxHp = Math.ceil(Entity.DEFAULT_MAX_HP + this.baseStatus.con * this.job.BASE_STATUS_RATE.CON);
-    this.maxBp = Math.ceil(Player.DEFAULT_MAX_BP + this.baseStatus.int * this.job.BASE_STATUS_RATE.INT);
+    // 成長曲線
+    // @ggrks ゴンペルツ曲線
+    var b = 0.006;
+    var c = 0.09;
+    var growthRate = 1 + 2 * Math.pow(b, Math.pow(Math.E, (-c * this.lv)));
+
+    this.maxHp = Math.ceil(Entity.DEFAULT_MAX_HP + this.baseStatus.con * this.job.BASE_STATUS_RATE.CON * growthRate);
+    this.maxBp = Math.ceil(Player.DEFAULT_MAX_BP + this.baseStatus.int * this.job.BASE_STATUS_RATE.INT * growthRate);
+    this.attack = Math.ceil(this.baseStatus.str * this.job.BASE_STATUS_RATE.STR * growthRate);
+    this.defence = Math.ceil(this.baseStatus.def * this.job.BASE_STATUS_RATE.DEF * growthRate);
     // TODO: ほかのステータス
 };
 

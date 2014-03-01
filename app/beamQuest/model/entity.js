@@ -32,6 +32,17 @@ var Entity = function(opt_data) {
      */
     this.hp = _.isUndefined(this.data.hp) ? this.maxHp : this.data.hp;
 
+    /**
+     * 攻撃力
+     * @type {number}
+     */
+    this.attack = this.data.attack;
+
+    /**
+     * 防御力
+     * @type {number}
+     */
+    this.defence = this.data.defence;
 
     /** @type {model.Position} */
     this.position = this.data.position || new positionModel();
@@ -59,6 +70,8 @@ Entity.prototype.toJSON = function() {
     json.name = this.name;
     json.maxHp = this.maxHp;
     json.hp =  this.hp;
+    json.attack = this.attack;
+    json.defence = this.defence;
     json.position = this.position.toJSON();
     return json;
 };
