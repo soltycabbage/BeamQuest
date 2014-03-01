@@ -33,7 +33,8 @@ var s_PlistPlayerMisc    =  'res/img/player/misc.plist';
 
 // sounds
 var s_BgmField       = 'res/sounds/Field.m4a';
-var s_SeBeamA        = 'res/sounds/BeamA.m4a';
+var s_SeBeamSimple1  = 'res/sounds/BeamSimple1.m4a';
+var s_SeBeamSp1      = 'res/sounds/BeamAp1.m4a';
 var s_SeDamage       = 'res/sounds/Damage.ogg';
 var s_SeNoDamage     = 'res/sounds/NoDamage.mp3';
 var s_SeDeath1       = 'res/sounds/Death1.m4a';
