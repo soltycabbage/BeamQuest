@@ -103,11 +103,13 @@ Player.prototype.addExp = function(exp) {
 Player.prototype.addLevel = function(lv) {
     this.lv += lv;
 
-    // TODO: ばらつきをもたせる
-    this.baseStatus.con++;
-    this.baseStatus.int++;
-    this.baseStatus.str++;
-    this.baseStatus.def++;
+    for (var i = 0;i < lv;i++) {
+        // TODO: ばらつきをもたせる
+        this.baseStatus.con++;
+        this.baseStatus.int++;
+        this.baseStatus.str++;
+        this.baseStatus.def++;
+    }
 
     this.updateStatus();
     this.updatePrevNextLvExp_();
