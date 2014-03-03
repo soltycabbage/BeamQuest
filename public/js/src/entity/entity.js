@@ -226,12 +226,13 @@ bq.entity.Entity = cc.Sprite.extend({
     /**
      * @param {Object} hpData HP変動データ
      * @param {number} opt_popLeft trueならダメージラベルが左に飛ぶよ
+     * @param {cc.c3b=} opt_color ダメージラベルの色
      */
-    updateHp: function(hpData, opt_popLeft) {
+    updateHp: function(hpData, opt_popLeft, opt_color) {
         var amount = hpData.hpAmount;
         if (amount < 0) { // ダメージ
             bq.soundManager.playEffect(s_SeDamage);
-            this.popDamageLabel_(amount, !!opt_popLeft);
+            this.popDamageLabel_(amount, !!opt_popLeft, opt_color);
         } else if (amount > 0) { // 回復
             // TODO
         } else { // ノーダメやで
@@ -251,14 +252,17 @@ bq.entity.Entity = cc.Sprite.extend({
     },
 
     /**
+     * @param {number} amount
+     * @param {boolean=} opt_popLeft
+     * @param {cc.c3b=} opt_color
      * @private
      */
-    popDamageLabel_: function(amount, popLeft) {
+    popDamageLabel_: function(amount, opt_popLeft, opt_color) {
         var damage = Math.abs(amount);
-        var label = bq.Label.createWithShadow(damage, 20);
+        var label = bq.Label.createWithShadow(damage, 20, opt_color);
         var rect = this.getBoundingBox();
         label.setPosition(cc.p(rect.getWidth()/2, rect.getHeight()));
-        var d = popLeft ? -1 : 1;
+        var d = opt_popLeft ? -1 : 1;
         var action = cc.JumpTo.create(1.5, cc.p(d * 200, -100), 100, 1);
         var fadeOut = cc.FadeOut.create(1.5);
         this.addChild(label);
