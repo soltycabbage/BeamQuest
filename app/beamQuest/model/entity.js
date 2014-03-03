@@ -36,13 +36,13 @@ var Entity = function(opt_data) {
      * 攻撃力
      * @type {number}
      */
-    this.attack = this.data.attack;
+    this.attack = this.data.attack || Entity.DEFAULT_ATTACK;
 
     /**
      * 防御力
      * @type {number}
      */
-    this.defence = this.data.defence;
+    this.defence = this.data.defence || Entity.DEFAULT_DEFENCE;
 
     /** @type {model.Position} */
     this.position = this.data.position || new positionModel();
@@ -50,6 +50,8 @@ var Entity = function(opt_data) {
 util.inherits(Entity, Model);
 
 Entity.DEFAULT_MAX_HP = 100;
+Entity.DEFAULT_ATTACK = 1;
+Entity.DEFAULT_DEFENCE = 1;
 
 /**
  * HP の増減を行う

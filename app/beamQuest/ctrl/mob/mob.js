@@ -202,7 +202,8 @@ Mob.prototype.shortRangeAttack = function() {
                 // TODO: 範囲内に対象がいるかどうかチェックする
 
                 // ダメージテキトー
-                var damage = -10 + Math.floor(-10 * Math.random());
+                var damage = -Math.floor(this.model.attack / 2 + this.model.attack / 2 * Math.random()
+                    - this.hateTarget.model.defence / 4);
                 this.hateTarget.model.addHp(damage);
             }
             this.isActive_ = false;
@@ -243,14 +244,19 @@ Mob.prototype.attackCancel = function() {
 
 /** @override */
 Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
-    if (this.isCancelAttacking_) {
+    var shooter = entityStore.getPlayerById(mapId, shooterId);
+    if (this.isCancelAttacking_ || !shooter) {
         return {hpAmount: 0};
     }
 
     // TODO: ほんとはクライアント側から指定されたビームtypeをそのまま使うべきではない
     //       サーバ側に保存してあるプレイヤーの装備しているビームを参照すべき
     var beam = bq.params.Beams[beamType.toUpperCase()];
-    var damage = Math.floor(Math.random() * beam.atk/2) + beam.atk; // TODO: ダメージ計算
+
+    // TODO: ダメージ計算
+    // いまんとこドラクエ式 (攻撃力/2) - (防御力/4)
+    var damage = Math.floor((Math.random() * beam.atk / 2 + beam.atk + shooter.model.attack) / 2
+        - this.model.defence / 4);
 
     // 攻撃を与えたユーザのIDをヘイトリストに突っ込む
     var hateTarget = _.find(this.hateList, function(h) {

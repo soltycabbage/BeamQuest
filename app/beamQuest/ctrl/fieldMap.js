@@ -47,6 +47,8 @@ FieldMap.prototype.spawnMob_ = function() {
             id: mobType.id + '_' + this.map.id + '_' + i + '_' + timeStamp,
             name: mobType.name,
             hp: mobType.hp,
+            attack: mobType.attack,
+            defence: mobType.defence,
             exp: mobType.exp,
             position: position
         });
