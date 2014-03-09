@@ -53,6 +53,12 @@ var Player = function(opt_data) {
     /** @type {Beam} */
     this.beam = bq.params.Beams.NORMAL1;
 
+    /**
+     * ステ振りポイント
+     * @type {number}
+     */
+    this.bonusStatusPoint = this.data.bonusStatusPoint || 0;
+
     /** @type {Socket} */
     this.socket = this.data.socket || null;
 
@@ -61,6 +67,12 @@ var Player = function(opt_data) {
 util.inherits(Player, Entity);
 
 Player.DEFAULT_MAX_BP = 10;
+
+/**
+ * 一度のレベルアップに貰えるステ振りボーナス値
+ * @const {number}
+ */
+Player.BONUS_STATUS_POINT_SIZE = 5;
 
 /**
  * baseStatus (STR, INT, CONなどなど）や装備品、バフ、デバフからHP, BP, 攻撃力などなどを決定する
@@ -102,17 +114,27 @@ Player.prototype.addExp = function(exp) {
  */
 Player.prototype.addLevel = function(lv) {
     this.lv += lv;
-
+    var bsp = 0;
     for (var i = 0;i < lv;i++) {
         // TODO: ばらつきをもたせる
         this.baseStatus.con++;
         this.baseStatus.int++;
         this.baseStatus.str++;
         this.baseStatus.def++;
+        bsp += Player.BONUS_STATUS_POINT_SIZE;
     }
 
     this.updateStatus();
     this.updatePrevNextLvExp_();
+    this.addBonusStatusPoint(bsp);
+};
+
+/**
+ * @param {number} bsp
+ */
+Player.prototype.addBonusStatusPoint = function(bsp) {
+    this.bonusStatusPoint += bsp;
+    this.emit('addBonusStatusPoint', bsp);
 };
 
 /**
@@ -137,6 +159,7 @@ Player.prototype.toJSON = function() {
     json.lv = this.lv;
     json.isDeath = this.isDeath;
     json.beam = this.beam;
+    json.bonusStatusPoint = this.bonusStatusPoint;
     return json;
 };
 
