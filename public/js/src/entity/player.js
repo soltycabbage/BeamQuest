@@ -141,7 +141,7 @@ bq.entity.Player = bq.entity.Entity.extend({
     },
 
     updateBp: function(bpData) {
-        $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_BP, [bpData.entity.bp, this.model_]);
+        $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_BP, [bpData.bp, this.model_]);
     },
 
     initBp: function() {

@@ -116,6 +116,11 @@ bq.Socket = cc.Class.extend({
         this.socket.on('user:status:bp:lack', function(data) {
             bq.player.showMessage('BP足りひん'); // TODO 適切なアナウンスにする
         });
+
+        // ボーナスステータスポイント値が更新されたよって
+        this.socket.on('user:status:bonusStatusPoint:update', function(data) {
+            console.log('BSP:' + data.bonusStatusPoint);
+        });
     },
 
     /**

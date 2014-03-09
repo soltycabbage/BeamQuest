@@ -81,7 +81,23 @@ Entity.prototype.updateHp = function(data) {
  */
 Entity.prototype.updateBp = function(data) {
     if (this.io_ && data.entity) {
-        data.entity.socket.emit('user:status:bp:update', data);
+        var obj = {
+            'bp': data.entity.bp
+        };
+        data.entity.socket.emit('user:status:bp:update', obj);
+    }
+};
+
+/**
+ * ボーナスポイントの更新をクライアントに伝える
+ * @param {Object.<entity: model.Player>} data
+ */
+Entity.prototype.updateBonusStatusPoint = function(data) {
+    if (this.io_ && data.entity) {
+        var obj = {
+            'bonusStatusPoint': data.entity.bonusStatusPoint
+        };
+        data.entity.socket.emit('user:status:bonusStatusPoint:update', obj);
     }
 };
 

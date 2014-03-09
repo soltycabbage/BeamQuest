@@ -114,19 +114,19 @@ Player.prototype.addExp = function(exp) {
  */
 Player.prototype.addLevel = function(lv) {
     this.lv += lv;
-    var bsp = 0;
+    var bonusStatusPoint = 0;
     for (var i = 0;i < lv;i++) {
         // TODO: ばらつきをもたせる
         this.baseStatus.con++;
         this.baseStatus.int++;
         this.baseStatus.str++;
         this.baseStatus.def++;
-        bsp += Player.BONUS_STATUS_POINT_SIZE;
+        bonusStatusPoint += Player.BONUS_STATUS_POINT_SIZE;
     }
 
     this.updateStatus();
     this.updatePrevNextLvExp_();
-    this.addBonusStatusPoint(bsp);
+    this.addBonusStatusPoint(bonusStatusPoint);
 };
 
 /**

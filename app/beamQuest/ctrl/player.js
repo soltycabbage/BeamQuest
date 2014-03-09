@@ -47,6 +47,7 @@ util.inherits(Player, EntityCtrl);
 Player.prototype.setModel = function(model) {
     Player.super_.prototype.setModel.call(this, model);
     this.model.on('addBp', _.bind(this.handleAddBp_, this));
+    this.model.on('addBonusStatusPoint', _.bind(this.handleAddBonusStatusPoint_, this));
 };
 
 /**
@@ -54,6 +55,13 @@ Player.prototype.setModel = function(model) {
  */
 Player.prototype.handleAddBp_ = function(amount) {
     entityListener.updateBp({entity: this.model, bpAmount: amount});
+};
+
+/**
+ * @private
+ */
+Player.prototype.handleAddBonusStatusPoint_ = function() {
+    entityListener.updateBonusStatusPoint({entity: this.model});
 };
 
 Player.prototype.update = function() {
