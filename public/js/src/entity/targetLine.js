@@ -66,7 +66,7 @@ bq.entity.TargetLine = cc.Node.extend({
         this.isActive_ = false;
 
         this.scheduleUpdate();
-        this.schedule(this.clearLine, 2.0, 0, 0);
+        this.schedule(this.clearLine, 1.0, 0, 0);
         bq.baseLayer.addChild(this);
     },
 

@@ -112,7 +112,7 @@ Player.prototype.addExp = function(exp) {
  * @private
  */
 Player.prototype.getLevelUpCount_ = function(exp, nextLevel) {
-    var nextLevelExp = bq.Params.Exp[nextLevel];
+    var nextLevelExp = this.model.job.Exp[nextLevel];
     if (!nextLevelExp || this.model.exp + exp < nextLevelExp) {
         return 0;
     }

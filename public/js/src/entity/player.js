@@ -132,7 +132,7 @@ bq.entity.Player = bq.entity.Entity.extend({
 
     /** @override */
     updateHp: function(hpData) {
-        this._super(hpData);
+        this._super(hpData, null, cc.c3b(255, 80, 80));
         $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_HP, [hpData.entity.hp, this.model_]);
     },
 

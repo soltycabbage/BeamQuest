@@ -41,12 +41,14 @@ FieldMap.prototype.spawnMob_ = function() {
     for(var i = this.map.mobCount;i < this.map.maxMobCount; i++) {
         // TODO: mapごとに出現モンスターとか決める
         var position = this.randomPosition_();
-        var mobType = bq.Params.Entities.KAMUTARO;
+        var mobType = bq.params.Entities.KAMUTARO;
         var mob = new MobCtrl();
         var mobModel = new MobModel({
             id: mobType.id + '_' + this.map.id + '_' + i + '_' + timeStamp,
             name: mobType.name,
             hp: mobType.hp,
+            attack: mobType.attack,
+            defence: mobType.defence,
             exp: mobType.exp,
             position: position
         });
