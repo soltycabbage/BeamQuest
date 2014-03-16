@@ -1,11 +1,9 @@
+require('beamQuest/init');
 var path     = require('path'),
     express  = require('express'),
     http     = require('http'),
     socketIo = require('socket.io'),
     log4js   = require('log4js');
-
-_      = require('underscore');
-logger = log4js.getLogger('BeamQuest');
 
 var app = express();
 
@@ -58,7 +56,7 @@ io.configure('production', function() {
     io.set('log level', 1);
 });
 
-var chat = require('beamQuest/main');
-chat.start(io);
+var main = require('beamQuest/main');
+main.start(io);
 
 logger.info('start');
