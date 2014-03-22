@@ -5,14 +5,14 @@ var util = require('util'),
  * @constructor
  * @extends {model.Model}
  */
-var Map = function(opt_data) {
+var MapModel = function(opt_data) {
     Model.apply(this, arguments);
 
     /** @type {number} */
     this.id = this.data.id;
 
     /** @type {string} */
-    this.name = this.data.name || Map.DEFAULT_NAME;
+    this.name = this.data.name || MapModel.DEFAULT_NAME;
 
     /**
      * tmx ファイル
@@ -24,19 +24,19 @@ var Map = function(opt_data) {
      * マップサイズ
      * @type {Object.<width:number, height: number>}
      */
-    this.size = this.data.size || Map.DEFAULT_SIZE;
+    this.size = this.data.size || MapModel.DEFAULT_SIZE;
 };
-util.inherits(Map, Model);
+util.inherits(MapModel, Model);
 
-Map.DEFAULT_NAME = 'map';
-Map.DEFAULT_SIZE = {width: 100, height: 100};
+MapModel.DEFAULT_NAME = 'map';
+MapModel.DEFAULT_SIZE = {width: 100, height: 100};
 
 /** @override */
-Map.prototype.toJSON = function() {
-    var json = Map.super_.prototype.toJSON.apply(this);
+MapModel.prototype.toJSON = function() {
+    var json = MapModel.super_.prototype.toJSON.apply(this);
     json.id = this.id;
     json.name = this.name;
     return json;
 };
 
-module.exports = Map;
+module.exports = MapModel;
