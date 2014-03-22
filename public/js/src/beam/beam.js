@@ -124,7 +124,7 @@ bq.beam.Beam.pop = function() {
         return null;
     }
     var be =  _.find(bq.beams, function(b) { return !b.active_;} );
-    if ( be == undefined ) {
+    if ( be === undefined ) {
         return null;
     }
     be.disable();

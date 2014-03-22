@@ -89,7 +89,7 @@ bq.entity.Entity = cc.Sprite.extend({
             var runningMoveAct = this.getActionByTag(moveActTag);
             if (runningMoveAct) {
                 this.stopAction(runningMoveAct);
-                delete runningMoveAct;
+                runningMoveAct = null;
             }
 
             // 走ってる状態だったら移動だけ（アニメーションは更新しない）
@@ -100,7 +100,7 @@ bq.entity.Entity = cc.Sprite.extend({
             // 移動したあと急に止めるとアニメーションが不自然になるので少し遅延を入れる
             var delay = cc.DelayTime.create(0.2);
             var changeAnime = cc.CallFunc.create(function () {
-                this.updateAnimation(bq.entity.EntityState.Mode.stop, null)
+                this.updateAnimation(bq.entity.EntityState.Mode.stop, null);
             }.bind(this));
 
             var act = cc.Sequence.create([move, delay, changeAnime]);
@@ -184,7 +184,7 @@ bq.entity.Entity = cc.Sprite.extend({
             cc.log(key + " is not found");
             return null;
         }
-     },
+    },
 
     /**
      *
@@ -195,7 +195,7 @@ bq.entity.Entity = cc.Sprite.extend({
     getAnimationByNameDirection: function(name, direction) {
         var key = name + "_" + direction;
         return this.getAnimationByKey(key);
-     },
+    },
 
     /**
      * 向きと状態を更新してそれにもとづいてアニメーションを更新する
@@ -204,10 +204,10 @@ bq.entity.Entity = cc.Sprite.extend({
      */
     updateAnimation: function(state, direction){
 
-        if ( state == null && direction == null ) {
+        if ( state === null && direction === null ) {
             return;
         }
-        if ( state == this.currentState && direction == this.currentDirection ) {
+        if ( state === this.currentState && direction === this.currentDirection ) {
             return ;
         }
         state = state ? state : this.currentState;

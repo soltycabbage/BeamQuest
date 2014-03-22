@@ -24,7 +24,7 @@ bq.MapManager = cc.Class.extend({
 
         // レイヤーにno_enterableのプロパティがあったらそれは入れないレイヤー
         var layers = _.select(this.tileMap.getChildren(), function(layer) {
-            return  (layer && layer.getProperties()['no_enterable'] === 'true')
+            return  (layer && layer.getProperties()['no_enterable'] === 'true');
         } );
 
         var sizeY = this.tileMap.getTileSize().width * this.tileMap.getMapSize().width;

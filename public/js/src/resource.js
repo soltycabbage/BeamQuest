@@ -81,9 +81,9 @@ var g_sprite_frames = [
 var KINDS_OF_ENEMY = 1;
 for (var i = 1; i <= KINDS_OF_ENEMY; i++) {
     var no = String('00' + i).slice(-3); // NOTE sprintf('%03d')
-    var name = 'res/img/enemy' + no;
-    var image = name + '.png';
-    var plist = name + '.plist';
+    var ename = 'res/img/enemy' + no;
+    var image = ename + '.png';
+    var plist = ename + '.plist';
     g_resources.push({type: 'image', src: image});
     g_resources.push({type: 'plist', src: plist});
     g_sprite_frames.push({image: image, plist: plist});
