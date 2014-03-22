@@ -141,7 +141,7 @@ Entities.prototype.getPlayersJSON = function(mapId) {
     var json = {};
     var players = this.mapPlayers_[mapId] || [];
     _.each(players, function(player, key) {
-       json[key] = player.model.toJSON();
+        json[key] = player.model.toJSON();
     });
     return json;
 };
@@ -155,7 +155,7 @@ Entities.prototype.getMobsJSON = function(mapId) {
     var json = {};
     var mobs = this.mapMobs_[mapId] || [];
     _.each(mobs, function(mob, key) {
-       json[key] = mob.model.toJSON();
+        json[key] = mob.model.toJSON();
     });
     return json;
 };
