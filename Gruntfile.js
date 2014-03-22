@@ -1,11 +1,17 @@
 module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-compass');
 
-  grunt.initConfig({
+    grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
     watch: {
+      sass: {
+        files: 'public/scss/*.scss',
+        tasks: ['compass']
+      },
+
       scripts: {
         files: ['app/**/*.js', 'public/**/*.js'],
         tasks: ['jshint']
@@ -19,6 +25,14 @@ module.exports = function(grunt) {
     jshint: {
       all: ['<%= watch.scripts.files %>'],
       options: grunt.file.readJSON('.jshintrc')
+    },
+
+    compass: {
+      dist: {
+        options: {
+          config: 'config.rb'
+        }
+      }
     }
   });
 
