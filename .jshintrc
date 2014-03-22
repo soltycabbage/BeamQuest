@@ -5,5 +5,7 @@
   "undef"   : false,
   "browser" : true,
   "devel"   : true,
-  "debug"   : true
+  "debug"   : true,
+  "sub"     : true,
+  "expr"    : true
 }

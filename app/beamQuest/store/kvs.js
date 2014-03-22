@@ -28,4 +28,4 @@ exports.createClient = function() {
     } else {
         return redis.createClient();
     }
-}
+};

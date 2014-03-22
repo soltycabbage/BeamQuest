@@ -125,7 +125,7 @@ bq.entity.Player = bq.entity.Entity.extend({
             src: {x: src.x, y: src.y},
             dest: {x: dest.x, y: dest.y},
             tag: parseInt(new Date().getTime()) + this.name
-         };
+        };
 
         this.socket.shootBeam(json);
     },
@@ -322,7 +322,6 @@ bq.entity.Player.InputHandler = cc.Class.extend({
 
         var getBtnSetting = function(key) {
             return {
-                stroke: 10,
                 opacity: '1',
                 stroke: 0,
                 touchStart: function() {
@@ -331,7 +330,7 @@ bq.entity.Player.InputHandler = cc.Class.extend({
                 touchEnd: function() {
                     handler.removeDownKey_(key);
                 }
-            }
+            };
         };
 
         var up = getBtnSetting(cc.KEY.w);
@@ -436,8 +435,8 @@ bq.entity.Player.InputHandler = cc.Class.extend({
         ];
 
         var found = _.find(pairs, function(pair) {
-            return ( downKeys.length==1 && _.contains(downKeys, pair.key[0]) )
-                || ( downKeys.length==2 && _.contains(downKeys, pair.key[0]) && _.contains(downKeys, pair.key[1]) );
+            return ( downKeys.length==1 && _.contains(downKeys, pair.key[0]) ) ||
+                ( downKeys.length==2 && _.contains(downKeys, pair.key[0]) && _.contains(downKeys, pair.key[1]) );
         });
 
         if (_.isUndefined(found)) {

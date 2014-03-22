@@ -1,8 +1,8 @@
 var util = require('util'),
-    Map = require('beamQuest/model/map');
+    MapModel = require('beamQuest/model/map');
 
 var FieldMap = function(opt_data) {
-    Map.apply(this, arguments);
+    MapModel.apply(this, arguments);
     /**
      * マップ上に存在できるmobの最大値。mobCountがこの数以下になるとmobがPOPする
      * @type {number}
@@ -15,7 +15,7 @@ var FieldMap = function(opt_data) {
      */
     this.mobCount = this.data.mobCount || 0;
 };
-util.inherits(FieldMap, Map);
+util.inherits(FieldMap, MapModel);
 
 FieldMap.prototype.toJSON = function() {
     var json = FieldMap.super_.prototype.toJSON.apply(this);

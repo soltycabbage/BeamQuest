@@ -228,7 +228,7 @@ bq.EntityManager = cc.Class.extend({
     startAttackShortRange: function(data) {
         var enemy =  this.enemys_[data.mobId];
         if (enemy) {
-            enemy.showMessage('ころちゅ')
+            enemy.showMessage('ころちゅ');
         }
     },
 

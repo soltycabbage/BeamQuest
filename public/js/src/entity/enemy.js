@@ -77,7 +77,7 @@ bq.entity.Enemy = bq.entity.Entity.extend({
         var idleIds = [1,2,3,4];
         _.each(['idle_bottom'], function (sts) {
             frames[sts] = this.getSpriteFrames_(idleIds);
-            }, this);
+        }, this);
 
         return frames;
     }
