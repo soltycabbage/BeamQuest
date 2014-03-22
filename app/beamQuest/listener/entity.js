@@ -111,7 +111,8 @@ Entity.prototype.addExp = function(playerId, mob) {
             exp: mob.model.exp,
             prevLvExp: player.model.prevLvExp,
             currentExp: player.model.exp,
-            nextLvExp: player.model.nextLvExp});
+            nextLvExp: player.model.nextLvExp
+        });
     }        
 };
 
@@ -143,8 +144,8 @@ Entity.prototype.handleRespawn = function(data) {
         var player = this.entitiesStore_.getPlayerById(mapId, playerId);
         if (player) {
             player.respawn();
-            var data = {entity: player.model.toJSON()};
-            this.socket_.broadcast.emit('notify:entity:player:respawn', data);
+            var d = {entity: player.model.toJSON()};
+            this.socket_.broadcast.emit('notify:entity:player:respawn', d);
         }
     }
 };
