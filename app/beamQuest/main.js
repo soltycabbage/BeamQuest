@@ -1,5 +1,4 @@
-var params = require('beamQuest/params/params'),
-    ping = require('beamQuest/listener/ping'),
+var ping = require('beamQuest/listener/ping'),
     login = require('beamQuest/listener/login'),
     world = require('beamQuest/listener/world'),
     beam = require('beamQuest/listener/beam'),
