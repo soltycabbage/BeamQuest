@@ -202,8 +202,8 @@ Mob.prototype.shortRangeAttack = function() {
                 // TODO: 範囲内に対象がいるかどうかチェックする
 
                 // ダメージテキトー
-                var damage = -Math.floor(this.model.attack / 2 + this.model.attack / 2 * Math.random()
-                    - this.hateTarget.model.defence / 4);
+                var damage = -Math.floor(this.model.attack / 2 + this.model.attack / 2 * Math.random() -
+                    this.hateTarget.model.defence / 4);
                 this.hateTarget.model.addHp(damage);
             }
             this.isActive_ = false;
@@ -255,8 +255,8 @@ Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
 
     // TODO: ダメージ計算
     // いまんとこドラクエ式 (攻撃力/2) - (防御力/4)
-    var damage = Math.floor((Math.random() * beam.atk / 2 + beam.atk + shooter.model.attack) / 2
-        - this.model.defence / 4);
+    var damage = Math.floor((Math.random() * beam.atk / 2 + beam.atk + shooter.model.attack) / 2 -
+        this.model.defence / 4);
 
     // 攻撃を与えたユーザのIDをヘイトリストに突っ込む
     var hateTarget = _.find(this.hateList, function(h) {
@@ -294,7 +294,6 @@ Mob.prototype.dispose = function() {
     delete this.model;
     this.interval_ && clearInterval(this.interval_);
     this.timeout_ && clearTimeout(this.timeout_);
-    delete this;
 };
 
 module.exports = Mob;
