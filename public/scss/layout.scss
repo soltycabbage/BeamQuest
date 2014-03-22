@@ -226,3 +226,13 @@ body {
 #bq-level-value {
     padding-left: 2px;
 }
+
+.bq-status-dialog {
+  font-size: 12px;
+  .ui-dialog-title {
+    padding-left: 7px;
+  }
+  .ui-dialog-titlebar {
+    padding: 0;
+  }
+}
