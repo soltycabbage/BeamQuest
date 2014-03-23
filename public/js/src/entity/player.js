@@ -359,7 +359,7 @@ bq.entity.Player.InputHandler = cc.Class.extend({
     onKeyDown: function(key) {
         this.addDownKey_(key);
         if (key === cc.KEY.i) { // iキーでステータスウィンドウを開く
-            bq.Hud.getInstance().openStatusWindow(this);
+            bq.Hud.getInstance().openStatusWindow(bq.player);
         }
     },
 

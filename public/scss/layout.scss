@@ -227,12 +227,136 @@ body {
     padding-left: 2px;
 }
 
+
+/** ステータスウィンドウ */
 .bq-status-dialog {
+  z-index: 1000;
+  background: #E6E4D4;
   font-size: 12px;
   .ui-dialog-title {
     padding-left: 7px;
   }
   .ui-dialog-titlebar {
     padding: 0;
+  }
+}
+
+#bq-status-window {
+  background: #FCF0C2;
+}
+
+.bq-status-left-pane {
+  margin: 5px 0 0 -5px;
+  width: 50%;
+  height: 96%;
+  border-right: 2px solid #5C7085;
+  border-radius: 9px;
+  display: inline-block;
+}
+
+.bq-status-right-pane {
+  position: absolute;
+  top: 10px;
+  left: 305px;
+  width: 48%;
+  height: 96%;
+  display: inline-block;
+}
+
+.bq-status-label {
+  border: 1px solid #4b4b4b;
+  background: #93c3cd url(lib/jquery/images/ui-bg_diagonals-small_50_93c3cd_40x40.png) 50% 50% repeat;
+  font-weight: bold;
+  color: #333;
+  border-radius: 4px;
+  padding: 2px 12px;
+}
+
+.bq-status-value {
+  vertical-align: middle;
+  font-size: 20px;
+}
+
+.bq-status-playername,
+.bq-status-level,
+.bq-status-attack,
+.bq-status-defence {
+  padding-right: 10px;
+  display: inline-block;
+}
+
+.bq-status-job {
+  padding-top: 10px;
+  .bq-status-value {
+    font-size: 13px;
+  }
+}
+
+.bq-status-equipment {
+  position: relative;
+  .bq-status-label {
+    margin-top: 10px;
+    display: inline-block;
+  }
+}
+
+.bq-status-player-preview {
+  position: absolute;
+  background: url(../res/img/statusPlayerStub.png);
+  width: 62px;
+  height: 96px;
+  top: 90px;
+  left: 100px;
+}
+
+.bq-status-equipment-item {
+  position: absolute;
+  border-radius: 4px;
+  border: 2px solid;
+  width: 36px;
+  height: 36px;
+  display: inline-block;
+  font-family: pixelMplus;
+  &.bq-status-head {
+    left: 110px;
+    top: 35px;
+  }
+  &.bq-status-core {
+    top: 80px;
+    left: 40px;
+  }
+  &.bq-status-right-arm {
+    top: 140px;
+    left: 40px;
+  }
+  &.bq-status-backpack {
+    top: 80px;
+    left: 180px;
+  }
+  &.bq-status-left-arm {
+    top: 140px;
+    left: 180px;
+  }
+  &.bq-status-foot {
+    top: 195px;
+    left: 110px;
+  }
+}
+
+.bq-status-status-title {
+  margin-bottom: 10px;
+}
+
+.bq-status-base {
+  border-top: 2px solid  #5C7085;
+  margin-top: 10px;
+  padding-top: 13px;
+  & div {
+    margin-bottom: 10px;
+  }
+
+  & div span {
+    display: inline-block;
+    width: 30px;
   }
 }
