@@ -12,38 +12,35 @@ bq.hud.StatusWindow = bq.hud.HudItem.extend({
     },
 
     /**
-     * @param {bq.entity.Entity}
+     * @param {string} entityId
+     * @param {string} mapId
      */
-    open: function(entity) {
-        this.render_(entity);
+    open: function(entityId, mapId) {
+        bq.Socket.getInstance().requestEntityStatus(entityId, mapId, function(data) {
+            this.render_(data);
 
-        $('#bq-status-window').dialog(
-            {
-                'title': 'CHARACTER',
-                'dialogClass': 'bq-status-dialog',
-                'width': 600,
-                'height': 360,
-                'close': this.close
-            }
-        );
+            $('#bq-status-window').dialog(
+                {
+                    'title': 'CHARACTER',
+                    'dialogClass': 'bq-status-dialog',
+                    'width': 600,
+                    'height': 360,
+                    'close': this.close
+                }
+            );
+
+        }, this);
     },
 
     /**
      * EJSからHTMLを作ってレンダリングする
-     * @param {bq.entity.Entity} entity
+     * @param {Object} model
      * @private
      */
-    render_: function(entity) {
+    render_: function(model) {
         this.close();
         var statusEjs = new EJS({url: '../ejs/statusWindow.ejs'});
-        var statusHtml = statusEjs.render({
-            playerName: entity.name,
-            level: entity.getModel().lv,
-            job: 'すっぴん',
-            attack: 10,
-            defence: 5,
-            con: 10
-        });
+        var statusHtml = statusEjs.render(model);
         this.container_ = $(statusHtml);
         $('#bq-hud').append(this.container_);
     },

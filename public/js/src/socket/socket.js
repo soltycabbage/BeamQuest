@@ -176,8 +176,19 @@ bq.Socket = cc.Class.extend({
      */
     shootBeam: function(beamPos) {
         this.socket.emit('beam:shoot', beamPos);
-    }
+    },
 
+    /**
+     * entityのステータスを要求する
+     * @param {string} entityId
+     * @param {string} mapId
+     * @param {Function} callback
+     * @param {Object} selfObj
+     */
+    requestEntityStatus: function(entityId, mapId, callback, selfObj) {
+        this.socket.emit('user:status:get', {entityId: entityId, mapId: mapId});
+        this.socket.once('user:status:receive', $.proxy(callback, selfObj));
+    }
 });
 
 bq.Socket.instance_ = new bq.Socket();
