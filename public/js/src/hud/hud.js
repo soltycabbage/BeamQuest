@@ -8,6 +8,7 @@ bq.Hud = cc.Node.extend({
         this.hpBpBar_ = new bq.hud.HpBpBar();
         this.expBar_ = new bq.hud.ExpBar();
         this.level_ = new bq.hud.Level();
+        this.statusWindow_ = new bq.hud.StatusWindow();
     },
 
     /**
@@ -29,6 +30,15 @@ bq.Hud = cc.Node.extend({
         } else {
             this.container_.hide();
         }
+    },
+
+    /**
+     * ステータスウィンドウを開く
+     * @param {string} entityId
+     * @param {string} mapId
+     */
+    openStatusWindow: function(entityId, mapId) {
+        this.statusWindow_.open(entityId, mapId);
     },
 
     /**

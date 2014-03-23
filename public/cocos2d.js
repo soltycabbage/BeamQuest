@@ -21,6 +21,8 @@
             'js/lib/md5.js',
             'js/lib/gamecontroller.min.js',
             'js/lib/jquery.mouseinfobox.js',
+            'js/lib/jquery-ui.min.js',
+            'js/lib/ejs.js',
 
             // resources
             'js/src/resource.js',
@@ -52,6 +54,7 @@
             'js/src/hud/hpBpBar.js',
             'js/src/hud/expBar.js',
             'js/src/hud/level.js',
+            'js/src/hud/statusWindow.js',
             'js/src/hud/hud.js',
 
             // entity
