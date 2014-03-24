@@ -11,7 +11,7 @@ Entity.prototype.listen = function(socket, io) {
     this.entitiesStore_ = require('beamQuest/store/entities');
 
     this.socket_.on('user:respawn', this.handleRespawn.bind(this));
-    this.socket_.on('user:status:get', this.handleGetStatus_.bind(this));
+    this.socket_.on('user:status:get', this.handleGetStatus_.bind(this, this.socket_));
 };
 
 /**
@@ -153,14 +153,15 @@ Entity.prototype.handleRespawn = function(data) {
 
 /**
  * entityのステータスを返す
+ * @param {io.socket} socket
  * @param {Object} data
  * @private
  */
-Entity.prototype.handleGetStatus_ = function(data) {
+Entity.prototype.handleGetStatus_ = function(socket, data) {
     if (data) {
         var player = this.entitiesStore_.getPlayerById(data.mapId, data.entityId);
         if (player) {
-            this.socket_.emit('user:status:receive', player.model.toJSON());
+            socket.emit('user:status:receive', player.model.toJSON());
         }
     }
 };
