@@ -34,7 +34,7 @@ app.configure('production', function() {
     "use strict";
 
     app.get('/backend', function(req, res) {
-        res.send('<form action="/backene/kvs/purge" method="POST"><button type="submit">redis リセット</button></form>');
+        res.send('<form action="/backend/kvs/purge" method="POST"><button type="submit">redis リセット</button></form>');
     });
 
     app.post('/backend/kvs/purge', function(req, res) {
