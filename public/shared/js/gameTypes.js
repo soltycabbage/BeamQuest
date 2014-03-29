@@ -20,5 +20,11 @@ bq.Types = {
         NORMAL2: 'normal2',
         FIRE: 'fire',
         METEOR: 'meteor'
+    },
+
+    Items: {
+        BEATS: 'beats',
+        POTION: 'potion',
+        SHORT_BEAM: 'shortbeam'
     }
 };
