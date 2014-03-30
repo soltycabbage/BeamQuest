@@ -89,6 +89,10 @@ bq.Socket = cc.Class.extend({
             entityManager.startAttackShortRange(data);
         });
 
+        // アイテムがドロップした
+        this.socket.on('notify:item:drop', function(data) {
+            console.dir(data);
+        });
         // hpに変動があった
         this.socket.on('notify:entity:hp:update', function(data) {
             entityManager.updateHp(data);

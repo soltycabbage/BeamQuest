@@ -43,15 +43,9 @@ FieldMap.prototype.spawnMob_ = function() {
         var position = this.randomPosition_();
         var mobType = bq.params.Entities.KAMUTARO;
         var mob = new MobCtrl();
-        var mobModel = new MobModel({
-            id: mobType.id + '_' + this.map.id + '_' + i + '_' + timeStamp,
-            name: mobType.name,
-            hp: mobType.hp,
-            attack: mobType.attack,
-            defence: mobType.defence,
-            exp: mobType.exp,
-            position: position
-        });
+        var mobModel = new MobModel(mobType);
+        mobModel.setId(mobType.id + '_' + this.map.id + '_' + i + '_' + timeStamp);
+        mobModel.setPosition(position);
         mob.setModel(mobModel);
         mob.startPos = _.clone(position);
         entitiesStore.addMob(this.map, mob);

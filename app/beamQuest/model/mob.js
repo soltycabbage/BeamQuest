@@ -25,6 +25,12 @@ var Mob = function(opt_data) {
      * @type {Boolean}
      */
     this.isPassive = true;
+
+    /**
+     * ドロップするアイテムのリスト
+     * @type {Array.<Object>}
+     */
+    this.drop = this.data.drop || [];
 };
 util.inherits(Mob, Entity);
 

@@ -2,6 +2,7 @@ var util = require('util'),
     EntityCtrl = require('beamQuest/ctrl/entity'),
     entityStore = require('beamQuest/store/entities'),
     entityListener = require('beamQuest/listener/entity'),
+    itemListener = require('beamQuest/listener/item'),
     distance = require('beamQuest/math/euclideanDistance'),
     manhattanDistance = require('beamQuest/math/manhattanDistance');
 
@@ -281,9 +282,36 @@ Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
  */
 Mob.prototype.handleAddHp = function(amount) {
     if (this.model.hp <= 0) { // 死
-        entityListener.killMob(this);
-        entityStore.removeMob(this);
+        this.death();
     }
+};
+
+/**
+ * @override
+ */
+Mob.prototype.death = function() {
+    itemListener.drop(this.chooseDropItems_(), this.model.position);
+    entityListener.killMob(this);
+    entityStore.removeMob(this);
+};
+
+/**
+ * ドロップするアイテムの抽選をする
+ * @return {Array.<string>}
+ * @private
+ */
+Mob.prototype.chooseDropItems_ = function() {
+    var result = [];
+    var dropItems =  this.model.drop;
+    // TODO: ビーツのドロップ
+    result.push(bq.Types.Items.BEATS);
+    _.forEach(dropItems, function(item) {
+        if (Math.floor(Math.random() * item['rate']) === 0) {
+            result.push(item.id);
+        }
+    });
+
+    return result;
 };
 
 /**
