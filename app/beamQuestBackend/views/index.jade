@@ -1,0 +1,33 @@
+doctype html
+html
+    include includes/head
+    body
+        .wrapper
+            include includes/header
+            #page-wrapper
+                .row
+                    //- write your content
+                    .col-lg-12
+                        h1.page-header Dashboard
+                    .col-lg-6
+                        .panel.panel-default
+                            .panel-heading データストア
+                            .panel-body
+                                #kvs-purge-button-result
+                                button#kvs-purge-button.btn.btn-default(type='button') redis リセット
+
+        include includes/footer
+        script(type='text/javascript').
+            $('#kvs-purge-button').on('click', function() {
+                $.ajax({
+                    url: '/backend/kvs/purge',
+                    method: 'post'
+                }).done(function() {
+                    "use strict";
+                    $('#kvs-purge-button-result')
+                      .html('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Done.</div>');
+                }).fail(function() {
+                    $('#kvs-purge-button-result')
+                      .html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Fail.</div>');
+                })
+            });
