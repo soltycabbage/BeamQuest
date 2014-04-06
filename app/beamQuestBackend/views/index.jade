@@ -13,21 +13,21 @@ html
                         .panel.panel-default
                             .panel-heading データストア
                             .panel-body
-                                #redis-purge-button-result
-                                button#redis-purge-button.btn.btn-default(type='button') redis リセット
+                                #kvs-purge-button-result
+                                button#kvs-purge-button.btn.btn-default(type='button') redis リセット
 
         include includes/footer
         script(type='text/javascript').
-            $('#redis-purge-button').on('click', function() {
+            $('#kvs-purge-button').on('click', function() {
                 $.ajax({
                     url: '/backend/kvs/purge',
                     method: 'post'
                 }).done(function() {
                     "use strict";
-                    $('#redis-purge-button-result')
+                    $('#kvs-purge-button-result')
                       .html('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Done.</div>');
                 }).fail(function() {
-                    $('#redis-purge-button-result')
+                    $('#kvs-purge-button-result')
                       .html('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Fail.</div>');
                 })
             });
