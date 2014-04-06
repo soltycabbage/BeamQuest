@@ -11,7 +11,7 @@ exports.listen = function(app) {
 
         redis.flushall();
 
-        res.send('DONE');
+        res.json({});
         logger.info('kvs purge');
     });
 };
