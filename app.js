@@ -30,22 +30,8 @@ app.configure(function() {
     app.use(express.static(path.join(__dirname, 'public')));
 });
 
-app.configure('production', function() {
-    "use strict";
-
-    app.get('/backend', function(req, res) {
-        res.send('<form action="/backend/kvs/purge" method="POST"><button type="submit">redis リセット</button></form>');
-    });
-
-    app.post('/backend/kvs/purge', function(req, res) {
-        var redis = require('redis').createClient();
-
-        redis.flushall();
-
-        res.send('DONE');
-        logger.info('kvs purge');
-    });
-});
+var backend = require('beamQuestBackend/main');
+backend.listen(app);
 
 var server = http.createServer(app);
 server.listen(app.get('port'));
