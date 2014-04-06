@@ -1,6 +1,9 @@
 exports.listen = function(app) {
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'ejs');
+
     app.get('/backend', function(req, res) {
-        res.send('<form action="/backend/kvs/purge" method="POST"><button type="submit">redis リセット</button></form>');
+        res.render('index');
     });
 
     app.post('/backend/kvs/purge', function(req, res) {
