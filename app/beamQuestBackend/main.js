@@ -1,6 +1,6 @@
 exports.listen = function(app) {
     app.set('views', __dirname + '/views');
-    app.set('view engine', 'hjs');
+    app.set('view engine', 'jade');
 
     app.get('/backend', function(req, res) {
         res.render('index');

@@ -1,0 +1,19 @@
+doctype html
+html
+    include includes/head
+    body
+        .wrapper
+            include includes/header
+            #page-wrapper
+                .row
+                    //- write your content
+                    .col-lg-12
+                        h1.page-header Dashboard
+                    .col-lg-6
+                        .panel.panel-default
+                            .panel-heading Redis
+                            .panel-body
+                                form(action='/backend/kvs/purge', method='post')
+                                    button.btn.btn-default(type='submit') redis リセット
+
+        include includes/footer
