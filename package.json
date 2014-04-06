@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "express": "3.4.6",
-    "ejs": "0.8.6",
+    "hjs": "*",
     "socket.io": "0.9.16",
     "underscore": "1.5.2",
     "deferred": "0.6.8",
