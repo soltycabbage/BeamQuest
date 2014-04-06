@@ -11,9 +11,18 @@ html
                         h1.page-header Dashboard
                     .col-lg-6
                         .panel.panel-default
-                            .panel-heading Redis
+                            .panel-heading データストア
                             .panel-body
-                                form(action='/backend/kvs/purge', method='post')
-                                    button.btn.btn-default(type='submit') redis リセット
+                                button#redis-button.btn.btn-default(type='button') redis リセット
 
         include includes/footer
+        script(type='text/javascript').
+            $('#redis-button').on('click', function() {
+                $.ajax({
+                    url: '/backend/kvs/purge',
+                    method: 'post'
+                }).done(function() {
+                    "use strict";
+                    console.log('done');
+                })
+            });
