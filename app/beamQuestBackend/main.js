@@ -3,7 +3,7 @@ exports.listen = function(app) {
     app.set('view engine', 'jade');
 
     app.get('/backend', function(req, res) {
-        res.render('index');
+        res.render('index', {env: process.env.NODE_ENV});
     });
 
     app.post('/backend/kvs/purge', function(req, res) {
