@@ -31,6 +31,12 @@ var Mob = function(opt_data) {
      * @type {Array.<Object>}
      */
     this.drop = this.data.drop || [];
+
+    /**
+     * ドロップするビーツの量
+     * @type {number}
+     */
+    this.money = this.data.money || 0;
 };
 util.inherits(Mob, Entity);
 

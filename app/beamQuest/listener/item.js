@@ -12,22 +12,20 @@ Item.prototype.listen = function(socket, io) {
 
 /**
  * 指定位置に指定アイテムをまき散らす
- * @param {Array.<string>}itemIds
+ * @param {Array.<model.dropItem>} dropItems
  * @param {model.Position} position
  */
-Item.prototype.drop = function(itemIds, position) {
+Item.prototype.drop = function(dropItems, position) {
     // TODO: ドロップごとに固有のIDを振っておかないと拾われた時に識別できない
-    if (this.io_ && !_.isEmpty(itemIds)) {
+    if (this.io_ && !_.isEmpty(dropItems)) {
         var datas = [];
-        _.forEach(itemIds, function(itemId) {
+        _.forEach(dropItems, function(dropItem) {
             var p = _.clone(position);
             // ドロップ位置を散らす
             p.x += Math.random() * 32 - 16;
             p.y += Math.random() * 32 - 16;
-            datas.push({
-                id: itemId,
-                position: p
-            });
+            dropItem.setPosition(p);
+            datas.push(dropItem.toJSON());
         });
 
         this.io_.sockets.emit('notify:item:drop', datas);

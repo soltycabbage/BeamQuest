@@ -1,6 +1,6 @@
 var util = require('util'),
-    Model = require('beamQuest/model/model');
-
+    Model = require('beamQuest/model/model'),
+    PositionModel = require('beamQuest/model/position');
 /**
  * ドロップアイテムのmodel
  * @constructor
@@ -38,9 +38,21 @@ var DropItem = function(opt_data) {
      * @type {number}
      */
     this.droppedAt = this.data.droppedAt;
+
+    /**
+     * ドロップした座標
+     * @type {mode.Position}
+     */
+    this.position = this.data.position || new PositionModel();
 };
 util.inherits(DropItem, Model);
 
+/**
+ * @param {model.Position} position
+ */
+DropItem.prototype.setPosition = function(position) {
+    this.position = position;
+};
 
 /** @override */
 DropItem.prototype.toJSON = function() {
@@ -50,6 +62,7 @@ DropItem.prototype.toJSON = function() {
     json.num = this.num;
     json.dropperId = this.dropperId;
     json.droppedAt = this.droppedAt;
+    json.position = this.position.toJSON();
     return json;
 };
 

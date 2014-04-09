@@ -4,7 +4,8 @@ var util = require('util'),
     entityListener = require('beamQuest/listener/entity'),
     itemListener = require('beamQuest/listener/item'),
     distance = require('beamQuest/math/euclideanDistance'),
-    manhattanDistance = require('beamQuest/math/manhattanDistance');
+    manhattanDistance = require('beamQuest/math/manhattanDistance'),
+    DropItemModel = require('beamQuest/model/dropitem');
 
 /**
  * すべてのmobの基底クラス
@@ -303,15 +304,47 @@ Mob.prototype.death = function() {
 Mob.prototype.chooseDropItems_ = function() {
     var result = [];
     var dropItems =  this.model.drop;
-    // TODO: ビーツのドロップ
-    result.push(bq.Types.Items.BEATS);
+    result.push(this.createDropItem_(bq.Types.Items.BEATS, this.model.money));
     _.forEach(dropItems, function(item) {
         if (Math.floor(Math.random() * item['rate']) === 0) {
-            result.push(item.id);
+            result.push(this.createDropItem_(item.id, 1));
         }
-    });
+    }.bind(this));
 
     return result;
+};
+
+/**
+ * @param {bq.Types.Items} itemId
+ * @param {string} num
+ * @return {!model.DropItem}
+ * @private
+ */
+Mob.prototype.createDropItem_ = function(itemId, num) {
+    var dropperId = !_.isEmpty(this.hateList) ? this.hateList.shift() : null;
+    var dropItem = new DropItemModel({
+        dropId: this.generateDropId_(itemId),
+        itemId: itemId,
+        num: num,
+        dropperId: dropperId,
+        droppedAt: new Date().getTime()
+    });
+
+    return dropItem;
+};
+
+/**
+ * ドロップアイテムのユニークIDを生成する
+ * @param {bq.Types.Items} itemId
+ * @private
+ * @return {string}
+ */
+Mob.prototype.generateDropId_ = function(itemId) {
+    var id = itemId;
+    id += this.model.id;
+    id += this.model.position.mapId;
+    id += new Date().getTime();
+    return id;
 };
 
 /**
