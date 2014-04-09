@@ -9,8 +9,11 @@ exports.listen = function(app) {
     app.post('/backend/kvs/purge', function(req, res) {
         var kvs = require('beamQuest/store/kvs').createClient();
 
-        kvs.flushall();
+        kvs.flushall(function(didSucceed) {
+            "use strict";
 
-        res.json({});
+            res.json({});
+        });
+
     });
 };
