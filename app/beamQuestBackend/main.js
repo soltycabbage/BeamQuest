@@ -7,11 +7,10 @@ exports.listen = function(app) {
     });
 
     app.post('/backend/kvs/purge', function(req, res) {
-        var redis = require('redis').createClient();
+        var kvs = require('beamQuest/store/kvs').createClient();
 
-        redis.flushall();
+        kvs.flushall();
 
         res.json({});
-        logger.info('kvs purge');
     });
 };

@@ -18,6 +18,10 @@ var SessionStore = {
     },
     del: function (key) {
         delete this.session_[key];
+    },
+    flushall: function() {
+        this.session_ = {};
+        logger.info('kvs flushall');
     }
 };
 
