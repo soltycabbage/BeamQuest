@@ -21,7 +21,7 @@ var Inventory = function(opt_data) {
      */
     this.money = this.data.money || 0;
 };
-util.inherits(Inventory(), Model);
+util.inherits(Inventory, Model);
 
 /**
  * アイテムを加える
