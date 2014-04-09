@@ -3,7 +3,8 @@ var path     = require('path'),
     express  = require('express'),
     http     = require('http'),
     socketIo = require('socket.io'),
-    log4js   = require('log4js');
+    log4js   = require('log4js'),
+    redis = require('socket.io/lib/stores/redis');
 
 var app = express();
 
@@ -39,7 +40,16 @@ server.listen(app.get('port'));
 var io = socketIo.listen(server);
 
 io.configure('production', function() {
+    var redisConf = {
+        host: '127.0.0.1',
+        port: 6379
+    };
     io.set('log level', 1);
+    io.set('store', new redis({
+        redisPub: redisConf,
+        redisSub: redisConf,
+        redisClient: redisConf
+    }));
 });
 
 var main = require('beamQuest/main');
