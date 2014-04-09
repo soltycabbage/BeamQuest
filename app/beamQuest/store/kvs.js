@@ -27,7 +27,6 @@ var SessionStore = {
 };
 
 exports.createClient = function() {
-    logger.info(process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development') {
         return SessionStore;
     } else {
