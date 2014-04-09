@@ -1,3 +1,5 @@
+var kvs = require('beamQuest/store/kvs').createClient();
+
 exports.listen = function(app) {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
@@ -7,13 +9,10 @@ exports.listen = function(app) {
     });
 
     app.post('/backend/kvs/purge', function(req, res) {
-        var kvs = require('beamQuest/store/kvs').createClient();
-
         kvs.flushall(function(didSucceed) {
             "use strict";
 
             res.json({});
         });
-
     });
 };
