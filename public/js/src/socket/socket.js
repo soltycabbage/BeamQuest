@@ -91,6 +91,8 @@ bq.Socket = cc.Class.extend({
 
         // アイテムがドロップした
         this.socket.on('notify:item:drop', function(data) {
+            // TODO model
+            var model = new bq.model.DropItem(data[0]);
             console.dir(data);
         });
         // hpに変動があった
