@@ -12,7 +12,8 @@ var Maps = function() {
      * - マップID
      * - マップの名前
      * - マップ上に存在するmobの数（常に一定数になるようにPOPを調整したい時に使う）
-     * @type {Array.<model.Map>}
+     * - マップ上のドロップアイテム
+     * @type {Array.<model.FieldMap>}
      * @private
      */
     this.maps_ = [];
@@ -38,7 +39,7 @@ Maps.prototype.init = function() {
         this.maps_.push(map);
         d.resolve();
     }.bind(this));
-
+map.toJSON();
     return d.promise();
 };
 

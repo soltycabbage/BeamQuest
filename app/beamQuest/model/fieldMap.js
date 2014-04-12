@@ -14,6 +14,12 @@ var FieldMap = function(opt_data) {
      * @type {number}
      */
     this.mobCount = this.data.mobCount || 0;
+
+    /**
+     *  マップに存在するドロップアイテム
+     * @type {Array.<model.DropItem>}
+     */
+    this.dropItems = this.data.dropItems || [];
 };
 util.inherits(FieldMap, MapModel);
 
@@ -21,6 +27,7 @@ FieldMap.prototype.toJSON = function() {
     var json = FieldMap.super_.prototype.toJSON.apply(this);
     json.maxMobCount = this.maxMobCount;
     json.mobCount = this.mobCount;
+    json.dropItems = this.toArrayJSON(this.dropItems);
     return json;
 };
 
