@@ -23,6 +23,7 @@ var FieldMap = function(opt_data) {
 };
 util.inherits(FieldMap, MapModel);
 
+/** @override */
 FieldMap.prototype.toJSON = function() {
     var json = FieldMap.super_.prototype.toJSON.apply(this);
     json.maxMobCount = this.maxMobCount;

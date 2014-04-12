@@ -12,6 +12,7 @@ var Model = function(opt_data) {
 };
 util.inherits(Model, events.EventEmitter);
 
+/** @protected */
 Model.prototype.toJSON = function() {
     return {};
 };
@@ -20,6 +21,7 @@ Model.prototype.toJSON = function() {
  * 配列に入った各modelをtoJSON()して返す
  * @param {Array.<Model>} arr
  * @return {Array.<Object>}
+ * @protected
  */
 Model.prototype.toArrayJSON = function(arr) {
     var result = [];
