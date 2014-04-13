@@ -321,9 +321,8 @@ Mob.prototype.chooseDropItems_ = function() {
  * @private
  */
 Mob.prototype.createDropItem_ = function(itemId, num) {
-    var dropperId = !_.isEmpty(this.hateList) ? this.hateList.shift() : null;
+    var dropperId = !_.isEmpty(this.hateList) ? this.hateList.shift()['entityId'] : null;
     var dropItem = new DropItemModel({
-        dropId: this.generateDropId_(itemId),
         itemId: itemId,
         num: num,
         dropperId: dropperId,
@@ -331,20 +330,6 @@ Mob.prototype.createDropItem_ = function(itemId, num) {
     });
 
     return dropItem;
-};
-
-/**
- * ドロップアイテムのユニークIDを生成する
- * @param {bq.Types.Items} itemId
- * @private
- * @return {string}
- */
-Mob.prototype.generateDropId_ = function(itemId) {
-    var id = itemId;
-    id += this.model.id;
-    id += this.model.position.mapId;
-    id += new Date().getTime();
-    return id;
 };
 
 /**

@@ -10,12 +10,6 @@ var DropItem = function(opt_data) {
     Model.apply(this, arguments);
 
     /**
-     * ドロップアイテムごとに付けられるユニークID
-     * @type {string}
-     */
-    this.dropId = this.data.dropId;
-
-    /**
      * ドロップしたアイテムのID
      * @type {bq.Types.Items}
      */
@@ -28,7 +22,7 @@ var DropItem = function(opt_data) {
     this.num = this.data.num;
 
     /**
-     * ドロップしたEntityのID
+     * ドロップさせたEntityのID
      * @type {string}
      */
     this.dropperId = this.data.dropperId;
@@ -44,8 +38,21 @@ var DropItem = function(opt_data) {
      * @type {mode.Position}
      */
     this.position = this.data.position || new PositionModel();
+
+    /**
+     * ドロップアイテムごとに付けられるユニークID
+     * @type {string}
+     */
+    this.dropId = this.data.dropId || this.generateDropId_();
 };
 util.inherits(DropItem, Model);
+
+/**
+ * @private
+ */
+DropItem.prototype.generateDropId_ = function() {
+    return [this.itemId, this.dropperId, this.droppedAt].join('_');
+};
 
 /**
  * @param {model.Position} position
