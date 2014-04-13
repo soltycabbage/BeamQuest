@@ -110,11 +110,14 @@ bq.entity.Entity = cc.Sprite.extend({
     
     /**
      * 死にモーション
+     * @param {boolean=} opt_skipRemove 見かけ上非表示にするだけでレイヤーから消したくない時はtrue
+     * @param {Function=} opt_callback 死にモーションが終わった時に呼びたい関数
      */
-    kill: function(opt_skipRemove) {
+    kill: function(opt_skipRemove, opt_callback) {
         var fadeOut = cc.FadeOut.create(0.8);
         var blink = cc.Blink.create(1, 50);
         var callFunc = cc.CallFunc.create(function() {
+            opt_callback && opt_callback.apply(this);
             if(!opt_skipRemove) {
                 this.removeFromParent();
             }

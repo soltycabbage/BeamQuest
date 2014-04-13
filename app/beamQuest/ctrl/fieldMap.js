@@ -9,9 +9,10 @@ var FieldMap = function(map) {
     EntityCtrl.apply(this, arguments);
     this.scheduleUpdate();
 
-    this.map = map;
+    this.model = map;
 
-    this.initMobs_();
+    entitiesStore = require('beamQuest/store/entities');
+
     setInterval(this.spawnMob_.bind(this), FieldMap.POP_INTERVAL);
 };
 util.inherits(FieldMap, EntityCtrl);
@@ -27,7 +28,7 @@ FieldMap.prototype.update = function() {
  * マップごとにmobを配置していく
  * @private
  */
-FieldMap.prototype.initMobs_ = function() {
+FieldMap.prototype.initMobs = function() {
     this.spawnMob_();
 };
 
@@ -38,17 +39,17 @@ FieldMap.prototype.initMobs_ = function() {
  */
 FieldMap.prototype.spawnMob_ = function() {
     var timeStamp = parseInt(new Date().getTime()/1);
-    for(var i = this.map.mobCount;i < this.map.maxMobCount; i++) {
+    for(var i = this.model.mobCount;i < this.model.maxMobCount; i++) {
         // TODO: mapごとに出現モンスターとか決める
         var position = this.randomPosition_();
         var mobType = bq.params.Entities.KAMUTARO;
         var mob = new MobCtrl();
         var mobModel = new MobModel(mobType);
-        mobModel.setId(mobType.id + '_' + this.map.id + '_' + i + '_' + timeStamp);
+        mobModel.setId(mobType.id + '_' + this.model.id + '_' + i + '_' + timeStamp);
         mobModel.setPosition(position);
         mob.setModel(mobModel);
         mob.startPos = _.clone(position);
-        entitiesStore.addMob(this.map, mob);
+        entitiesStore.addMob(this.model, mob);
     }
 };
 
@@ -58,10 +59,10 @@ FieldMap.prototype.spawnMob_ = function() {
  * @private
  */
 FieldMap.prototype.randomPosition_ = function() {
-    var randX = Math.floor(Math.random() * this.map.size.width);
-    var randY = Math.floor(Math.random() * this.map.size.height);
+    var randX = Math.floor(Math.random() * this.model.size.width);
+    var randY = Math.floor(Math.random() * this.model.size.height);
     var position = new positionModel({
-        mapId: this.map.id,
+        mapId: this.model.id,
         x: randX,
         y: randY
     });

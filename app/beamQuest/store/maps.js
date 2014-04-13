@@ -1,6 +1,7 @@
 var mapModel = require('beamQuest/model/fieldMap'),
     tmx = require('tmx-parser'),
-    deferred = require('deferred');
+    deferred = require('deferred'),
+    FieldMapCtrl = require('beamQuest/ctrl/fieldMap');
 
 /**
  * ゲーム内のマップの状態を保持しておくクラス
@@ -13,7 +14,7 @@ var Maps = function() {
      * - マップの名前
      * - マップ上に存在するmobの数（常に一定数になるようにPOPを調整したい時に使う）
      * - マップ上のドロップアイテム
-     * @type {Array.<model.FieldMap>}
+     * @type {Array.<ctrl.FieldMap>}
      * @private
      */
     this.maps_ = [];
@@ -33,18 +34,18 @@ Maps.prototype.init = function() {
 
     tmx.parseFile('public/res/map/map_village.tmx', function(err, m) {
         if (err) throw err;
-
         map.objTmx = m;
         map.size = {width: m.width * m.tileWidth, height: m.height * m.tileHeight};
-        this.maps_.push(map);
+        var mapCtrl = new FieldMapCtrl(map);
+        this.maps_.push(mapCtrl);
         d.resolve();
     }.bind(this));
-map.toJSON();
+
     return d.promise();
 };
 
 /**
- * @return {Array.<number>}
+ * @return {Array.<ctrl.FieldMap>}
  */
 Maps.prototype.getMaps = function() {
     return this.maps_;
@@ -52,11 +53,11 @@ Maps.prototype.getMaps = function() {
 
 /**
  * @param {number} mapId
- * @return {model.Map}
+ * @return {ctrl.FieldMap}
  */
 Maps.prototype.getMapById = function(mapId) {
     return _.find(this.maps_, function(map) {
-        return map.id === mapId;
+        return map.model.id === mapId;
     }) || null;
 };
 

@@ -6,7 +6,6 @@ var ping = require('beamQuest/listener/ping'),
     item = require('beamQuest/listener/item'),
     entities = require('beamQuest/store/entities'),
     mapStore = require('beamQuest/store/maps'),
-    FieldMapCtrl = require('beamQuest/ctrl/fieldMap'),
     scheduler = require('beamQuest/scheduler'),
     usage = require('usage');
 
@@ -21,14 +20,14 @@ exports.start = function(io) {
     }
 
     function init_() {
-        entities.init();
         var config = {
             STEP_INTERVAL: 30 // mainループの間隔(msec)
         };
-
+        entities.init();
         _.each(mapStore.getMaps(), function(map) {
-            new FieldMapCtrl(map);
+            map.initMobs();
         }.bind(this));
+
 
         io.sockets.on('connection', function(socket) {
             login.listen(socket, io);

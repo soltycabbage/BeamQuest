@@ -87,6 +87,8 @@ var Mob = function() {
      * @type {model.Position}
      */
     this.startPos = null;
+
+    entityStore = require('beamQuest/store/entities');
 };
 util.inherits(Mob, EntityCtrl);
 
@@ -321,7 +323,7 @@ Mob.prototype.chooseDropItems_ = function() {
  * @private
  */
 Mob.prototype.createDropItem_ = function(itemId, num) {
-    var dropperId = !_.isEmpty(this.hateList) ? this.hateList.shift()['entityId'] : null;
+    var dropperId = !_.isEmpty(this.hateList) ? this.hateList[0]['entityId'] : null;
     var dropItem = new DropItemModel({
         itemId: itemId,
         num: num,

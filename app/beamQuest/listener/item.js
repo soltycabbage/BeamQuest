@@ -1,3 +1,5 @@
+var mapStore = require('beamQuest/store/maps');
+
 /**
  * @fileoverview アイテムの取得/ドロップなどなど
  */
@@ -16,6 +18,8 @@ Item.prototype.listen = function(socket, io) {
  * @param {model.Position} position
  */
 Item.prototype.drop = function(dropItems, position) {
+   // var map = mapStore.getMapById(position.mapId);
+
     // TODO: ドロップごとに固有のIDを振っておかないと拾われた時に識別できない
     if (this.io_ && !_.isEmpty(dropItems)) {
         var datas = [];

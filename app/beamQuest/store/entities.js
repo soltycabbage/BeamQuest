@@ -41,9 +41,9 @@ var Entities = function() {
 Entities.prototype.init = function() {
     var d = deferred();
     _.each(mapStore.getMaps(), function(map) {
-        this.mapPlayers_[map.id] = {};
-        this.mapMobs_[map.id] = {};
-        this.mapNpcs_[map.id] = {};
+        this.mapPlayers_[map.model.id] = {};
+        this.mapMobs_[map.model.id] = {};
+        this.mapNpcs_[map.model.id] = {};
 
     }.bind(this));
     return d.resolve();
@@ -109,8 +109,8 @@ Entities.prototype.addMob = function(map, mob) {
 Entities.prototype.removeMob = function(mob) {
     var map = mapStore.getMapById(mob.model.position.mapId);
     if (map) {
-        map.mobCount--;
-        delete this.mapMobs_[map.id][mob.model.id];
+        map.model.mobCount--;
+        delete this.mapMobs_[map.model.id][mob.model.id];
         mob.dispose();
     }
 };
