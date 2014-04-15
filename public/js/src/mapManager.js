@@ -9,6 +9,13 @@ bq.MapManager = cc.Class.extend({
     ctor:function (tileMap) {
         'use strict';
         this.tileMap = tileMap;
+
+        /**
+         * マップ上に落ちてるアイテム
+         * @type {Array.<bq.object.DropItem>}
+         * @private
+         */
+        this.dropItems_ = [];
     },
 
     /**
@@ -52,5 +59,16 @@ bq.MapManager = cc.Class.extend({
             // リスポーンポイントが指定されてない場合適当な場所
             return cc.p(100,100);
         }
+    },
+
+    /**
+     * マップ上にドロップアイテムを追加する
+     * @param {Array.<Object>} itemJsons
+     */
+    addDropItems: function(itemJsons) {
+        _.forEach(itemJsons, function(itemJson) {
+            var item =  new bq.object.DropItem(new bq.model.DropItem(itemJson));
+            bq.baseLayer.addChild(item);
+        });
     }
 });

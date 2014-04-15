@@ -57,6 +57,9 @@
             'js/src/hud/level.js',
             'js/src/hud/statusWindow.js',
             'js/src/hud/hud.js',
+            // object
+            'js/src/object/object.js',
+            'js/src/object/dropItem.js',
 
             // entity
             'js/src/entity/entity.js',

@@ -38,7 +38,7 @@ bq.entity.Entity = cc.Sprite.extend({
     },
 
     /**
-     * @param {bq.model.Model}model
+     * @param {bq.model.Model} model
      */
     setModel: function(model) {
         this.model_ = model;
