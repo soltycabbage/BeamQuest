@@ -23,6 +23,13 @@ var FieldMap = function(opt_data) {
 };
 util.inherits(FieldMap, MapModel);
 
+/**
+ * @param {Array.<model.DropItem>} items
+ */
+FieldMap.prototype.addDropItems = function(items) {
+    this.dropItems = this.dropItems.concat(items);
+};
+
 /** @override */
 FieldMap.prototype.toJSON = function() {
     var json = FieldMap.super_.prototype.toJSON.apply(this);

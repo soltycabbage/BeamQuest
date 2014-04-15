@@ -18,10 +18,8 @@ Item.prototype.listen = function(socket, io) {
  * @param {model.Position} position
  */
 Item.prototype.drop = function(dropItems, position) {
-   // var map = mapStore.getMapById(position.mapId);
-
-    // TODO: ドロップごとに固有のIDを振っておかないと拾われた時に識別できない
     if (this.io_ && !_.isEmpty(dropItems)) {
+        var map = mapStore.getMapById(position.mapId);
         var datas = [];
         _.forEach(dropItems, function(dropItem) {
             var p = _.clone(position);
@@ -32,6 +30,7 @@ Item.prototype.drop = function(dropItems, position) {
             datas.push(dropItem.toJSON());
         });
 
+        map.addDropItems(dropItems);
         this.io_.sockets.emit('notify:item:drop', datas);
     }
 };

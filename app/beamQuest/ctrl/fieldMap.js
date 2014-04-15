@@ -69,4 +69,11 @@ FieldMap.prototype.randomPosition_ = function() {
     return position;
 };
 
+/**
+ * @param {Array.<model.DropItem>} items
+ */
+FieldMap.prototype.addDropItems = function(items) {
+    this.model.addDropItems(items);
+};
+
 module.exports = FieldMap;

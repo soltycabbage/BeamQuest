@@ -1,7 +1,6 @@
 var mapModel = require('beamQuest/model/fieldMap'),
     tmx = require('tmx-parser'),
-    deferred = require('deferred'),
-    FieldMapCtrl = require('beamQuest/ctrl/fieldMap');
+    deferred = require('deferred');
 
 /**
  * ゲーム内のマップの状態を保持しておくクラス
@@ -23,6 +22,7 @@ var Maps = function() {
 /**
  */
 Maps.prototype.init = function() {
+    var FieldMapCtrl = require('beamQuest/ctrl/fieldMap');
     var d = deferred();
     // NOTE マップ情報の保存先がまだ決まってないので直接書いてる。将来的にはファイルorDBから取ってくる？
     var map = new mapModel({

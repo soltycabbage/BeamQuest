@@ -51,7 +51,9 @@ util.inherits(DropItem, Model);
  * @private
  */
 DropItem.prototype.generateDropId_ = function() {
-    return [this.itemId, this.dropperId, this.droppedAt].join('_');
+    // テキトーな乱数をくっつけて同時期にドロップしたアイテム同士のID重複を防ぐ
+    var r = Math.floor(Math.random() * 1000000);
+    return [this.itemId, this.dropperId, this.droppedAt, r].join('_');
 };
 
 /**
