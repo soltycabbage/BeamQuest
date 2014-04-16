@@ -10,6 +10,8 @@ var Item = function() {
 Item.prototype.listen = function(socket, io) {
     this.socket_ = socket;
     this.io_ = io;
+
+    this.socket_.on('item:pick', this.handlePickItem_);
 };
 
 /**
@@ -31,7 +33,21 @@ Item.prototype.drop = function(dropItems, position) {
         });
 
         map.addDropItems(dropItems);
-        this.io_.sockets.emit('notify:item:drop', datas);
+        this.io_.sockets.emit('notify:item:drop', datias);
+    }
+};
+
+/**
+ * プレイヤーからのアイテム取得要求
+ * @param {Object} data
+ * @private
+ */
+Item.prototype.handlePickItem_ = function(data) {
+    if (data && data.mapId && data.pickerId && data.itemId) {
+        var map = mapStore.getMapById(data.mapId);
+        if (map) {
+            // TODO: mapDropItemsをArrayじゃなくてObjectにしてItemIdをKeyにしたい
+        }
     }
 };
 

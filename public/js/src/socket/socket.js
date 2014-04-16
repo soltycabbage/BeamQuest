@@ -193,6 +193,24 @@ bq.Socket = cc.Class.extend({
     requestEntityStatus: function(entityId, mapId, callback, selfObj) {
         this.socket.emit('user:status:get', {entityId: entityId, mapId: mapId});
         this.socket.once('user:status:receive', $.proxy(callback, selfObj));
+    },
+
+    /**
+     * ドロップアイテムを拾い上げる
+     * @param {bq.Types.Items} itemId
+     * @param {string} mapId
+     * @param {string} pickerId
+     * @param {Function} callback
+     * @param {Object} selfObj
+     */
+    requestPickItem: function(itemId, mapId, pickerId, callback, selfObj) {
+        var data = {
+            'itemId': itemId,
+            'mapId': mapId
+            'pickerId': pickerId,
+        };
+        this.socket.emit('item:pick', data);
+        this.socket.emit('item:pick:receive', $.proxy(callback, selfObj));
     }
 });
 

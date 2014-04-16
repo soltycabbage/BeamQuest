@@ -19,6 +19,4 @@ bq.object.DropItem = bq.object.Object.extend({
         var pos = this.model_.position;
         this.setPosition(cc.p(pos.x, pos.y));
     }
-
-
 });
