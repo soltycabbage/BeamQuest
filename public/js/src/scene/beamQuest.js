@@ -48,6 +48,14 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
 
         bq.space = this.createPhysicalSpace_(tileMap.getContentSize());
 
+        // 当たり判定のコールバック
+        bq.space.addCollisionHandler( 1, 2,
+            this.collisionBegin.bind(this),
+            this.collisionPre.bind(this),
+            this.collisionPost.bind(this),
+            this.collisionSeparate.bind(this)
+        );
+
 
         this._debugNode = cc.PhysicsDebugNode.create( bq.space );
         this._debugNode.setVisible( true );
@@ -60,7 +68,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         this.scheduleUpdate();
 
 
-        bq.soundManager.playMusic(s_BgmField, true);
+        //bq.soundManager.playMusic(s_BgmField, true);
         this.addChild(baseLayer, bq.config.zOrder.BASE_LAYER);
         bq.baseLayer = baseLayer;
         return true;
@@ -130,6 +138,43 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
 
 
         return space;
+    },
+
+    //    this.space.removeCollisionHandler( 1, 2 );
+
+    collisionBegin : function ( arbiter, space ) {
+
+        cc.log('collision begin');
+
+        var shapes = arbiter.getShapes();
+        var collTypeA = shapes[0].collision_type; //beam
+        var collTypeB = shapes[1].collision_type;
+
+        var data = {};
+        data.entity  = shapes[1].sprite.getModel();
+        data.beamPos = shapes[1].sprite.getPosition();
+        data.hpAmount = -10;
+        data.beamTag = shapes[0].sprite.tag;
+        bq.EntityManager.getInstance().hitEntity(data);
+
+        space.addPostStepCallback(function(){
+            space.removeShape(shapes[0]);
+        })
+
+        return true;
+    },
+
+    collisionPre : function ( arbiter, space ) {
+        cc.log('collision pre');
+        return true;
+    },
+
+    collisionPost : function ( arbiter, space ) {
+        cc.log('collision post');
+    },
+
+    collisionSeparate : function ( arbiter, space ) {
+        cc.log('collision separate');
     }
 });
 

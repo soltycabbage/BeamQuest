@@ -88,9 +88,9 @@ bq.EntityManager = cc.Class.extend({
         var enemy = this.enemys_[data.entity.id];
         if (enemy) {
             enemy.kill(null, function() {
+                bq.space.removeShape(enemy.shape_);
                 delete this.enemys_[data.entity.id];
             }.bind(this));
-
         }
     },
 

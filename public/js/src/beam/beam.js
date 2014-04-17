@@ -7,7 +7,7 @@ bq.beam = {};
  * @constructor
  * @extends {cc.Node}
  */
-bq.beam.Beam = cc.Node.extend({
+bq.beam.Beam = cc.PhysicsSprite.extend({
     id: bq.Types.Beams.NORMAL0,   // ビームID
     tag: '',                     // ビーム識別用タグ
     destination_:cc.p(0,0),      // {cc.p} 目標
@@ -21,14 +21,28 @@ bq.beam.Beam = cc.Node.extend({
     ctor: function (id, shooterId, tag) {
         "use strict";
         this._super();
-        this.setVisible(false);
+        this.initWithSpriteFrameName("large1.png");
+        this.setVisible(true);
         this.socket_ = bq.Socket.getInstance();
         this.shooterId_ = shooterId || null;
         if (shooterId === bq.player.name) {
             // 自分が撃ったビームだけサーバに位置情報を送信する
             // TODO: これもentityのshoot()的なメソッドでやるべき
-            this.enableSendPosition(true);
+            this.enableSendPosition(false);
+
+            // 自分がうったビームだけ送る
+            var body = new cp.Body(0.01, cp.momentForBox(1, 2, 2));
+            this.setBody(body);
+            if ( bq.space ) {
+                bq.space.addBody(this.getBody());
+                this.shape_ = new cp.BoxShape(this.getBody(), 8, 8);
+                this.shape_.setCollisionType(1);
+                this.shape_.sprite = this;
+                bq.space.addShape(this.shape_);
+            }
         }
+
+
         this.tag = tag;
         this.scheduleUpdate();
         this.schedule(this.sendPosition, this.POSITION_SEND_INTERVAL);
@@ -37,6 +51,7 @@ bq.beam.Beam = cc.Node.extend({
     /** @override */
     update: function(dt) {
         "use strict";
+        /*
         if ( this.active_ ) {
             var rotate = -1.0 * ( cc.RADIANS_TO_DEGREES(cc.pToAngle( this.inc_ )) -90);
             var curr = this.getPosition();
@@ -44,6 +59,7 @@ bq.beam.Beam = cc.Node.extend({
             this.setPosition(cc.pAdd(curr, this.inc_));
             this.setRotation(rotate);
         }
+        */
     },
 
     /**
@@ -88,9 +104,15 @@ bq.beam.Beam = cc.Node.extend({
         var vn = cc.pNormalize(v);
         this.inc_ = cc.pMult(vn, speed);
 
+        this.getBody().applyImpulse(vn, cp.v(0, 0));
+
         // duration秒後にこのビームを消去する
-        var remove = cc.CallFunc.create(this.dispose, this);
-        var sequence = cc.Sequence.create(cc.FadeIn.create(duration) , remove);
+        var remove = cc.CallFunc.create(function(){ 
+                this.dispose(); 
+                bq.space.removeShape(this.shape_);
+            }
+            , this);
+        var sequence = cc.Sequence.create(cc.FadeIn.create(3) , remove);
         this.runAction(sequence);
     },
 
@@ -110,6 +132,7 @@ bq.beam.Beam = cc.Node.extend({
 
     dispose: function() {
         $(this).triggerHandler(bq.beam.Beam.EventType.REMOVE);
+        //this.shape_ && bq.space.removeShape(this.shape_); TODO ほんとはここでremove したいが当たり判定のコールバックでdisposeよぶと、shapeは消しちゃダメって言われるから
         this.removeFromParent();
     }
 });
@@ -164,7 +187,11 @@ bq.beam.Beam.createSpriteBeam = function(beamType, shooterId, tag) {
     var frames = beamType2textureName[beamType];
 
     var sp = cc.SpriteFrameCache.getInstance().getSpriteFrame("large1.png");
-    var cl = cc.Sprite.createWithSpriteFrame(sp);
+    var cl = cc.PhysicsSprite.createWithSpriteFrameName("large1.png");
+    cl.setBody(new cp.Body(0.01, cp.momentForBox(100, 16, 16)));
+    bq.space.addBody(cl.getBody());
+    cl.shape_ = new cp.BoxShape(cl.getBody(), 32, 32);
+    bq.space.addShape(cl.shape_);
 
     var anime = bq.entity.Animation.createAnimation(frames, 0.05);
     var animation = anime && cc.RepeatForever.create(cc.Animate.create(anime));
@@ -208,7 +235,7 @@ bq.beam.Beam.create = function(beamType, shooterId, tag) {
  * @param {number} id
  * @param {cc.Layer} layer
  */
-bq.beam.Beam.setup = function(id, layer, shooterId) {
+bq.beam.Beam.setup = function(id, layer, shooterId) { // TODO 消す
     "use strict";
 
     var maxBeamCount = 1;

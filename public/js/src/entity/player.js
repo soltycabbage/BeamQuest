@@ -127,7 +127,8 @@ bq.entity.Player = bq.entity.Entity.extend({
             tag: parseInt(new Date().getTime()) + this.name
         };
 
-        this.socket.shootBeam(json);
+        bq.BeamManager.getInstance().beamShoot(json);
+        //this.socket.shootBeam(json);
     },
 
     /** @override */
