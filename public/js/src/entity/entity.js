@@ -7,13 +7,14 @@ bq.entity = {};
  * @constructor
  * @extends {cc.Sprite}
  */
-bq.entity.Entity = cc.Sprite.extend({
+bq.entity.Entity = cc.PhysicsSprite.extend({
     DEFAULT_NAME: 'entity',
     name: 'entity', // entityの名前
     chatRect: null, // チャット吹き出しのSprite
     currentState:null,
     currentDirection:null,
     model_: null,
+    shape_: null,
 
     /**
      * @param {string} spriteFrameName *.plistの<key>に設定されてるframeName
@@ -24,6 +25,15 @@ bq.entity.Entity = cc.Sprite.extend({
         spriteFrame && this.initWithSpriteFrame(spriteFrame); // TODO initWithSpriteFrameName ? iwg
         if ( frameMap ) {
             this.animations = bq.entity.Animation.createAnimations(frameMap);
+        }
+        var body = new cp.Body(100, 1000);
+        this.setBody(body);
+        if ( bq.space ) {
+            bq.space.addBody(this.getBody());
+            this.shape_ = new cp.BoxShape(this.getBody(), 16, 16);
+            this.shape_.setCollisionType(2);
+            this.shape_.sprite = this;
+            bq.space.addShape(this.shape_);
         }
         this.init_();
     },

@@ -46,17 +46,30 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         var hud = bq.Hud.getInstance();
         hud.enable(true);
 
-        this.space = new cp.Space();
-        this.initPhysics_();
+        bq.space = this.createPhysicalSpace_(tileMap.getContentSize());
 
-        this._debugNode = cc.PhysicsDebugNode.create( this.space );
+
+        this._debugNode = cc.PhysicsDebugNode.create( bq.space );
         this._debugNode.setVisible( true );
-        this.addChild( this._debugNode );
+        baseLayer.addChild( this._debugNode );
+
+        bq.space.addBody(bq.player.getBody());
+        var shape = new cp.BoxShape(bq.player.getBody(), 32, 32);
+        bq.space.addShape(shape);
+
+        this.scheduleUpdate();
+
 
         bq.soundManager.playMusic(s_BgmField, true);
         this.addChild(baseLayer, bq.config.zOrder.BASE_LAYER);
         bq.baseLayer = baseLayer;
         return true;
+    },
+
+    /** @override */
+    update: function(bt) {
+        'use strict';
+        bq.space.step(bt);
     },
 
     initPing_: function() {
@@ -95,10 +108,10 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         this.addChild(pingLabel, zIndex, bq.config.zOrder.DEBUG_PING);
     },
 
-    initPhysics_: function() {
-        var space = this.space ;
+    createPhysicalSpace_: function(size) {
+
+        var space = new cp.Space();
         var staticBody = space.staticBody;
-        var size = cc.Director.getInstance().getWinSize();
         // Walls
         var walls = [
             new cp.SegmentShape( staticBody, cp.v(0,0), cp.v(size.width,0), 0 ),				// bottom
@@ -108,12 +121,15 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         ];
         for( var i=0; i < walls.length; i++ ) { // TODO use underscore.js
             var shape = walls[i];
-            shape.setElasticity(1.6);
-            shape.setFriction(1.2);
+            shape.setElasticity(1);
+            shape.setFriction(1);
             space.addStaticShape( shape );
         }
 
-        space.gravity = cp.v(0, -100);
+        space.gravity = cp.v(0, 0);
+
+
+        return space;
     }
 });
 
