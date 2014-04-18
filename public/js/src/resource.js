@@ -17,6 +17,9 @@ var s_ImgSmoke0        = 'res/img/beam/smoke.png';
 var s_ImgPlayerMisc    = 'res/img/player/misc.png';
 var s_ImgBeats100      = 'res/img/beats_100.png';
 
+// path prefix
+var s_PrefixDropItem = 'res/img/object/dropitem/';
+
 // tmx
 // TODO s_Tmx, s_Tile はじまりにへんこー
 var s_ShinjukuTmx        =  'res/map/shinjuku.tmx';
@@ -50,10 +53,7 @@ var g_resources = [
     {type: 'image', src:s_SmallVillageMapSet},
     {type: 'image', src:s_ImgChatTail},
     {type: 'image', src:s_ImgPlayerWalking},
-    {type: 'image', src:s_ImgBeam0},
-    {type: 'image', src:s_ImgSmoke0},
-    {type: 'image', src:s_ImgSimpleBeam},
-    {type: 'image', src:s_ImgBeats100},
+
 
     //plist
     {type: 'plist', src:s_PlistPlayerWalking},

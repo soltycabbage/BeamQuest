@@ -206,8 +206,8 @@ bq.Socket = cc.Class.extend({
     requestPickItem: function(itemId, mapId, pickerId, callback, selfObj) {
         var data = {
             'itemId': itemId,
-            'mapId': mapId
-            'pickerId': pickerId,
+            'mapId': mapId,
+            'pickerId': pickerId
         };
         this.socket.emit('item:pick', data);
         this.socket.emit('item:pick:receive', $.proxy(callback, selfObj));

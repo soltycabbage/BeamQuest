@@ -33,7 +33,7 @@ Item.prototype.drop = function(dropItems, position) {
         });
 
         map.addDropItems(dropItems);
-        this.io_.sockets.emit('notify:item:drop', datias);
+        this.io_.sockets.emit('notify:item:drop', datas);
     }
 };
 

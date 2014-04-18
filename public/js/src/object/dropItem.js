@@ -3,11 +3,12 @@
  */
 
 bq.object.DropItem = bq.object.Object.extend({
+    prefixPath_: s_PrefixDropItem,
     /**
      * @param {bq.model.DropItem} model
      */
     ctor: function(model) {
-        this._super();
+        this._super(this.prefixPath_ + model.itemId + '.png');
         this.model_ = model;
         this.init_();
     },

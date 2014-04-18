@@ -9,11 +9,10 @@ bq.object = {};
  */
 bq.object.Object = cc.Sprite.extend({
     /**
-     * @param {string} spriteFrameName *.plistの<key>に設定されてるframeName
+     * @param {string} imgFile 該当画像までのファイルパス
      */
-    ctor: function(spriteFrameName) {
+    ctor: function(imgFile) {
         this._super();
-        //var spriteFrame = cc.SpriteFrameCache.getInstance().getSpriteFrame(spriteFrameName);
-        //spriteFrame && this.initWithSpriteFrame(spriteFrame);
+        this.initWithFile(imgFile);
     }
 });
