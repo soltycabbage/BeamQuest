@@ -104,7 +104,8 @@ bq.scene.BeamQuestWorldScene = cc.Scene.extend({
             var layer = new bq.scene.BeamQuestWorld();
             layer.init();
             this.addChild(layer);
-            this.renderEntities_(1); // TODO: maoId
+            this.renderEntities_(1); // TODO: mapIdが固定なのをなんとかする
+            this.renderDropItems_(1);// TODO: mapIdが固定なのをなんとかする
         } else {
             this.addChild(new bq.scene.LoginScene());
         }
@@ -118,6 +119,15 @@ bq.scene.BeamQuestWorldScene = cc.Scene.extend({
     renderEntities_: function(mapId) {
         var entityManager = bq.EntityManager.getInstance();
         entityManager.updateEntitiesByMapId(mapId);
+    },
+
+    /**
+     * ドロップアイテムを描画する
+     * @param {number} mapId
+     * @private
+     */
+    renderDropItems_: function(mapId) {
+        bq.mapManager.updateDropItemsByMapId(mapId);
     },
 
     /**

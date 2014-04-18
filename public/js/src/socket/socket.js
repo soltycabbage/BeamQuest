@@ -176,6 +176,17 @@ bq.Socket = cc.Class.extend({
     },
 
     /**
+     * マップ上に存在するドロップアイテムの一覧を要求する
+     * @param {number} mapId
+     * @param {Function} callback
+     * @param {Object} selfObj
+     */
+    requestDropItemsByMapId: function(mapId, callback, selfObj) {
+        this.socket.emit('world:dropitems:get', {mapId: mapId});
+        this.socket.once('world:dropitems:receive', $.proxy(callback, selfObj));
+    },
+
+    /**
      * いまからビーム撃つよってサーバに伝える
      * @param {Object.<shooterId: number, mapId: number, src: cc.p, dest: cc.p, beamId: string, tag: string} beamPos
      */

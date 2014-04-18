@@ -19,6 +19,17 @@ bq.MapManager = cc.Class.extend({
     },
 
     /**
+     * サーバからmapIdに指定したマップ上に存在するドロップアイテム一覧を取得してきて更新する
+     * @param {number} mapId
+     */
+    updateDropItemsByMapId: function(mapId) {
+        var soc = bq.Socket.getInstance();
+        soc.requestDropItemsByMapId(mapId, $.proxy(function(data) {
+            this.addDropItems(data['dropitems']);
+        }, this));
+    },
+
+    /**
      * マップ上のx,y(グローバル座標）に移動できるか？！？！
      * @param {cc.p} pos
      * @returns {boolean}
@@ -66,9 +77,10 @@ bq.MapManager = cc.Class.extend({
      * @param {Array.<Object>} itemJsons
      */
     addDropItems: function(itemJsons) {
-        _.forEach(itemJsons, function(itemJson) {
+        _.forEach(itemJsons, $.proxy(function(itemJson) {
             var item =  new bq.object.DropItem(new bq.model.DropItem(itemJson));
             bq.baseLayer.addChild(item);
-        });
+            this.dropItems_.push(item);
+        }), this);
     }
 });
