@@ -26,8 +26,8 @@ Item.prototype.drop = function(dropItems, position) {
         _.forEach(dropItems, function(dropItem) {
             var p = _.clone(position);
             // ドロップ位置を散らす
-            p.x += Math.random() * 32 - 16;
-            p.y += Math.random() * 32 - 16;
+            p.x += Math.random() * 64;
+            p.y += Math.random() * 64;
             dropItem.setPosition(p);
             datas.push(dropItem.toJSON());
         });

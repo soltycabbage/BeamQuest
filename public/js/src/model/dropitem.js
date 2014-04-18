@@ -6,7 +6,10 @@ bq.model.DropItem = bq.model.extend({
         /** @type {bq.Types.Items} */
         this.itemId;
 
-        /** @type {number} */
+        /** @type {bq.model.Item} */
+        this.item;
+
+         /** @type {number} */
         this.num;
 
         /** @type {string} */
@@ -25,6 +28,7 @@ bq.model.DropItem = bq.model.extend({
     parse: function(json) {
         this.dropId = json['dropId'];
         this.itemId = json['itemId'];
+        this.item = json['item'];
         this.num = json['num'];
         this.dropperId = json['dropperId'];
         this.droppedAt = json['droppedAt'];

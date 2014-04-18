@@ -1,8 +1,10 @@
 var util = require('util'),
     Model = require('beamQuest/model/model'),
-    PositionModel = require('beamQuest/model/position');
+    PositionModel = require('beamQuest/model/position'),
+    ItemModel = require('beamQuest/model/item');
+
 /**
- * ドロップアイテムのmodel
+ * ドロップ情報のmodel
  * @constructor
  * @extends {model.Model}
  */
@@ -14,6 +16,16 @@ var DropItem = function(opt_data) {
      * @type {bq.Types.Items}
      */
     this.itemId = this.data.itemId;
+
+    /**
+     * アイテム情報
+     * @type {model.Item}
+     */
+    this.item = this.data.item;
+    var item = bq.params.Items[this.itemId];
+    if (!this.item && item) {
+        this.item = new ItemModel(item);
+    }
 
     /**
      * 個数
@@ -68,6 +80,7 @@ DropItem.prototype.toJSON = function() {
     var json = {};
     json.dropId = this.dropId;
     json.itemId = this.itemId;
+    json.item = this.item.toJSON();
     json.num = this.num;
     json.dropperId = this.dropperId;
     json.droppedAt = this.droppedAt;
