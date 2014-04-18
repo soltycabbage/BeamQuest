@@ -306,7 +306,10 @@ Mob.prototype.death = function() {
 Mob.prototype.chooseDropItems_ = function() {
     var result = [];
     var dropItems =  this.model.drop;
-    result.push(this.createDropItem_(bq.Types.Items.BEATS, this.model.money));
+    var money = this.model.money;
+    // 設定値+10%の範囲で適当に分散
+    money += Math.floor(Math.random() * money * 0.1);
+    result.push(this.createDropItem_(bq.Types.Items.BEATS, money));
     _.forEach(dropItems, function(item) {
         if (Math.floor(Math.random() * item['rate']) === 0) {
             result.push(this.createDropItem_(item.id, 1));
