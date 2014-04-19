@@ -5,7 +5,7 @@ var util = require('util'),
     itemListener = require('beamQuest/listener/item'),
     distance = require('beamQuest/math/euclideanDistance'),
     manhattanDistance = require('beamQuest/math/manhattanDistance'),
-    DropItemModel = require('beamQuest/model/dropitem');
+    DropItemModel = require('beamQuest/model/dropItem');
 
 /**
  * すべてのmobの基底クラス

@@ -18,7 +18,7 @@ var s_ImgPlayerMisc    = 'res/img/player/misc.png';
 var s_ImgBeats100      = 'res/img/beats_100.png';
 
 // path prefix
-var s_PrefixDropItem = 'res/img/object/dropitem/';
+var s_PrefixDropItem = 'res/img/object/dropItem/';
 
 // tmx
 // TODO s_Tmx, s_Tile はじまりにへんこー
