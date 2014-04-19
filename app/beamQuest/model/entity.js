@@ -54,6 +54,20 @@ Entity.DEFAULT_ATTACK = 1;
 Entity.DEFAULT_DEFENCE = 1;
 
 /**
+ * @param {string} id
+ */
+Entity.prototype.setId = function(id) {
+    this.id = id;
+};
+
+/**
+ * @param {model.Position} position
+ */
+Entity.prototype.setPosition = function(position) {
+    this.position = position;
+};
+
+/**
  * HP の増減を行う
  * 減らす場合は負の数を指定
  *

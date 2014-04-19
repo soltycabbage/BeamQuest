@@ -36,6 +36,7 @@
             'js/src/model/beamPos.js',
             'js/src/model/chat.js',
             'js/src/model/mob.js',
+            'js/src/model/dropItem.js',
 
             'js/src/entityManager.js',
             'js/src/soundManager.js',
@@ -56,6 +57,9 @@
             'js/src/hud/level.js',
             'js/src/hud/statusWindow.js',
             'js/src/hud/hud.js',
+            // object
+            'js/src/object/object.js',
+            'js/src/object/dropItem.js',
 
             // entity
             'js/src/entity/entity.js',

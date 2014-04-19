@@ -9,6 +9,24 @@ bq.MapManager = cc.Class.extend({
     ctor:function (tileMap) {
         'use strict';
         this.tileMap = tileMap;
+
+        /**
+         * マップ上に落ちてるアイテム
+         * @type {Array.<bq.object.DropItem>}
+         * @private
+         */
+        this.dropItems_ = [];
+    },
+
+    /**
+     * サーバからmapIdに指定したマップ上に存在するドロップアイテム一覧を取得してきて更新する
+     * @param {number} mapId
+     */
+    updateDropItemsByMapId: function(mapId) {
+        var soc = bq.Socket.getInstance();
+        soc.requestDropItemsByMapId(mapId, $.proxy(function(data) {
+            this.addDropItems(data['dropitems']);
+        }, this));
     },
 
     /**
@@ -52,5 +70,17 @@ bq.MapManager = cc.Class.extend({
             // リスポーンポイントが指定されてない場合適当な場所
             return cc.p(100,100);
         }
+    },
+
+    /**
+     * マップ上にドロップアイテムを追加する
+     * @param {Array.<Object>} itemJsons
+     */
+    addDropItems: function(itemJsons) {
+        _.forEach(itemJsons, $.proxy(function(itemJson) {
+            var item =  new bq.object.DropItem(new bq.model.DropItem(itemJson));
+            bq.baseLayer.addChild(item);
+            this.dropItems_.push(item);
+        }), this);
     }
 });

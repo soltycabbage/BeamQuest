@@ -87,8 +87,10 @@ bq.EntityManager = cc.Class.extend({
     killMob: function(data) {
         var enemy = this.enemys_[data.entity.id];
         if (enemy) {
-            enemy.kill();
-            delete this.enemys_[data.entity.id];
+            enemy.kill(null, function() {
+                delete this.enemys_[data.entity.id];
+            }.bind(this));
+
         }
     },
 

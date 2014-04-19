@@ -20,5 +20,18 @@ bq.Types = {
         NORMAL2: 'normal2',
         FIRE: 'fire',
         METEOR: 'meteor'
+    },
+
+    Items: {
+        BEATS: 'beats',
+        POTION: 'potion',
+        SHORT_BEAM: 'shortbeam'
+    },
+
+    ItemType: {
+        USE: 'use',       // 使うことができるアイテム
+        MONEY: 'money',   // 貨幣になるアイテム
+        EQUIP: 'equip',   // 装備することができるアイテム
+        EVENT: 'evemt'    // イベントで使うアイテム
     }
 };

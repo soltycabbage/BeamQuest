@@ -2,8 +2,10 @@ var util = require('util'),
     EntityCtrl = require('beamQuest/ctrl/entity'),
     entityStore = require('beamQuest/store/entities'),
     entityListener = require('beamQuest/listener/entity'),
+    itemListener = require('beamQuest/listener/item'),
     distance = require('beamQuest/math/euclideanDistance'),
-    manhattanDistance = require('beamQuest/math/manhattanDistance');
+    manhattanDistance = require('beamQuest/math/manhattanDistance'),
+    DropItemModel = require('beamQuest/model/dropItem');
 
 /**
  * すべてのmobの基底クラス
@@ -85,6 +87,8 @@ var Mob = function() {
      * @type {model.Position}
      */
     this.startPos = null;
+
+    entityStore = require('beamQuest/store/entities');
 };
 util.inherits(Mob, EntityCtrl);
 
@@ -281,9 +285,56 @@ Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
  */
 Mob.prototype.handleAddHp = function(amount) {
     if (this.model.hp <= 0) { // 死
-        entityListener.killMob(this);
-        entityStore.removeMob(this);
+        this.death();
     }
+};
+
+/**
+ * @override
+ */
+Mob.prototype.death = function() {
+    itemListener.drop(this.chooseDropItems_(), this.model.position);
+    entityListener.killMob(this);
+    entityStore.removeMob(this);
+};
+
+/**
+ * ドロップするアイテムの抽選をする
+ * @return {Array.<string>}
+ * @private
+ */
+Mob.prototype.chooseDropItems_ = function() {
+    var result = [];
+    var dropItems =  this.model.drop;
+    var money = this.model.money;
+    // 設定値+10%の範囲で適当に分散
+    money += Math.floor(Math.random() * money * 0.1);
+    result.push(this.createDropItem_(bq.Types.Items.BEATS, money));
+    _.forEach(dropItems, function(item) {
+        if (Math.floor(Math.random() * item['rate']) === 0) {
+            result.push(this.createDropItem_(item.id, 1));
+        }
+    }.bind(this));
+
+    return result;
+};
+
+/**
+ * @param {bq.Types.Items} itemId
+ * @param {string} num
+ * @return {!model.DropItem}
+ * @private
+ */
+Mob.prototype.createDropItem_ = function(itemId, num) {
+    var dropperId = !_.isEmpty(this.hateList) ? this.hateList[0]['entityId'] : null;
+    var dropItem = new DropItemModel({
+        itemId: itemId,
+        num: num,
+        dropperId: dropperId,
+        droppedAt: new Date().getTime()
+    });
+
+    return dropItem;
 };
 
 /**

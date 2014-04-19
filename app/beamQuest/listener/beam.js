@@ -94,11 +94,10 @@ exports.listen = function(socket, io) {
 
         var map = maps.getMapById(data.mapId) || {};
 
-        var tileSize = map.objTmx.tileWidth;
-        var sizeY = map.objTmx.height;
+        var tileSize = map.model.objTmx.tileWidth;
+        var sizeY = map.model.objTmx.height;
 
-        var passables = _.select(map.objTmx.layers, function(layer) {
-            //console.log(layer);
+        var passables = _.select(map.model.objTmx.layers, function(layer) {
             return layer && layer.type === 'tile' && layer.properties['beam_no_passable'] === 'true';
         } );
 

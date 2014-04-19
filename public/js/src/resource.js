@@ -9,13 +9,16 @@ bq.beams = [];
 // Note. 各種接頭辞をつけてね。(ex. 画像ならs_Img)
 
 // img
-var s_ImgPlayer        = 'res/img/player.png';
 var s_ImgChatTail      = 'res/img/chat_tail.png';
 var s_ImgPlayerWalking = 'res/img/player/walk.png';
 var s_ImgBeam0         = 'res/img/beam/star.png';
 var s_ImgSimpleBeam    = 'res/img/beam/simple.png';
 var s_ImgSmoke0        = 'res/img/beam/smoke.png';
 var s_ImgPlayerMisc    = 'res/img/player/misc.png';
+var s_ImgBeats100      = 'res/img/beats_100.png';
+
+// path prefix
+var s_PrefixDropItem = 'res/img/object/dropItem/';
 
 // tmx
 // TODO s_Tmx, s_Tile はじまりにへんこー
@@ -46,15 +49,11 @@ var s_SeTargetLine   = 'res/sounds/TargetLine.m4a';
 
 var g_resources = [
     //img
-    {type: 'image', src:s_ImgPlayer},
-    //{type: 'image', src:s_ShinjukuMapSet},
     {type: 'image', src:s_StartVillageMapSet},
     {type: 'image', src:s_SmallVillageMapSet},
     {type: 'image', src:s_ImgChatTail},
     {type: 'image', src:s_ImgPlayerWalking},
-    {type: 'image', src:s_ImgBeam0},
-    {type: 'image', src:s_ImgSmoke0},
-    {type: 'image', src:s_ImgSimpleBeam},
+
 
     //plist
     {type: 'plist', src:s_PlistPlayerWalking},
