@@ -31,8 +31,10 @@ bq.object.DropItem = bq.object.Object.extend({
      * @param {string} name
      */
     showName: function(name) {
-        var label = bq.Label.createWithShadow(name, 8, cc.c3b(20,240,255));
-        label.setPosition(cc.p(0, -10));
+        var fontSize = 3;
+        var label = bq.Label.createWithShadow(name, fontSize, cc.c3b(160,255,255));
+        label.setPosition(cc.p(name.length * fontSize, -10));
+
         this.addChild(label);
     }
 });
