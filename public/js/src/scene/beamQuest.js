@@ -150,15 +150,14 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         var collTypeA = shapes[0].collision_type; //beam
         var collTypeB = shapes[1].collision_type;
 
-        var data = {};
-        data.entity  = shapes[1].sprite.getModel();
-        data.beamPos = shapes[1].sprite.getPosition();
-        data.hpAmount = -10;
-        data.beamTag = shapes[0].sprite.tag;
-        bq.EntityManager.getInstance().hitEntity(data);
-
         space.addPostStepCallback(function(){
-            space.removeShape(shapes[0]);
+            var data = {};
+            data.entity  = shapes[1].sprite.getModel();
+            data.beamPos = shapes[1].sprite.getPosition();
+            data.hpAmount = -10;
+            data.beamTag = shapes[0].sprite.tag;
+
+            bq.EntityManager.getInstance().hitEntity(data);
         })
 
         return true;
