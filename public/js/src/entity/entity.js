@@ -139,6 +139,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var callFunc = cc.CallFunc.create(function() {
             opt_callback && opt_callback.apply(this);
             if(!opt_skipRemove) {
+                this.shape_ && bq.space.removeShape(this.shape_);
                 this.removeFromParent();
             }
         }.bind(this));
