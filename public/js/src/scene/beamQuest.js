@@ -49,11 +49,8 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         bq.space = this.createPhysicalSpace_(tileMap.getContentSize());
 
         // 当たり判定のコールバック
-        bq.space.addCollisionHandler( 1, 2,
-            this.collisionBegin.bind(this),
-            this.collisionPre.bind(this),
-            this.collisionPost.bind(this),
-            this.collisionSeparate.bind(this)
+        bq.space.addCollisionHandler( 1, 2, // TODO 変数にしないとダメ
+            this.collisionBegin.bind(this)
         );
 
 
@@ -140,40 +137,20 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         return space;
     },
 
-    //    this.space.removeCollisionHandler( 1, 2 );
-
     collisionBegin : function ( arbiter, space ) {
 
-        cc.log('collision begin');
-
         var shapes = arbiter.getShapes();
-        var collTypeA = shapes[0].collision_type; //beam
-        var collTypeB = shapes[1].collision_type;
-
         space.addPostStepCallback(function(){
             var data = {};
-            data.entity  = shapes[1].sprite.getModel();
+            data.entity  = shapes[1].sprite.getModel(); // TODO this.sprite やめなよ
             data.beamPos = shapes[1].sprite.getPosition();
-            data.hpAmount = -10;
+            data.hpAmount = -10; // これも
             data.beamTag = shapes[0].sprite.tag;
 
             bq.EntityManager.getInstance().hitEntity(data);
         })
 
         return true;
-    },
-
-    collisionPre : function ( arbiter, space ) {
-        cc.log('collision pre');
-        return true;
-    },
-
-    collisionPost : function ( arbiter, space ) {
-        cc.log('collision post');
-    },
-
-    collisionSeparate : function ( arbiter, space ) {
-        cc.log('collision separate');
     }
 });
 
