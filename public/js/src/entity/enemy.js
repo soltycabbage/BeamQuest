@@ -27,8 +27,8 @@ bq.entity.Enemy = bq.entity.Entity.extend({
     },
 
     /** @override */
-    kill: function(opt_skipRemove) {
-        this._super(opt_skipRemove);
+    kill: function(opt_skipRemove, opt_callback) {
+        this._super(opt_skipRemove, opt_callback);
         this.targetLine_ && this.targetLine_.removeFromParent();
     },
 
