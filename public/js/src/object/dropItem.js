@@ -24,6 +24,11 @@ bq.object.DropItem = bq.object.Object.extend({
         } else {
             this.showName(this.model_.item.name);
         }
+
+        var pos = this.getPosition();
+        var moveTo = cc.RepeatForever.create(cc.BezierTo.create(1, [cc.p(pos.x, pos.y+10), cc.p(pos.x, pos.y-10), pos]));
+        this.runAction(moveTo);
+
     },
 
     /**
