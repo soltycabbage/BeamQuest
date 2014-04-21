@@ -18,6 +18,20 @@ Model.prototype.toJSON = function() {
 };
 
 /**
+ * Objectに入った各modelをtoJSON()して返す
+ * @param {Object.<Model>} obj
+ * @return {Object.<Object>}
+ * @protected
+ */
+Model.prototype.toObjectJSON = function(obj) {
+    var result = {};
+    _.forEach(obj, function(value, key) {
+        result[key] = value.toJSON();
+    });
+    return result;
+};
+
+/**
  * 配列に入った各modelをtoJSON()して返す
  * @param {Array.<Model>} arr
  * @return {Array.<Object>}

@@ -12,7 +12,7 @@ bq.MapManager = cc.Class.extend({
 
         /**
          * マップ上に落ちてるアイテム
-         * @type {Array.<bq.object.DropItem>}
+         * @type {Object.<bq.object.DropItem>}
          * @private
          */
         this.dropItems_ = [];
@@ -74,13 +74,13 @@ bq.MapManager = cc.Class.extend({
 
     /**
      * マップ上にドロップアイテムを追加する
-     * @param {Array.<Object>} itemJsons
+     * @param {Object.<Object>} itemJsons
      */
     addDropItems: function(itemJsons) {
-        _.forEach(itemJsons, $.proxy(function(itemJson) {
+        _.forEach(itemJsons, $.proxy(function(itemJson, key) {
             var item =  new bq.object.DropItem(new bq.model.DropItem(itemJson));
             bq.baseLayer.addChild(item);
-            this.dropItems_.push(item);
+            this.dropItems_[key] = item;
         }), this);
     }
 });
