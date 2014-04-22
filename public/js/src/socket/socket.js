@@ -104,6 +104,12 @@ bq.Socket = cc.Class.extend({
             var model = new bq.model.Player(data);
             entityManager.levelUp(model);
         });
+
+        // 誰かが（自分含む）ドロップアイテム拾ったよって
+        this.socket.on('notify:item:pick', function(data) {
+            console.log(data);
+        });
+
         /**
          *  1対1の通信
          */
@@ -208,20 +214,17 @@ bq.Socket = cc.Class.extend({
 
     /**
      * ドロップアイテムを拾い上げる
-     * @param {bq.Types.Items} itemId
+     * @param {bq.Types.Items} dropId
      * @param {string} mapId
      * @param {string} pickerId
-     * @param {Function} callback
-     * @param {Object} selfObj
      */
-    requestPickItem: function(itemId, mapId, pickerId, callback, selfObj) {
+    requestPickItem: function(dropId, mapId, pickerId) {
         var data = {
-            'itemId': itemId,
+            'dropId': dropId,
             'mapId': mapId,
             'pickerId': pickerId
         };
         this.socket.emit('item:pick', data);
-        this.socket.emit('item:pick:receive', $.proxy(callback, selfObj));
     }
 });
 

@@ -52,6 +52,16 @@ bq.entity.Entity = cc.Sprite.extend({
     },
 
     /**
+     * 当たり判定の範囲を矩形で返す
+     * @return {cc.rect}
+     */
+    getCollideRect: function() {
+        var a = this.getContentSize();
+        var p = this.getPosition();
+        return cc.rect(p.x - a.width / 2, p.y - a.height / 2, a.width, a.height);
+    },
+
+    /**
      * Entityの頭上にキャラ名を表示する
      */
     showName: function() {

@@ -11,7 +11,7 @@ Item.prototype.listen = function(socket, io) {
     this.socket_ = socket;
     this.io_ = io;
 
-    this.socket_.on('item:pick', this.handlePickItem_);
+    this.socket_.on('item:pick', this.handlePickItem_.bind(this));
 };
 
 /**
@@ -42,11 +42,16 @@ Item.prototype.drop = function(dropItems, position) {
  * @param {Object} data
  * @private
  */
-Item.prototype.handlePickItem_ = function(data) {
-    if (data && data.mapId && data.pickerId && data.itemId) {
+Item.prototype.handlePickItem_ = function(data, p, e, r) {
+    if (this.io_ && data && data.mapId && data.pickerId && data.dropId) {
         var map = mapStore.getMapById(data.mapId);
         if (map) {
-            // TODO: mapDropItemsをArrayじゃなくてObjectにしてItemIdをKeyにしたい
+            var dropItem = map.model.dropItems[data.dropId];
+            if (dropItem) {
+                // TODO 取得プレイヤーのインベントリにアイテムを追加
+                this.io_.sockets.emit('notify:item:pick', dropItem.toJSON());
+                delete map.model.dropItems[data.dropId];
+            }
         }
     }
 };

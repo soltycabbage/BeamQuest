@@ -11,6 +11,7 @@ bq.object.DropItem = bq.object.Object.extend({
         this._super(this.prefixPath_ + model.itemId + '.png');
         this.model_ = model;
         this.init_();
+        this.schedule(this.collidePlayer_, 0.5);
     },
 
     /**
@@ -24,6 +25,25 @@ bq.object.DropItem = bq.object.Object.extend({
         } else {
             this.showName(this.model_.item.name);
         }
+    },
+
+    /**
+     * プレイヤーとの衝突をチェックして衝突してたらpick扱いにする
+     * @private
+     */
+    collidePlayer_: function() {
+        if(cc.rectIntersectsRect(bq.player.getCollideRect(), this.getCollideRect())) {
+            this.tryPick_();
+        }
+    },
+
+    /**
+     * pickを試みる
+     * @private
+     */
+    tryPick_: function() {
+        var soc = bq.Socket.getInstance();
+        soc.requestPickItem(this.model_.dropId, this.model_.position.mapId, bq.player.name);
     },
 
     /**
