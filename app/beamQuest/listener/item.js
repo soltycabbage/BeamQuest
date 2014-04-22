@@ -1,4 +1,5 @@
-var mapStore = require('beamQuest/store/maps');
+var mapStore = require('beamQuest/store/maps'),
+    entityStore = require('beamQuest/store/entities');
 
 /**
  * @fileoverview アイテムの取得/ドロップなどなど
@@ -42,14 +43,18 @@ Item.prototype.drop = function(dropItems, position) {
  * @param {Object} data
  * @private
  */
-Item.prototype.handlePickItem_ = function(data, p, e, r) {
+Item.prototype.handlePickItem_ = function(data) {
     if (this.io_ && data && data.mapId && data.pickerId && data.dropId) {
         var map = mapStore.getMapById(data.mapId);
-        if (map) {
+        var picker = entityStore.getPlayerById(data.mapId, data.pickerId);
+        if (map && picker) {
             var dropItem = map.model.dropItems[data.dropId];
             if (dropItem) {
+                var res = dropItem.toJSON();
+                res['pickerId'] = picker.model.id;
+                res['pickerPosition'] = picker.model.position.toJSON();
                 // TODO 取得プレイヤーのインベントリにアイテムを追加
-                this.io_.sockets.emit('notify:item:pick', dropItem.toJSON());
+                this.io_.sockets.emit('notify:item:pick', res);
                 delete map.model.dropItems[data.dropId];
             }
         }

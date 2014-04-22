@@ -94,6 +94,11 @@ bq.Socket = cc.Class.extend({
             bq.mapManager.addDropItems(data);
         });
 
+        // 誰かが（自分含む）ドロップアイテム拾ったよって
+        this.socket.on('notify:item:pick', function(data) {
+            bq.mapManager.removeDropItem(data);
+        });
+
         // hpに変動があった
         this.socket.on('notify:entity:hp:update', function(data) {
             entityManager.updateHp(data);
@@ -103,11 +108,6 @@ bq.Socket = cc.Class.extend({
         this.socket.on('notify:entity:player:levelup', function(data) {
             var model = new bq.model.Player(data);
             entityManager.levelUp(model);
-        });
-
-        // 誰かが（自分含む）ドロップアイテム拾ったよって
-        this.socket.on('notify:item:pick', function(data) {
-            console.log(data);
         });
 
         /**

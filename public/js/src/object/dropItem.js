@@ -27,6 +27,14 @@ bq.object.DropItem = bq.object.Object.extend({
         }
     },
 
+    /** @override */
+    getCollideRect: function() {
+        // 見かけより2倍大きい当たり判定
+        var a = this.getContentSize();
+        var p = this.getPosition();
+        return cc.rect(p.x - a.width, p.y, a.width * 2, a.height * 2);
+    },
+
     /**
      * プレイヤーとの衝突をチェックして衝突してたらpick扱いにする
      * @private
@@ -44,6 +52,16 @@ bq.object.DropItem = bq.object.Object.extend({
     tryPick_: function() {
         var soc = bq.Socket.getInstance();
         soc.requestPickItem(this.model_.dropId, this.model_.position.mapId, bq.player.name);
+    },
+
+    /**
+     * @param {bq.model.Position}
+     */
+    pickAndRemove: function(pos) {
+        var moveTo = cc.MoveTo.create(0.2, cc.p(pos.x, pos.y));
+        var fadeOut = cc.FadeOut.create(0.1);
+        var removeFunc = cc.CallFunc.create($.proxy(this.removeFromParent, this));
+        this.runAction(cc.Sequence.create(cc.Spawn.create(moveTo, fadeOut), removeFunc));
     },
 
     /**

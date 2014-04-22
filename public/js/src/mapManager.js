@@ -77,10 +77,22 @@ bq.MapManager = cc.Class.extend({
      * @param {Object.<Object>} itemJsons
      */
     addDropItems: function(itemJsons) {
-        _.forEach(itemJsons, $.proxy(function(itemJson, key) {
+        _.forEach(itemJsons, $.proxy(function(itemJson) {
             var item =  new bq.object.DropItem(new bq.model.DropItem(itemJson));
             bq.baseLayer.addChild(item);
-            this.dropItems_[key] = item;
+            this.dropItems_[itemJson['dropId']] = item;
         }), this);
+    },
+
+    /**
+     * マップ上のドロップアイテムを削除する
+     * @param {Object} itemJson
+     */
+    removeDropItem: function(itemJson) {
+        if (this.dropItems_[itemJson['dropId']]) {
+            var item = this.dropItems_[itemJson['dropId']];
+            item.pickAndRemove(itemJson['pickerPosition']);
+            delete this.dropItems_[itemJson['dropId']];
+        }
     }
 });
