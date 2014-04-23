@@ -1,5 +1,6 @@
 var mapStore = require('beamQuest/store/maps'),
-    entityStore = require('beamQuest/store/entities');
+    entityStore = require('beamQuest/store/entities'),
+    inventoryStore = require('beamQuest/store/inventory');
 
 /**
  * @fileoverview アイテムの取得/ドロップなどなど
@@ -53,7 +54,7 @@ Item.prototype.handlePickItem_ = function(data) {
                 var res = dropItem.toJSON();
                 res['pickerId'] = picker.model.id;
                 res['pickerPosition'] = picker.model.position.toJSON();
-                // TODO 取得プレイヤーのインベントリにアイテムを追加
+                inventoryStore.push(picker.model.id, dropItem.item, dropItem.num);
                 this.io_.sockets.emit('notify:item:pick', res);
                 delete map.model.dropItems[data.dropId];
             }

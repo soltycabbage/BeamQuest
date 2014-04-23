@@ -10,6 +10,12 @@ var Item = function(opt_data) {
     Model.apply(this, arguments);
 
     /**
+     * アイテムID
+     * @type {bq.Types.Items}
+     */
+    this.id = this.data.id || '';
+
+    /**
      * アイテムの名前
      * @type {string}
      */
@@ -32,6 +38,7 @@ util.inherits(Item, Model);
 /** @override */
 Item.prototype.toJSON = function() {
     var json = {};
+    json.id = this.id;
     json.name = this.name;
     json.info = this.info;
     json.type = this.type;

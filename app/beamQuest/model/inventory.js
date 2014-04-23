@@ -26,13 +26,22 @@ util.inherits(Inventory, Model);
 /**
  * アイテムを加える
  * @param {string} itemId
+ * @param {number} amount
  */
-Inventory.prototype.pushItem = function(itemId) {
+Inventory.prototype.pushItem = function(itemId, amount) {
     if (!this.items[itemId]) {
-        this.items[itemId] = {'amount': 1};
+        this.items[itemId] = {'amount': amount};
     } else {
-        this.items[itemId].amount++;
+        this.items[itemId].amount += amount;
     }
+};
+
+/**
+ * 所持金を増やす
+ * @param {number} money 負数だと減額
+ */
+Inventory.prototype.addMoney = function(money) {
+    this.money += money;
 };
 
 /**

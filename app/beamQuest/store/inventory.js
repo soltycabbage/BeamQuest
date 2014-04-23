@@ -19,20 +19,25 @@ var Inventory = function() {
          }
      };
      */
-    this.inventory_;
+    this.inventory_ = {};
 };
 
 /**
  * アイテムを所持品に加える
  * @param {string} userId
- * @param {string} itemId
+ * @param {model.Item} item
+ * @param {number} amount 数量
  */
-Inventory.prototype.push = function(userId, itemId) {
+Inventory.prototype.push = function(userId, item, amount) {
     if (!this.inventory_[userId]) {
         this.inventory_[userId] = new InventoryModel();
     }
-
-    this.inventory_[userId].pushItem(itemId);
+    // TODO: データ永続化
+    if (item.type === bq.Types.ItemType.MONEY) {
+        this.inventory_[userId].addMoney(amount);
+    } else {
+        this.inventory_[userId].pushItem(item.id, amount);
+    }
 };
 
 /**

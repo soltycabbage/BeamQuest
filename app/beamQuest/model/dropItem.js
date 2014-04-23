@@ -24,6 +24,7 @@ var DropItem = function(opt_data) {
     this.item = this.data.item;
     var item = bq.params.Items[this.itemId];
     if (!this.item && item) {
+        item['id'] = this.itemId;
         this.item = new ItemModel(item);
     }
 
