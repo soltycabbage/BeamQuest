@@ -75,7 +75,7 @@ bq.entity.Entity = cc.Sprite.extend({
         var callFunc = cc.CallFunc.create(label.removeFromParent.bind(label));
         label.runAction(cc.Sequence.create(cc.Spawn.create(fadeOut, moveTo), callFunc));
         label.setPosition(pos.x, pos.y);
-        bq.baseLayer.addChild(label, bq.config.tags.EXP_LABEL);
+        bq.baseLayer.addChild(label, bq.config.zOrder.EXP_LABEL);
     },
 
     /**
@@ -159,7 +159,7 @@ bq.entity.Entity = cc.Sprite.extend({
 
         msgRect.addChild(tt);
         msgRect.addChild(tail, -100);
-        this.addChild(msgRect, bq.config.tags.CHAT);
+        this.addChild(msgRect, bq.config.zOrder.CHAT);
         this.chatRect = msgRect;
         setTimeout($.proxy(this.removeChatRect_, this, msgRect), 5000);
     },

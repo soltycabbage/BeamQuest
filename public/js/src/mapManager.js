@@ -42,7 +42,8 @@ bq.MapManager = cc.Class.extend({
 
         // レイヤーにno_enterableのプロパティがあったらそれは入れないレイヤー
         var layers = _.select(this.tileMap.getChildren(), function(layer) {
-            return  (layer && layer.getProperties()['no_enterable'] === 'true');
+            return  (layer instanceof cc.TMXLayer &&
+                layer.getProperties()['no_enterable'] === 'true');
         } );
 
         var sizeY = this.tileMap.getTileSize().width * this.tileMap.getMapSize().width;
@@ -79,7 +80,7 @@ bq.MapManager = cc.Class.extend({
     addDropItems: function(itemJsons) {
         _.forEach(itemJsons, $.proxy(function(itemJson) {
             var item =  new bq.object.DropItem(new bq.model.DropItem(itemJson));
-            bq.baseLayer.addChild(item);
+            bq.baseLayer.addChild(item, bq.config.zOrder.PLAYER - 50);
             this.dropItems_.push(item);
         }), this);
     }

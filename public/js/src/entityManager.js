@@ -165,7 +165,7 @@ bq.EntityManager = cc.Class.extend({
         other.name = moveData.userId;
         other.showName(moveData.userId, true);
         other.setPosition(cc.p(moveData.x, moveData.y));
-        bq.baseLayer.addChild(other, bq.config.tags.PLAYER);
+        bq.baseLayer.addChild(other, bq.config.zOrder.PLAYER);
         this.otherPlayers_[moveData.userId] = other;
     },
 
@@ -189,7 +189,7 @@ bq.EntityManager = cc.Class.extend({
         var enemy = new bq.entity.Enemy(enemy_id);
         enemy.setModel(mobModel);
         enemy.setPosition(cc.p(x, y));
-        bq.baseLayer.addChild(enemy, 50);
+        bq.baseLayer.addChild(enemy, bq.config.zOrder.PLAYER - 1);
         this.enemys_[mobModel.id] = enemy;
     },
 

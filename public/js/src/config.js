@@ -18,11 +18,13 @@ var BQConfig = cc.Class.extend({
             }
         };
 
-        // Spriteのタグ（IDみたいなの）
-        this.tags = {
+        // SpriteのZOrder（重なり順)
+        this.zOrder = {
             BASE_LAYER: 0,
-            PLAYER: 100,
-            EXP_LABEL: 101,
+            MAP: 100,          // tmxから生成したマップ
+            PLAYER: 100,       // プレイヤー
+            BEHIND_LAYER: 150, // 背後に回るとプレイヤーが隠れる（木の裏とか）
+            EXP_LABEL: 200,
             CHAT: 500,
             DEBUG_PING: 1000000
         };
