@@ -262,7 +262,7 @@ bq.entity.Entity = cc.Sprite.extend({
      */
     popDamageLabel_: function(amount, opt_popLeft, opt_color) {
         var damage = Math.abs(amount);
-        var label = bq.Label.createWithShadow(damage, 20, opt_color);
+        var label = bq.Label.createWithShadow(damage, 16, opt_color);
         var rect = this.getBoundingBox();
         label.setPosition(cc.p(rect.getWidth()/2, rect.getHeight()));
         var d = opt_popLeft ? -1 : 1;

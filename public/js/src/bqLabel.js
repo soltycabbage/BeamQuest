@@ -5,7 +5,7 @@
 bq.Label = cc.Class.extend({
 });
 
-bq.Label.DEFAULT_FONT = 'pixelMplus';
+bq.Label.DEFAULT_FONT = 'systemFont';
 bq.Label.DEFAULT_FONT_SIZE = 11;
 
 /**

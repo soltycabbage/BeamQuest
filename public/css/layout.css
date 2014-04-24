@@ -1,6 +1,6 @@
 @font-face {
-  font-family: pixelMplus;
-  src: url(../res/fonts/pixelMplus.ttf) format("truetype");
+  font-family: systemFont;
+  src: url(../res/fonts/yasasisa.ttf) format("truetype");
 }
 
 @font-face {
@@ -66,7 +66,7 @@ body {
 
 /* line 60, ../scss/layout.scss */
 .bq-message-log-value {
-  font-family: pixelMplus;
+  font-family: systemFont;
   font-size: 10px;
   color: #fff;
   padding: 4px 6px;
@@ -79,7 +79,7 @@ body {
 
 /* line 71, ../scss/layout.scss */
 #bq-chat-form {
-  font-family: pixelMplus;
+  font-family: systemFont;
   margin-bottom: 6px;
 }
 
@@ -243,7 +243,7 @@ body {
 
 /* line 199, ../scss/layout.scss */
 .infoBox > div {
-  font-family: pixelMplus;
+  font-family: systemFont;
   background: #2d2f2d;
   color: #fff;
   border-radius: 2px;
@@ -379,7 +379,7 @@ body {
   width: 36px;
   height: 36px;
   display: inline-block;
-  font-family: pixelMplus;
+  font-family: systemFont;
 }
 /* line 320, ../scss/layout.scss */
 .bq-status-equipment-item.bq-status-head {
