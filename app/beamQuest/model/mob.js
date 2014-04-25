@@ -37,6 +37,12 @@ var Mob = function(opt_data) {
      * @type {number}
      */
     this.money = this.data.money || 0;
+
+    /**
+     * 敵の場合は最大HPを設定値から取得してくる
+     * @type {number}
+     */
+    this.maxHp = _.isUndefined(this.data.hp) ? this.maxHp : this.data.hp;
 };
 util.inherits(Mob, Entity);
 
