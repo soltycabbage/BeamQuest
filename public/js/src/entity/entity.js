@@ -85,7 +85,7 @@ bq.entity.Entity = cc.Sprite.extend({
         var callFunc = cc.CallFunc.create(label.removeFromParent.bind(label));
         label.runAction(cc.Sequence.create(cc.Spawn.create(fadeOut, moveTo), callFunc));
         label.setPosition(pos.x, pos.y);
-        bq.baseLayer.addChild(label, bq.config.tags.EXP_LABEL);
+        bq.baseLayer.addChild(label, bq.config.zOrder.EXP_LABEL);
     },
 
     /**
@@ -169,7 +169,7 @@ bq.entity.Entity = cc.Sprite.extend({
 
         msgRect.addChild(tt);
         msgRect.addChild(tail, -100);
-        this.addChild(msgRect, bq.config.tags.CHAT);
+        this.addChild(msgRect, bq.config.zOrder.CHAT);
         this.chatRect = msgRect;
         setTimeout($.proxy(this.removeChatRect_, this, msgRect), 5000);
     },
@@ -272,7 +272,7 @@ bq.entity.Entity = cc.Sprite.extend({
      */
     popDamageLabel_: function(amount, opt_popLeft, opt_color) {
         var damage = Math.abs(amount);
-        var label = bq.Label.createWithShadow(damage, 20, opt_color);
+        var label = bq.Label.createWithShadow(damage, 16, opt_color);
         var rect = this.getBoundingBox();
         label.setPosition(cc.p(rect.getWidth()/2, rect.getHeight()));
         var d = opt_popLeft ? -1 : 1;

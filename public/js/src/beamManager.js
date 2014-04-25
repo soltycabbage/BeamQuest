@@ -24,7 +24,7 @@ bq.BeamManager = cc.Class.extend({
         // TODO: ほんとはここじゃなくてentityに定義されたshoot()関数的なやつを呼ぶのがいい。
         var beam = bq.beam.Beam.create(beamPos.beamId, beamPos.shooterId, beamPos.tag);
 
-        bq.baseLayer.addChild(beam, 10);
+        bq.baseLayer.addChild(beam, bq.config.zOrder.MAP);
 
         bq.soundManager.playEffect(s_SeBeamSimple1);
 

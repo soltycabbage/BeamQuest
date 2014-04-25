@@ -11,23 +11,25 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
             this.setMouseEnabled(true);
         }
 
-        var baseLayer = cc.Layer.create();
-        baseLayer.setPosition(cc.p(0,0));
-        this.addChild(baseLayer, 1, bq.config.tags.BASE_LAYER);
-
-        this.camera = new bq.Camera(baseLayer);
-        this.camera.lookAt(bq.player);
-        bq.camera = this.camera;
-
         // TODO position.mapIdからロードするマップを取得する
         var tileMap = new cc.TMXTiledMap();
         tileMap.initWithTMXFile(bq.config.maps.area.START_MURA);
         tileMap.setPosition(cc.p(0,0));
-        baseLayer.addChild(tileMap, 0);
+
+        var behindMapLayer = tileMap.getLayer('GoBehind');
+        behindMapLayer.setZOrder(bq.config.zOrder.BEHIND_LAYER);
         var mapManager = new bq.MapManager(tileMap);
         bq.mapManager = mapManager;
 
-        baseLayer.addChild(bq.player, 100, bq.config.tags.PLAYER);
+        var baseLayer = tileMap;
+        baseLayer.setPosition(cc.p(0,0));
+        this.addChild(baseLayer, bq.config.zOrder.BASE_LAYER);
+
+        baseLayer.addChild(bq.player, bq.config.zOrder.PLAYER);
+
+        this.camera = new bq.Camera(baseLayer);
+        this.camera.lookAt(bq.player);
+        bq.camera = this.camera;
 
         var chat = new bq.Chat();
 
@@ -91,7 +93,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         });
 
         var zIndex = 10000;
-        this.addChild(pingLabel, zIndex, bq.config.tags.DEBUG_PING);
+        this.addChild(pingLabel, zIndex, bq.config.zOrder.DEBUG_PING);
     }
 });
 
