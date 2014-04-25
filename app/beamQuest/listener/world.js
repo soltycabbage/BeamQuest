@@ -22,7 +22,7 @@ exports.listen = function(socket) {
         var map = mapStore.getMapById(data.mapId);
         if (map) {
             var result = {
-                dropitems: map.model.toArrayJSON(map.model.dropItems)
+                dropitems: map.model.toObjectJSON(map.model.dropItems)
             };
             socket.emit('world:dropitems:receive', result);
         }

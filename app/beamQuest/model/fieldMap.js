@@ -16,10 +16,10 @@ var FieldMap = function(opt_data) {
     this.mobCount = this.data.mobCount || 0;
 
     /**
-     *  マップに存在するドロップアイテム
-     * @type {Array.<model.DropItem>}
+     *  マップに存在するドロップアイテム (key: dropId)
+     * @type {Object.<model.DropItem>}
      */
-    this.dropItems = this.data.dropItems || [];
+    this.dropItems = this.data.dropItems || {};
 };
 util.inherits(FieldMap, MapModel);
 
@@ -27,7 +27,9 @@ util.inherits(FieldMap, MapModel);
  * @param {Array.<model.DropItem>} items
  */
 FieldMap.prototype.addDropItems = function(items) {
-    this.dropItems = this.dropItems.concat(items);
+    _.forEach(items, function(item) {
+        this.dropItems[item.dropId] = item;
+    }.bind(this));
 };
 
 /** @override */
@@ -35,7 +37,7 @@ FieldMap.prototype.toJSON = function() {
     var json = FieldMap.super_.prototype.toJSON.apply(this);
     json.maxMobCount = this.maxMobCount;
     json.mobCount = this.mobCount;
-    json.dropItems = this.toArrayJSON(this.dropItems);
+    json.dropItems = this.toObjectJSON(this.dropItems);
     return json;
 };
 
