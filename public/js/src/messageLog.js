@@ -26,6 +26,9 @@ bq.MessageLog = cc.Class.extend({
      */
     init_: function() {
         this.expandButton.on('click', $.proxy(this.handleExpand_, this));
+        this.expandButton.infoBox({
+            content: 'チャットログを読む'
+        });
     },
 
     /**
