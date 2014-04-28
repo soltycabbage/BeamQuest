@@ -66,13 +66,9 @@ bq.scene.LoginLayer = cc.Layer.extend({
      * @private
      */
     welcomeToBeamQuestWorld_: function(userId, data) {
-        // HUD有効
-        var hud = bq.Hud.getInstance();
-        hud.enable(true);
-
         this.initPlayer_(userId, data);
         bq.Socket.getInstance().initAfterLogin();
-        cc.Director.getInstance().replaceScene(new bq.scene.BeamQuestWorldScene());
+        bq.loadingTo(new bq.scene.BeamQuestWorldScene());
     },
 
     /**
@@ -180,7 +176,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
     }
 });
 
-bq.scene.LoginScene = cc.Scene.extend({
+bq.scene.LoginScene = bq.scene.extend({
     onEnter: function() {
         this._super();
         var layer = new bq.scene.LoginLayer();

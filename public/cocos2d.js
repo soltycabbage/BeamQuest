@@ -74,6 +74,7 @@
 
             // scene
             'js/src/scene/scene.js',
+            'js/src/scene/loading.js',
             'js/src/scene/login.js',
             'js/src/scene/beamQuest.js'
         ]
