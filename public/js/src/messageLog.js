@@ -11,12 +11,6 @@ bq.MessageLog = cc.Class.extend({
          * @type {Element}
          */
         this.logDisplayed = $('#bq-message-log-inner');
-
-        /**
-         * 表示する行数
-         * @type {Number}
-         */
-        this.maxDisplaySize_ = 4;
     },
 
     /**
@@ -54,14 +48,15 @@ bq.MessageLog = cc.Class.extend({
         valueEl.text(msg);
         valueEl.css('color', color);
         this.logDisplayed.append(valueEl);
+        this.scrollBottom_();
+    },
 
-        var values = $('.bq-message-log-value');
-        var logSize = values.length;
-        _.each(values, function(value, index) {
-            if (index < (logSize - this.maxDisplaySize_)) {
-                $(value).hide();
-            }
-        }.bind(this));
+    /**
+     * 最下部にスクロールする
+     * @private
+     */
+    scrollBottom_: function() {
+        this.logDisplayed.scrollTop(this.logDisplayed.offset().top);
     }
 });
 
