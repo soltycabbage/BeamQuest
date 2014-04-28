@@ -57,16 +57,37 @@ body {
   background: black;
   position: relative;
 }
+/* line 57, ../scss/layout.scss */
+#bq-message-log .fa {
+  color: #CEC7C7;
+  position: absolute;
+  left: 0px;
+  top: -17px;
+  padding: 3px;
+  border-radius: 2px;
+  background-color: #000;
+  cursor: pointer;
+}
+/* line 66, ../scss/layout.scss */
+#bq-message-log .fa:hover {
+  color: #21ff76;
+}
 
-/* line 58, ../scss/layout.scss */
+/* line 72, ../scss/layout.scss */
 #bq-message-log-inner {
   overflow-y: scroll;
   height: 80px;
   position: absolute;
   bottom: 0;
+  padding-right: 10px;
 }
 
-/* line 65, ../scss/layout.scss */
+/* line 81, ../scss/layout.scss */
+.bq-message-log-expand {
+  height: 500px !important;
+}
+
+/* line 85, ../scss/layout.scss */
 .bq-message-log-value {
   font-family: systemFont;
   font-size: 10px;
@@ -74,24 +95,24 @@ body {
   padding: 4px 6px;
 }
 
-/* line 72, ../scss/layout.scss */
+/* line 92, ../scss/layout.scss */
 #bq-chat-input {
   width: 200px;
 }
 
-/* line 76, ../scss/layout.scss */
+/* line 96, ../scss/layout.scss */
 #bq-chat-form {
   font-family: systemFont;
   margin-bottom: 6px;
 }
 
-/* line 81, ../scss/layout.scss */
+/* line 101, ../scss/layout.scss */
 #bq-chat-submit {
   margin: 5px 0px 2px 5px;
   width: 57px;
 }
 
-/* line 87, ../scss/layout.scss */
+/* line 107, ../scss/layout.scss */
 #bq-hp-bar,
 #bq-bp-bar {
   border-radius: 5px;
@@ -101,7 +122,7 @@ body {
   position: relative;
 }
 
-/* line 96, ../scss/layout.scss */
+/* line 116, ../scss/layout.scss */
 .bq-hp-bar-frame,
 .bq-bp-bar-frame {
   position: absolute;
@@ -109,7 +130,7 @@ body {
   z-index: 101;
 }
 
-/* line 102, ../scss/layout.scss */
+/* line 122, ../scss/layout.scss */
 #bq-hp-bar-gain {
   position: absolute;
   background: #ffc7c8;
@@ -120,7 +141,7 @@ body {
   border-bottom-right-radius: 2px;
 }
 
-/* line 112, ../scss/layout.scss */
+/* line 132, ../scss/layout.scss */
 #bq-bp-bar-gain {
   position: absolute;
   background: #c5fffd;
@@ -132,7 +153,7 @@ body {
   bottom: 0;
 }
 
-/* line 124, ../scss/layout.scss */
+/* line 144, ../scss/layout.scss */
 #bq-hp-bar-background,
 #bq-bp-bar-background {
   height: 23px;
@@ -144,7 +165,7 @@ body {
   bottom: -2px;
 }
 
-/* line 135, ../scss/layout.scss */
+/* line 155, ../scss/layout.scss */
 #bq-hp-bar-value,
 #bq-bp-bar-value {
   z-index: 99;
@@ -156,7 +177,7 @@ body {
   bottom: -2px;
 }
 
-/* line 146, ../scss/layout.scss */
+/* line 166, ../scss/layout.scss */
 #bq-hp-bar-value-text,
 #bq-bp-bar-value-text {
   z-index: 110;
@@ -169,7 +190,7 @@ body {
   text-shadow: 2px 2px #272525;
 }
 
-/* line 157, ../scss/layout.scss */
+/* line 177, ../scss/layout.scss */
 #bq-hp-bar-value {
   background: #febbbb;
   /* Old browsers */
@@ -189,7 +210,7 @@ body {
   /* IE6-9 */
 }
 
-/* line 168, ../scss/layout.scss */
+/* line 188, ../scss/layout.scss */
 #bq-bp-bar-value {
   background: #a9e4f7;
   /* Old browsers */
@@ -209,7 +230,7 @@ body {
   /* IE6-9 */
 }
 
-/* line 179, ../scss/layout.scss */
+/* line 199, ../scss/layout.scss */
 #bq-exp-bar {
   position: absolute;
   bottom: 1px;
@@ -218,7 +239,7 @@ body {
   background: rgba(0, 0, 0, 0.5);
 }
 
-/* line 187, ../scss/layout.scss */
+/* line 207, ../scss/layout.scss */
 #bq-exp-bar-value {
   height: 4px;
   background: #f5a052;
@@ -237,13 +258,13 @@ body {
   width: 0%;
 }
 
-/* line 199, ../scss/layout.scss */
+/* line 219, ../scss/layout.scss */
 .infoBox {
   position: absolute;
   z-index: 1000;
 }
 
-/* line 204, ../scss/layout.scss */
+/* line 224, ../scss/layout.scss */
 .infoBox > div {
   font-family: systemFont;
   background: #2d2f2d;
@@ -254,7 +275,7 @@ body {
   font-size: 10px;
 }
 
-/* line 214, ../scss/layout.scss */
+/* line 234, ../scss/layout.scss */
 #bq-level {
   font-family: spacie;
   position: absolute;
@@ -267,39 +288,39 @@ body {
   border-radius: 2px;
 }
 
-/* line 226, ../scss/layout.scss */
+/* line 246, ../scss/layout.scss */
 .bq-level-label {
   font-size: 12px;
   color: #8ED8D8;
 }
 
-/* line 231, ../scss/layout.scss */
+/* line 251, ../scss/layout.scss */
 #bq-level-value {
   padding-left: 2px;
 }
 
 /** ステータスウィンドウ */
-/* line 237, ../scss/layout.scss */
+/* line 257, ../scss/layout.scss */
 .bq-status-dialog {
   z-index: 1000;
   background: #E6E4D4;
   font-size: 12px;
 }
-/* line 241, ../scss/layout.scss */
+/* line 261, ../scss/layout.scss */
 .bq-status-dialog .ui-dialog-title {
   padding-left: 7px;
 }
-/* line 244, ../scss/layout.scss */
+/* line 264, ../scss/layout.scss */
 .bq-status-dialog .ui-dialog-titlebar {
   padding: 0;
 }
 
-/* line 249, ../scss/layout.scss */
+/* line 269, ../scss/layout.scss */
 #bq-status-window {
   background: #FCF0C2;
 }
 
-/* line 253, ../scss/layout.scss */
+/* line 273, ../scss/layout.scss */
 .bq-status-left-pane {
   margin: 5px 0 0 -5px;
   width: 50%;
@@ -309,7 +330,7 @@ body {
   display: inline-block;
 }
 
-/* line 262, ../scss/layout.scss */
+/* line 282, ../scss/layout.scss */
 .bq-status-right-pane {
   position: absolute;
   top: 10px;
@@ -319,7 +340,7 @@ body {
   display: inline-block;
 }
 
-/* line 271, ../scss/layout.scss */
+/* line 291, ../scss/layout.scss */
 .bq-status-label {
   border: 1px solid #4b4b4b;
   background: #93c3cd url(lib/jquery/images/ui-bg_diagonals-small_50_93c3cd_40x40.png) 50% 50% repeat;
@@ -329,13 +350,13 @@ body {
   padding: 2px 12px;
 }
 
-/* line 280, ../scss/layout.scss */
+/* line 300, ../scss/layout.scss */
 .bq-status-value {
   vertical-align: middle;
   font-size: 20px;
 }
 
-/* line 288, ../scss/layout.scss */
+/* line 308, ../scss/layout.scss */
 .bq-status-playername,
 .bq-status-level,
 .bq-status-attack,
@@ -344,26 +365,26 @@ body {
   display: inline-block;
 }
 
-/* line 293, ../scss/layout.scss */
+/* line 313, ../scss/layout.scss */
 .bq-status-job {
   padding-top: 10px;
 }
-/* line 295, ../scss/layout.scss */
+/* line 315, ../scss/layout.scss */
 .bq-status-job .bq-status-value {
   font-size: 13px;
 }
 
-/* line 300, ../scss/layout.scss */
+/* line 320, ../scss/layout.scss */
 .bq-status-equipment {
   position: relative;
 }
-/* line 302, ../scss/layout.scss */
+/* line 322, ../scss/layout.scss */
 .bq-status-equipment .bq-status-label {
   margin-top: 10px;
   display: inline-block;
 }
 
-/* line 308, ../scss/layout.scss */
+/* line 328, ../scss/layout.scss */
 .bq-status-player-preview {
   position: absolute;
   background: url(../res/img/statusPlayerStub.png);
@@ -373,7 +394,7 @@ body {
   left: 100px;
 }
 
-/* line 317, ../scss/layout.scss */
+/* line 337, ../scss/layout.scss */
 .bq-status-equipment-item {
   position: absolute;
   border-radius: 4px;
@@ -383,53 +404,53 @@ body {
   display: inline-block;
   font-family: systemFont;
 }
-/* line 325, ../scss/layout.scss */
+/* line 345, ../scss/layout.scss */
 .bq-status-equipment-item.bq-status-head {
   left: 110px;
   top: 35px;
 }
-/* line 329, ../scss/layout.scss */
+/* line 349, ../scss/layout.scss */
 .bq-status-equipment-item.bq-status-core {
   top: 80px;
   left: 40px;
 }
-/* line 333, ../scss/layout.scss */
+/* line 353, ../scss/layout.scss */
 .bq-status-equipment-item.bq-status-right-arm {
   top: 140px;
   left: 40px;
 }
-/* line 337, ../scss/layout.scss */
+/* line 357, ../scss/layout.scss */
 .bq-status-equipment-item.bq-status-backpack {
   top: 80px;
   left: 180px;
 }
-/* line 341, ../scss/layout.scss */
+/* line 361, ../scss/layout.scss */
 .bq-status-equipment-item.bq-status-left-arm {
   top: 140px;
   left: 180px;
 }
-/* line 345, ../scss/layout.scss */
+/* line 365, ../scss/layout.scss */
 .bq-status-equipment-item.bq-status-foot {
   top: 195px;
   left: 110px;
 }
 
-/* line 351, ../scss/layout.scss */
+/* line 371, ../scss/layout.scss */
 .bq-status-status-title {
   margin-bottom: 10px;
 }
 
-/* line 355, ../scss/layout.scss */
+/* line 375, ../scss/layout.scss */
 .bq-status-base {
   border-top: 2px solid  #5C7085;
   margin-top: 10px;
   padding-top: 13px;
 }
-/* line 359, ../scss/layout.scss */
+/* line 379, ../scss/layout.scss */
 .bq-status-base div {
   margin-bottom: 10px;
 }
-/* line 363, ../scss/layout.scss */
+/* line 383, ../scss/layout.scss */
 .bq-status-base div span {
   display: inline-block;
   width: 30px;

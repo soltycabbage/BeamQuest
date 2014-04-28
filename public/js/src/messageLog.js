@@ -11,6 +11,21 @@ bq.MessageLog = cc.Class.extend({
          * @type {Element}
          */
         this.logDisplayed = $('#bq-message-log-inner');
+
+        /**
+         * チャットウィンドウを広げるボタン
+         * @type {Element}
+         */
+        this.expandButton = $('#bq-message-log-expand');
+
+        this.init_();
+    },
+
+    /**
+     * @private
+     */
+    init_: function() {
+        this.expandButton.on('click', $.proxy(this.handleExpand_, this));
     },
 
     /**
@@ -57,6 +72,19 @@ bq.MessageLog = cc.Class.extend({
      */
     scrollBottom_: function() {
         this.logDisplayed.scrollTop(this.logDisplayed.offset().top);
+    },
+
+    /**
+     * @param {$.Event} evt
+     * @private
+     */
+    handleExpand_: function(evt) {
+        var btn = $(evt.currentTarget);
+        var expandClass = 'bq-message-log-expand';
+        this.logWindow.toggleClass(expandClass);
+        this.logDisplayed.toggleClass(expandClass);
+        btn.toggleClass('fa-toggle-up');
+        btn.toggleClass('fa-toggle-down');
     }
 });
 

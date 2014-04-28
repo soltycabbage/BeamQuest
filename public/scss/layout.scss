@@ -53,6 +53,20 @@ $messageHeight: 80px;
     height: $messageHeight;
     background: black;
     position: relative;
+
+    .fa {
+        color: #CEC7C7;
+        position: absolute;
+        left: 0px;
+        top: -17px;
+        padding: 3px;
+        border-radius: 2px;
+        background-color: #000;
+        cursor: pointer;
+        &:hover {
+          color: #21ff76;
+        }
+    }
 }
 
 #bq-message-log-inner {
@@ -60,6 +74,12 @@ $messageHeight: 80px;
     height: $messageHeight;
     position: absolute;
     bottom: 0;
+    padding-right: 10px;
+}
+
+// 展開された状態のスタイル
+.bq-message-log-expand {
+  height: 500px !important;
 }
 
 .bq-message-log-value {
