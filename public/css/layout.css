@@ -476,8 +476,16 @@ body {
   background-image: -ms-linear-gradient(#000000, #111111 40%, #3279cd 100%);
   background-image: linear-gradient(#000000, #111111 40%, #3279cd 100%);
 }
+/* line 404, ../scss/layout.scss */
+#bq-loading-top > span {
+  font-family: systemFont;
+  color: #fff;
+  font-size: 24px;
+  float: left;
+  padding: 10px;
+}
 
-/* line 405, ../scss/layout.scss */
+/* line 413, ../scss/layout.scss */
 #bq-loading-bottom {
   bottom: -100px;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #3279cd), color-stop(40%, #111111), color-stop(100%, #000000));
@@ -487,7 +495,7 @@ body {
   background-image: -ms-linear-gradient(#3279cd, #111111 40%, #000000 100%);
   background-image: linear-gradient(#3279cd, #111111 40%, #000000 100%);
 }
-/* line 409, ../scss/layout.scss */
+/* line 417, ../scss/layout.scss */
 #bq-loading-bottom > span {
   padding-top: 30px;
   font-size: 23px;

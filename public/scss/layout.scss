@@ -400,6 +400,14 @@ $messageHeight: 80px;
 #bq-loading-top {
   top: -100px;
   @include background-image(linear-gradient(#000000, #111111 40%, #3279cd 100%));
+
+  &>span {
+    font-family: systemFont;
+    color: #fff;
+    font-size: 24px;
+    float: left;
+    padding: 10px;
+  }
 }
 
 #bq-loading-bottom {
