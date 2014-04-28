@@ -9,11 +9,15 @@
 </head>
 <body>
 <div id="bq-canvas-container">
+    <div id="bq-loading-top"></div>
+    <div id="bq-loading-bottom">
+        <span>Now loading...</span>
+    </div>
     <canvas id="gameCanvas" width="1040" height="620"></canvas>
     <div id="bq-hud" style="display: none;">
         <div id="bq-message-container">
             <div id="bq-message-log">
-                <i id="bq-message-log-expand" class="fa fa-toggle-up bq-contract" title="ウィンドウを展開/畳む"></i>
+                <i id="bq-message-log-expand" class="fa fa-toggle-up bq-contract"></i>
                 <div id="bq-message-log-inner"></div>
             </div>
             <form id="bq-chat-form">

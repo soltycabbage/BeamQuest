@@ -1,3 +1,5 @@
+@import "compass/css3/images";
+
 @font-face {
     font-family: systemFont;
     src: url(../res/fonts/yasasisa.ttf) format("truetype");
@@ -383,5 +385,33 @@ $messageHeight: 80px;
   & div span {
     display: inline-block;
     width: 30px;
+  }
+}
+
+#bq-loading-top,
+#bq-loading-bottom {
+  z-index: 100;
+  height: 70px;
+  width: 100%;
+  background-color: black;
+  position: absolute;
+}
+
+#bq-loading-top {
+  top: -100px;
+  @include background-image(linear-gradient(#000000, #111111 40%, #3279cd 100%));
+}
+
+#bq-loading-bottom {
+  bottom: -100px;
+  @include background-image(linear-gradient(#3279cd, #111111 40%, #000000 100%));
+
+  &>span {
+    padding-top: 30px;
+    font-size: 23px;
+    color: #fff;
+    font-family: systemFont;
+    float: right;
+    padding-right: 20px;
   }
 }

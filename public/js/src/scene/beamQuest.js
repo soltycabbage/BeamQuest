@@ -49,6 +49,9 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         });
 
         this.initPing_();
+        // HUD有効
+        var hud = bq.Hud.getInstance();
+        hud.enable(true);
 
         bq.soundManager.playMusic(s_BgmField, true);
         return true;
