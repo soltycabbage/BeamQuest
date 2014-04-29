@@ -49,9 +49,10 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         bq.space = this.createPhysicalSpace_(tileMap.getContentSize());
 
         // 当たり判定のコールバック
-        bq.space.addCollisionHandler( 1, 2, // TODO 変数にしないとダメ
-            this.collisionBegin.bind(this)
-        );
+        // TODO クライアントのコッチ使うようにする（まだサーバサイドできてないのでダメ）
+        // bq.space.addCollisionHandler( 1, 2,
+        //     bq.EntityManager.getInstance().collisionCallback
+        // );
 
 
         this._debugNode = cc.PhysicsDebugNode.create( bq.space );

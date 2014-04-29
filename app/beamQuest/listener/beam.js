@@ -32,6 +32,7 @@ exports.listen = function(socket, io) {
      */
     socket.on('beam:position:update', function(data) {
         // TODO: 誰が撃ったかによって当たり判定の対象を変えたい
+        // TODO この部分は消してクライアントにします iwag
         var entity = isHitEntity_(data);
         if (entity) {
             updateEntityStatus_(entity, data.beamId, data);
