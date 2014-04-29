@@ -56,7 +56,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         bq.soundManager.playMusic(s_BgmField, true);
         return true;
     },
-
+ 
     initPing_: function() {
         'use strict';
 
