@@ -7,13 +7,23 @@ bq.scene.LoadingLayer = cc.Layer.extend({
     init: function() {
         this._super();
         var winSize = cc.Director.getInstance().getWinSize();
+
+        // ワールドマップを表示する
         var worldMap = cc.Sprite.create(s_ImgWorldMap);
         worldMap.setScale(1.5);
         worldMap.setPosition(cc.p(winSize.width/2, winSize.height/2));
+
+        // ワールドマップ上にプレイヤーの現在位置を表示する
+        var chara = cc.Sprite.create(s_ImgMiniChara);
+        chara.setPosition(cc.p(260, 85)); // TODO mapId によって座標を定義しておきたい
+        worldMap.addChild(chara, 10);
+        chara.runAction(cc.Blink.create(10, 20));
+        // 背景色を海の色で埋めておく
         var bgRect = cc.Sprite.create();
         bgRect.setTextureRect(cc.rect(0, 0, winSize.width, winSize.height));
         bgRect.setColor(cc.c3b(50, 121, 205));
         bgRect.setPosition(cc.p(winSize.width/2, winSize.height/2));
+
         this.addChild(bgRect, 0);
         this.addChild(worldMap, 1);
         this.showBar_(true);
@@ -24,7 +34,7 @@ bq.scene.LoadingLayer = cc.Layer.extend({
         setTimeout($.proxy(function() {
             this.showBar_(false);
             cc.Director.getInstance().replaceScene(this.nextScene_);
-        }, this), 500);
+        }, this), 1000);
     },
 
     /**

@@ -17,6 +17,7 @@ var s_ImgSmoke0        = 'res/img/beam/smoke.png';
 var s_ImgPlayerMisc    = 'res/img/player/misc.png';
 var s_ImgBeats100      = 'res/img/beats_100.png';
 var s_ImgWorldMap      = 'res/img/worldmap.png';
+var s_ImgMiniChara     = 'res/img/minichara.png';
 
 // path prefix
 var s_PrefixDropItem = 'res/img/object/dropitem/';
