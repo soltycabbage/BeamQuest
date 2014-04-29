@@ -54,16 +54,16 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         //     bq.EntityManager.getInstance().collisionCallback
         // );
 
-
+        // add Physics Debug
         this._debugNode = cc.PhysicsDebugNode.create(bq.space);
         this._debugNode.setVisible(false); // 物理の箱見たいときはtrueに
         baseLayer.addChild(this._debugNode);
 
+        // add player physical box
         var shape = new cp.BoxShape(bq.player.getBody(), 32, 32);
         bq.space.addShape(shape);
 
         this.scheduleUpdate();
-
         bq.soundManager.playMusic(s_BgmField, true);
         this.addChild(baseLayer, bq.config.zOrder.BASE_LAYER);
         bq.baseLayer = baseLayer;

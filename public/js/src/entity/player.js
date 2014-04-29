@@ -128,7 +128,6 @@ bq.entity.Player = bq.entity.Entity.extend({
         };
 
         this.socket.shootBeam(json);
-        // bq.BeamManager.getInstance().beamShoot(json);
     },
 
     /** @override */

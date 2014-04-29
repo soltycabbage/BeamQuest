@@ -174,8 +174,7 @@ bq.beam.Beam.createSpriteBeam = function(beamType, shooterId, tag) {
 
     var frames = beamType2textureName[beamType];
 
-    var sp = cc.SpriteFrameCache.getInstance().getSpriteFrame("large1.png");
-    var cl = cc.PhysicsSprite.createWithSpriteFrameName("large1.png");
+    var cl = cc.PhysicsSprite.createWithSpriteFrameName(frames[0]);
     cl.setBody(new cp.Body(0.01, cp.momentForBox(100, 16, 16)));
     bq.space.addBody(cl.getBody());
     cl.shape_ = new cp.BoxShape(cl.getBody(), 32, 32);
