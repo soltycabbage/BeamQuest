@@ -23,8 +23,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
 
         var baseLayer = tileMap;
         baseLayer.setPosition(cc.p(0,0));
-        this.addChild(baseLayer, bq.config.zOrder.BASE_LAYER);
-
         baseLayer.addChild(bq.player, bq.config.zOrder.PLAYER);
 
         this.camera = new bq.Camera(baseLayer);
@@ -32,13 +30,8 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         bq.camera = this.camera;
 
         var chat = new bq.Chat();
-
-        bq.baseLayer = baseLayer;
-        this.scheduleUpdate();
-
         this.inputHandler = new bq.InputHandler();
         this.inputHandler.attach(this);
-
         this.inputHandler.addListener(bq.player.inputHandler);
         this.inputHandler.addListener({
             onKeyDown: function(key) {
@@ -54,9 +47,11 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         hud.enable(true);
 
         bq.soundManager.playMusic(s_BgmField, true);
+        this.addChild(baseLayer, bq.config.zOrder.BASE_LAYER);
+        bq.baseLayer = baseLayer;
         return true;
     },
- 
+
     initPing_: function() {
         'use strict';
 
