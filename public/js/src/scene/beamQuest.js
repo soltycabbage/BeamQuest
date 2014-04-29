@@ -123,12 +123,11 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
             new cp.SegmentShape( staticBody, cp.v(0,0), cp.v(0,size.height), 0),				// left
             new cp.SegmentShape( staticBody, cp.v(size.width,0), cp.v(size.width,size.height), 0)	// right
         ];
-        for( var i=0; i < walls.length; i++ ) { // TODO use underscore.js
-            var shape = walls[i];
+        _.forEach(walls, function(shape) {
             shape.setElasticity(1);
             shape.setFriction(1);
-            space.addStaticShape( shape );
-        }
+            space.addStaticShape(shape);
+        });
 
         space.gravity = cp.v(0, 0);
 
