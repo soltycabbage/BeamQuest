@@ -58,7 +58,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         this._debugNode.setVisible( true );
         baseLayer.addChild( this._debugNode );
 
-        var shape = new cp.BoxShape(bq.player.getBody(), 8, 8);
+        var shape = new cp.BoxShape(bq.player.getBody(), 32, 32);
         bq.space.addShape(shape);
 
         this.scheduleUpdate();
@@ -134,22 +134,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
 
 
         return space;
-    },
-
-    collisionBegin : function ( arbiter, space ) {
-
-        var shapes = arbiter.getShapes();
-        space.addPostStepCallback(function(){
-            var data = {};
-            data.entity  = shapes[1].sprite.getModel(); // TODO this.sprite やめなよ
-            data.beamPos = shapes[1].sprite.getPosition();
-            data.hpAmount = -10; // これも
-            data.beamTag = shapes[0].sprite.tag;
-
-            bq.EntityManager.getInstance().hitEntity(data);
-        })
-
-        return true;
     }
 });
 

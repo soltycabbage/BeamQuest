@@ -35,8 +35,8 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
             this.setBody(body);
             bq.space && bq.space.addBody(this.getBody());
             this.shape_ = new cp.BoxShape(this.getBody(), 8, 8);
-            this.shape_.setCollisionType(1);
-            this.shape_.sprite = this; // sprite これよくない！
+            this.shape_.setCollisionType(1); // FIXME fix magic number
+            this.shape_.tag = tag;
             bq.space && bq.space.addShape(this.shape_);
         }
 
@@ -88,6 +88,10 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
         var vn = cc.pNormalize(v);
         this.inc_ = cc.pMult(vn, speed);
 
+        var rotate = -1.0 * ( cc.RADIANS_TO_DEGREES(cc.pToAngle( this.inc_ )) -90);
+        this.setRotation(rotate);
+
+        // 力を与えてそっちに飛ばす
         this.getBody().applyImpulse(vn, cp.v(0, 0));
 
         // duration秒後にこのビームを消去する
@@ -95,7 +99,8 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
                 this.dispose();
             }
             , this);
-        var sequence = cc.Sequence.create(cc.FadeIn.create(5) , remove);
+        var sequence = cc.Sequence.create(cc.DelayTime.create(3, v) , remove);
+
         this.runAction(sequence);
     },
 

@@ -26,12 +26,11 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         if ( frameMap ) {
             this.animations = bq.entity.Animation.createAnimations(frameMap);
         }
-        var body = new cp.Body(100, 1000);
+        var body = new cp.Body(0.0001, 0.001);
         this.setBody(body);
         if ( bq.space ) {
             this.shape_ = new cp.BoxShape(this.getBody(), 16, 16);
             this.shape_.setCollisionType(2);
-            this.shape_.sprite = this;
             bq.space.addShape(this.shape_);
         }
         this.init_();
@@ -50,6 +49,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
      * @param {bq.model.Model} model
      */
     setModel: function(model) {
+        this.shape_ && (this.shape_.id = model.id); // TODO よくない
         this.model_ = model;
     },
 
