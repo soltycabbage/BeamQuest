@@ -58,8 +58,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         this._debugNode.setVisible( true );
         baseLayer.addChild( this._debugNode );
 
-        bq.space.addBody(bq.player.getBody());
-        var shape = new cp.BoxShape(bq.player.getBody(), 32, 32);
+        var shape = new cp.BoxShape(bq.player.getBody(), 8, 8);
         bq.space.addShape(shape);
 
         this.scheduleUpdate();

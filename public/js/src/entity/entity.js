@@ -29,7 +29,6 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var body = new cp.Body(100, 1000);
         this.setBody(body);
         if ( bq.space ) {
-            bq.space.addBody(this.getBody());
             this.shape_ = new cp.BoxShape(this.getBody(), 16, 16);
             this.shape_.setCollisionType(2);
             this.shape_.sprite = this;
@@ -139,7 +138,6 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var callFunc = cc.CallFunc.create(function() {
             opt_callback && opt_callback.apply(this);
             if(!opt_skipRemove) {
-                this.shape_ && bq.space.removeShape(this.shape_);
                 this.removeFromParent();
             }
         }.bind(this));
