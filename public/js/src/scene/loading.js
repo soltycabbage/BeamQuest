@@ -20,8 +20,9 @@ bq.scene.LoadingLayer = cc.Layer.extend({
         chara.runAction(cc.Blink.create(10, 20));
         // 背景色を海の色で埋めておく
         var bgRect = cc.Sprite.create();
+        var oceanColor = cc.c3b(50, 121, 205);
         bgRect.setTextureRect(cc.rect(0, 0, winSize.width, winSize.height));
-        bgRect.setColor(cc.c3b(50, 121, 205));
+        bgRect.setColor(oceanColor);
         bgRect.setPosition(cc.p(winSize.width/2, winSize.height/2));
 
         this.addChild(bgRect, 0);

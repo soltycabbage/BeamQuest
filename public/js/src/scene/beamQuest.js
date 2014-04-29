@@ -57,12 +57,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         return true;
     },
 
-    /** @override */
-    update: function() {
-        'use strict';
-
-    },
-
     initPing_: function() {
         'use strict';
 
