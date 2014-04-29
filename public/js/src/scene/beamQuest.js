@@ -55,17 +55,16 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         // );
 
 
-        this._debugNode = cc.PhysicsDebugNode.create( bq.space );
-        this._debugNode.setVisible( true );
-        baseLayer.addChild( this._debugNode );
+        this._debugNode = cc.PhysicsDebugNode.create(bq.space);
+        this._debugNode.setVisible(false); // 物理の箱見たいときはtrueに
+        baseLayer.addChild(this._debugNode);
 
         var shape = new cp.BoxShape(bq.player.getBody(), 32, 32);
         bq.space.addShape(shape);
 
         this.scheduleUpdate();
 
-
-        //bq.soundManager.playMusic(s_BgmField, true);
+        bq.soundManager.playMusic(s_BgmField, true);
         this.addChild(baseLayer, bq.config.zOrder.BASE_LAYER);
         bq.baseLayer = baseLayer;
         return true;
@@ -132,7 +131,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         }
 
         space.gravity = cp.v(0, 0);
-
 
         return space;
     }
