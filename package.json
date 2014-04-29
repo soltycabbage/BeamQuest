@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "NODE_ENV=development NODE_PATH=public:app node app",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "grunt test"
   },
   "dependencies": {
     "express": "3.4.6",
