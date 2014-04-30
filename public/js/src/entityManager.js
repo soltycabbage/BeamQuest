@@ -149,7 +149,7 @@ bq.EntityManager = cc.Class.extend({
             data.beamTag = shapes[0].tag;
 
             bq.EntityManager.getInstance().hitEntity(data);
-        })
+        });
 
         return true;
     },

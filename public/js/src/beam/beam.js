@@ -94,11 +94,9 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
         this.getBody().applyImpulse(vn, cp.v(0, 0));
 
         // duration秒後にこのビームを消去する
-        var remove = cc.CallFunc.create(function(){ 
-                this.dispose();
-            }
-            , this);
-        var sequence = cc.Sequence.create(cc.DelayTime.create(3, v) , remove);
+        var remove = cc.CallFunc.create(function () {
+                this.dispose(); }, this);
+        var sequence = cc.Sequence.create(cc.DelayTime.create(3, v), remove);
 
         this.runAction(sequence);
     },
