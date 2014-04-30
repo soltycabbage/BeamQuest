@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "NODE_ENV=development NODE_PATH=public:app node app",
-    "test": "grunt test"
+    "test": "NODE_PATH=public:app grunt test"
   },
   "dependencies": {
     "express": "3.4.6",
