@@ -88,9 +88,9 @@ bq.EntityManager = cc.Class.extend({
         var enemy = this.enemys_[data.entity.id];
         if (enemy) {
             enemy.kill(null, function() {
+                bq.space.removeShape(enemy.shape_);
                 delete this.enemys_[data.entity.id];
             }.bind(this));
-
         }
     },
 
@@ -136,6 +136,23 @@ bq.EntityManager = cc.Class.extend({
         bq.BeamManager.getInstance().disposeBeam(data);
     },
 
+    // ビームと敵があたった時によばれる
+    collisionCallback : function ( arbiter, space ) {
+
+        var shapes = arbiter.getShapes();
+        var enemy = bq.EntityManager.getInstance().getEnemys()[shapes[1].id];
+        space.addPostStepCallback(function(){
+            var data = {};
+            data.entity  = enemy.getModel();
+            data.beamPos = enemy.getPosition();
+            data.hpAmount = -10; // これも
+            data.beamTag = shapes[0].tag;
+
+            bq.EntityManager.getInstance().hitEntity(data);
+        });
+
+        return true;
+    },
 
     /**
      * @param {Object}

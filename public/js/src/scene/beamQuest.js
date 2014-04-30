@@ -46,10 +46,34 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         var hud = bq.Hud.getInstance();
         hud.enable(true);
 
+        bq.space = this.createPhysicalSpace_(tileMap.getContentSize());
+
+        // 当たり判定のコールバック
+        // TODO クライアントのコッチ使うようにする（まだサーバサイドできてないのでダメ）
+        // bq.space.addCollisionHandler( 1, 2,
+        //     bq.EntityManager.getInstance().collisionCallback
+        // );
+
+        // add Physics Debug
+        this._debugNode = cc.PhysicsDebugNode.create(bq.space);
+        this._debugNode.setVisible(false); // 物理の箱見たいときはtrueに
+        baseLayer.addChild(this._debugNode);
+
+        // add player physical box
+        var shape = new cp.BoxShape(bq.player.getBody(), 32, 32);
+        bq.space.addShape(shape);
+
+        this.scheduleUpdate();
         bq.soundManager.playMusic(s_BgmField, true);
         this.addChild(baseLayer, bq.config.zOrder.BASE_LAYER);
         bq.baseLayer = baseLayer;
         return true;
+    },
+
+    /** @override */
+    update: function(bt) {
+        'use strict';
+        bq.space.step(bt);
     },
 
     initPing_: function() {
@@ -86,6 +110,28 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
 
         var zIndex = 10000;
         this.addChild(pingLabel, zIndex, bq.config.zOrder.DEBUG_PING);
+    },
+
+    createPhysicalSpace_: function(size) {
+
+        var space = new cp.Space();
+        var staticBody = space.staticBody;
+        // Walls
+        var walls = [
+            new cp.SegmentShape( staticBody, cp.v(0,0), cp.v(size.width,0), 0 ),				// bottom
+            new cp.SegmentShape( staticBody, cp.v(0,size.height), cp.v(size.width,size.height), 0),	// top
+            new cp.SegmentShape( staticBody, cp.v(0,0), cp.v(0,size.height), 0),				// left
+            new cp.SegmentShape( staticBody, cp.v(size.width,0), cp.v(size.width,size.height), 0)	// right
+        ];
+        _.forEach(walls, function(shape) {
+            shape.setElasticity(1);
+            shape.setFriction(1);
+            space.addStaticShape(shape);
+        });
+
+        space.gravity = cp.v(0, 0);
+
+        return space;
     }
 });
 
