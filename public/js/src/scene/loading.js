@@ -46,7 +46,7 @@ bq.scene.LoadingLayer = cc.Layer.extend({
     showBar_: function(visible) {
         var topBar = $('#bq-loading-top');
         var bottomBar = $('#bq-loading-bottom');
-        if (topBar.length == 0 || bottomBar.length == 0) {
+        if (topBar.length === 0 || bottomBar.length === 0) {
             return;
         }
 

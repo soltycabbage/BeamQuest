@@ -39,5 +39,6 @@ module.exports = function(grunt) {
   grunt.event.on('watch', function(action, filepath) {
       grunt.config(['jshint', 'all'], [filepath]);
   });
-}
 
+  grunt.registerTask('test', ['jshint']);
+};
