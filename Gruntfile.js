@@ -2,6 +2,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-compass');
+  grunt.loadNpmTasks('grunt-mocha-test');
 
     grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -32,6 +33,15 @@ module.exports = function(grunt) {
         options: {
           config: 'config.rb'
         }
+      }
+    },
+
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec'
+        },
+        src: ['app/**/*Spec.js']
       }
     }
   });
