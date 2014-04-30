@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "NODE_ENV=development NODE_PATH=public:app node app",
-    "test": "grunt test"
+    "test": "NODE_PATH=public:app grunt test"
   },
   "dependencies": {
     "express": "3.4.6",
@@ -16,15 +16,17 @@
     "redis": "0.9.1",
     "log4js": "0.6.9",
     "tmx-parser": "1.2.0",
-    "usage": "0.3.9",
-    "expect.js": "0.3.1",
-    "mocha": "1.18.0",
-    "sinon": "1.9.0"
+    "usage": "0.3.9"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-contrib-jshint": "~0.7.2",
-    "grunt-contrib-compass": "*"
+    "grunt-contrib-compass": "*",
+    "grunt-mocha-test": "~0.10.2",
+
+    "expect.js": "0.3.1",
+    "mocha": "1.18.0",
+    "sinon": "1.9.0"
   }
 }
