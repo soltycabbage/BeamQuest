@@ -29,17 +29,16 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
             // 自分が撃ったビームだけサーバに位置情報を送信する
             // TODO: これもentityのshoot()的なメソッドでやるべき
             this.enableSendPosition(true);
-
-            // 自分がうったビームだけ物理てきなのを作る
-            var body = new cp.Body(0.01, cp.momentForBox(1, 2, 2));
-            this.setBody(body);
-            bq.space && bq.space.addBody(this.getBody());
-            this.shape_ = new cp.BoxShape(this.getBody(), 8, 8);
-            this.shape_.setCollisionType(1); // FIXME fix magic number
-            this.shape_.tag = tag;
-            bq.space && bq.space.addShape(this.shape_);
         }
 
+        // 物理てきなのを作る
+        var body = new cp.Body(0.01, cp.momentForBox(1, 2, 2));
+        this.setBody(body);
+        bq.space && bq.space.addBody(this.getBody());
+        this.shape_ = new cp.BoxShape(this.getBody(), 8, 8);
+        this.shape_.setCollisionType(1); // FIXME fix magic number 他人の打ったビームの場合変えたほうがいいかも
+        this.shape_.tag = tag;
+        bq.space && bq.space.addShape(this.shape_);
 
         this.tag = tag;
         this.scheduleUpdate();
@@ -91,7 +90,7 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
         var rotate = -1.0 * ( cc.RADIANS_TO_DEGREES(cc.pToAngle( this.inc_ )) -90);
         this.setRotation(rotate);
 
-        // 力を与えてそっちに飛ばす
+        // 力を与えてそっちに飛ばす TODO 他人が打ったビームの場合いらないかも
         this.getBody().applyImpulse(vn, cp.v(0, 0));
 
         // duration秒後にこのビームを消去する
