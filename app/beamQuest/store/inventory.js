@@ -19,7 +19,7 @@ var Inventory = function() {
          }
      };
      */
-    this.inventory_;
+    this.inventory_ = {};
 };
 
 /**

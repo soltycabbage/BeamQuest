@@ -46,7 +46,7 @@ Inventory.prototype.pickItem = function(itemId) {
     } else {
         this.items[itemId].amount--;
         if (this.items[itemId].amount <= 0) {
-            delete this.items[itemid];
+            delete this.items[itemId];
         }
         return itemId;
     }
