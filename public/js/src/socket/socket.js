@@ -89,6 +89,16 @@ bq.Socket = cc.Class.extend({
             entityManager.startAttackShortRange(data);
         });
 
+        // アイテムがドロップした
+        this.socket.on('notify:item:drop', function(data) {
+            bq.mapManager.addDropItems(data);
+        });
+
+        // 誰かが（自分含む）ドロップアイテム拾ったよって
+        this.socket.on('notify:item:pick', function(data) {
+            bq.mapManager.removeDropItem(data);
+        });
+
         // hpに変動があった
         this.socket.on('notify:entity:hp:update', function(data) {
             entityManager.updateHp(data);
@@ -99,6 +109,7 @@ bq.Socket = cc.Class.extend({
             var model = new bq.model.Player(data);
             entityManager.levelUp(model);
         });
+
         /**
          *  1対1の通信
          */
@@ -171,6 +182,17 @@ bq.Socket = cc.Class.extend({
     },
 
     /**
+     * マップ上に存在するドロップアイテムの一覧を要求する
+     * @param {number} mapId
+     * @param {Function} callback
+     * @param {Object} selfObj
+     */
+    requestDropItemsByMapId: function(mapId, callback, selfObj) {
+        this.socket.emit('world:dropitems:get', {mapId: mapId});
+        this.socket.once('world:dropitems:receive', $.proxy(callback, selfObj));
+    },
+
+    /**
      * いまからビーム撃つよってサーバに伝える
      * @param {Object.<shooterId: number, mapId: number, src: cc.p, dest: cc.p, beamId: string, tag: string} beamPos
      */
@@ -188,6 +210,21 @@ bq.Socket = cc.Class.extend({
     requestEntityStatus: function(entityId, mapId, callback, selfObj) {
         this.socket.emit('user:status:get', {entityId: entityId, mapId: mapId});
         this.socket.once('user:status:receive', $.proxy(callback, selfObj));
+    },
+
+    /**
+     * ドロップアイテムを拾い上げる
+     * @param {bq.Types.Items} dropId
+     * @param {string} mapId
+     * @param {string} pickerId
+     */
+    requestPickItem: function(dropId, mapId, pickerId) {
+        var data = {
+            'dropId': dropId,
+            'mapId': mapId,
+            'pickerId': pickerId
+        };
+        this.socket.emit('item:pick', data);
     }
 });
 

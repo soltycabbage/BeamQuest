@@ -1,6 +1,9 @@
+@charset "UTF-8";
+@import "compass/css3/images";
+
 @font-face {
-    font-family: pixelMplus;
-    src: url(../res/fonts/pixelMplus.ttf) format("truetype");
+    font-family: systemFont;
+    src: url(../res/fonts/yasasisa.ttf) format("truetype");
 }
 
 @font-face {
@@ -43,22 +46,47 @@ body {
     width: 100%;
 }
 
+// メッセージウインドウのデフォルトheight
+$messageHeight: 80px;
+
 #bq-message-log {
     border-radius: 5px;
     opacity: 0.7;
     width: 270px;
-    height: 80px;
+    height: $messageHeight;
     background: black;
     position: relative;
+
+    .fa {
+        color: #CEC7C7;
+        position: absolute;
+        left: 0px;
+        top: -17px;
+        padding: 3px;
+        border-radius: 2px;
+        background-color: #000;
+        cursor: pointer;
+        &:hover {
+          color: #21ff76;
+        }
+    }
 }
 
 #bq-message-log-inner {
+    overflow-y: scroll;
+    height: $messageHeight;
     position: absolute;
     bottom: 0;
+    padding-right: 10px;
+}
+
+// 展開された状態のスタイル
+.bq-message-log-expand {
+  height: 500px !important;
 }
 
 .bq-message-log-value {
-    font-family: pixelMplus;
+    font-family: systemFont;
     font-size: 10px;
     color: #fff;
     padding: 4px 6px;
@@ -69,7 +97,7 @@ body {
 }
 
 #bq-chat-form {
-    font-family: pixelMplus;
+    font-family: systemFont;
     margin-bottom: 6px;
 }
 
@@ -197,7 +225,7 @@ body {
 }
 
 .infoBox > div {
-    font-family: pixelMplus;
+    font-family: systemFont;
     background: #2d2f2d;
     color: #fff;
     border-radius: 2px;
@@ -316,7 +344,7 @@ body {
   width: 36px;
   height: 36px;
   display: inline-block;
-  font-family: pixelMplus;
+  font-family: systemFont;
   &.bq-status-head {
     left: 110px;
     top: 35px;
@@ -358,5 +386,41 @@ body {
   & div span {
     display: inline-block;
     width: 30px;
+  }
+}
+
+#bq-loading-top,
+#bq-loading-bottom {
+  z-index: 100;
+  height: 70px;
+  width: 100%;
+  background-color: black;
+  position: absolute;
+}
+
+#bq-loading-top {
+  top: -100px;
+  @include background-image(linear-gradient(#000000, #111111 40%, #3279cd 100%));
+
+  &>span {
+    font-family: systemFont;
+    color: #fff;
+    font-size: 24px;
+    float: left;
+    padding: 10px;
+  }
+}
+
+#bq-loading-bottom {
+  bottom: -100px;
+  @include background-image(linear-gradient(#3279cd, #111111 40%, #000000 100%));
+
+  &>span {
+    padding-top: 30px;
+    font-size: 23px;
+    color: #fff;
+    font-family: systemFont;
+    float: right;
+    padding-right: 20px;
   }
 }

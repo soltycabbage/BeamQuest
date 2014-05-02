@@ -1,2 +1,2 @@
-bq.scene = cc.Class.extend({
+bq.scene = cc.Scene.extend({
 });

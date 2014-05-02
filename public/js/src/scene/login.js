@@ -26,7 +26,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
         label.setPosition(cc.p(size.width/2, size.height/2 + 50));
         this.addChild(label);
 
-        var nameField = cc.TextFieldTTF.create(this.defaultPlaceHolder_, 'pixelMplus', 32);
+        var nameField = cc.TextFieldTTF.create(this.defaultPlaceHolder_, 'systemFont', 32);
         this.addChild(nameField);
         nameField.setPosition(cc.p(size.width / 2, size.height / 2));
         this.nameField_ = nameField;
@@ -66,13 +66,9 @@ bq.scene.LoginLayer = cc.Layer.extend({
      * @private
      */
     welcomeToBeamQuestWorld_: function(userId, data) {
-        // HUD有効
-        var hud = bq.Hud.getInstance();
-        hud.enable(true);
-
         this.initPlayer_(userId, data);
         bq.Socket.getInstance().initAfterLogin();
-        cc.Director.getInstance().replaceScene(new bq.scene.BeamQuestWorldScene());
+        bq.loadingTo(new bq.scene.BeamQuestWorldScene());
     },
 
     /**
@@ -180,7 +176,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
     }
 });
 
-bq.scene.LoginScene = cc.Scene.extend({
+bq.scene.LoginScene = bq.scene.extend({
     onEnter: function() {
         this._super();
         var layer = new bq.scene.LoginLayer();

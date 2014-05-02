@@ -3,7 +3,7 @@
     var c = {
         COCOS2D_DEBUG:2, //0 to turn debug off, 1 for basic debug, and 2 for full debug
         box2d:false,
-        chipmunk:false,
+        chipmunk:true,
         showFPS:true,
         frameRate:30,
         loadExtension:false,
@@ -36,6 +36,7 @@
             'js/src/model/beamPos.js',
             'js/src/model/chat.js',
             'js/src/model/mob.js',
+            'js/src/model/dropItem.js',
 
             'js/src/entityManager.js',
             'js/src/soundManager.js',
@@ -56,6 +57,9 @@
             'js/src/hud/level.js',
             'js/src/hud/statusWindow.js',
             'js/src/hud/hud.js',
+            // object
+            'js/src/object/object.js',
+            'js/src/object/dropItem.js',
 
             // entity
             'js/src/entity/entity.js',
@@ -70,6 +74,7 @@
 
             // scene
             'js/src/scene/scene.js',
+            'js/src/scene/loading.js',
             'js/src/scene/login.js',
             'js/src/scene/beamQuest.js'
         ]
