@@ -22,11 +22,10 @@ if ('production' == env) {
 }
 
 app.set('port', process.env.PORT || 3000);
-app.use(require('static-favicon'));
+app.use(require('static-favicon')());
 app.use(log4js.connectLogger(expressLogWrapper, {level: log4js.levels.INFO}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-app.use(require('method-override'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 var backend = require('beamQuestBackend/main');
@@ -63,9 +62,7 @@ app.use(function(err, req, res, next) {
     });
 });
 
-var server = http.createServer(app);
-server.listen(app.get('port'));
-
+var server = app.listen(app.get('port'));
 var io = socketIo.listen(server);
 
 io.configure('production', function() {
