@@ -40,6 +40,7 @@ app.use(function(req, res, next) {
 
 /// error handlers
 
+<<<<<<< HEAD
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
@@ -62,14 +63,18 @@ app.use(function(err, req, res, next) {
     });
 });
 
+module.exports = app;
+
+if (!module.parent) {
 var server = app.listen(app.get('port'));
-var io = socketIo.listen(server);
+    var io = socketIo.listen(server);
 
-io.configure('production', function() {
-    io.set('log level', 1);
-});
+    io.configure('production', function() {
+        io.set('log level', 1);
+    });
 
-var main = require('beamQuest/main');
-main.start(io);
+    var main = require('beamQuest/main');
+    main.start(io);
+}
 
 logger.info('start');
