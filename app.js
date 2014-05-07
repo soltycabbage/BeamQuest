@@ -9,13 +9,21 @@ var app = express();
 
 var expressLogWrapper = log4js.getLogger('express');
 
+if (module.parent) {
+    log4js.setGlobalLogLevel('OFF');
+} else {
+    // setGlobalLogLevel しても別でレベルを設定した場合は上書きされるらしい
+    app.configure('development', function() {
+        expressLogWrapper.setLevel('INFO');
+    });
+
+    app.configure('production', function() {
+        expressLogWrapper.setLevel('WARN');
+    });
+}
+
 app.configure('development', function() {
     app.use(express.errorHandler());
-    expressLogWrapper.setLevel('INFO');
-});
-
-app.configure('production', function() {
-    expressLogWrapper.setLevel('WARN');
 });
 
 
