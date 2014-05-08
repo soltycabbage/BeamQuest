@@ -43,6 +43,7 @@ backend.listen(app);
 
 module.exports = app;
 
+// テスト実行時には listen しない
 if (!module.parent) {
     var server = http.createServer(app);
     server.listen(app.get('port'));
