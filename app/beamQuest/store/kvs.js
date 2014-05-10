@@ -18,11 +18,15 @@ var SessionStore = {
     },
     del: function (key) {
         delete this.session_[key];
+    },
+    flushall: function(callback) {
+        this.session_ = {};
+        logger.info('kvs flushall');
+        callback(true);
     }
 };
 
 exports.createClient = function() {
-    logger.info(process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development') {
         return SessionStore;
     } else {

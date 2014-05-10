@@ -12,8 +12,37 @@ var Model = function(opt_data) {
 };
 util.inherits(Model, events.EventEmitter);
 
+/** @protected */
 Model.prototype.toJSON = function() {
     return {};
+};
+
+/**
+ * Objectに入った各modelをtoJSON()して返す
+ * @param {Object.<Model>} obj
+ * @return {Object.<Object>}
+ * @protected
+ */
+Model.prototype.toObjectJSON = function(obj) {
+    var result = {};
+    _.forEach(obj, function(value, key) {
+        result[key] = value.toJSON();
+    });
+    return result;
+};
+
+/**
+ * 配列に入った各modelをtoJSON()して返す
+ * @param {Array.<Model>} arr
+ * @return {Array.<Object>}
+ * @protected
+ */
+Model.prototype.toArrayJSON = function(arr) {
+    var result = [];
+    _.forEach(arr, function(model) {
+        result.push(model.toJSON());
+    });
+    return result;
 };
 
 module.exports = Model;

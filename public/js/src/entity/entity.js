@@ -7,13 +7,14 @@ bq.entity = {};
  * @constructor
  * @extends {cc.Sprite}
  */
-bq.entity.Entity = cc.Sprite.extend({
+bq.entity.Entity = cc.PhysicsSprite.extend({
     DEFAULT_NAME: 'entity',
     name: 'entity', // entityの名前
     chatRect: null, // チャット吹き出しのSprite
     currentState:null,
     currentDirection:null,
     model_: null,
+    shape_: null,
 
     /**
      * @param {string} spriteFrameName *.plistの<key>に設定されてるframeName
@@ -24,6 +25,13 @@ bq.entity.Entity = cc.Sprite.extend({
         spriteFrame && this.initWithSpriteFrame(spriteFrame); // TODO initWithSpriteFrameName ? iwg
         if ( frameMap ) {
             this.animations = bq.entity.Animation.createAnimations(frameMap);
+        }
+        var body = new cp.Body(0.0001, 0.001);
+        this.setBody(body);
+        if ( bq.space ) {
+            this.shape_ = new cp.BoxShape(this.getBody(), 16, 16);
+            this.shape_.setCollisionType(2);
+            bq.space.addShape(this.shape_);
         }
         this.init_();
     },
@@ -38,9 +46,10 @@ bq.entity.Entity = cc.Sprite.extend({
     },
 
     /**
-     * @param {bq.model.Model}model
+     * @param {bq.model.Model} model
      */
     setModel: function(model) {
+        this.shape_ && (this.shape_.id = model.id); // TODO よくない
         this.model_ = model;
     },
 
@@ -49,6 +58,16 @@ bq.entity.Entity = cc.Sprite.extend({
      */
     getModel: function() {
         return this.model_;
+    },
+
+    /**
+     * 当たり判定の範囲を矩形で返す
+     * @return {cc.rect}
+     */
+    getCollideRect: function() {
+        var a = this.getContentSize();
+        var p = this.getPosition();
+        return cc.rect(p.x - a.width / 2, p.y - a.height / 2, a.width, a.height);
     },
 
     /**
@@ -75,7 +94,7 @@ bq.entity.Entity = cc.Sprite.extend({
         var callFunc = cc.CallFunc.create(label.removeFromParent.bind(label));
         label.runAction(cc.Sequence.create(cc.Spawn.create(fadeOut, moveTo), callFunc));
         label.setPosition(pos.x, pos.y);
-        bq.baseLayer.addChild(label, bq.config.tags.EXP_LABEL);
+        bq.baseLayer.addChild(label, bq.config.zOrder.EXP_LABEL);
     },
 
     /**
@@ -110,11 +129,14 @@ bq.entity.Entity = cc.Sprite.extend({
     
     /**
      * 死にモーション
+     * @param {boolean=} opt_skipRemove 見かけ上非表示にするだけでレイヤーから消したくない時はtrue
+     * @param {Function=} opt_callback 死にモーションが終わった時に呼びたい関数
      */
-    kill: function(opt_skipRemove) {
+    kill: function(opt_skipRemove, opt_callback) {
         var fadeOut = cc.FadeOut.create(0.8);
         var blink = cc.Blink.create(1, 50);
         var callFunc = cc.CallFunc.create(function() {
+            opt_callback && opt_callback.apply(this);
             if(!opt_skipRemove) {
                 this.removeFromParent();
             }
@@ -156,7 +178,7 @@ bq.entity.Entity = cc.Sprite.extend({
 
         msgRect.addChild(tt);
         msgRect.addChild(tail, -100);
-        this.addChild(msgRect, bq.config.tags.CHAT);
+        this.addChild(msgRect, bq.config.zOrder.CHAT);
         this.chatRect = msgRect;
         setTimeout($.proxy(this.removeChatRect_, this, msgRect), 5000);
     },
@@ -259,7 +281,7 @@ bq.entity.Entity = cc.Sprite.extend({
      */
     popDamageLabel_: function(amount, opt_popLeft, opt_color) {
         var damage = Math.abs(amount);
-        var label = bq.Label.createWithShadow(damage, 20, opt_color);
+        var label = bq.Label.createWithShadow(damage, 16, opt_color);
         var rect = this.getBoundingBox();
         label.setPosition(cc.p(rect.getWidth()/2, rect.getHeight()));
         var d = opt_popLeft ? -1 : 1;

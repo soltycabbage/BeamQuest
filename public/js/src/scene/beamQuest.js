@@ -11,32 +11,27 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
             this.setMouseEnabled(true);
         }
 
-        var baseLayer = cc.Layer.create();
+        // TODO position.mapIdからロードするマップを取得する
+        var tileMap = new cc.TMXTiledMap();
+        tileMap.initWithTMXFile(bq.config.maps.area.START_MURA);
+        tileMap.setPosition(cc.p(0,0));
+
+        var behindMapLayer = tileMap.getLayer('GoBehind');
+        behindMapLayer.setZOrder(bq.config.zOrder.BEHIND_LAYER);
+        var mapManager = new bq.MapManager(tileMap);
+        bq.mapManager = mapManager;
+
+        var baseLayer = tileMap;
         baseLayer.setPosition(cc.p(0,0));
-        this.addChild(baseLayer, 1, bq.config.tags.BASE_LAYER);
+        baseLayer.addChild(bq.player, bq.config.zOrder.PLAYER);
 
         this.camera = new bq.Camera(baseLayer);
         this.camera.lookAt(bq.player);
         bq.camera = this.camera;
 
-        // TODO position.mapIdからロードするマップを取得する
-        var tileMap = new cc.TMXTiledMap();
-        tileMap.initWithTMXFile(bq.config.maps.area.START_MURA);
-        tileMap.setPosition(cc.p(0,0));
-        baseLayer.addChild(tileMap, 0);
-        var mapManager = new bq.MapManager(tileMap);
-        bq.mapManager = mapManager;
-
-        baseLayer.addChild(bq.player, 100, bq.config.tags.PLAYER);
-
         var chat = new bq.Chat();
-
-        bq.baseLayer = baseLayer;
-        this.scheduleUpdate();
-
         this.inputHandler = new bq.InputHandler();
         this.inputHandler.attach(this);
-
         this.inputHandler.addListener(bq.player.inputHandler);
         this.inputHandler.addListener({
             onKeyDown: function(key) {
@@ -47,15 +42,38 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         });
 
         this.initPing_();
+        // HUD有効
+        var hud = bq.Hud.getInstance();
+        hud.enable(true);
 
+        bq.space = this.createPhysicalSpace_(tileMap.getContentSize());
+
+        // 当たり判定のコールバック
+        // TODO クライアントのコッチ使うようにする（まだサーバサイドできてないのでダメ）
+        // bq.space.addCollisionHandler( 1, 2,
+        //     bq.EntityManager.getInstance().collisionCallback
+        // );
+
+        // add Physics Debug
+        this._debugNode = cc.PhysicsDebugNode.create(bq.space);
+        this._debugNode.setVisible(false); // 物理の箱見たいときはtrueに
+        baseLayer.addChild(this._debugNode);
+
+        // add player physical box
+        var shape = new cp.BoxShape(bq.player.getBody(), 32, 32);
+        bq.space.addShape(shape);
+
+        this.scheduleUpdate();
         bq.soundManager.playMusic(s_BgmField, true);
+        this.addChild(baseLayer, bq.config.zOrder.BASE_LAYER);
+        bq.baseLayer = baseLayer;
         return true;
     },
 
     /** @override */
-    update: function() {
+    update: function(bt) {
         'use strict';
-
+        bq.space.step(bt);
     },
 
     initPing_: function() {
@@ -91,7 +109,29 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         });
 
         var zIndex = 10000;
-        this.addChild(pingLabel, zIndex, bq.config.tags.DEBUG_PING);
+        this.addChild(pingLabel, zIndex, bq.config.zOrder.DEBUG_PING);
+    },
+
+    createPhysicalSpace_: function(size) {
+
+        var space = new cp.Space();
+        var staticBody = space.staticBody;
+        // Walls
+        var walls = [
+            new cp.SegmentShape( staticBody, cp.v(0,0), cp.v(size.width,0), 0 ),				// bottom
+            new cp.SegmentShape( staticBody, cp.v(0,size.height), cp.v(size.width,size.height), 0),	// top
+            new cp.SegmentShape( staticBody, cp.v(0,0), cp.v(0,size.height), 0),				// left
+            new cp.SegmentShape( staticBody, cp.v(size.width,0), cp.v(size.width,size.height), 0)	// right
+        ];
+        _.forEach(walls, function(shape) {
+            shape.setElasticity(1);
+            shape.setFriction(1);
+            space.addStaticShape(shape);
+        });
+
+        space.gravity = cp.v(0, 0);
+
+        return space;
     }
 });
 
@@ -104,7 +144,8 @@ bq.scene.BeamQuestWorldScene = cc.Scene.extend({
             var layer = new bq.scene.BeamQuestWorld();
             layer.init();
             this.addChild(layer);
-            this.renderEntities_(1); // TODO: maoId
+            this.renderEntities_(1); // TODO: mapIdが固定なのをなんとかする
+            this.renderDropItems_(1);// TODO: mapIdが固定なのをなんとかする
         } else {
             this.addChild(new bq.scene.LoginScene());
         }
@@ -118,6 +159,15 @@ bq.scene.BeamQuestWorldScene = cc.Scene.extend({
     renderEntities_: function(mapId) {
         var entityManager = bq.EntityManager.getInstance();
         entityManager.updateEntitiesByMapId(mapId);
+    },
+
+    /**
+     * ドロップアイテムを描画する
+     * @param {number} mapId
+     * @private
+     */
+    renderDropItems_: function(mapId) {
+        bq.mapManager.updateDropItemsByMapId(mapId);
     },
 
     /**

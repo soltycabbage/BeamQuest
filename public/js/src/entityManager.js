@@ -21,7 +21,7 @@ bq.EntityManager = cc.Class.extend({
             });
             this.createOtherPlayers(players);
             this.createMobs(data.mobs);
-            bq.MessageLog.getInstance().addSystemMsg('この辺にはオンラインの他プレイヤーが' + players.length + '人いるようだ。');
+            bq.MessageLog.getInstance().addSystemMsg('この辺にはオンラインのプレイヤーが' + players.length + '人いるようだ');
         }, this));
     },
 
@@ -87,8 +87,10 @@ bq.EntityManager = cc.Class.extend({
     killMob: function(data) {
         var enemy = this.enemys_[data.entity.id];
         if (enemy) {
-            enemy.kill();
-            delete this.enemys_[data.entity.id];
+            enemy.kill(null, function() {
+                bq.space.removeShape(enemy.shape_);
+                delete this.enemys_[data.entity.id];
+            }.bind(this));
         }
     },
 
@@ -134,6 +136,23 @@ bq.EntityManager = cc.Class.extend({
         bq.BeamManager.getInstance().disposeBeam(data);
     },
 
+    // ビームと敵があたった時によばれる
+    collisionCallback : function ( arbiter, space ) {
+
+        var shapes = arbiter.getShapes();
+        var enemy = bq.EntityManager.getInstance().getEnemys()[shapes[1].id];
+        space.addPostStepCallback(function(){
+            var data = {};
+            data.entity  = enemy.getModel();
+            data.beamPos = enemy.getPosition();
+            data.hpAmount = -10; // これも
+            data.beamTag = shapes[0].tag;
+
+            bq.EntityManager.getInstance().hitEntity(data);
+        });
+
+        return true;
+    },
 
     /**
      * @param {Object}
@@ -163,7 +182,7 @@ bq.EntityManager = cc.Class.extend({
         other.name = moveData.userId;
         other.showName(moveData.userId, true);
         other.setPosition(cc.p(moveData.x, moveData.y));
-        bq.baseLayer.addChild(other, bq.config.tags.PLAYER);
+        bq.baseLayer.addChild(other, bq.config.zOrder.PLAYER);
         this.otherPlayers_[moveData.userId] = other;
     },
 
@@ -187,7 +206,7 @@ bq.EntityManager = cc.Class.extend({
         var enemy = new bq.entity.Enemy(enemy_id);
         enemy.setModel(mobModel);
         enemy.setPosition(cc.p(x, y));
-        bq.baseLayer.addChild(enemy, 50);
+        bq.baseLayer.addChild(enemy, bq.config.zOrder.PLAYER - 1);
         this.enemys_[mobModel.id] = enemy;
     },
 

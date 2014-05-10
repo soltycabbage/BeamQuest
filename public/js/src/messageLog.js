@@ -13,10 +13,22 @@ bq.MessageLog = cc.Class.extend({
         this.logDisplayed = $('#bq-message-log-inner');
 
         /**
-         * 表示する行数
-         * @type {Number}
+         * チャットウィンドウを広げるボタン
+         * @type {Element}
          */
-        this.maxDisplaySize_ = 4;
+        this.expandButton = $('#bq-message-log-expand');
+
+        this.init_();
+    },
+
+    /**
+     * @private
+     */
+    init_: function() {
+        this.expandButton.on('click', $.proxy(this.handleExpand_, this));
+        this.expandButton.infoBox({
+            content: 'チャットログを読む'
+        });
     },
 
     /**
@@ -54,14 +66,28 @@ bq.MessageLog = cc.Class.extend({
         valueEl.text(msg);
         valueEl.css('color', color);
         this.logDisplayed.append(valueEl);
+        this.scrollBottom_();
+    },
 
-        var values = $('.bq-message-log-value');
-        var logSize = values.length;
-        _.each(values, function(value, index) {
-            if (index < (logSize - this.maxDisplaySize_)) {
-                $(value).hide();
-            }
-        }.bind(this));
+    /**
+     * 最下部にスクロールする
+     * @private
+     */
+    scrollBottom_: function() {
+        this.logDisplayed.scrollTop(this.logDisplayed.offset().top);
+    },
+
+    /**
+     * @param {$.Event} evt
+     * @private
+     */
+    handleExpand_: function(evt) {
+        var btn = $(evt.currentTarget);
+        var expandClass = 'bq-message-log-expand';
+        this.logWindow.toggleClass(expandClass);
+        this.logDisplayed.toggleClass(expandClass);
+        btn.toggleClass('fa-toggle-up');
+        btn.toggleClass('fa-toggle-down');
     }
 });
 

@@ -7,5 +7,6 @@
   "devel"   : true,
   "debug"   : true,
   "sub"     : true,
-  "expr"    : true
+  "expr"    : true,
+  "-W015"   : false
 }

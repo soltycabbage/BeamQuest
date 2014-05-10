@@ -9,6 +9,24 @@ bq.MapManager = cc.Class.extend({
     ctor:function (tileMap) {
         'use strict';
         this.tileMap = tileMap;
+
+        /**
+         * マップ上に落ちてるアイテム
+         * @type {Object.<bq.object.DropItem>}
+         * @private
+         */
+        this.dropItems_ = [];
+    },
+
+    /**
+     * サーバからmapIdに指定したマップ上に存在するドロップアイテム一覧を取得してきて更新する
+     * @param {number} mapId
+     */
+    updateDropItemsByMapId: function(mapId) {
+        var soc = bq.Socket.getInstance();
+        soc.requestDropItemsByMapId(mapId, $.proxy(function(data) {
+            this.addDropItems(data['dropitems']);
+        }, this));
     },
 
     /**
@@ -24,7 +42,8 @@ bq.MapManager = cc.Class.extend({
 
         // レイヤーにno_enterableのプロパティがあったらそれは入れないレイヤー
         var layers = _.select(this.tileMap.getChildren(), function(layer) {
-            return  (layer && layer.getProperties()['no_enterable'] === 'true');
+            return  (layer instanceof cc.TMXLayer &&
+                layer.getProperties()['no_enterable'] === 'true');
         } );
 
         var sizeY = this.tileMap.getTileSize().width * this.tileMap.getMapSize().width;
@@ -51,6 +70,30 @@ bq.MapManager = cc.Class.extend({
         } else {
             // リスポーンポイントが指定されてない場合適当な場所
             return cc.p(100,100);
+        }
+    },
+
+    /**
+     * マップ上にドロップアイテムを追加する
+     * @param {Object.<Object>} itemJsons
+     */
+    addDropItems: function(itemJsons) {
+        _.forEach(itemJsons, $.proxy(function(itemJson) {
+            var item =  new bq.object.DropItem(new bq.model.DropItem(itemJson));
+            bq.baseLayer.addChild(item, bq.config.zOrder.PLAYER - 50);
+            this.dropItems_[itemJson['dropId']] = item;
+        }), this);
+    },
+
+    /**
+     * マップ上のドロップアイテムを削除する
+     * @param {Object} itemJson
+     */
+    removeDropItem: function(itemJson) {
+        if (this.dropItems_[itemJson['dropId']]) {
+            var item = this.dropItems_[itemJson['dropId']];
+            item.pickAndRemove(itemJson['pickerPosition']);
+            delete this.dropItems_[itemJson['dropId']];
         }
     }
 });
