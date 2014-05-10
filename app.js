@@ -13,7 +13,7 @@ var expressLogWrapper = log4js.getLogger('express');
 var env = process.env.NODE_ENV || 'development';
 
 if ('development' == env) {
-    app.use(require('errorhandler'));
+    app.use(require('errorhandler')());
     expressLogWrapper.setLevel('INFO');
 }
 
