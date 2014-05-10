@@ -9,18 +9,13 @@ var app = express();
 
 var expressLogWrapper = log4js.getLogger('express');
 
-if (module.parent) {
-    log4js.setGlobalLogLevel('OFF');
-} else {
-    // setGlobalLogLevel しても別でレベルを設定した場合は上書きされるらしい
-    app.configure('development', function() {
-        expressLogWrapper.setLevel('INFO');
-    });
+app.configure('development', function() {
+    expressLogWrapper.setLevel('INFO');
+});
 
-    app.configure('production', function() {
-        expressLogWrapper.setLevel('WARN');
-    });
-}
+app.configure('production', function() {
+    expressLogWrapper.setLevel('WARN');
+});
 
 app.configure('development', function() {
     app.use(express.errorHandler());
@@ -43,19 +38,16 @@ backend.listen(app);
 
 module.exports = app;
 
-// テスト実行時には listen しない
-if (!module.parent) {
-    var server = http.createServer(app);
-    server.listen(app.get('port'));
+var server = http.createServer(app);
+server.listen(app.get('port'));
 
-    var io = socketIo.listen(server);
+var io = socketIo.listen(server);
 
-    io.configure('production', function() {
-        io.set('log level', 1);
-    });
+io.configure('production', function() {
+    io.set('log level', 1);
+});
 
-    var main = require('beamQuest/main');
-    main.start(io);
-}
+var main = require('beamQuest/main');
+main.start(io);
 
 logger.info('start');
