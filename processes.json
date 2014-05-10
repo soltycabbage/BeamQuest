@@ -1,0 +1,9 @@
+[{
+        "script"     : "./app.js",
+        "instances"  : "1",
+        "exec_mode"  : "cluster_mode",
+        "env"        : {
+                "NODE_ENV": "production",
+                "NODE_PATH": "public:app"
+        }
+}]

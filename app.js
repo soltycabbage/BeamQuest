@@ -10,14 +10,12 @@ var app = express();
 var expressLogWrapper = log4js.getLogger('express');
 
 app.configure('development', function() {
-    app.use(express.errorHandler());
     expressLogWrapper.setLevel('INFO');
 });
 
 app.configure('production', function() {
     expressLogWrapper.setLevel('WARN');
 });
-
 
 app.configure(function() {
     app.set('port', process.env.PORT || 3000);
