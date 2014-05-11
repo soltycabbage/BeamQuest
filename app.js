@@ -5,7 +5,8 @@ var path     = require('path'),
     http     = require('http'),
     socketIo = require('socket.io'),
     log4js   = require('log4js'),
-    redis = require('socket.io/lib/stores/redis');
+    redis = require('socket.io/lib/stores/redis')
+    config   = require('config');
 
 var app = express();
 
@@ -68,10 +69,12 @@ module.exports = app;
 var server = app.listen(app.get('port'));
 var io = socketIo.listen(server);
 
-io.configure('production', function() {
+var CONFIG = config.session;
+logger.info('session type: ' + CONFIG.type);
+if (CONFIG.type === 'redis') {
     var redisConf = {
-        host: '127.0.0.1',
-        port: 6379
+        host: CONFIG.host,
+        port: CONFIG.port
     };
     io.set('log level', 1);
     io.set('store', new redis({
@@ -79,7 +82,7 @@ io.configure('production', function() {
         redisSub: redisConf,
         redisClient: redisConf
     }));
-});
+}
 
 var main = require('beamQuest/main');
 main.start(io);

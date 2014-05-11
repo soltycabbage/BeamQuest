@@ -1,7 +1,8 @@
 /**
  * @fileoverview オンメモリのKVS的なやつ。redisに置き換える？
  */
-var redis = require('redis');
+var redis = require('redis'),
+    CONFIG = require('config').kvs;
 
 var SessionStore = {
     session_: {},
@@ -27,9 +28,10 @@ var SessionStore = {
 };
 
 exports.createClient = function() {
-    if (process.env.NODE_ENV === 'development') {
+    logger.info('kvs type: ' + CONFIG.type);
+    if (CONFIG.type === 'memory') {
         return SessionStore;
-    } else {
+    } else if (CONFIG.type === 'redis') {
         return redis.createClient();
     }
 };
