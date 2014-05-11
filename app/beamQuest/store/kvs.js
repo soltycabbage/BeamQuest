@@ -6,7 +6,11 @@ var redis = require('redis'),
 
 var SessionStore = {
     session_: {},
+    isEnd: false,
     get: function (key, callback) {
+        if (this.isEnd) {
+            callback('connection already closed', null);
+        }
         if (key in this.session_) {
             callback(null, this.session_[key]);
         }
@@ -21,9 +25,15 @@ var SessionStore = {
         delete this.session_[key];
     },
     flushall: function(callback) {
+        if (this.isEnd) {
+            callback(false);
+        }
         this.session_ = {};
         logger.info('kvs flushall');
         callback(true);
+    },
+    end: function() {
+        this.isEnd = true;
     }
 };
 
