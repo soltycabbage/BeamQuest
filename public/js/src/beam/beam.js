@@ -18,10 +18,10 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
     enableSendPosition_: false,  // 位置情報を送信するかどうか
     shooterId_: null,            // ビームを打った人のID
 
-    ctor: function (id, shooterId, tag) {
+    ctor: function (id, shooterId, tag, frameName) {
         "use strict";
         this._super();
-        this.initWithSpriteFrameName("long1.png");
+        frameName && this.initWithSpriteFrameName(frameName);
         this.setVisible(true);
         this.socket_ = bq.Socket.getInstance();
         this.shooterId_ = shooterId || null;
@@ -80,7 +80,6 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
      */
     initDestination: function (src, dest, speed, duration) {
         "use strict";
-        this.enable();
         this.destination_ = dest;
         this.setPosition(src);
         var v = cc.pSub(dest, src);
@@ -100,136 +99,12 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
         this.runAction(sequence);
     },
 
-    enable: function() {
-        this.setVisible(true);
-        this.active_ = true;
-    },
-
-    /**
-     * このビームをフィールドから消して次使えるように準備する
-     */
-    disable: function() {
-        this.setVisible(false);
-        this.active_ = false;
-        this.inc_ = cc.p(0, 0);
-    },
-
     dispose: function() {
         $(this).triggerHandler(bq.beam.Beam.EventType.REMOVE);
         this.shape_ && bq.space.removeShape(this.shape_);
         this.removeFromParent();
     }
 });
-
-/**
- * プリセットからビームを取り出す
- * @return {bq.beam.Beam} プリセットされたビームを返す、キャッシュされたビームが尽きていた場合は不定（今のところnullを返す）
- */
-bq.beam.Beam.pop = function() {
-    "use strict";
-    if (bq.beams.length <= 0 ) {
-        return null;
-    }
-    var be =  _.find(bq.beams, function(b) { return !b.active_;} );
-    if ( be === undefined ) {
-        return null;
-    }
-    be.disable();
-    return be;
-};
-
-bq.beam.Beam.createParticleBeam = function(beamType, shooterId, tag) {
-    "use strict";
-    var beam =  new bq.beam.Beam(beamType, shooterId, tag);
-    // パーティクルとテクスチャをセット
-    // TODO これもっとうまく書く方法あるはずだし、別のクラスgameType?に移した方がいい
-    var beamType2Partile = {};
-    beamType2Partile[bq.Types.Beams.FIRE] = cc.ParticleSun;
-    beamType2Partile[bq.Types.Beams.METEOR] = cc.ParticleMeteor;
-
-    var particle = beamType2Partile[beamType];
-    var myTexture = cc.TextureCache.getInstance().textureForKey(s_Beam0);
-
-    particle.setTexture(myTexture);
-    particle.setPosition(cc.p(0,0));
-    beam.addChild(particle);
-    beam.disable();
-
-    return beam;
-};
-
-bq.beam.Beam.createSpriteBeam = function(beamType, shooterId, tag) {
-    "use strict";
-    var beam =  new bq.beam.Beam(beamType, shooterId, tag);
-
-    var beamType2textureName = {};
-    // TODO これもっとうまく書く方法あるはずだし、別のクラスgameType?に移した方がいい
-    beamType2textureName[ bq.Types.Beams.NORMAL0] =  ["large1.png","large2.png","large3.png","large4.png"];
-    beamType2textureName[ bq.Types.Beams.NORMAL1] =  ["long1.png","long2.png","long3.png","long4.png"];
-    beamType2textureName[ bq.Types.Beams.NORMAL2] =  ["small1.png","small2.png","small3.png"];
-
-    var frames = beamType2textureName[beamType];
-
-    var cl = cc.PhysicsSprite.createWithSpriteFrameName(frames[0]);
-    cl.setBody(new cp.Body(0.01, cp.momentForBox(100, 16, 16)));
-    bq.space.addBody(cl.getBody());
-    cl.shape_ = new cp.BoxShape(cl.getBody(), 32, 32);
-    bq.space.addShape(cl.shape_);
-
-    var anime = bq.entity.Animation.createAnimation(frames, 0.05);
-    var animation = anime && cc.RepeatForever.create(cc.Animate.create(anime));
-    animation && cl.runAction(animation);
-
-    beam.addChild(cl);
-    beam.setPosition(cc.p(0,0));
-
-    return beam;
-};
-
-/**
- * Beamのファクトリ
- * 引数id にあうパーティクルのビームを作成する
- *
- * @param {bq.Types.Beams} beamType
- * @param {string} shooterId
- * @param {string} tag
- * @return {bq.beam.Beam}
- */
-bq.beam.Beam.create = function(beamType, shooterId, tag) {
-    "use strict";
-    var beam;
-
-    var type = bq.Types.Beams;
-    if (_.contains([type.FIRE, type.METEOR], beamType) ) {
-        beam = bq.beam.Beam.createParticleBeam(beamType, shooterId, tag);
-    } else {
-        beam = bq.beam.Beam.createSpriteBeam(beamType, shooterId, tag);
-    }
-
-
-    beam.disable();
-
-    return beam;
-};
-
-/**
- * idなビームをsetupする
- * プレイヤが武器を変更した瞬間などに呼ばれる。
- * @param {number} id
- * @param {cc.Layer} layer
- */
-bq.beam.Beam.setup = function(id, layer, shooterId) { // TODO 消す
-    "use strict";
-
-    var maxBeamCount = 1;
-    _.times(maxBeamCount, function(i) {
-        var beam = bq.beam.Beam.create(id, shooterId);
-        bq.beams[i] && bq.beams[i].removeFromParent(true); // TODO need ?
-        bq.beams[i] = beam;
-        layer.addChild(beam, 10);
-    });
-
-};
 
 bq.beam.Beam.EventType = {
     REMOVE: 'remove'
