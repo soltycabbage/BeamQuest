@@ -80,7 +80,6 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
      */
     initDestination: function (src, dest, speed, duration) {
         "use strict";
-        this.enable();
         this.destination_ = dest;
         this.setPosition(src);
         var v = cc.pSub(dest, src);
@@ -98,20 +97,6 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
         var sequence = cc.Sequence.create(cc.DelayTime.create(3, v), remove);
 
         this.runAction(sequence);
-    },
-
-    enable: function() {
-        this.setVisible(true);
-        this.active_ = true;
-    },
-
-    /**
-     * このビームをフィールドから消して次使えるように準備する
-     */
-    disable: function() {
-        this.setVisible(false);
-        this.active_ = false;
-        this.inc_ = cc.p(0, 0);
     },
 
     dispose: function() {

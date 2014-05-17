@@ -15,7 +15,6 @@ bq.beam.BeamFactory = cc.Class.extend({
         particle.setTexture(myTexture);
         particle.setPosition(cc.p(0, 0));
         beam.addChild(particle);
-        beam.disable();
 
         return beam;
     },
