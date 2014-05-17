@@ -69,6 +69,7 @@
             'js/src/entity/player.js',
             'js/src/entity/enemy.js',
             'js/src/beam/beam.js',
+            'js/src/beam/beamFactory.js',
             'js/src/ping.js',
             'js/src/camera.js',
 

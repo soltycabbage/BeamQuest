@@ -22,7 +22,6 @@ bq.beam.BeamFactory = cc.Class.extend({
 
     createSpriteBeam: function (beamType, shooterId, tag) {
         "use strict";
-        var beam = new bq.beam.Beam(beamType, shooterId, tag);
 
         var beamType2textureName = {};
         // TODO これもっとうまく書く方法あるはずだし、別のクラスgameType?に移した方がいい
@@ -31,19 +30,11 @@ bq.beam.BeamFactory = cc.Class.extend({
         beamType2textureName[ bq.Types.Beams.NORMAL2] = ["small1.png", "small2.png", "small3.png"];
 
         var frames = beamType2textureName[beamType];
-
-        var cl = cc.PhysicsSprite.createWithSpriteFrameName(frames[0]);
-        cl.setBody(new cp.Body(0.01, cp.momentForBox(100, 16, 16)));
-        bq.space.addBody(cl.getBody());
-        cl.shape_ = new cp.BoxShape(cl.getBody(), 32, 32);
-        bq.space.addShape(cl.shape_);
+        var beam = new bq.beam.Beam(beamType, shooterId, tag, frames[0]);
 
         var anime = bq.entity.Animation.createAnimation(frames, 0.05);
         var animation = anime && cc.RepeatForever.create(cc.Animate.create(anime));
-        animation && cl.runAction(animation);
-
-        beam.addChild(cl);
-        beam.setPosition(cc.p(0, 0));
+        animation && beam.runAction(animation);
 
         return beam;
     },
@@ -63,15 +54,19 @@ bq.beam.BeamFactory = cc.Class.extend({
 
         var type = bq.Types.Beams;
         if (_.contains([type.FIRE, type.METEOR], beamType)) {
-            beam = bq.beam.Beam.createParticleBeam(beamType, shooterId, tag);
+            // 動きません！
+            beam = this.createParticleBeam(beamType, shooterId, tag);
         } else {
-            beam = bq.beam.Beam.createSpriteBeam(beamType, shooterId, tag);
+            beam = this.createSpriteBeam(beamType, shooterId, tag);
         }
-
-
-        beam.disable();
 
         return beam;
     }
 
 });
+
+bq.beam.BeamFactory.instance_ = new bq.beam.BeamFactory();
+
+bq.beam.BeamFactory.getInstance = function() {
+    return bq.beam.BeamFactory.instance_;
+};

@@ -18,10 +18,10 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
     enableSendPosition_: false,  // 位置情報を送信するかどうか
     shooterId_: null,            // ビームを打った人のID
 
-    ctor: function (id, shooterId, tag) {
+    ctor: function (id, shooterId, tag, frameName) {
         "use strict";
         this._super();
-        this.initWithSpriteFrameName("long1.png");
+        frameName && this.initWithSpriteFrameName(frameName);
         this.setVisible(true);
         this.socket_ = bq.Socket.getInstance();
         this.shooterId_ = shooterId || null;

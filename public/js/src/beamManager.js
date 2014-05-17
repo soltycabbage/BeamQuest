@@ -22,7 +22,7 @@ bq.BeamManager = cc.Class.extend({
      */
     beamShoot: function(beamPos) {
         // TODO: ほんとはここじゃなくてentityに定義されたshoot()関数的なやつを呼ぶのがいい。
-        var beam = new bq.beam.Beam(beamPos.beamId, beamPos.shooterId, beamPos.tag);
+        var beam = bq.beam.BeamFactory.getInstance().create(beamPos.beamId, beamPos.shooterId, beamPos.tag);
 
         bq.baseLayer.addChild(beam, bq.config.zOrder.MAP);
 
