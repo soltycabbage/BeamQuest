@@ -424,3 +424,17 @@ $messageHeight: 80px;
     padding-right: 20px;
   }
 }
+
+#bq-hot-bar {
+  position: absolute;
+  left: 580px;
+  bottom: 4px;
+}
+
+.bq-hot-bar-item {
+  border: 1px solid;
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  margin: -1px;
+}

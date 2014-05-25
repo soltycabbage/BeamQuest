@@ -505,3 +505,19 @@ body {
   float: right;
   padding-right: 20px;
 }
+
+/* line 428, ../scss/layout.scss */
+#bq-hot-bar {
+  position: absolute;
+  left: 580px;
+  bottom: 4px;
+}
+
+/* line 434, ../scss/layout.scss */
+.bq-hot-bar-item {
+  border: 1px solid;
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  margin: -1px;
+}
