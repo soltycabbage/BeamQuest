@@ -11,7 +11,6 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
     id: bq.Types.Beams.NORMAL0,   // ビームID
     tag: '',                     // ビーム識別用タグ
     destination_:cc.p(0,0),      // {cc.p} 目標
-    inc_:cc.p(0,0),              // 1回のupdateで進ませるピクセル数（xとy方向)
     active_:false,               // 発射中ならtrue
     POSITION_SEND_INTERVAL: 0.1, // 位置情報を何秒ごとに送信するか
     prevPos_: {x: 0, y: 0},      // 前回送信時の座標
@@ -83,10 +82,8 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
         this.destination_ = dest;
         this.setPosition(src);
         var v = cc.pSub(dest, src);
-        var vn = cc.pNormalize(v);
-        this.inc_ = cc.pMult(vn, speed);
-
-        var rotate = -1.0 * ( cc.RADIANS_TO_DEGREES(cc.pToAngle( this.inc_ )) -90);
+        var vn = cc.pMult(cc.pNormalize(v), speed);
+        var rotate = -1.0 * ( cc.RADIANS_TO_DEGREES(cc.pToAngle(vn)) -90);
         this.setRotation(rotate);
 
         // 力を与えてそっちに飛ばす TODO 他人が打ったビームの場合いらないかも
@@ -94,7 +91,7 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
 
         // duration秒後にこのビームを消去する
         var remove = cc.CallFunc.create(this.dispose, this);
-        var sequence = cc.Sequence.create(cc.DelayTime.create(3, v), remove);
+        var sequence = cc.Sequence.create(cc.DelayTime.create(duration, v), remove);
 
         this.runAction(sequence);
     },
