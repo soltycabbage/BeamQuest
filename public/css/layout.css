@@ -521,6 +521,7 @@ body {
   display: inline-block;
   margin: -1px;
   position: relative;
+  background: rgba(0, 0, 0, 0.6);
 }
 /* line 435, ../scss/layout.scss */
 .bq-hot-bar-item:before {
@@ -534,42 +535,42 @@ body {
   text-shadow: 0px 0px 10px black, 0px 0px 10px black, 0px 0px 10px black, 0px 0px 10px black;
 }
 
-/* line 455, ../scss/layout.scss */
+/* line 456, ../scss/layout.scss */
 #bq-hot-bar-item-1:before {
   content: '1';
 }
 
-/* line 459, ../scss/layout.scss */
+/* line 460, ../scss/layout.scss */
 #bq-hot-bar-item-2:before {
   content: '2';
 }
 
-/* line 463, ../scss/layout.scss */
+/* line 464, ../scss/layout.scss */
 #bq-hot-bar-item-3:before {
   content: '3';
 }
 
-/* line 467, ../scss/layout.scss */
+/* line 468, ../scss/layout.scss */
 #bq-hot-bar-item-4:before {
   content: '4';
 }
 
-/* line 471, ../scss/layout.scss */
+/* line 472, ../scss/layout.scss */
 #bq-hot-bar-item-5:before {
   content: '5';
 }
 
-/* line 475, ../scss/layout.scss */
+/* line 476, ../scss/layout.scss */
 #bq-hot-bar-item-6:before {
   content: '6';
 }
 
-/* line 479, ../scss/layout.scss */
+/* line 480, ../scss/layout.scss */
 #bq-hot-bar-item-7:before {
   content: '7';
 }
 
-/* line 483, ../scss/layout.scss */
+/* line 484, ../scss/layout.scss */
 #bq-hot-bar-item-8:before {
   content: '8';
 }
