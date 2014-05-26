@@ -509,15 +509,67 @@ body {
 /* line 428, ../scss/layout.scss */
 #bq-hot-bar {
   position: absolute;
-  left: 580px;
-  bottom: 4px;
+  left: 590px;
+  bottom: 6px;
 }
 
 /* line 434, ../scss/layout.scss */
 .bq-hot-bar-item {
   border: 1px solid;
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
   display: inline-block;
   margin: -1px;
+  position: relative;
+}
+/* line 435, ../scss/layout.scss */
+.bq-hot-bar-item:before {
+  font-size: 14px;
+  position: absolute;
+  top: -5px;
+  right: -2px;
+  font-family: spacie;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 0px 0px 10px black, 0px 0px 10px black, 0px 0px 10px black, 0px 0px 10px black;
+}
+
+/* line 455, ../scss/layout.scss */
+#bq-hot-bar-item-1:before {
+  content: '1';
+}
+
+/* line 459, ../scss/layout.scss */
+#bq-hot-bar-item-2:before {
+  content: '2';
+}
+
+/* line 463, ../scss/layout.scss */
+#bq-hot-bar-item-3:before {
+  content: '3';
+}
+
+/* line 467, ../scss/layout.scss */
+#bq-hot-bar-item-4:before {
+  content: '4';
+}
+
+/* line 471, ../scss/layout.scss */
+#bq-hot-bar-item-5:before {
+  content: '5';
+}
+
+/* line 475, ../scss/layout.scss */
+#bq-hot-bar-item-6:before {
+  content: '6';
+}
+
+/* line 479, ../scss/layout.scss */
+#bq-hot-bar-item-7:before {
+  content: '7';
+}
+
+/* line 483, ../scss/layout.scss */
+#bq-hot-bar-item-8:before {
+  content: '8';
 }
