@@ -513,21 +513,21 @@ body {
   bottom: 6px;
 }
 
-/* line 434, ../scss/layout.scss */
+/* line 437, ../scss/layout.scss */
 .bq-hot-bar-item {
   border: 1px solid;
   border-radius: 5px;
   overflow: hidden;
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
   display: inline-block;
   margin: -1px;
   position: relative;
   background: rgba(0, 0, 0, 0.6);
 }
-/* line 435, ../scss/layout.scss */
+/* line 439, ../scss/layout.scss */
 .bq-hot-bar-item:before {
-  font-size: 14px;
+  font-size: 11px;
   position: absolute;
   top: 0px;
   right: 1px;
@@ -536,48 +536,63 @@ body {
   font-weight: bold;
   text-shadow: 0px 0px 10px black, 0px 0px 10px black, 0px 0px 10px black, 0px 0px 10px black;
 }
+/* line 451, ../scss/layout.scss */
+.bq-hot-bar-item > img {
+  width: 36px;
+  height: 36px;
+}
 
-/* line 457, ../scss/layout.scss */
+/* line 467, ../scss/layout.scss */
 .bq-hot-bar-item-selected {
   bottom: 10px;
 }
 
-/* line 462, ../scss/layout.scss */
+/* line 472, ../scss/layout.scss */
 #bq-hot-bar-item-1:before {
   content: '1';
 }
 
-/* line 466, ../scss/layout.scss */
+/* line 476, ../scss/layout.scss */
 #bq-hot-bar-item-2:before {
   content: '2';
 }
 
-/* line 470, ../scss/layout.scss */
+/* line 480, ../scss/layout.scss */
 #bq-hot-bar-item-3:before {
   content: '3';
 }
 
-/* line 474, ../scss/layout.scss */
+/* line 484, ../scss/layout.scss */
 #bq-hot-bar-item-4:before {
   content: '4';
 }
 
-/* line 478, ../scss/layout.scss */
+/* line 488, ../scss/layout.scss */
 #bq-hot-bar-item-5:before {
   content: '5';
 }
 
-/* line 482, ../scss/layout.scss */
+/* line 492, ../scss/layout.scss */
 #bq-hot-bar-item-6:before {
   content: '6';
 }
 
-/* line 486, ../scss/layout.scss */
+/* line 496, ../scss/layout.scss */
 #bq-hot-bar-item-7:before {
   content: '7';
 }
 
-/* line 490, ../scss/layout.scss */
+/* line 500, ../scss/layout.scss */
 #bq-hot-bar-item-8:before {
   content: '8';
+}
+
+/* line 504, ../scss/layout.scss */
+#bq-hot-bar-item-9:before {
+  content: '9';
+}
+
+/* line 508, ../scss/layout.scss */
+#bq-hot-bar-item-0:before {
+  content: '0';
 }

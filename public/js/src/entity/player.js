@@ -370,6 +370,8 @@ bq.entity.Player.InputHandler = cc.Class.extend({
             case cc.KEY['6']:
             case cc.KEY['7']:
             case cc.KEY['8']:
+            case cc.KEY['9']:
+            case cc.KEY['0']:
                 // 1キーのkeyCodeは49
                 this.handleNumKeyDown_(key - 48);
                 break;
