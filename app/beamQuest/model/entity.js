@@ -46,6 +46,12 @@ var Entity = function(opt_data) {
 
     /** @type {model.Position} */
     this.position = this.data.position || new positionModel();
+
+    /**
+     * 使用可能アクション一覧
+     * @type {Array.<model.Action>}
+     */
+    this.actions;
 };
 util.inherits(Entity, Model);
 
