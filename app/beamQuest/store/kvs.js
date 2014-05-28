@@ -42,6 +42,8 @@ exports.createClient = function() {
     if (CONFIG.type === 'memory') {
         return SessionStore;
     } else if (CONFIG.type === 'redis') {
-        return redis.createClient();
+        var client = redis.createClient(CONFIG.port, CONFIG.host);
+        client.auth(CONFIG.pass);
+        return client;
     }
 };
