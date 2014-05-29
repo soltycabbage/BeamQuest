@@ -424,3 +424,86 @@ $messageHeight: 80px;
     padding-right: 20px;
   }
 }
+
+#bq-hot-bar {
+  position: absolute;
+  left: 590px;
+  bottom: 6px;
+}
+
+// ホットバーの枠サイズ
+$hotBarItemSize: 36px;
+
+.bq-hot-bar-item {
+  // 数字部分
+  &:before {
+    font-size: 11px;
+    position: absolute;
+    top: 0px;
+    right: 1px;
+    font-family: spacie;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 0px 0px 10px #000,0px 0px 10px #000,0px 0px 10px #000,0px 0px 10px #000;
+  }
+
+  // アイコン
+  & > img {
+    width: $hotBarItemSize;
+    height: $hotBarItemSize;
+  }
+
+  border: 1px solid;
+  border-radius: 5px;
+  overflow: hidden;
+  width: $hotBarItemSize;
+  height: $hotBarItemSize;
+  display: inline-block;
+  margin: -1px;
+  position: relative;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.bq-hot-bar-item-selected {
+  bottom: 10px;
+}
+
+#bq-hot-bar-item-1 {
+  &:before { content: '1'}
+}
+
+#bq-hot-bar-item-2 {
+  &:before { content: '2'}
+}
+
+#bq-hot-bar-item-3 {
+  &:before { content: '3'}
+}
+
+#bq-hot-bar-item-4 {
+  &:before { content: '4'}
+}
+
+#bq-hot-bar-item-5 {
+  &:before { content: '5'}
+}
+
+#bq-hot-bar-item-6 {
+  &:before { content: '6'}
+}
+
+#bq-hot-bar-item-7 {
+  &:before { content: '7'}
+}
+
+#bq-hot-bar-item-8 {
+  &:before { content: '8'}
+}
+
+#bq-hot-bar-item-9 {
+  &:before { content: '9'}
+}
+
+#bq-hot-bar-item-0 {
+  &:before { content: '0'}
+}

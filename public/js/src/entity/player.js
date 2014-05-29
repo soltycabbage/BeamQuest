@@ -358,8 +358,25 @@ bq.entity.Player.InputHandler = cc.Class.extend({
     /** @override */
     onKeyDown: function(key) {
         this.addDownKey_(key);
-        if (key === cc.KEY.i) { // iキーでステータスウィンドウを開く
-            bq.Hud.getInstance().openStatusWindow(bq.player.name, bq.player.getModel().position.mapId);
+        switch(key) {
+            case cc.KEY.i: // iキーでステータスウィンドウを開く
+                bq.Hud.getInstance().openStatusWindow(bq.player.name, bq.player.getModel().position.mapId);
+                break;
+            case cc.KEY['1']:
+            case cc.KEY['2']:
+            case cc.KEY['3']:
+            case cc.KEY['4']:
+            case cc.KEY['5']:
+            case cc.KEY['6']:
+            case cc.KEY['7']:
+            case cc.KEY['8']:
+            case cc.KEY['9']:
+            case cc.KEY['0']:
+                // 1キーのkeyCodeは49
+                this.handleNumKeyDown_(key - 48);
+                break;
+            default:
+                break;
         }
     },
 
@@ -451,6 +468,22 @@ bq.entity.Player.InputHandler = cc.Class.extend({
 
     shiftMouseDownEvent: function() {
         return this.mouseDownEvents_.shift();
+    },
+
+    /**
+     * 数字キーが押された時の動作
+     * @param {number} num
+     * @private
+     */
+    handleNumKeyDown_: function(num) {
+        var selectedItem = $('#bq-hot-bar-item-' + num);
+        $('.bq-hot-bar-item').each(function(index, item) {
+            if ($(item).attr('id') === $(selectedItem).attr('id')) {
+                $(item).addClass('bq-hot-bar-item-selected');
+            } else {
+                $(item).removeClass('bq-hot-bar-item-selected');
+            }
+        });
     }
 });
 
