@@ -1,11 +1,16 @@
 /**
  * @fileoverview オンメモリのKVS的なやつ。redisに置き換える？
  */
-var redis = require('redis');
+var redis = require('redis'),
+    CONFIG = require('config').kvs;
 
 var SessionStore = {
     session_: {},
+    isEnd: false,
     get: function (key, callback) {
+        if (this.isEnd) {
+            callback('connection already closed', null);
+        }
         if (key in this.session_) {
             callback(null, this.session_[key]);
         }
@@ -20,16 +25,25 @@ var SessionStore = {
         delete this.session_[key];
     },
     flushall: function(callback) {
+        if (this.isEnd) {
+            callback(false);
+        }
         this.session_ = {};
         logger.info('kvs flushall');
         callback(true);
+    },
+    end: function() {
+        this.isEnd = true;
     }
 };
 
 exports.createClient = function() {
-    if (process.env.NODE_ENV === 'development') {
+    logger.info('kvs type: ' + CONFIG.type);
+    if (CONFIG.type === 'memory') {
         return SessionStore;
-    } else {
-        return redis.createClient();
+    } else if (CONFIG.type === 'redis') {
+        var client = redis.createClient(CONFIG.port, CONFIG.host);
+        client.auth(CONFIG.pass);
+        return client;
     }
 };
