@@ -7,4 +7,4 @@ module.exports = {
     session: {
         type: "memory"
     }
-}
+};
