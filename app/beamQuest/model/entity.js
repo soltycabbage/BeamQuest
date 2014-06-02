@@ -1,6 +1,7 @@
 var util = require('util'),
     Model = require('beamQuest/model/model'),
-    positionModel = require('beamQuest/model/position');
+    positionModel = require('beamQuest/model/position'),
+    skillModel = require('beamQuest/model/skill');
 
 
 /**
@@ -51,7 +52,7 @@ var Entity = function(opt_data) {
      * 使用可能スキル一覧
      * @type {Array.<model.Skill>}
      */
-    this.skills;
+    this.skills = this.data.skills || this.getPresetSkills_();
 };
 util.inherits(Entity, Model);
 
@@ -82,6 +83,17 @@ Entity.prototype.setPosition = function(position) {
 Entity.prototype.addHp = function(amount) {
     this.hp = Math.max(0, Math.min(this.maxHp, this.hp + amount));
     this.emit('addHp', amount);
+};
+
+/**
+ * レベル1から習得してるスキルを返す
+ * @return {Array.<mode.Skill>}
+ * @private
+ */
+Entity.prototype.getPresetSkills_ = function() {
+    var skills = [];
+    skills.push(new skillModel(bq.params.Skills.BURNSTRIKE));
+    return skills;
 };
 
 /** @override */

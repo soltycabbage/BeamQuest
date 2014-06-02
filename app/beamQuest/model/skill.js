@@ -10,7 +10,7 @@ var Skill = function(opt_data) {
     Model.apply(this, arguments);
 
     /**
-     * アクションID
+     * スキルID
      * @type {string}
      */
     this.id = this.data.id;
@@ -38,6 +38,12 @@ var Skill = function(opt_data) {
      * @type {number}
      */
     this.range = this.data.range;
+
+    /**
+     * 有効半径(px)
+     * @type {number}
+     */
+    this.radius = this.data.radius;
 };
 
 /** @override */
@@ -48,5 +54,8 @@ Skill.prototype.toJSON = function() {
     json.castTime = this.castTime;
     json.recastTime = this.recastTime;
     json.range = this.range;
+    json.radius = this.radius;
     return json;
 };
+
+module.exports = Skill;

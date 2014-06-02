@@ -32,6 +32,7 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.initBp();
         this.initExp();
         this.initLevel();
+        this.initSkills();
     },
 
     /** @override */
@@ -98,16 +99,17 @@ bq.entity.Player = bq.entity.Entity.extend({
     },
 
     /**
-     * destination までビームを出す
+     * destination までビームorスキルを発動する
      *
      * @param {cc.p} destination
      */
     shoot: function(destination) {
-        // BPが残ってるかチェック
+        // スキル選択中ならスキル発動
+        if (this.selectedSkill_) {
 
-        //撃てるならBPを減らす
-
-        this.shootInternal_(destination);
+        } else {
+            this.shootInternal_(destination);
+        }
     },
 
     /**
@@ -150,6 +152,10 @@ bq.entity.Player = bq.entity.Entity.extend({
 
     initExp: function() {
         $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_EXP, [this.model_.prevLvExp, this.model_.exp, this.model_.nextLvExp]);
+    },
+
+    initSkills: function() {
+        this.model_.skills;
     },
 
     /**

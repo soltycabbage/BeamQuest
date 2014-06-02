@@ -25,6 +25,9 @@ bq.model.Entity = bq.model.extend({
         /** @type {bq.model.Position} */
         this.position;
 
+        /** @type {Array.<bq.model.Skill>} */
+        this.skills;
+
         this._super(json);
     },
 
@@ -35,5 +38,6 @@ bq.model.Entity = bq.model.extend({
         this.maxHp = json['maxHp'];
         this.hp = json['hp'];
         this.position = new bq.model.Position(json['position']);
+        this.skills = this.parseArray(json['skills'], bq.model.Skill);
     }
 });

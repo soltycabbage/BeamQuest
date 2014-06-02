@@ -37,6 +37,7 @@
             'js/src/model/chat.js',
             'js/src/model/mob.js',
             'js/src/model/dropItem.js',
+            'js/src/model/skill.js',
 
             'js/src/entityManager.js',
             'js/src/soundManager.js',
