@@ -2,11 +2,11 @@ var util = require('util'),
     Model = require('beamQuest/model/model');
 
 /**
- * Entityが使用するアクションのmodel
+ * Entityが使用するスキルのmodel
  * @constructor
  * @extends {model.Model}
  */
-var Action = function(opt_data) {
+var Skill = function(opt_data) {
     Model.apply(this, arguments);
 
     /**
