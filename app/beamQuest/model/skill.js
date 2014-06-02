@@ -39,3 +39,14 @@ var Skill = function(opt_data) {
      */
     this.range = this.data.range;
 };
+
+/** @override */
+Skill.prototype.toJSON = function() {
+    var json = {};
+    json.id = this.id;
+    json.bp = this.bp;
+    json.castTime = this.castTime;
+    json.recastTime = this.recastTime;
+    json.range = this.range;
+    return json;
+};

@@ -48,10 +48,10 @@ var Entity = function(opt_data) {
     this.position = this.data.position || new positionModel();
 
     /**
-     * 使用可能アクション一覧
-     * @type {Array.<model.Action>}
+     * 使用可能スキル一覧
+     * @type {Array.<model.Skill>}
      */
-    this.actions;
+    this.skills;
 };
 util.inherits(Entity, Model);
 
@@ -95,6 +95,7 @@ Entity.prototype.toJSON = function() {
     json.attack = this.attack;
     json.defence = this.defence;
     json.position = this.position.toJSON();
+    json.skills = this.toArrayJSON(this.skills);
     return json;
 };
 
