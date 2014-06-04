@@ -57,6 +57,7 @@
             'js/src/hud/expBar.js',
             'js/src/hud/level.js',
             'js/src/hud/statusWindow.js',
+            'js/src/hud/hotbar.js',
             'js/src/hud/hud.js',
             // object
             'js/src/object/object.js',

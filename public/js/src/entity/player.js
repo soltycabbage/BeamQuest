@@ -154,8 +154,14 @@ bq.entity.Player = bq.entity.Entity.extend({
         $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_EXP, [this.model_.prevLvExp, this.model_.exp, this.model_.nextLvExp]);
     },
 
+    /**
+     * 習得スキル一覧からホットバーに配置する
+     */
     initSkills: function() {
-        this.model_.skills;
+        var skills = this.model_.skills;
+        _.forEach(skills, function(skill) {
+
+        });
     },
 
     /**
@@ -296,7 +302,8 @@ bq.entity.Player.EventType = {
     INIT_LEVEL: 'updatelevel',
     UPDATE_HP: 'updatehp',
     UPDATE_BP: 'updatebp',
-    UPDATE_EXP: 'updateexp'
+    UPDATE_EXP: 'updateexp',
+    SELECT_HOT_BAR: 'selecthotbar'
 };
 
 bq.entity.Player.InputHandler = cc.Class.extend({
@@ -482,14 +489,7 @@ bq.entity.Player.InputHandler = cc.Class.extend({
      * @private
      */
     handleNumKeyDown_: function(num) {
-        var selectedItem = $('#bq-hot-bar-item-' + num);
-        $('.bq-hot-bar-item').each(function(index, item) {
-            if ($(item).attr('id') === $(selectedItem).attr('id')) {
-                $(item).addClass('bq-hot-bar-item-selected');
-            } else {
-                $(item).removeClass('bq-hot-bar-item-selected');
-            }
-        });
+        $(bq.player).triggerHandler(bq.entity.Player.EventType.SELECT_HOT_BAR, [num]);
     }
 });
 
