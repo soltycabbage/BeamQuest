@@ -53,6 +53,12 @@ var Player = function(opt_data) {
     /** @type {Beam} */
     this.beam = bq.params.Beams.NORMAL1;
 
+    /**
+     * ホットバーに登録されているitem一覧
+     * @type {Array.<model.Skill|model.Item>}
+     */
+    this.hotbarItems = this.data.hotbarItems || this.skills;
+
     /** @type {Socket} */
     this.socket = this.data.socket || null;
 
@@ -137,6 +143,7 @@ Player.prototype.toJSON = function() {
     json.lv = this.lv;
     json.isDeath = this.isDeath;
     json.beam = this.beam;
+    json.hotbarItems = this.toArrayJSON(this.hotbarItems);
     return json;
 };
 

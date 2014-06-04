@@ -13,6 +13,18 @@ bq.model.Skill = bq.model.extend({
         this.bp;
 
         /**
+         * スキル名
+         * @type {string}
+         */
+        this.name;
+
+        /**
+         * スキルの説明文
+         * @type {string}
+         */
+        this.info;
+
+        /**
          * キャストタイム
          * @type {number}
          */
@@ -42,6 +54,8 @@ bq.model.Skill = bq.model.extend({
     /** @override */
     parse: function(json) {
         this.id = json['id'];
+        this.name = json['name'];
+        this.info = json['info'];
         this.bp = json['bp'];
         this.castTime = json['castTime'];
         this.recastTime = json['recastTime'];

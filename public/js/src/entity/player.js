@@ -13,6 +13,7 @@ bq.entity.Player = bq.entity.Entity.extend({
     state: bq.entity.EntityState.Mode.stop,  // 動いてるとか止まってるとかの状態
     POSITION_SEND_INTERVAL: 0.15,            // 位置情報を何秒ごとに送信するか
     prevPos_: {x: 0, y: 0},                  // 前回送信時の座標
+    selectedHotbarItem_: null,               // 選択中のホットバーitem
 
     ctor:function () {
         this._super('b0_0.png', this.getKeyFrameMap_());
@@ -32,7 +33,7 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.initBp();
         this.initExp();
         this.initLevel();
-        this.initSkills();
+        this.initHotbar();
     },
 
     /** @override */
@@ -157,10 +158,13 @@ bq.entity.Player = bq.entity.Entity.extend({
     /**
      * 習得スキル一覧からホットバーに配置する
      */
-    initSkills: function() {
-        var skills = this.model_.skills;
-        _.forEach(skills, function(skill) {
-
+    initHotbar: function() {
+        var items = this.model_.hotbarItems;
+        _.forEach(items, function(item, index) {
+            var hotNum = (index + 1) % 10;
+            var hotbarItem = $('#bq-hot-bar-item-' + hotNum);
+            var img = $('<img/>').attr('src', 'res/img/icon/'+ item.id + '.png');
+            hotbarItem.append(img);
         });
     },
 
@@ -187,6 +191,18 @@ bq.entity.Player = bq.entity.Entity.extend({
      */
     setProfile: function(data) {
         this.name = data.name;
+    },
+
+    /**
+     *
+     * @param {number} num
+     */
+    setSelectedHotbar: function(num) {
+        var hotNum = num === 0 ? 8 : num - 1;
+        var item = this.model_.hotbarItems[hotNum];
+        if (item) {
+            this.selectedHotbarItem_ = item;
+        }
     },
 
     /** @override */
@@ -490,6 +506,7 @@ bq.entity.Player.InputHandler = cc.Class.extend({
      */
     handleNumKeyDown_: function(num) {
         $(bq.player).triggerHandler(bq.entity.Player.EventType.SELECT_HOT_BAR, [num]);
+        bq.player.setSelectedHotbar(num);
     }
 });
 

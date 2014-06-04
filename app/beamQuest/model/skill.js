@@ -16,6 +16,18 @@ var Skill = function(opt_data) {
     this.id = this.data.id;
 
     /**
+     * スキル名
+     * @type {string}
+     */
+    this.name = this.data.name;
+
+    /**
+     * スキルの説明文
+     * @type {string}
+     */
+    this.info = this.data.info;
+
+    /**
      * 消費BP
      * @type {number}
      */
@@ -50,6 +62,8 @@ var Skill = function(opt_data) {
 Skill.prototype.toJSON = function() {
     var json = {};
     json.id = this.id;
+    json.name = this.name;
+    json.info = this.info;
     json.bp = this.bp;
     json.castTime = this.castTime;
     json.recastTime = this.recastTime;
