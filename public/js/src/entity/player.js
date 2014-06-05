@@ -13,7 +13,7 @@ bq.entity.Player = bq.entity.Entity.extend({
     state: bq.entity.EntityState.Mode.stop,  // 動いてるとか止まってるとかの状態
     POSITION_SEND_INTERVAL: 0.15,            // 位置情報を何秒ごとに送信するか
     prevPos_: {x: 0, y: 0},                  // 前回送信時の座標
-    selectedHotbarItem_: null,               // 選択中のホットバーitem
+    selectedHotbarNumber_: null,               // 選択中のホットバーitem
 
     ctor:function () {
         this._super('b0_0.png', this.getKeyFrameMap_());
@@ -106,9 +106,10 @@ bq.entity.Player = bq.entity.Entity.extend({
      */
     shoot: function(destination) {
         // スキル選択中ならスキル発動
-        if (this.selectedHotbarNumber_ >= 0) {
+        if (this.selectedHotbarNumber_ !== null) {
             var hotNum = this.selectedHotbarNumber_ === 0 ? 8 : this.selectedHotbarNumber_ - 1;
             var item = this.model_.hotbarItems[hotNum];
+            this.showMessage(item.name + 'を発射');
         } else {
             this.shootInternal_(destination);
         }
