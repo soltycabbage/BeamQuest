@@ -106,8 +106,9 @@ bq.entity.Player = bq.entity.Entity.extend({
      */
     shoot: function(destination) {
         // スキル選択中ならスキル発動
-        if (this.selectedSkill_) {
-
+        if (this.selectedHotbarNumber_ >= 0) {
+            var hotNum = this.selectedHotbarNumber_ === 0 ? 8 : this.selectedHotbarNumber_ - 1;
+            var item = this.model_.hotbarItems[hotNum];
         } else {
             this.shootInternal_(destination);
         }
@@ -197,11 +198,11 @@ bq.entity.Player = bq.entity.Entity.extend({
      * 押された数字キーに対応するitemを選択した状態にする
      * @param {number} num
      */
-    setSelectedHotbar: function(num) {
-        var hotNum = num === 0 ? 8 : num - 1;
-        var item = this.model_.hotbarItems[hotNum];
-        if (item) {
-            this.selectedHotbarItem_ = item;
+    setSelectedHotbarNumber: function(num) {
+        if (this.selectedHotbarNumber_ !== num) {
+            this.selectedHotbarNumber_ = num;
+        } else {
+            this.selectedHotbarNumber_ = null;
         }
     },
 
@@ -506,7 +507,7 @@ bq.entity.Player.InputHandler = cc.Class.extend({
      */
     handleNumKeyDown_: function(num) {
         $(bq.player).triggerHandler(bq.entity.Player.EventType.SELECT_HOT_BAR, [num]);
-        bq.player.setSelectedHotbar(num);
+        bq.player.setSelectedHotbarNumber(num);
     }
 });
 

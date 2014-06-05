@@ -17,11 +17,12 @@ bq.hud.HotBar = bq.hud.HudItem.extend({
      */
     select: function(num) {
         var selectedItem = $('#bq-hot-bar-item-' + num);
+        var selectedClass = 'bq-hot-bar-item-selected';
         $('.bq-hot-bar-item').each(function(index, item) {
-            if ($(item).attr('id') === $(selectedItem).attr('id')) {
-                $(item).addClass('bq-hot-bar-item-selected');
+            if ($(item).attr('id') === $(selectedItem).attr('id') && !$(item).hasClass(selectedClass)) {
+                $(item).addClass(selectedClass);
             } else {
-                $(item).removeClass('bq-hot-bar-item-selected');
+                $(item).removeClass(selectedClass);
             }
         });
     }
