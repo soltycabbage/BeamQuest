@@ -109,7 +109,8 @@ bq.entity.Player = bq.entity.Entity.extend({
         if (this.selectedHotbarNumber_ !== null) {
             var hotNum = this.selectedHotbarNumber_ === 0 ? 8 : this.selectedHotbarNumber_ - 1;
             var item = this.model_.hotbarItems[hotNum];
-            this.showMessage(item.name + 'を発射');
+            destination['mapId'] = this.model_.position.mapId;
+            this.socket.castSkill(item.id, this.model_.id, destination)
         } else {
             this.shootInternal_(destination);
         }

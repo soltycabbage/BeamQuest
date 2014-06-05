@@ -72,6 +72,7 @@ Entities.prototype.getPlayerById = function(mapId, playerId) {
     if (this.mapPlayers_[mapId]) {
         return this.mapPlayers_[mapId][playerId] || null;
     }
+    return null;
 };
 
 /**

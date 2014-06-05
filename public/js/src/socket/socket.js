@@ -110,6 +110,12 @@ bq.Socket = cc.Class.extend({
             entityManager.levelUp(model);
         });
 
+        // スキルのキャストを開始したよって
+        this.socket.on('notify:skill:cast:start', function(data) {
+            // TODO: キャスト処理を書く
+            data.skill.castTime;
+        });
+
         /**
          *  1対1の通信
          */
@@ -190,6 +196,23 @@ bq.Socket = cc.Class.extend({
     requestDropItemsByMapId: function(mapId, callback, selfObj) {
         this.socket.emit('world:dropitems:get', {mapId: mapId});
         this.socket.once('world:dropitems:receive', $.proxy(callback, selfObj));
+    },
+
+    /**
+     * いまからスキル使うよってサーバに伝える
+     * @param {string} skillId スキルID
+     * @param {string} userId 使用者のID
+     * @param {bq.model.Position|Object} position
+     * @param {string=] opt_targetId 座標指定ではなくターゲット指定型の場合は座標よりこちらが優先される
+     */
+    castSkill: function(skillId, userId, position, opt_targetId) {
+        var data = {
+            skillId: skillId,
+            userId: userId,
+            position: position,
+            targetId: opt_targetId || null
+        };
+        this.socket.emit('skill:cast', data);
     },
 
     /**

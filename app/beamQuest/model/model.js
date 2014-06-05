@@ -40,7 +40,12 @@ Model.prototype.toObjectJSON = function(obj) {
 Model.prototype.toArrayJSON = function(arr) {
     var result = [];
     _.forEach(arr, function(model) {
-        result.push(model.toJSON());
+        if (model.toJSON) {
+            result.push(model.toJSON());
+        } else {
+            result.push(model);
+        }
+
     });
     return result;
 };
