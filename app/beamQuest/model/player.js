@@ -55,6 +55,7 @@ var Player = function(opt_data) {
 
     /**
      * ホットバーに登録されているitem一覧
+     * itemはユーザが実行可能なもの（スキル、アイテムなど）が対象となる
      * @type {Array.<model.Skill|model.Item>}
      */
     this.hotbarItems = this.data.hotbarItems || this.skills;

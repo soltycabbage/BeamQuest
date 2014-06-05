@@ -194,7 +194,7 @@ bq.entity.Player = bq.entity.Entity.extend({
     },
 
     /**
-     *
+     * 押された数字キーに対応するitemを選択した状態にする
      * @param {number} num
      */
     setSelectedHotbar: function(num) {
