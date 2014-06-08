@@ -21,7 +21,7 @@
             'js/lib/md5.js',
             'js/lib/gamecontroller.min.js',
             'js/lib/jquery.mouseinfobox.js',
-            'js/lib/jquery-ui.min.js',
+            'lib/jquery-ui/ui/minified/jquery-ui.min.js',
             'js/lib/ejs.js',
 
             // resources
