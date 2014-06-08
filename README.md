@@ -12,8 +12,8 @@
 ## せっとあっぷからのきどう
 
 ```
-$ git submodule init
-$ git submodule update
+$ git clone http://github.com/soltycabbage/BeamQuest --recursive
+$ cd BeamQuest
 $ npm install
 $ npm start
 ```
