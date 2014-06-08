@@ -9,19 +9,19 @@
         loadExtension:false,
         renderMode:0,       //Choose of RenderMode: 0(default), 1(Canvas only), 2(WebGL only)
         tag:'gameCanvas', //the dom element to run cocos2d on
-        engineDir:'js/lib/cocos2d/cocos2d/',
+        engineDir:'lib/cocos2d-html5/cocos2d/',
         //SingleEngineFile:'',
         appFiles:[
             // サーバ側からも参照されるやつら
             'shared/js/gameTypes.js',
 
             // libs
-            'js/lib/jquery-min.js',
-            'js/lib/underscore-min.js',
+            'lib/jquery/dist/jquery.min.js',
+            'lib/underscore/underscore-min.js',
             'js/lib/md5.js',
             'js/lib/gamecontroller.min.js',
             'js/lib/jquery.mouseinfobox.js',
-            'js/lib/jquery-ui.min.js',
+            'lib/jquery-ui/ui/minified/jquery-ui.min.js',
             'js/lib/ejs.js',
 
             // resources
