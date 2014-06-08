@@ -16,7 +16,7 @@
             'shared/js/gameTypes.js',
 
             // libs
-            'js/lib/jquery-min.js',
+            'lib/jquery/dist/jquery.min.js',
             'lib/underscore/underscore-min.js',
             'js/lib/md5.js',
             'js/lib/gamecontroller.min.js',
