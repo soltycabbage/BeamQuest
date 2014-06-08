@@ -17,7 +17,7 @@
 
             // libs
             'js/lib/jquery-min.js',
-            'js/lib/underscore-min.js',
+            'lib/underscore/underscore-min.js',
             'js/lib/md5.js',
             'js/lib/gamecontroller.min.js',
             'js/lib/jquery.mouseinfobox.js',
