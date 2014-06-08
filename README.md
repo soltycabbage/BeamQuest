@@ -12,7 +12,7 @@
 ## せっとあっぷからのきどう
 
 ```
-$ git clone http://github.com/soltycabbage/BeamQuest --recursive
+$ git clone https://github.com/soltycabbage/BeamQuest --recursive
 $ cd BeamQuest
 $ npm install
 $ npm start
