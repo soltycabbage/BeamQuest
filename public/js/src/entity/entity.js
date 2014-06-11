@@ -15,6 +15,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     currentDirection:null,
     model_: null,
     shape_: null,
+    isCasting: false, // スキルキャスト中ならtrue
 
     /**
      * @param {string} spriteFrameName *.plistの<key>に設定されてるframeName
@@ -147,6 +148,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
 
     /** 復活処理 */
     respawn: function() {
+        this.isCasting = false;
         var fadeIn = cc.FadeIn.create(0.8);
         this.runAction(fadeIn);
     },
@@ -268,6 +270,12 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
      * @param {Object.<mapId: string, userId: string, skill: bq.model.Skill>} data
      */
     cast: function(data) {
+        // すでにキャスト中ならキャストできない
+        if (this.isCasting) {
+            // TODO: メッセージを出す
+            return;
+        }
+        this.isCasting = true;
         var castTime = data.skill.castTime;
         var entityRect = this.getBoundingBox();
         var castBarWidth = 100;
@@ -297,19 +305,11 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
             cc.CallFunc.create(_.bind(function() {
                 rect.removeFromParent();
                 skillName.removeFromParent();
-                this.castEnd_();
-            }), this))
+                this.isCasting = false;
+            }, this)))
         );
         this.addChild(skillName, bq.config.zOrder.CHAT + 1);
         this.addChild(rect, bq.config.zOrder.CHAT + 1);
-    },
-
-    /**
-     * スキルのキャストが終わったら呼ばれる
-     * @private
-     */
-    castEnd_: function() {
-
     },
 
     /**
