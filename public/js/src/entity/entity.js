@@ -294,13 +294,22 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
 
         var scaleAnim = cc.ScaleTo.create(castTime / 1000, 0, 1);
         rect.runAction(cc.Sequence.create(scaleAnim,
-            cc.CallFunc.create(function() {
+            cc.CallFunc.create(_.bind(function() {
                 rect.removeFromParent();
                 skillName.removeFromParent();
-            }))
+                this.castEnd_();
+            }), this))
         );
         this.addChild(skillName, bq.config.zOrder.CHAT + 1);
         this.addChild(rect, bq.config.zOrder.CHAT + 1);
+    },
+
+    /**
+     * スキルのキャストが終わったら呼ばれる
+     * @private
+     */
+    castEnd_: function() {
+
     },
 
     /**

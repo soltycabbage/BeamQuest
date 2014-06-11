@@ -35,6 +35,12 @@ Skill.prototype.handleCastSkill_ = function(data) {
                 skill: targetSkill
             };
             this.io_.sockets.emit('notify:skill:cast:start', result);
+
+            // キャストタイム終了後、スキル使用者のBPを減らす。
+            // キャストが中断されない前提。
+            setTimeout(function() {
+                player.model.addBp(-targetSkill.bp);
+            }, targetSkill.castTime);
         }
     }
 };
