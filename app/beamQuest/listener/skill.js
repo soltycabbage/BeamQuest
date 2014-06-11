@@ -17,7 +17,7 @@ Skill.prototype.listen = function(socket, io) {
 
 /**
  * プレイヤーからのスキル使用要求
- * @param {Object} data
+ * @param {Object.<skillId: string, userId: string, position: model.Position>} data
  * @private
  */
 Skill.prototype.handleCastSkill_ = function(data) {

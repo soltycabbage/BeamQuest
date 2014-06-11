@@ -264,6 +264,18 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     },
 
     /**
+     * キャストを開始する
+     * @param {Object.<mapId: string, userId: string, skill: bq.model.Skill>} data
+     */
+    cast: function(data) {
+        this.showMessage(data.skill.info);
+    },
+
+    showCastBar_: function() {
+
+    },
+
+    /**
      * 常に動いているアニメーション(歩行アニメーションとか)を止める
      */
     stopForeverAnimation: function() {

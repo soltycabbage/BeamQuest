@@ -112,8 +112,8 @@ bq.Socket = cc.Class.extend({
 
         // スキルのキャストを開始したよって
         this.socket.on('notify:skill:cast:start', function(data) {
-            // TODO: キャスト処理を書く
-            data.skill.castTime;
+            data.skill = new bq.model.Skill(data.skill);
+            entityManager.cast(data);
         });
 
         /**

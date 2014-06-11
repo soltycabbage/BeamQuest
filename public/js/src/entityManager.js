@@ -252,6 +252,17 @@ bq.EntityManager = cc.Class.extend({
     },
 
     /**
+     * Entityがキャストを開始した
+     * @param {Object.<mapId: string, userId: string, skill: bq.model.Skill>} data
+     */
+    cast: function(data) {
+        var entity = this.getEntityById_(data.userId);
+        if (entity) {
+            entity.cast(data);
+        }
+    },
+
+    /**
      * hpに増減があった
      * @param {Array.<Object>} data
      */
@@ -310,8 +321,31 @@ bq.EntityManager = cc.Class.extend({
         var msg = ('0' + now.getHours()).slice(-2) + ':' +
             ('0' + now.getMinutes()).slice(-2) + ' ' + userId + ' ' + suffix;
         bq.MessageLog.getInstance().addSystemMsg(msg);
-    }
+    },
 
+    /**
+     * IDから判断してEntityを返す
+     * @param {string} entityId
+     * @return {bq.entity.Entity}
+     * @private
+     */
+    getEntityById_: function(entityId) {
+        var enemy = this.enemys_[entityId];
+        if (enemy) {
+            return enemy;
+        }
+
+        var otherPlayer = this.otherPlayers_[entityId];
+        if (otherPlayer) {
+            return otherPlayer;
+        }
+
+        if (bq.player.name === entityId) {
+            return bq.player;
+        }
+
+        return null;
+    }
 });
 
 
