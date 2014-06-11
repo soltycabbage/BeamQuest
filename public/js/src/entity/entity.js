@@ -268,11 +268,39 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
      * @param {Object.<mapId: string, userId: string, skill: bq.model.Skill>} data
      */
     cast: function(data) {
-        this.showMessage(data.skill.info);
-    },
+        var castTime = data.skill.castTime;
+        var entityRect = this.getBoundingBox();
+        var castBarWidth = 100;
+        var castBarHeight = 10;
 
-    showCastBar_: function() {
+        var rect = cc.Sprite.create();
+        rect.setTextureRect(cc.rect(0, 0, castBarWidth, castBarHeight));
+        rect.setColor(cc.c3b(77, 50, 255));
+        rect.setOpacity(200);
+        rect.setPosition(cc.p(entityRect.getWidth() / 2 - castBarWidth / 2,
+            entityRect.getHeight() + 18));
+        rect.setAnchorPoint(0, 0.5);
 
+        var rectOuter = cc.Sprite.create();
+        rectOuter.setTextureRect(cc.rect(0, 0, castBarWidth + 2, castBarHeight + 2));
+        rectOuter.setColor(cc.c3b(0, 0, 0));
+        rectOuter.setOpacity(100);
+        rectOuter.setAnchorPoint(0, 0.5);
+        rectOuter.setPosition(cc.p(-1, 5));
+        rect.addChild(rectOuter, -1);
+
+        var skillName = bq.Label.createWithShadow(data.skill.name, 10, cc.c3b(200, 255, 30));
+        skillName.setPosition(cc.p(entityRect.getWidth() / 2, entityRect.getHeight() + 33));
+
+        var scaleAnim = cc.ScaleTo.create(castTime / 1000, 0, 1);
+        rect.runAction(cc.Sequence.create(scaleAnim,
+            cc.CallFunc.create(function() {
+                rect.removeFromParent();
+                skillName.removeFromParent();
+            }))
+        );
+        this.addChild(skillName, bq.config.zOrder.CHAT + 1);
+        this.addChild(rect, bq.config.zOrder.CHAT + 1);
     },
 
     /**
