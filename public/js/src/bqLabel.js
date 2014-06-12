@@ -16,7 +16,7 @@ bq.Label.DEFAULT_FONT_SIZE = 11;
  */
 bq.Label.create = function(msg, opt_fontSize) {
     var fontSize = opt_fontSize || bq.Label.DEFAULT_FONT_SIZE;
-    return cc.LabelTTF.create(msg, bq.Label.DEFAULT_FONT, fontSize);
+    return new cc.LabelTTF(msg, bq.Label.DEFAULT_FONT, fontSize);
 };
 
 /**
@@ -38,5 +38,5 @@ bq.Label.createWithShadow = function(msg, opt_fontSize, opt_color) {
         strokeSize: 2
     };
 
-    return cc.LabelTTF.createWithFontDefinition(msg, fontDef);
+    return new cc.LabelTTF(msg, fontDef);
 };
