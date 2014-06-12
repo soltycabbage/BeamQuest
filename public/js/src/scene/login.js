@@ -23,7 +23,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
         label.setPosition(cc.p(size.width/2, size.height/2 + 50));
         this.addChild(label);
 
-        var nameField = cc.TextFieldTTF.create(this.defaultPlaceHolder_, 'systemFont', 32);
+        var nameField = new cc.TextFieldTTF(this.defaultPlaceHolder_, 'systemFont', 32);
         this.addChild(nameField);
         nameField.setPosition(cc.p(size.width / 2, size.height / 2));
         this.nameField_ = nameField;
