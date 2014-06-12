@@ -6,8 +6,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
     },
     init: function() {
         this._super();
-        var platform = cc.Application.getInstance().getTargetPlatform();
-        if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
+        if (cc.sys.isMobile) {
             this.setTouchEnabled(true);
         }
         this.defaultPlaceHolder_ = '< click here >';
