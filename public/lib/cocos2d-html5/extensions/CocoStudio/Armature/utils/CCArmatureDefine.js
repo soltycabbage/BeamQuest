@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -21,6 +22,9 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+/**
+ * @ignore
+ */
 ccs.VERSION_COMBINED = 0.30;
 ccs.VERSION_CHANGE_ROTATION_RANGE = 1.0;
 ccs.VERSION_COLOR_READING = 1.1;

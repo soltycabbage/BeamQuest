@@ -1,5 +1,7 @@
 /**
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2008-2010 Ricardo Quesada
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
  Copyright (c) 2008, Luke Benstead.
  All rights reserved.
 
@@ -24,6 +26,9 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * @ignore
+ */
 cc.KM_PLANE_LEFT = 0;
 
 cc.KM_PLANE_RIGHT = 1;

@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -34,30 +34,22 @@ cc.ACTION_TAG_INVALID = -1;
  * Base class for cc.Action objects.
  * @class
  * @extends cc.Class
+ *
+ * @property {cc.Node}  target          - The target will be set with the 'startWithTarget' method. When the 'stop' method is called, target will be set to nil.
+ * @property {cc.Node}  originalTarget  - The original target of the action.
+ * @property {Number}   tag             - The tag of the action, can be used to find the action.
  */
 cc.Action = cc.Class.extend(/** @lends cc.Action# */{
     //***********variables*************
-    _originalTarget:null,
-
-    /** The "target".
-     The target will be set with the 'startWithTarget' method.
-     When the 'stop' method is called, target will be set to nil.
-     The target is 'assigned', it is not 'retained'.
-     */
-    _target:null,
-    _tag:cc.ACTION_TAG_INVALID,
+    originalTarget:null,
+    target:null,
+    tag:cc.ACTION_TAG_INVALID,
 
     //**************Public Functions***********
     ctor:function () {
-        this._originalTarget = null;
-        this._target = null;
-        this._tag = cc.ACTION_TAG_INVALID;
-    },
-    /**
-     * @return {String}
-     */
-    description:function () {
-        return "<cc.Action | Tag = " + this._tag + ">";
+        this.originalTarget = null;
+        this.target = null;
+        this.tag = cc.ACTION_TAG_INVALID;
     },
 
     /**
@@ -66,7 +58,8 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @return {object}
      */
     copy:function () {
-        return cc.clone(this);
+        cc.log("copy is deprecated. Please use clone instead.");
+        return this.clone();
     },
 
     /**
@@ -75,9 +68,9 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      */
     clone:function () {
         var action = new cc.Action();
-        action._originalTarget = null;
-        action._target = null;
-        action._tag = this._tag;
+        action.originalTarget = null;
+        action.target = null;
+        action.tag = this.tag;
         return action;
     },
 
@@ -94,8 +87,8 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @param {cc.Node} target
      */
     startWithTarget:function (target) {
-        this._originalTarget = target;
-        this._target = target;
+        this.originalTarget = target;
+        this.target = target;
     },
 
     /**
@@ -103,7 +96,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * IMPORTANT: You should never call "action stop" manually. Instead, use: "target.stopAction(action);"
      */
     stop:function () {
-        this._target = null;
+        this.target = null;
     },
     /** called every frame with it's delta time. DON'T override unless you know what you are doing.
      *
@@ -132,7 +125,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @return {cc.Node}
      */
     getTarget:function () {
-        return this._target;
+        return this.target;
     },
 
     /** The action will modify the target properties.
@@ -140,7 +133,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @param {cc.Node} target
      */
     setTarget:function (target) {
-        this._target = target;
+        this.target = target;
     },
 
     /**
@@ -148,7 +141,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @return {cc.Node}
      */
     getOriginalTarget:function () {
-        return this._originalTarget;
+        return this.originalTarget;
     },
 
     /** Set the original target, since target can be nil. <br/>
@@ -158,7 +151,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @param {cc.Node} originalTarget
      */
     setOriginalTarget:function (originalTarget) {
-        this._originalTarget = originalTarget;
+        this.originalTarget = originalTarget;
     },
 
     /**
@@ -166,7 +159,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @return {Number}
      */
     getTag:function () {
-        return this._tag;
+        return this.tag;
     },
 
     /**
@@ -174,7 +167,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @param {Number} tag
      */
     setTag:function (tag) {
-        this._tag = tag;
+        this.tag = tag;
     },
     /**
      * Currently JavaScript Bindigns (JSB), in some cases, needs to use retain and release. This is a bug in JSB,
@@ -221,7 +214,7 @@ cc.FiniteTimeAction = cc.Action.extend(/** @lends cc.FiniteTimeAction# */{
      * @return {Number}
      */
     getDuration:function () {
-        return this._duration;
+        return this._duration * (this._times || 1);
     },
 
     /** set duration in seconds of the action
@@ -261,10 +254,17 @@ cc.Speed = cc.Action.extend(/** @lends cc.Speed# */{
     _speed:0.0,
     _innerAction:null,
 
-    ctor:function () {
+	/**
+	 * Constructor of cc.Speed
+	 * @param {cc.ActionInterval} action
+	 * @param {Number} speed
+	 */
+    ctor:function (action, speed) {
         cc.Action.prototype.ctor.call(this);
         this._speed = 0;
         this._innerAction = null;
+
+		action && this.initWithAction(action, speed);
     },
 
     /**
@@ -367,10 +367,7 @@ cc.Speed = cc.Action.extend(/** @lends cc.Speed# */{
  * @return {cc.Speed}
  */
 cc.Speed.create = function (action, speed) {
-    var ret = new cc.Speed();
-    if (ret && ret.initWithAction(action, speed))
-        return ret;
-    return null;
+    return new cc.Speed(action, speed);
 };
 
 /**
@@ -413,7 +410,26 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
     bottomBoundary:0.0,
     _worldRect:null,
 
-    ctor:function () {
+	/**
+	 * creates the action with a set boundary <br/>
+	 * creates the action with no boundary set
+	 *
+	 * Constructor of cc.Follow
+	 * @param {cc.Node} followedNode
+	 * @param {cc.Rect} rect
+	 * @example
+	 * // example
+	 * // creates the action with a set boundary
+	 * var sprite = new cc.Sprite("spriteFileName");
+	 * var followAction = new cc.Follow(sprite, cc.rect(0, 0, s.width * 2 - 100, s.height));
+	 * this.runAction(followAction);
+	 *
+	 * // creates the action with no boundary set
+	 * var sprite = new cc.Sprite("spriteFileName");
+	 * var followAction = new cc.Follow(sprite);
+	 * this.runAction(followAction);
+	 */
+    ctor:function (followedNode, rect) {
         cc.Action.prototype.ctor.call(this);
         this._followedNode = null;
         this._boundarySet = false;
@@ -426,7 +442,11 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
         this.rightBoundary = 0.0;
         this.topBoundary = 0.0;
         this.bottomBoundary = 0.0;
-        this._worldRect = cc.RectZero();
+        this._worldRect = cc.rect(0, 0, 0, 0);
+
+		if(followedNode)
+			rect ? this.initWithTarget(followedNode, rect)
+				 : this.initWithTarget(followedNode);
     },
 
     clone:function () {
@@ -461,37 +481,38 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
         if(!followedNode)
             throw "cc.Follow.initWithAction(): followedNode must be non nil";
 
-        rect = rect || cc.RectZero();
-        this._followedNode = followedNode;
-        this._worldRect = rect;
+        var _this = this;
+        rect = rect || cc.rect(0, 0, 0, 0);
+        _this._followedNode = followedNode;
+        _this._worldRect = rect;
 
-        this._boundarySet = !cc._rectEqualToZero(rect);
+        _this._boundarySet = !cc._rectEqualToZero(rect);
 
-        this._boundaryFullyCovered = false;
+        _this._boundaryFullyCovered = false;
 
-        var winSize = cc.Director.getInstance().getWinSize();
-        this._fullScreenSize = cc.p(winSize.width, winSize.height);
-        this._halfScreenSize = cc.pMult(this._fullScreenSize, 0.5);
+        var winSize = cc.director.getWinSize();
+        _this._fullScreenSize = cc.p(winSize.width, winSize.height);
+        _this._halfScreenSize = cc.pMult(_this._fullScreenSize, 0.5);
 
-        if (this._boundarySet) {
-            this.leftBoundary = -((rect.x + rect.width) - this._fullScreenSize.x);
-            this.rightBoundary = -rect.x;
-            this.topBoundary = -rect.y;
-            this.bottomBoundary = -((rect.y + rect.height) - this._fullScreenSize.y);
+        if (_this._boundarySet) {
+            _this.leftBoundary = -((rect.x + rect.width) - _this._fullScreenSize.x);
+            _this.rightBoundary = -rect.x;
+            _this.topBoundary = -rect.y;
+            _this.bottomBoundary = -((rect.y + rect.height) - _this._fullScreenSize.y);
 
-            if (this.rightBoundary < this.leftBoundary) {
+            if (_this.rightBoundary < _this.leftBoundary) {
                 // screen width is larger than world's boundary width
                 //set both in the middle of the world
-                this.rightBoundary = this.leftBoundary = (this.leftBoundary + this.rightBoundary) / 2;
+                _this.rightBoundary = _this.leftBoundary = (_this.leftBoundary + _this.rightBoundary) / 2;
             }
-            if (this.topBoundary < this.bottomBoundary) {
+            if (_this.topBoundary < _this.bottomBoundary) {
                 // screen width is larger than world's boundary width
                 //set both in the middle of the world
-                this.topBoundary = this.bottomBoundary = (this.topBoundary + this.bottomBoundary) / 2;
+                _this.topBoundary = _this.bottomBoundary = (_this.topBoundary + _this.bottomBoundary) / 2;
             }
 
-            if ((this.topBoundary == this.bottomBoundary) && (this.leftBoundary == this.rightBoundary))
-                this._boundaryFullyCovered = true;
+            if ((_this.topBoundary == _this.bottomBoundary) && (_this.leftBoundary == _this.rightBoundary))
+                _this._boundaryFullyCovered = true;
         }
         return true;
     },
@@ -500,8 +521,8 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
      * @param {Number} dt
      */
     step:function (dt) {
-        var tempPosX = this._followedNode.getPositionX();
-        var tempPosY = this._followedNode.getPositionY();
+        var tempPosX = this._followedNode.x;
+        var tempPosY = this._followedNode.y;
         tempPosX = this._halfScreenSize.x - tempPosX;
         tempPosY = this._halfScreenSize.y - tempPosY;
 
@@ -510,10 +531,9 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
             if (this._boundaryFullyCovered)
                 return;
 
-            this._target.setPosition(cc.clampf(tempPosX, this.leftBoundary, this.rightBoundary),
-                cc.clampf(tempPosY, this.bottomBoundary, this.topBoundary));
+	        this.target.setPosition(cc.clampf(tempPosX, this.leftBoundary, this.rightBoundary), cc.clampf(tempPosY, this.bottomBoundary, this.topBoundary));
         } else {
-            this._target.setPosition(tempPosX, tempPosY);
+            this.target.setPosition(tempPosX, tempPosY);
         }
     },
 
@@ -521,14 +541,14 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
      * @return {Boolean}
      */
     isDone:function () {
-        return ( !this._followedNode.isRunning() );
+        return ( !this._followedNode.running );
     },
 
     /**
      * Stop the action.
      */
     stop:function () {
-        this._target = null;
+        this.target = null;
         cc.Action.prototype.stop.call(this);
     }
 });
@@ -550,11 +570,5 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
  * this.runAction(followAction);
  */
 cc.Follow.create = function (followedNode, rect) {
-    rect = rect || new cc.RectZero();
-    var ret = new cc.Follow();
-    if (rect != null && ret && ret.initWithTarget(followedNode, rect))
-        return ret;
-    else if (ret && ret.initWithTarget(followedNode))
-        return ret;
-    return null;
+    return new cc.Follow(followedNode, rect);
 };

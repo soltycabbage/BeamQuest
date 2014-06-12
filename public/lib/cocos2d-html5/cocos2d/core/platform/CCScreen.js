@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -25,33 +25,69 @@
  ****************************************************************************/
 
 /**
- * The fullscreen API provides an easy way for web content to be presented using the user's entire screen.
+ * @namespace The fullscreen API provides an easy way for web content to be presented using the user's entire screen.
  * It's invalid on safari,QQbrowser and android browser
- * @class
- * @extends cc.Class
+ * @name cc.screen
  */
-cc.Screen = cc.Class.extend({
+cc.screen = /** @lends cc.screen# */{
     _supportsFullScreen: false,
-    _browserPrefix: "",
-    _preElement: null,//the pre element to show in full screen mode.
-    _preOnFullScreenChange: null,//the pre fullscreenchange function
+	// the pre fullscreenchange function
+    _preOnFullScreenChange: null,
     _touchEvent: "",
-    init: function () {
-        var browserPres = 'webkit,moz,o,ms,khtml'.split(',');
-        var body = document.body;
-        if (body["requestFullScreen"]) {
-            this._supportsFullScreen = true;
-        } else {
-            for (var i = 0, il = browserPres.length, prefix; i < il; i++) {
-                prefix = browserPres[i];
-                if (body[prefix + "RequestFullScreen"]) {
-                    this._supportsFullScreen = true;
-                    this._browserPrefix = prefix;
-                    break;
-                }
-            }
-        }
+	_fn: null,
+	// Function mapping for cross browser support
+	_fnMap: [
+		[
+			'requestFullscreen',
+			'exitFullscreen',
+			'fullscreenchange',
+			'fullscreenEnabled',
+			'fullscreenElement'
+		],
+		[
+			'requestFullScreen',
+			'exitFullScreen',
+			'fullScreenchange',
+			'fullScreenEnabled',
+			'fullScreenElement'
+		],
+		[
+			'webkitRequestFullScreen',
+			'webkitCancelFullScreen',
+			'webkitfullscreenchange',
+			'webkitIsFullScreen',
+			'webkitCurrentFullScreenElement'
+		],
+		[
+			'mozRequestFullScreen',
+			'mozCancelFullScreen',
+			'mozfullscreenchange',
+			'mozFullScreen',
+			'mozFullScreenElement'
+		],
+		[
+			'msRequestFullscreen',
+			'msExitFullscreen',
+			'MSFullscreenChange',
+			'msFullscreenEnabled',
+			'msFullscreenElement'
+		]
+	],
 
+    init: function () {
+	    this._fn = {};
+	    var i, val, map = this._fnMap, valL;
+	    for (i = 0, l = map.length; i < l; i++ ) {
+		    val = map[ i ];
+		    if ( val && val[1] in document ) {
+			    for ( i = 0, valL = val.length; i < valL; i++ ) {
+				    this._fn[ map[0][ i ] ] = val[ i ];
+			    }
+			    break;
+		    }
+	    }
+
+		this._supportsFullScreen = (this._fn.requestFullscreen != undefined);
         this._touchEvent = ('ontouchstart' in window) ? 'touchstart' : 'mousedown';
     },
 
@@ -59,73 +95,55 @@ cc.Screen = cc.Class.extend({
      * return true if it's full now.
      * @returns {Boolean}
      */
-    fullScreen: function () {
-        var d = document;
-        if (this._supportsFullScreen) {
-            switch (this._browserPrefix) {
-                case '':
-                    return d["fullScreen"];
-                case 'webkit':
-                    return d["webkitIsFullScreen"];
-                default:
-                    return d[this._browserPrefix + 'FullScreen'];
-            }
-        }
-        return false;
+    fullScreen: function() {
+	    return this._supportsFullScreen && document[ this._fn.fullscreenEnabled ];
     },
 
     /**
      * change the screen to full mode.
      * @param {Element} element
      * @param {Function} onFullScreenChange
-     * @returns {*}
      */
     requestFullScreen: function (element, onFullScreenChange) {
-        if (!this._supportsFullScreen || this.fullScreen()) return;
-        if (onFullScreenChange) {
-            var eventName = this._browserPrefix + "fullscreenchange";
-            if (this._preElement && this._preOnFullScreenChange) this._preElement.removeEventListener(eventName, this._preOnFullScreenChange);
-            this._preElement = element;
-            this._preOnFullScreenChange = onFullScreenChange;
-            element.addEventListener(eventName, onFullScreenChange, false);
-        }
-        return (this._browserPrefix === '') ? element["requestFullScreen"]() : element[this._browserPrefix + 'RequestFullScreen']();
+	    if (!this._supportsFullScreen) return;
+
+	    element = element || document.documentElement;
+	    element[ this._fn.requestFullscreen ]();
+
+	    if (onFullScreenChange) {
+		    var eventName = this._fn.fullscreenchange;
+		    if (this._preOnFullScreenChange)
+			    document.removeEventListener(eventName, this._preOnFullScreenChange);
+		    this._preOnFullScreenChange = onFullScreenChange;
+            cc._addEventListener(document, eventName, onFullScreenChange, false);
+	    }
+
+        return element[ this._fn.requestFullscreen ]();
     },
 
     /**
      * exit the full mode.
-     * @returns {*}
      */
     exitFullScreen: function () {
-        if (!this._supportsFullScreen || !this.fullScreen()) return;
-        return (this._browserPrefix === '') ? document.body["cancelFullScreen"]() : document.body[this._browserPrefix + 'CancelFullScreen']();
+        return this._supportsFullScreen ? document[ this._fn.exitFullscreen ]() : true;
     },
 
     /**
      * Automatically request full screen with a touch/click event
+     * @param {Element} element
+     * @param {Function} onFullScreenChange
      */
     autoFullScreen: function (element, onFullScreenChange) {
+	    element = element || document.body;
+	    var touchTarget = cc._canvas || element;
         var theScreen = this;
         // Function bind will be too complicated here because we need the callback function's reference to remove the listener
         function callback() {
             theScreen.requestFullScreen(element, onFullScreenChange);
-            element.removeEventListener(theScreen._touchEvent, callback);
+            touchTarget.removeEventListener(theScreen._touchEvent, callback);
         }
         this.requestFullScreen(element, onFullScreenChange);
-        element.addEventListener(this._touchEvent, callback);
+        cc._addEventListener(touchTarget, this._touchEvent, callback);
     }
-});
-
-/**
- * returns a shared instance of the cc.Screen
- * @function
- * @return {cc.Screen}
- */
-cc.Screen.getInstance = function () {
-    if (!this._instance){
-        var screen = new cc.Screen();
-        screen.init();
-        this._instance = screen;
-    }
-    return this._instance;
 };
+cc.screen.init();

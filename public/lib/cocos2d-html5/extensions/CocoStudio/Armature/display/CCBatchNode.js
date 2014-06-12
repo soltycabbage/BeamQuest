@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -24,12 +25,13 @@
 
 cc.BatchNode = cc.Node.extend({
     _atlas:null,
+    _className:"BatchNode",
     ctor:function () {
         this._atlas = null;
     },
     init:function () {
         var ret = cc.Node.prototype.init.call(this);
-        this.setShaderProgram(cc.ShaderCache.getInstance().programForKey(cc.SHADER_POSITION_TEXTURE_UCOLOR));
+        this.setShaderProgram(cc.shaderCache.programForKey(cc.SHADER_POSITION_TEXTURE_UCOLOR));
         return ret;
     },
 
@@ -46,22 +48,22 @@ cc.BatchNode = cc.Node.extend({
             return;
         }
         this.kmGLPushMatrix();
-        if (this._grid && this._grid.isActive()) {
-            this._grid.beforeDraw();
+        if (this.grid && this.grid.isActive()) {
+            this.grid.beforeDraw();
         }
         this.transform();
         this.sortAllChildren();
         this.draw();
         // reset for next frame
-        this._orderOfArrival = 0;
-        if (this._grid && this._grid.isActive()) {
-            this._grid.afterDraw(this);
+        this.arrivalOrder = 0;
+        if (this.grid && this.grid.isActive()) {
+            this.grid.afterDraw(this);
         }
         this.kmGLPopMatrix();
     },
 
     draw:function (ctx) {
-        cc.NODE_DRAW_SETUP(this);
+        cc.nodeDrawSetup(this);
         var child = null;
         for (var i = 0; i < this._children.length; i++) {
             child = this._children[i];

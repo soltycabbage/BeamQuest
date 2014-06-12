@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -23,11 +24,11 @@
  ****************************************************************************/
 
 /**
- * Base class for ccs.DecotativeDisplay
+ * Base class for ccs.DecorativeDisplay
  * @class
  * @extends ccs.Class
  */
-ccs.DecotativeDisplay = ccs.Class.extend({
+ccs.DecorativeDisplay = ccs.Class.extend(/** @lends ccs.DecorativeDisplay# */{
     _display:null,
     _colliderDetector:null,
     _displayData:null,
@@ -101,17 +102,17 @@ ccs.DecotativeDisplay = ccs.Class.extend({
 });
 
 /**
- * allocates and initializes a decotative display.
+ * allocates and initializes a decorative display.
  * @constructs
- * @return {ccs.DecotativeDisplay}
+ * @return {ccs.DecorativeDisplay}
  * @example
  * // example
- * var display = ccs.DecotativeDisplay.create();
+ * var display = ccs.DecorativeDisplay.create();
  */
-ccs.DecotativeDisplay.create = function () {
-    var decotativeDisplay = new ccs.DecotativeDisplay();
-    if (decotativeDisplay && decotativeDisplay.init()) {
-        return decotativeDisplay;
+ccs.DecorativeDisplay.create = function () {
+    var decorativeDisplay = new ccs.DecorativeDisplay();
+    if (decorativeDisplay && decorativeDisplay.init()) {
+        return decorativeDisplay;
     }
     return null;
 };

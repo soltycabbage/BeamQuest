@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -22,36 +23,111 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+//BlendType
 /**
- * BlendType
- * @type Object
+ * The value of the blend type of normal
+ * @constant
+ * @type Number
  */
-ccs.BlendType = {
-    normal: 0,
-    layer: 1,
-    darken: 2,
-    multiply: 3,
-    lighten: 4,
-    screen: 5,
-    overlay: 6,
-    highlight: 7,
-    add: 8,
-    subtract: 9,
-    difference: 10,
-    invert: 11,
-    alpha: 12,
-    erase: 13
-};
+ccs.BLEND_TYPE_NORMAL = 0;
+
 /**
- * DisplayType
- * @type Object
+ * The value of the blend type of layer
+ * @constant
+ * @type Number
  */
-ccs.DisplayType = {
-    sprite: 0,
-    armature: 1,
-    particle: 2,
-    max: 3
-};
+ccs.BLEND_TYPE_LAYER = 1;
+
+/**
+ * The value of the blend type of darken
+ * @constant
+ * @type Number
+ */
+ccs.BLEND_TYPE_DARKEN = 2;
+
+/**
+ * The value of the blend type of multiply
+ * @constant
+ * @type Number
+ */
+ccs.BLEND_TYPE_MULTIPLY = 3;
+
+/**
+ * The value of the blend type of lighten
+ * @constant
+ * @type Number
+ */
+ccs.BLEND_TYPE_LIGHTEN = 4;
+
+/**
+ * The value of the blend type of screen
+ * @constant
+ * @type Number
+ */
+ccs.BLEND_TYPE_SCREEN = 5;
+
+/**
+ * The value of the blend type of overlay
+ * @constant
+ * @type Number
+ */
+ccs.BLEND_TYPE_OVERLAY = 6;
+
+/**
+ * The value of the blend type of highlight
+ * @constant
+ * @type Number
+ */
+ccs.BLEND_TYPE_HIGHLIGHT = 7;
+
+/**
+ * The value of the blend type of add
+ * @constant
+ * @type Number
+ */
+ccs.BLEND_TYPE_ADD = 8;
+
+/**
+ * The value of the blend type of subtract
+ * @constant
+ * @type Number
+ */
+ccs.BLEND_TYPE_SUBTRACT = 9;
+
+/**
+ * The value of the blend type of difference
+ * @constant
+ * @type Number
+ */
+ccs.BLEND_TYPE_DIFFERENCE = 10;
+
+/**
+ * The value of the blend type of invert
+ * @constant
+ * @type Number
+ */
+ccs.BLEND_TYPE_INVERT = 11;
+
+/**
+ * The value of the blend type of alpha
+ * @constant
+ * @type Number
+ */
+ccs.BLEND_TYPE_ALPHA = 12;
+
+/**
+ * The value of the blend type of erase
+ * @constant
+ * @type Number
+ */
+ccs.BLEND_TYPE_ERASE = 13;
+
+
+//DisplayType
+ccs.DISPLAY_TYPE_SPRITE = 0;
+ccs.DISPLAY_TYPE_ARMATURE = 1;
+ccs.DISPLAY_TYPE_PARTICLE = 2;
+ccs.DISPLAY_TYPE_MAX = 3;
 
 /**
  * Base class for ccs.BaseData objects.
@@ -83,7 +159,10 @@ ccs.BaseData = ccs.Class.extend(/** @lends ccs.BaseData# */{
         this.scaleY = 1;
         this.tweenRotate = 0;
         this.isUseColorInfo = false;
-        this.color = cc.c4f(1, 1, 1, 1);
+        this.r = 255;
+        this.g = 255;
+        this.b = 255;
+        this.a = 255;
     },
 
 
@@ -109,7 +188,7 @@ ccs.BaseData = ccs.Class.extend(/** @lends ccs.BaseData# */{
 
     /**
      * color setter
-     * @param {cc.Color4B} color
+     * @param {cc.Color} color
      */
     setColor:function(color){
         this.r = color.r;
@@ -120,10 +199,10 @@ ccs.BaseData = ccs.Class.extend(/** @lends ccs.BaseData# */{
 
     /**
      * color getter
-     * @returns {cc.Color4B}
+     * @returns {cc.Color}
      */
     getColor:function(){
-        return cc.c4b(this.r, this.g, this.b, this.a);
+        return cc.color(this.r, this.g, this.b, this.a);
     },
 
     /**
@@ -179,10 +258,10 @@ ccs.BaseData = ccs.Class.extend(/** @lends ccs.BaseData# */{
  * @extends ccs.Class
  */
 ccs.DisplayData = ccs.Class.extend(/** @lends ccs.DisplayData# */{
-    displayType:ccs.DisplayType.max,
+    displayType:ccs.DISPLAY_TYPE_MAX,
     displayName:"",
     ctor:function () {
-        this.displayType = ccs.DisplayType.max;
+        this.displayType = ccs.DISPLAY_TYPE_MAX;
     },
     /**
      * change display name to texture type
@@ -218,7 +297,7 @@ ccs.SpriteDisplayData = ccs.DisplayData.extend(/** @lends ccs.SpriteDisplayData#
     skinData:null,
     ctor:function () {
         this.skinData = new ccs.BaseData();
-        this.displayType = ccs.DisplayType.sprite;
+        this.displayType = ccs.DISPLAY_TYPE_SPRITE;
     },
     /**
      * copy data
@@ -239,7 +318,7 @@ ccs.ArmatureDisplayData = ccs.DisplayData.extend(/** @lends ccs.ArmatureDisplayD
     displayName:"",
     ctor:function () {
         this.displayName = "";
-        this.displayType = ccs.DisplayType.armature;
+        this.displayType = ccs.DISPLAY_TYPE_ARMATURE;
     }
 });
 
@@ -250,7 +329,7 @@ ccs.ArmatureDisplayData = ccs.DisplayData.extend(/** @lends ccs.ArmatureDisplayD
  */
 ccs.ParticleDisplayData = ccs.DisplayData.extend(/** @lends ccs.ParticleDisplayData# */{
     ctor:function () {
-        this.displayType = ccs.DisplayType.particle;
+        this.displayType = ccs.DISPLAY_TYPE_PARTICLE;
     }
 });
 

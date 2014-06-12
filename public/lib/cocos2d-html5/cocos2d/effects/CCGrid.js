@@ -1,8 +1,8 @@
 /****************************************************************************
- Copyright (c) 2010-2013 cocos2d-x.org
- Copyright (c) 2009      On-Core
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2009      On-Core
 
  http://www.cocos2d-x.org
 
@@ -43,7 +43,15 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
 
     _dirty:false,
 
-    ctor:function () {
+    /**
+     * create one cc.GridBase Object
+     * Constructor of cc.GridBase
+     * @param {cc.Size} gridSize
+     * @param {cc.Texture2D} [texture=]
+     * @param {Boolean} [flipped=]
+     */
+    ctor:function (gridSize, texture, flipped) {
+        cc._checkWebGLRenderMode();
         this._active=false;
         this._reuseGrid=0;
         this._gridSize=null;
@@ -54,6 +62,9 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
         this._shaderProgram=null;
         this._directorProjection=0;
         this._dirty=false;
+
+        if(gridSize !== undefined)
+            this.initWithSize(gridSize, texture, flipped);
     },
 
     /**
@@ -71,7 +82,7 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
     setActive:function (active) {
         this._active = active;
         if (!active) {
-            var director = cc.Director.getInstance();
+            var director = cc.director;
             var proj = director.getProjection();
             director.setProjection(proj);
         }
@@ -154,7 +165,7 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
      */
     initWithSize:function (gridSize, texture, flipped) {
         if (!texture) {
-            var director = cc.Director.getInstance();
+            var director = cc.director;
             var winSize = director.getWinSizeInPixels();
 
             var POTWide = cc.NextPOT(winSize.width);
@@ -168,7 +179,7 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
 
             texture = new cc.Texture2D();
             // we only use rgba8888
-            texture.initWithData(data, cc.TEXTURE_2D_PIXEL_FORMAT_RGBA8888, POTWide, POTHigh, winSize);
+            texture.initWithData(data, cc.Texture2D.PIXEL_FORMAT_RGBA8888, POTWide, POTHigh, winSize);
             if (!texture) {
                 cc.log("cocos2d: CCGrid: error creating texture");
                 return false;
@@ -183,22 +194,21 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
         this._texture = texture;
         this._isTextureFlipped = flipped;
 
-        var texSize = this._texture.getContentSize();
-        this._step.x = texSize.width / gridSize.width;
-        this._step.y = texSize.height / gridSize.height;
+        this._step.x = this._texture.width / gridSize.width;
+        this._step.y = this._texture.height / gridSize.height;
 
         this._grabber = new cc.Grabber();
         if (!this._grabber)
             return false;
         this._grabber.grab(this._texture);
-        this._shaderProgram = cc.ShaderCache.getInstance().programForKey(cc.SHADER_POSITION_TEXTURE);
+        this._shaderProgram = cc.shaderCache.programForKey(cc.SHADER_POSITION_TEXTURE);
         this.calculateVertexPoints();
         return true;
     },
 
     beforeDraw:function () {
         // save projection
-        this._directorProjection = cc.Director.getInstance().getProjection();
+        this._directorProjection = cc.director.getProjection();
 
         // 2d projection
         //    [director setProjection:kCCDirectorProjection2D];
@@ -210,7 +220,7 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
         this._grabber.afterRender(this._texture);
 
         // restore projection
-        cc.Director.getInstance().setProjection(this._directorProjection);
+        cc.director.setProjection(this._directorProjection);
 
         if (target.getCamera().isDirty()) {
             var offset = target.getAnchorPointInPoints();
@@ -244,9 +254,9 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
     },
 
     set2DProjection:function () {
-        var winSize = cc.Director.getInstance().getWinSizeInPixels();
+        var winSize = cc.director.getWinSizeInPixels();
 
-        var gl = cc.renderContext;
+        var gl = cc._renderContext;
         gl.viewport(0, 0, winSize.width , winSize.height);
         cc.kmGLMatrixMode(cc.KM_GL_PROJECTION);
         cc.kmGLLoadIdentity();
@@ -269,10 +279,7 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
  * @return {cc.GridBase}
  */
 cc.GridBase.create = function (gridSize, texture, flipped) {
-    var gridBase = new cc.GridBase();
-    if (gridBase && gridBase.initWithSize(gridSize, texture, flipped))
-        return gridBase;
-    return null;
+    return new cc.GridBase(gridSize, texture, flipped);
 };
 
 /**
@@ -290,7 +297,14 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
     _verticesBuffer:null,
     _indicesBuffer:null,
 
-    ctor:function () {
+    /**
+     * create one Grid3D object
+     * Constructor of cc.Grid3D
+     * @param {cc.Size} gridSize
+     * @param {cc.Texture2D} [texture=]
+     * @param {Boolean} [flipped=]
+     */
+    ctor:function (gridSize, texture, flipped) {
         cc.GridBase.prototype.ctor.call(this);
         this._texCoordinates=null;
         this._vertices=null;
@@ -300,6 +314,9 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
         this._texCoordinateBuffer=null;
         this._verticesBuffer=null;
         this._indicesBuffer=null;
+
+        if(gridSize !== undefined)
+            this.initWithSize(gridSize, texture, flipped);
     },
 
     /**
@@ -346,11 +363,11 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
 
     blit:function () {
         var n = this._gridSize.width * this._gridSize.height;
-        cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_TEXCOORDS);
+        cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_TEX_COORDS);
         this._shaderProgram.use();
         this._shaderProgram.setUniformsForBuiltins();
 
-        var gl = cc.renderContext, locDirty = this._dirty;
+        var gl = cc._renderContext, locDirty = this._dirty;
         //
         // Attributes
         //
@@ -372,7 +389,7 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
         gl.drawElements(gl.TRIANGLES, n * 6, gl.UNSIGNED_SHORT, 0);
         if (locDirty)
             this._dirty = false;
-        cc.INCREMENT_GL_DRAWS(1);
+        cc.incrementGLDraws(1);
     },
 
     reuse:function () {
@@ -385,10 +402,10 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
     },
 
     calculateVertexPoints:function () {
-        var gl = cc.renderContext;
+        var gl = cc._renderContext;
 
-        var width = this._texture.getPixelsWide();
-        var height = this._texture.getPixelsHigh();
+        var width = this._texture.pixelsWidth;
+        var height = this._texture.pixelsHeight;
         var imageH = this._texture.getContentSizeInPixels().height;
         var locGridSize = this._gridSize;
 
@@ -470,10 +487,7 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
  * @return {cc.Grid3D}
  */
 cc.Grid3D.create = function (gridSize, texture, flipped) {
-    var grid3D = new cc.Grid3D();
-    if (grid3D && grid3D.initWithSize(gridSize, texture, flipped))
-        return grid3D;
-    return null;
+    return new cc.Grid3D(gridSize, texture, flipped);
 };
 
 /**
@@ -492,7 +506,14 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
     _verticesBuffer:null,
     _indicesBuffer:null,
 
-    ctor:function () {
+    /**
+     * create one TiledGrid3D object
+     * Constructor of cc.TiledGrid3D
+     * @param {cc.Size} gridSize
+     * @param {cc.Texture2D} [texture=]
+     * @param {Boolean} [flipped=]
+     */
+    ctor:function (gridSize, texture, flipped) {
         cc.GridBase.prototype.ctor.call(this);
         this._texCoordinates=null;
         this._vertices=null;
@@ -502,6 +523,9 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
         this._texCoordinateBuffer=null;
         this._verticesBuffer=null;
         this._indicesBuffer=null;
+
+        if(gridSize !== undefined)
+            this.initWithSize(gridSize, texture, flipped);
     },
 
     /**
@@ -573,8 +597,8 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
         //
         // Attributes
         //
-        var gl = cc.renderContext, locDirty = this._dirty;
-        cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_TEXCOORDS);
+        var gl = cc._renderContext, locDirty = this._dirty;
+        cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_TEX_COORDS);
 
         // position
         gl.bindBuffer(gl.ARRAY_BUFFER, this._verticesBuffer);
@@ -594,7 +618,7 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
         gl.drawElements(gl.TRIANGLES, n * 6, gl.UNSIGNED_SHORT, 0);
         if (locDirty)
             this._dirty = false;
-        cc.INCREMENT_GL_DRAWS(1);
+        cc.incrementGLDraws(1);
     },
 
     reuse:function () {
@@ -607,8 +631,8 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
     },
 
     calculateVertexPoints:function () {
-        var width = this._texture.getPixelsWide();
-        var height = this._texture.getPixelsHigh();
+        var width = this._texture.pixelsWidth;
+        var height = this._texture.pixelsHeight;
         var imageH = this._texture.getContentSizeInPixels().height;
         var locGridSize = this._gridSize;
 
@@ -617,7 +641,7 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
         this._texCoordinates = new Float32Array(numQuads * 8);
         this._indices = new Uint16Array(numQuads * 6);
 
-        var gl = cc.renderContext;
+        var gl = cc._renderContext;
         if(this._verticesBuffer)
             gl.deleteBuffer(this._verticesBuffer);
         this._verticesBuffer = gl.createBuffer();
@@ -700,7 +724,5 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
  * @return {cc.TiledGrid3D}
  */
 cc.TiledGrid3D.create = function (gridSize, texture, flipped) {
-    var ret = new cc.TiledGrid3D();
-    ret.initWithSize(gridSize, texture, flipped);
-    return ret;
+    return new cc.TiledGrid3D(gridSize, texture, flipped);
 };

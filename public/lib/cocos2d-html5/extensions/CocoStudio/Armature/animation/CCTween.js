@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -26,6 +27,8 @@
  * Base class for ccs.Tween objects.
  * @class
  * @extends ccs.ProcessBase
+ *
+ * @property {ccs.ArmatureAnimation}    animation   - The animation
  */
 ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
     _tweenData:null,
@@ -39,7 +42,7 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
     _totalDuration:0,
     _toIndex:0,
     _fromIndex:0,
-    _animation:null,
+    animation:null,
     _passLastFrame:false,
     ctor:function () {
         ccs.ProcessBase.prototype.ctor.call(this);
@@ -52,7 +55,7 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
         this._frameTweenEasing = ccs.TweenType.linear;
         this._toIndex = 0;
         this._fromIndex = 0;
-        this._animation = null;
+        this.animation = null;
         this._passLastFrame = false;
     },
 
@@ -69,7 +72,7 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
         this._tweenData = this._bone.getTweenData();
         this._tweenData.displayIndex = -1;
          var armature = bone.getArmature();
-        if (armature) this._animation = armature.getAnimation();
+        if (armature) this.animation = armature.getAnimation();
         return true;
     },
 
@@ -85,9 +88,9 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
         ccs.ProcessBase.prototype.play.call(this, durationTo, tweenEasing);
 
         if(loop){
-            this._loopType = CC_ANIMATION_TYPE_TO_LOOP_FRONT;
+            this._loopType = ccs.ANIMATION_TYPE_TO_LOOP_FRONT;
         }else{
-            this._loopType = CC_ANIMATION_TYPE_NO_LOOP;
+            this._loopType = ccs.ANIMATION_TYPE_NO_LOOP;
         }
 
         this._totalDuration = 0;
@@ -107,7 +110,7 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
         }
 
         if (this._rawDuration == 0 || this._movementBoneData.frameList.length == 1) {
-            this._loopType = CC_ANIMATION_TYPE_SINGLE_FRAME;
+            this._loopType = ccs.ANIMATION_TYPE_SINGLE_FRAME;
             if (durationTo == 0) {
                 this.setBetween(nextKeyFrame, nextKeyFrame);
             } else {
@@ -154,13 +157,13 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
         var locLoopType = this._loopType;
         if (locCurrentPercent >= 1) {
             switch (locLoopType) {
-                case CC_ANIMATION_TYPE_SINGLE_FRAME:
+                case ccs.ANIMATION_TYPE_SINGLE_FRAME:
                     locCurrentPercent = 1;
                     this._isComplete = true;
                     this._isPlaying = false;
                     break;
-                case CC_ANIMATION_TYPE_NO_LOOP:
-                    locLoopType = CC_ANIMATION_TYPE_MAX;
+                case ccs.ANIMATION_TYPE_NO_LOOP:
+                    locLoopType = ccs.ANIMATION_TYPE_MAX;
                     if (this._durationTween <= 0) {
                         locCurrentPercent = 1;
                     }
@@ -181,8 +184,8 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
                         this._fromIndex = this._toIndex = 0;
                         break;
                     }
-                case CC_ANIMATION_TYPE_TO_LOOP_FRONT:
-                    locLoopType = CC_ANIMATION_TYPE_LOOP_FRONT;
+                case ccs.ANIMATION_TYPE_TO_LOOP_FRONT:
+                    locLoopType = ccs.ANIMATION_TYPE_LOOP_FRONT;
                     this._nextFrameIndex = this._durationTween > 0 ? this._durationTween : 1;
                     if (this._movementBoneData.delay != 0) {
                         this._currentFrame = (1 - this._movementBoneData.delay) * this._nextFrameIndex;
@@ -197,7 +200,7 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
                     this._betweenDuration = 0;
                     this._fromIndex = this._toIndex = 0;
                     break;
-                case CC_ANIMATION_TYPE_MAX:
+                case ccs.ANIMATION_TYPE_MAX:
                     locCurrentPercent = 1;
                     this._isComplete = true;
                     this._isPlaying = false;
@@ -206,19 +209,18 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
                     this._currentFrame = ccs.fmodf(this._currentFrame, this._nextFrameIndex);
                     this._totalDuration = 0;
                     this._betweenDuration = 0;
-                    this._fromIndex = this._toIndex = 0;
                     break;
             }
         }
 
-        if (locCurrentPercent < 1 && locLoopType < CC_ANIMATION_TYPE_TO_LOOP_BACK) {
+        if (locCurrentPercent < 1 && locLoopType < ccs.ANIMATION_TYPE_TO_LOOP_BACK) {
             locCurrentPercent = Math.sin(locCurrentPercent * cc.PI / 2);
         }
 
         this._currentPercent = locCurrentPercent;
         this._loopType = locLoopType;
 
-        if (locLoopType > CC_ANIMATION_TYPE_TO_LOOP_BACK) {
+        if (locLoopType > ccs.ANIMATION_TYPE_TO_LOOP_BACK) {
             locCurrentPercent = this.updateFrameData(locCurrentPercent);
         }
         if (this._frameTweenEasing != ccs.TweenType.tweenEasingMax) {
@@ -269,11 +271,12 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
             var displayManager = locBone.getDisplayManager();
             if (!displayManager.getForceChangeDisplay()) {
                 displayManager.changeDisplayWithIndex(displayIndex, false);
-
+                var locRenderNode = displayManager.getDisplayRenderNode();
+                if(locRenderNode)
+                    locRenderNode.setBlendFunc(keyFrameData.blendFunc);
             }
             this._tweenData.zOrder = keyFrameData.zOrder;
             locBone.updateZOrder();
-            locBone.setBlendFunc(keyFrameData.blendFunc);
             var childAramture = locBone.getChildArmature();
             if (childAramture) {
                 if (keyFrameData.movement != "") {
@@ -369,8 +372,8 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
                 to = frames[locToIndex];
 
                 //! Guaranteed to trigger frame event
-                if(from.event&& !this._animation.isIgnoreFrameEvent()){
-                    this._animation.frameEvent(this._bone, from.event,from.frameID, playedTime);
+                if(from.event&& !this.animation.isIgnoreFrameEvent()){
+                    this.animation.frameEvent(this._bone, from.event,from.frameID, playedTime);
                 }
 
                 if (playedTime == from.frameID|| (this._passLastFrame && this._fromIndex == length-1)){
@@ -404,7 +407,7 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
      * @param {ccs.ArmatureAnimation} animation
      */
     setAnimation:function (animation) {
-        this._animation = animation;
+        this.animation = animation;
     },
 
     /**
@@ -412,7 +415,7 @@ ccs.Tween = ccs.ProcessBase.extend(/** @lends ccs.Tween# */{
      * @return {ccs.ArmatureAnimation}
      */
     getAnimation:function () {
-        return this._animation;
+        return this.animation;
     },
 
     release:function () {

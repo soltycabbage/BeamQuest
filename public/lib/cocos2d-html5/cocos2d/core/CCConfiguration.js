@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -24,14 +24,51 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-cc.ConfigurationType = {ConfigurationError:0, ConfigurationString:1, ConfigurationInt:2, ConfigurationDouble:3, ConfigurationBoolean:4};
-
 /**
- * cc.Configuration contains some openGL variables
- * @class
- * @extends cc.Class
+ * @namespace cc.configuration contains some openGL variables
  */
-cc.Configuration = cc.Class.extend(/** @lends cc.Configuration# */{
+cc.configuration = /** @lends cc.configuration# */{
+	// Type constants
+	/*
+	 * ERROR type
+	 * @public
+	 * @const
+	 * @type {Number}
+	 */
+	ERROR:0,
+
+	/*
+	 * STRING type
+	 * @public
+	 * @const
+	 * @type {Number}
+	 */
+	STRING:1,
+
+	/*
+	 * INT type
+	 * @public
+	 * @const
+	 * @type {Number}
+	 */
+	INT:2,
+
+	/*
+	 * DOUBLE type
+	 * @public
+	 * @const
+	 * @type {Number}
+	 */
+	DOUBLE:3,
+
+	/*
+	 * BOOLEAN type
+	 * @public
+	 * @const
+	 * @type {Number}
+	 */
+	BOOLEAN:4,
+
     _maxTextureSize:0,
     _maxModelviewStackDepth:0,
     _supportsPVRTC:false,
@@ -42,21 +79,17 @@ cc.Configuration = cc.Class.extend(/** @lends cc.Configuration# */{
     _maxSamplesAllowed:0,
     _maxTextureUnits:0,
     _GlExtensions:"",
-    _valueDict:null,
+    _valueDict:{},
 
-    ctor: function () {
-        this._maxTextureSize = 0;
-        this._maxModelviewStackDepth = 0;
-        this._supportsPVRTC = false;
-        this._supportsNPOT = false;
-        this._supportsBGRA8888 = false;
-        this._supportsDiscardFramebuffer = false;
-        this._supportsShareableVAO = false;
-        this._maxSamplesAllowed = 0;
-        this._maxTextureUnits = 0;
-        this._GlExtensions = "";
-        this._valueDict = {};
-    },
+	_inited: false,
+
+	_init:function () {
+		var locValueDict = this._valueDict;
+		locValueDict["cocos2d.x.version"] = cc.ENGINE_VERSION;
+		locValueDict["cocos2d.x.compiled_with_profiler"] = false;
+		locValueDict["cocos2d.x.compiled_with_gl_state_cache"] = cc.ENABLE_GL_STATE_CACHE;
+		this._inited = true;
+	},
 
     /**
      * OpenGL Max texture size.
@@ -95,9 +128,33 @@ cc.Configuration = cc.Class.extend(/** @lends cc.Configuration# */{
      * Whether or not PVR Texture Compressed is supported
      * @return {Boolean}
      */
-    supportsPVRTC:function () {
+    supportsPVRTC: function () {
         return this._supportsPVRTC;
     },
+
+	/**
+	 * Whether or not ETC Texture Compressed is supported
+	 * @return {Boolean}
+	 */
+	supportsETC: function() {
+		return false;
+	},
+
+	/**
+	 * Whether or not S3TC Texture Compressed is supported
+	 * @return {Boolean}
+	 */
+	supportsS3TC: function() {
+		return false;
+	},
+
+	/**
+	 * Whether or not ATITC Texture Compressed is supported
+	 * @return {Boolean}
+	 */
+	supportsATITC: function() {
+		return false;
+	},
 
     /**
      * Whether or not BGRA8888 textures are supported.
@@ -131,85 +188,37 @@ cc.Configuration = cc.Class.extend(/** @lends cc.Configuration# */{
         return this._GlExtensions.indexOf(searchName) > -1;
     },
 
-    init:function () {
-        var locValueDict = this._valueDict;
-        locValueDict["cocos2d.x.version"] = cc.ENGINE_VERSION;
-        locValueDict["cocos2d.x.compiled_with_profiler"] = false;
-        locValueDict["cocos2d.x.compiled_with_gl_state_cache"] = cc.ENABLE_GL_STATE_CACHE;
-        return true;
-    },
-
     /**
-     * returns the value of a given key as a string.  If the key is not found, it will return the default value
+     * Returns the value of a given key.  If the key is not found, it will return the default value
      * @param {String} key
-     * @param {String} [default_value=null]
-     * @returns {String}
+     * @param {String|Bool|Number|Object} [default_value=null]
+     * @returns {String|Bool|Number|Object}
      */
-    getCString:function(key, default_value){
-       var locValueDict = this._valueDict;
-        if(locValueDict.hasOwnProperty(key))
+    getValue: function(key, default_value){
+	    if(!this._inited)
+		    this._init();
+        var locValueDict = this._valueDict;
+        if(locValueDict[key])
             return locValueDict[key];
         return default_value;
     },
 
     /**
-     * returns the value of a given key as a boolean. If the key is not found, it will return the default value
+     * Sets a new key/value pair  in the configuration dictionary
      * @param {string} key
-     * @param {boolean|null} [default_value=false]
-     * @returns {boolean}
+     * @param {String|Bool|Number|Object} value
      */
-    getBool: function(key, default_value){
-        if(default_value == null)
-            default_value = false;
-        var locValueDict = this._valueDict;
-        if(locValueDict.hasOwnProperty(key))
-            return locValueDict[key];
-        return default_value;
-    },
-
-    /**
-     * returns the value of a given key as a double. If the key is not found, it will return the default value
-     * @param {string} key
-     * @param {number} [default_value=0]
-     * @returns {number}
-     */
-    getNumber: function(key, default_value){
-        if(default_value == null)
-            default_value = 0;
-        var locValueDict = this._valueDict;
-        if(locValueDict.hasOwnProperty(key))
-            return locValueDict[key];
-        return default_value;
-    },
-
-    /**
-     * returns the value of a given key as a double
-     * @param {string} key
-     * @returns {Object|null}
-     */
-    getObject:function(key){
-        var locValueDict = this._valueDict;
-        if(locValueDict.hasOwnProperty(key))
-            return locValueDict[key];
-        return null;
-    },
-
-    /**
-     * sets a new key/value pair  in the configuration dictionary
-     * @param {string} key
-     * @param {Object} value
-     */
-    setObject: function(key, value){
+    setValue: function(key, value){
         this._valueDict[key] = value;
     },
 
     /**
-     * dumps the current configuration on the console
+     * Dumps the current configuration on the console
      */
     dumpInfo: function(){
          if(cc.ENABLE_GL_STATE_CACHE === 0){
              cc.log("");
-             cc.log("cocos2d: **** WARNING **** CC_ENABLE_PROFILERS is defined. Disable it when you finish profiling (from ccConfig.js)");
+             cc.log(cc._LogInfos.configuration_dumpInfo);
              cc.log("")
          }
     },
@@ -218,10 +227,12 @@ cc.Configuration = cc.Class.extend(/** @lends cc.Configuration# */{
      * gathers OpenGL / GPU information
      */
     gatherGPUInfo: function(){
-        if(cc.renderContextType === cc.CANVAS)
+        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
             return;
 
-        var gl = cc.renderContext;
+	    if(!this._inited)
+		    this._init();
+        var gl = cc._renderContext;
         var locValueDict = this._valueDict;
         locValueDict["gl.vendor"] = gl.getParameter(gl.VENDOR);
         locValueDict["gl.renderer"] = gl.getParameter(gl.RENDERER);
@@ -252,24 +263,23 @@ cc.Configuration = cc.Class.extend(/** @lends cc.Configuration# */{
         this._supportsShareableVAO = this.checkForGLExtension("vertex_array_object");
         locValueDict["gl.supports_vertex_array_object"] = this._supportsShareableVAO;
 
-        cc.CHECK_GL_ERROR_DEBUG();
+        cc.checkGLErrorDebug();
     },
 
     /**
      * Loads a config file. If the keys are already present, then they are going to be replaced. Otherwise the new keys are added.
-     * @param {string} filename
+     * @param {string} url
      */
-    loadConfigFile: function( filename){
-        var fileUtils = cc.FileUtils.getInstance();
-        var fullPath = fileUtils.fullPathForFilename(filename);
-        var dict = fileUtils.dictionaryWithContentsOfFileThreadSafe(fullPath);
-
-        if(dict == null)
-            return;
+    loadConfigFile: function( url){
+	    if(!this._inited)
+		    this._init();
+        var dict = cc.loader.getRes(url);
+        if(!dict) throw "Please load the resource first : " + url;
+        cc.assert(dict, cc._LogInfos.configuration_loadConfigFile_2, url);
 
         var getDatas = dict["data"];
         if(!getDatas){
-            cc.log("Expected 'data' dict, but not found. Config file: " + filename);
+            cc.log(cc._LogInfos.configuration_loadConfigFile, url);
             return;
         }
 
@@ -277,26 +287,4 @@ cc.Configuration = cc.Class.extend(/** @lends cc.Configuration# */{
         for(var selKey in getDatas)
             this._valueDict[selKey] = getDatas[selKey];
     }
-});
-
-
-cc.Configuration._sharedConfiguration = null;
-
-/**
- * returns a shared instance of CCConfiguration
- * @return {cc.Configuration}
- */
-cc.Configuration.getInstance = function () {
-    if(!cc.Configuration._sharedConfiguration){
-        cc.Configuration._sharedConfiguration = new cc.Configuration();
-        cc.Configuration._sharedConfiguration.init();
-    }
-    return cc.Configuration._sharedConfiguration;
-};
-
-/**
- * purge the shared instance of CCConfiguration
- */
-cc.Configuration.purgeConfiguration = function () {
-    cc.Configuration._sharedConfiguration = null;
 };

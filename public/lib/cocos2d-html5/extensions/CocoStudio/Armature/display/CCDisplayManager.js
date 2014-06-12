@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -22,7 +23,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-ccs.DisplayManager = ccs.Class.extend({
+/**
+ * The display manager of CocoStudio
+ * @Class
+ * @extend cc.Class
+ */
+ccs.DisplayManager = ccs.Class.extend(/** @lends cc.DisplayManager */{
     _decoDisplayList:null,
     _currentDecoDisplay:null,
     _displayRenderNode:null,
@@ -39,7 +45,7 @@ ccs.DisplayManager = ccs.Class.extend({
         this._forceChangeDisplay = false;
         this._bone = null;
         this._visible = true;
-        this._displayType = ccs.DisplayType.max;
+        this._displayType = ccs.DISPLAY_TYPE_MAX;
     },
 
     init:function (bone) {
@@ -54,7 +60,7 @@ ccs.DisplayManager = ccs.Class.extend({
             decoDisplay = this._decoDisplayList[index];
         }
         else {
-            decoDisplay = ccs.DecotativeDisplay.create();
+            decoDisplay = ccs.DecorativeDisplay.create();
             this._decoDisplayList.push(decoDisplay);
         }
 
@@ -118,7 +124,7 @@ ccs.DisplayManager = ccs.Class.extend({
     },
 
     removeDisplay:function (index) {
-        cc.ArrayRemoveObjectAtIndex(this._decoDisplayList, index);
+        this._decoDisplayList.splice(index, 1);
         if (index == this._displayIndex) {
             this.setCurrentDecorativeDisplay(null);
         }
@@ -211,7 +217,7 @@ ccs.DisplayManager = ccs.Class.extend({
             //todo
             //this._displayRenderNode.setVisible(this._visible);
         }else{
-            this._displayType = ccs.DisplayType.max;
+            this._displayType = ccs.DISPLAY_TYPE_MAX;
         }
     },
 
@@ -243,7 +249,7 @@ ccs.DisplayManager = ccs.Class.extend({
         var displayList = boneData.displayDataList;
         for (var i = 0; i < displayList.length; i++) {
             var displayData = displayList[i];
-            var decoDisplay = ccs.DecotativeDisplay.create();
+            var decoDisplay = ccs.DecorativeDisplay.create();
             decoDisplay.setDisplayData(displayData);
 
             ccs.DisplayFactory.createDisplay(this._bone, decoDisplay);
@@ -252,14 +258,14 @@ ccs.DisplayManager = ccs.Class.extend({
         }
     },
 
-    containPoint:function (/*point|x,y*/) {
+    containPoint: function (point, y) {
         var p = cc.p(0, 0);
-        if (arguments.length == 1) {
-            p.x = arguments[0].x;
-            p.y = arguments[0].y;
-        } else if (arguments.length == 2) {
-            p.x = arguments[0];
-            p.y = arguments[1];
+        if (y === undefined) {
+            p.x = point.x;
+            p.y = point.y;
+        } else {
+            p.x = point;
+            p.y = y;
         }
         if (!this._visible || this._displayIndex < 0) {
             return false;
@@ -267,7 +273,7 @@ ccs.DisplayManager = ccs.Class.extend({
 
         var ret = false;
         switch (this._currentDecoDisplay.getDisplayData().displayType) {
-            case ccs.DisplayType.sprite:
+            case ccs.DISPLAY_TYPE_SPRITE:
                 /*
                  *  First we first check if the point is in the sprite content rect. If false, then we continue to check
                  *  the contour point. If this step is also false, then we can say the bone not contain this point.

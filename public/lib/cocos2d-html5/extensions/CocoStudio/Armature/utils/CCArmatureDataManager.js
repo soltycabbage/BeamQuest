@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -34,26 +35,14 @@ ccs.RelativeData = function(){
 };
 
 /**
- * format and manage armature configuration and armature animation
- * @class
- * @extends ccs.Class
+ * @namespace Format and manage armature configuration and armature animation
  */
-ccs.ArmatureDataManager = ccs.Class.extend(/** @lends ccs.ArmatureDataManager# */{
-    _animationDatas:null,
-    _armarureDatas:null,
-    _textureDatas:null,
-    _autoLoadSpriteFile:null,
-    _relativeDatas:null,
-    ctor:function () {
-        this._animationDatas = {};
-        this._armarureDatas = {};
-        this._textureDatas = {};
-        this._autoLoadSpriteFile = false;
-        this._relativeDatas = {};
-    },
-    init:function () {
-
-    },
+ccs.armatureDataManager = /** @lends ccs.armatureDataManager# */{
+    _animationDatas: {},
+    _armarureDatas: {},
+    _textureDatas: {},
+    _autoLoadSpriteFile: false,
+    _relativeDatas: {},
 
     /**
      * remove armature cache data by configFilePath
@@ -75,10 +64,10 @@ ccs.ArmatureDataManager = ccs.Class.extend(/** @lends ccs.ArmatureDataManager# *
         }
         for (var i = 0; i < data.plistFiles.length; i++) {
             var obj = data.plistFiles[i];
-            cc.SpriteFrameCache.getInstance().removeSpriteFramesFromFile(obj);
+            cc.spriteFrameCache.removeSpriteFramesFromFile(obj);
         }
         delete this._relativeDatas[configFilePath];
-        ccs.DataReaderHelper.removeConfigFile(configFilePath);
+        ccs.dataReaderHelper.removeConfigFile(configFilePath);
     },
 
     /**
@@ -99,7 +88,7 @@ ccs.ArmatureDataManager = ccs.Class.extend(/** @lends ccs.ArmatureDataManager# *
      * @param {string} id
      */
     removeArmatureData:function(id){
-        if (this._armarureDatas.hasOwnProperty(id))
+        if (this._armarureDatas[id])
            delete this._armarureDatas[id];
     },
 
@@ -142,7 +131,7 @@ ccs.ArmatureDataManager = ccs.Class.extend(/** @lends ccs.ArmatureDataManager# *
      * @param {string} id
      */
     removeAnimationData:function(id){
-        if (this._animationDatas.hasOwnProperty(id))
+        if (this._animationDatas[id])
             delete this._animationDatas[id];
     },
 
@@ -185,7 +174,7 @@ ccs.ArmatureDataManager = ccs.Class.extend(/** @lends ccs.ArmatureDataManager# *
      * @param {string} id
      */
     removeTextureData:function(id){
-        if (this._textureDatas.hasOwnProperty(id))
+        if (this._textureDatas[id])
             delete this._textureDatas[id];
     },
 
@@ -217,12 +206,12 @@ ccs.ArmatureDataManager = ccs.Class.extend(/** @lends ccs.ArmatureDataManager# *
      * @param {String} configFilePath
      * @example
      * //example1
-     * ccs.ArmatureDataManager.getInstance().addArmatureFileInfo("res/test.json");
+     * ccs.armatureDataManager.addArmatureFileInfo("res/test.json");
      * //example2
-     * ccs.ArmatureDataManager.getInstance().addArmatureFileInfo("res/test.png","res/test.plist","res/test.json");
+     * ccs.armatureDataManager.addArmatureFileInfo("res/test.png","res/test.plist","res/test.json");
      */
-    addArmatureFileInfo:function (/*imagePath,plistPath,configFilePath*/) {
-        var imagePath,plistPath,configFilePath;
+    addArmatureFileInfo:function (/*imagePath, plistPath, configFilePath*/) {
+        var imagePath, plistPath, configFilePath;
         var isLoadSpriteFrame = false;
         if (arguments.length == 1) {
             configFilePath = arguments[0];
@@ -235,7 +224,7 @@ ccs.ArmatureDataManager = ccs.Class.extend(/** @lends ccs.ArmatureDataManager# *
             this.addRelativeData(configFilePath);
             this.addSpriteFrameFromFile(plistPath, imagePath, configFilePath);
         }
-        ccs.DataReaderHelper.addDataFromFile(configFilePath,isLoadSpriteFrame);
+        ccs.dataReaderHelper.addDataFromFile(configFilePath,isLoadSpriteFrame);
     },
 
     /**
@@ -246,8 +235,8 @@ ccs.ArmatureDataManager = ccs.Class.extend(/** @lends ccs.ArmatureDataManager# *
      * @param {Object} target
      * @param {Function} configFilePath
      */
-    addArmatureFileInfoAsync:function (/*imagePath, plistPath, configFilePath,target,selector*/) {
-        var imagePath, plistPath, configFilePath,target,selector;
+    addArmatureFileInfoAsync:function (/*imagePath, plistPath, configFilePath, target, selector*/) {
+        var imagePath, plistPath, configFilePath, target, selector;
         var isLoadSpriteFrame = false;
         if (arguments.length == 3) {
             configFilePath = arguments[0];
@@ -264,7 +253,7 @@ ccs.ArmatureDataManager = ccs.Class.extend(/** @lends ccs.ArmatureDataManager# *
             this.addRelativeData(configFilePath);
             this.addSpriteFrameFromFile(plistPath, imagePath, configFilePath);
         }
-        ccs.DataReaderHelper.addDataFromFileAsync(configFilePath,target,selector,isLoadSpriteFrame);
+        ccs.dataReaderHelper.addDataFromFileAsync(configFilePath,target,selector,isLoadSpriteFrame);
 
     },
 
@@ -276,7 +265,7 @@ ccs.ArmatureDataManager = ccs.Class.extend(/** @lends ccs.ArmatureDataManager# *
     addSpriteFrameFromFile:function (plistPath, imagePath, configFilePath) {
         var data = this.getRelativeData(configFilePath);
         data.plistFiles.push(plistPath);
-        ccs.SpriteFrameCacheHelper.getInstance().addSpriteFrameFromFile(plistPath, imagePath);
+        ccs.spriteFrameCacheHelper.addSpriteFrameFromFile(plistPath, imagePath);
     },
 
     isAutoLoadSpriteFile:function(){
@@ -288,7 +277,7 @@ ccs.ArmatureDataManager = ccs.Class.extend(/** @lends ccs.ArmatureDataManager# *
      * @param {String} configFilePath
      */
     addRelativeData: function (configFilePath) {
-        if (!this._relativeDatas.hasOwnProperty(configFilePath))
+        if (!this._relativeDatas[configFilePath])
             this._relativeDatas[configFilePath] = new ccs.RelativeData();
     },
 
@@ -301,29 +290,14 @@ ccs.ArmatureDataManager = ccs.Class.extend(/** @lends ccs.ArmatureDataManager# *
         return this._relativeDatas[configFilePath];
     },
 
-    removeAll:function () {
-        this._animationDatas = null;
-        this._armarureDatas = null;
-        this._textureDatas = null;
-        ccs.DataReaderHelper.purge();
-    }
-});
-
-ccs.ArmatureDataManager._instance = null;
-/**
- * returns a shared instance of the ArmatureDataManager
- * @function
- * @return {ccs.ArmatureDataManager}
- */
-ccs.ArmatureDataManager.getInstance = function () {
-    if (!this._instance) {
-        this._instance = new ccs.ArmatureDataManager();
-        this._instance.init();
-    }
-    return this._instance;
-};
-ccs.ArmatureDataManager.purge = function () {
-    ccs.SpriteFrameCacheHelper.purge();
-    ccs.DataReaderHelper.purge();
-    this._instance = null;
+	/**
+	 * Clear data
+	 */
+	clear: function() {
+        this._animationDatas = {};
+        this._armarureDatas = {};
+        this._textureDatas = {};
+        ccs.spriteFrameCacheHelper.clear();
+        ccs.dataReaderHelper.clear();
+	}
 };
