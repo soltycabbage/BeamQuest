@@ -14,7 +14,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
 
     onEnter: function() {
         this._super();
-        var size = cc.Director.getInstance().getWinSize();
+        var size = cc.director.getWinSize();
         var title = bq.Label.createWithShadow('- Beam Quest Online -', 50);
         title.setPosition(cc.p(size.width/2, size.height - 100));
         this.addChild(title);
