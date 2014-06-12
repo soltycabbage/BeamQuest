@@ -32,6 +32,16 @@ bq.scene.LoginLayer = cc.Layer.extend({
         var versionSize = versionLabel.getContentSize();
         versionLabel.setPosition(cc.p(size.width - versionSize.width, versionSize.height));
         this.addChild(versionLabel);
+
+        cc.eventManager.addListener(cc.EventListener.create({
+            event: cc.EventListener.MOUSE,
+
+            onMouseUp: function(evt) {
+                var rect = this.getTextInputRect_(this.nameField_);
+                var point = evt.getLocation();
+                this.enableIME_(cc.rectContainsPoint(rect, point));
+            }.bind(this)
+        }), this);
     },
 
     /**
@@ -119,13 +129,6 @@ bq.scene.LoginLayer = cc.Layer.extend({
     createHash_: function() {
         var sid = bq.Socket.getInstance().socket.socket.sessionid;
         return CybozuLabs.MD5.calc(sid);
-    },
-
-    /** @override */
-    onMouseUp: function(evt) {
-        var rect = this.getTextInputRect_(this.nameField_);
-        var point = evt.getLocation();
-        this.enableIME_(cc.rectContainsPoint(rect, point));
     },
 
     /** @override */
