@@ -9,7 +9,7 @@ bq.SoundManager = cc.Class.extend({
      */
     ctor: function(options) {
         options = options || {};
-        this.audioEngine = options.audioEngine || cc.AudioEngine.getInstance();
+        this.audioEngine = options.audioEngine || cc.audioEngine;
         this.musicVolume = options.musicVolume || this.DEFAULT_VOLUME;
         this.effectVolume = options.effectVolume || this.DEFAULT_VOLUME;
     },
