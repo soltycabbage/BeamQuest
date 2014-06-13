@@ -34,6 +34,16 @@ bq.scene.LoginLayer = cc.Layer.extend({
         this.addChild(versionLabel);
 
         cc.eventManager.addListener(cc.EventListener.create({
+            event: cc.EventListener.KEYBOARD,
+
+            onKeyReleased: function(key) {
+                if (key === cc.KEY.enter) {
+                    this.processLogin_(this.nameField_.getContentText());
+                }
+            }.bind(this)
+        }), this);
+
+        cc.eventManager.addListener(cc.EventListener.create({
             event: cc.EventListener.MOUSE,
 
             onMouseUp: function(evt) {
@@ -129,13 +139,6 @@ bq.scene.LoginLayer = cc.Layer.extend({
     createHash_: function() {
         var sid = bq.Socket.getInstance().socket.socket.sessionid;
         return CybozuLabs.MD5.calc(sid);
-    },
-
-    /** @override */
-    onKeyUp: function(key) {
-        if (key === cc.KEY.enter) {
-            this.processLogin_(this.nameField_.getContentText());
-        }
     },
 
     /** @override */
