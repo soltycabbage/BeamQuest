@@ -3,11 +3,8 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         'use strict';
 
         this._super();
-        this.setKeyboardEnabled(true);
         if (cc.sys.isMobile) {
             this.setTouchEnabled(true);
-        } else {
-            this.setMouseEnabled(true);
         }
 
         // TODO position.mapIdからロードするマップを取得する
