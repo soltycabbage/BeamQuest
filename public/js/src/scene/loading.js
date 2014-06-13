@@ -6,7 +6,7 @@ bq.scene.LoadingLayer = cc.Layer.extend({
 
     init: function() {
         this._super();
-        var winSize = cc.Director.getInstance().getWinSize();
+        var winSize = cc.director.getWinSize();
 
         // ワールドマップを表示する
         var worldMap = cc.Sprite.create(s_ImgWorldMap);
@@ -34,7 +34,7 @@ bq.scene.LoadingLayer = cc.Layer.extend({
         this._super();
         setTimeout($.proxy(function() {
             this.showBar_(false);
-            cc.Director.getInstance().replaceScene(this.nextScene_);
+            cc.director.runScene(this.nextScene_);
         }, this), 1000);
     },
 
@@ -83,5 +83,5 @@ bq.scene.LoadingScene = cc.Scene.extend({
  * @param {cc.Scene} scene
  */
 bq.loadingTo = function(scene) {
-    cc.Director.getInstance().replaceScene(new bq.scene.LoadingScene(scene));
+    cc.director.runScene(new bq.scene.LoadingScene(scene));
 };

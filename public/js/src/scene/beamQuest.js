@@ -78,7 +78,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
     initPing_: function() {
         'use strict';
 
-        if (! cc.Director.getInstance().isDisplayStats()) {
+        if (! cc.director.isDisplayStats()) {
             return;
         }
 
@@ -99,7 +99,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
 
         // 表示位置
         var margin = 5;
-        var winSize = cc.Director.getInstance().getWinSize();
+        var winSize = cc.director.getWinSize();
         pingLabel.setPosition(cc.p(margin, winSize.height - margin));
 
         // 表示内容更新処理

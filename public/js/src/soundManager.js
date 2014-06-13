@@ -56,7 +56,7 @@ bq.SoundManager = cc.Class.extend({
         var currentVolume = this.audioEngine.getMusicVolume();
         var action = this.createFadeoutSequence(duration, currentVolume, 0.0, callback);
         var target = new bq.SoundManager.MusicVolumeModificationActionTweenDelegate(this.audioEngine);
-        var actionManager = cc.Director.getInstance().getActionManager();
+        var actionManager = cc.director.getActionManager();
         actionManager.addAction(action, target);
     },
 
