@@ -177,7 +177,7 @@ bq.scene.BeamQuestWorldScene = cc.Scene.extend({
     isAlreadyLogin_: function(userId) {
         'use strict';
 
-        userId = sys.localStorage.getItem('userHash:' + userId);
+        userId = cc.sys.localStorage.getItem('userHash:' + userId);
         return !!userId;
     }
 });
