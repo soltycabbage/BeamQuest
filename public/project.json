@@ -8,7 +8,7 @@
     "renderMode":0,
     "id": "gameCanvas",
     "engineDir": "lib/cocos2d-html5/",
-    "modules" : ["cocos2d", "physics"],
+    "modules" : ["cocos2d", "chipmunk"],
     "jsList":[
         "shared/js/gameTypes.js",
 
