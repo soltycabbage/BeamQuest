@@ -1,5 +1,5 @@
 {
-    "debug_mode":2,
+    "debugMode":2,
     "box2d":false,
     "chipmunk":true,
     "showFPS":true,
