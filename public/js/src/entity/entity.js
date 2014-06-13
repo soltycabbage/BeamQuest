@@ -77,7 +77,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var rect = this.getBoundingBox();
         var label = bq.Label.createWithShadow(this.name);
 
-        label.setPosition(cc.p(rect.getWidth() / 2, rect.getHeight() + 3));
+        label.setPosition(cc.p(rect.width / 2, rect.height + 3));
         this.addChild(label);
     },
 
