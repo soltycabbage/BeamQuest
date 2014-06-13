@@ -4,8 +4,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
 
         this._super();
         this.setKeyboardEnabled(true);
-        var platform = cc.Application.getInstance().getTargetPlatform();
-        if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
+        if (cc.sys.isMobile) {
             this.setTouchEnabled(true);
         } else {
             this.setMouseEnabled(true);
