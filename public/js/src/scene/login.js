@@ -61,14 +61,14 @@ bq.scene.LoginLayer = cc.Layer.extend({
      */
     processLogin_: function(userId) {
         var soc = bq.Socket.getInstance();
-        var hash = sys.localStorage.getItem('userHash:' + userId);
+        var hash = cc.sys.localStorage.getItem('userHash:' + userId);
         if (!hash) {
             hash = this.createHash_();
         }
 
         soc.tryLogin(userId, hash, function(data) {
             if (data.result === this.status.SUCCESS) {
-                sys.localStorage.setItem('userHash:' + userId, hash);
+                cc.sys.localStorage.setItem('userHash:' + userId, hash);
                 console.log(userId + 'がログインしました。');
                 this.welcomeToBeamQuestWorld_(userId, data);
             } else if (data.result === this.status.ERROR) {
