@@ -21,7 +21,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
      */
     ctor: function(spriteFrameName, frameMap) {
         this._super();
-        var spriteFrame = cc.SpriteFrameCache.getInstance().getSpriteFrame(spriteFrameName);
+        var spriteFrame = cc.spriteFrameCache.getSpriteFrame(spriteFrameName);
         spriteFrame && this.initWithSpriteFrame(spriteFrame); // TODO initWithSpriteFrameName ? iwg
         if ( frameMap ) {
             this.animations = bq.entity.Animation.createAnimations(frameMap);

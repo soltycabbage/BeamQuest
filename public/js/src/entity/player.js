@@ -185,19 +185,18 @@ bq.entity.Player = bq.entity.Entity.extend({
 
         // 死亡モーション＊くるくるまわってぱたっと倒れる
         bq.soundManager.playEffect(s_SeDeath1);
-        var frameCache = cc.SpriteFrameCache.getInstance();
         var rotateFrames = this.getKeyFrameMap_()['rotate'];
         var rotateAnimation = cc.Animation.create();
         rotateAnimation.setDelayPerUnit(0.03);
         rotateAnimation.setLoops(5);
         _.forEach(rotateFrames, function(rotateFrame) {
-            rotateAnimation.addSpriteFrame(frameCache.getSpriteFrame(rotateFrame));
+            rotateAnimation.addSpriteFrame(cc.spriteFrameCache.getSpriteFrame(rotateFrame));
         });
         var deathFrames = this.getKeyFrameMap_()['death'];
         var deathAnimation = cc.Animation.create();
         deathAnimation.setDelayPerUnit(0.1);
         _.forEach(deathFrames, function(deathFrame) {
-            deathAnimation.addSpriteFrame(frameCache.getSpriteFrame(deathFrame));
+            deathAnimation.addSpriteFrame(cc.spriteFrameCache.getSpriteFrame(deathFrame));
         });
 
         var fadeOut = cc.FadeOut.create(0.8);
