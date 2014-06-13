@@ -358,6 +358,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
 
                 event.stopPropagation();
                 event.preventDefault();
+                element.focus();
             }, false);
 
             cc._addEventListener(element, "mouseup", function (event) {
@@ -460,6 +461,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
                 selfPointer.handleTouchesBegin(selfPointer.getTouchesByEvent(event, pos));
                 event.stopPropagation();
                 event.preventDefault();
+                element.focus();
             }, false);
 
             cc._addEventListener(element, "touchmove", function (event) {
