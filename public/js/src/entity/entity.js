@@ -162,7 +162,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         // 吹き出し
         var msgRect = cc.Sprite.create();
         msgRect.setTextureRect(cc.rect(0, 0, msg.length * 12 + 20, 20));
-        msgRect.setColor(cc.c3b(0, 0, 0));
+        msgRect.setColor(cc.color(0, 0, 0));
         msgRect.setOpacity(200);
         msgRect.setPosition(cc.p(rect.getWidth() / 2, rect.getHeight() + 30));
 
@@ -172,7 +172,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
 
         // 吹き出しのしっぽみたいなやつ
         var tail = cc.Sprite.create(s_ImgChatTail);
-        tail.setColor(cc.c3b(0, 0, 0));
+        tail.setColor(cc.color(0, 0, 0));
         tail.setOpacity(200);
         tail.setPosition(cc.p(msgRect.getBoundingBox().getWidth() / 2, -3));
 
@@ -248,7 +248,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     /**
      * @param {Object} hpData HP変動データ
      * @param {number} opt_popLeft trueならダメージラベルが左に飛ぶよ
-     * @param {cc.c3b=} opt_color ダメージラベルの色
+     * @param {cc.color=} opt_color ダメージラベルの色
      */
     updateHp: function(hpData, opt_popLeft, opt_color) {
         var amount = hpData.hpAmount;
@@ -276,7 +276,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     /**
      * @param {number} amount
      * @param {boolean=} opt_popLeft
-     * @param {cc.c3b=} opt_color
+     * @param {cc.color=} opt_color
      * @private
      */
     popDamageLabel_: function(amount, opt_popLeft, opt_color) {
