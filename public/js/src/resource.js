@@ -50,6 +50,11 @@ var s_SeLogout       = 'res/sounds/Logout.m4a';
 var s_SeTargetLine   = 'res/sounds/TargetLine.m4a';
 
 var g_resources = [
+    //tmx
+    //{type: 'tmx', src:s_ShinjukuTmx},
+    {type: 'tmx', src:s_StartVillageTmx},
+    {type: 'tmx', src:s_SmallVillageTmx},
+
     //img
     {type: 'image', src:s_StartVillageMapSet},
     {type: 'image', src:s_SmallVillageMapSet},
@@ -63,11 +68,6 @@ var g_resources = [
     {type: 'plist', src:s_PlistPlayerMisc},
 
     //fnt
-
-    //tmx
-    //{type: 'tmx', src:s_ShinjukuTmx},
-    {type: 'tmx', src:s_StartVillageTmx},
-    {type: 'tmx', src:s_SmallVillageTmx},
 
     //bgm
     {type:"bgm",src:s_BgmField}
