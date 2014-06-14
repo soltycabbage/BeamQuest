@@ -541,7 +541,7 @@ bq.entity.Player.InputHandler = cc.Class.extend({
             onKeyPressed: _.bind(this.onKeyDown, this),
             onKeyReleased: _.bind(this.onKeyUp, this)
         });
->    }
+    }
 
 });
 
