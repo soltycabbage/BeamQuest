@@ -56,10 +56,10 @@ var g_resources = [
     {type: 'tmx', src:s_SmallVillageTmx},
 
     //img
-    {type: 'image', src:s_StartVillageMapSet},
-    {type: 'image', src:s_SmallVillageMapSet},
-    {type: 'image', src:s_ImgChatTail},
-    {type: 'image', src:s_ImgPlayerWalking},
+    {type: 'png', src:s_StartVillageMapSet},
+    {type: 'png', src:s_SmallVillageMapSet},
+    {type: 'png', src:s_ImgChatTail},
+    {type: 'png', src:s_ImgPlayerWalking},
 
 
     //plist
@@ -70,7 +70,7 @@ var g_resources = [
     //fnt
 
     //bgm
-    {type:"bgm",src:s_BgmField}
+    {type:"m4a",src:s_BgmField}
 
     //effect
 ];
@@ -85,7 +85,7 @@ for (var i = 1; i <= KINDS_OF_ENEMY; i++) {
     var ename = 'res/img/enemy' + no;
     var image = ename + '.png';
     var plist = ename + '.plist';
-    g_resources.push({type: 'image', src: image});
+    g_resources.push({type: 'png', src: image});
     g_resources.push({type: 'plist', src: plist});
     g_sprite_frames.push({image: image, plist: plist});
 }
