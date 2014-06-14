@@ -8,8 +8,8 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         }
 
         // TODO position.mapIdからロードするマップを取得する
-        var tileMap = new cc.TMXTiledMap();
-        tileMap.initWithTMXFile(bq.config.maps.area.START_MURA);
+        var xmlStr = cc.loader.getRes(bq.config.maps.area.START_MURA);
+        var tileMap = new cc.TMXTiledMap(xmlStr);
         tileMap.setPosition(cc.p(0,0));
 
         var behindMapLayer = tileMap.getLayer('GoBehind');
