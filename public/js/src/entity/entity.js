@@ -283,22 +283,22 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
 
         var rect = cc.Sprite.create();
         rect.setTextureRect(cc.rect(0, 0, castBarWidth, castBarHeight));
-        rect.setColor(cc.c3b(77, 50, 255));
+        rect.setColor(cc.color(77, 50, 255));
         rect.setOpacity(200);
-        rect.setPosition(cc.p(entityRect.getWidth() / 2 - castBarWidth / 2,
-            entityRect.getHeight() + 18));
+        rect.setPosition(cc.p(entityRect.width / 2 - castBarWidth / 2,
+            entityRect.height + 18));
         rect.setAnchorPoint(0, 0.5);
 
         var rectOuter = cc.Sprite.create();
         rectOuter.setTextureRect(cc.rect(0, 0, castBarWidth + 2, castBarHeight + 2));
-        rectOuter.setColor(cc.c3b(0, 0, 0));
+        rectOuter.setColor(cc.color(0, 0, 0));
         rectOuter.setOpacity(100);
         rectOuter.setAnchorPoint(0, 0.5);
         rectOuter.setPosition(cc.p(-1, 5));
         rect.addChild(rectOuter, -1);
 
-        var skillName = bq.Label.createWithShadow(data.skill.name, 10, cc.c3b(200, 255, 30));
-        skillName.setPosition(cc.p(entityRect.getWidth() / 2, entityRect.getHeight() + 33));
+        var skillName = bq.Label.createWithShadow(data.skill.name, 10, cc.color(200, 255, 30));
+        skillName.setPosition(cc.p(entityRect.width / 2, entityRect.height + 33));
 
         var scaleAnim = cc.ScaleTo.create(castTime / 1000, 0, 1);
         rect.runAction(cc.Sequence.create(scaleAnim,
