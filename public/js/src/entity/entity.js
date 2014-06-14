@@ -164,17 +164,17 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         msgRect.setTextureRect(cc.rect(0, 0, msg.length * 12 + 20, 20));
         msgRect.setColor(cc.color(0, 0, 0));
         msgRect.setOpacity(200);
-        msgRect.setPosition(cc.p(rect.getWidth() / 2, rect.getHeight() + 30));
+        msgRect.setPosition(cc.p(rect.width / 2, rect.height + 30));
 
         // label
         var tt = bq.Label.create(msg);
-        tt.setPosition(cc.p(msgRect.getBoundingBox().getWidth() / 2, 10));
+        tt.setPosition(cc.p(msgRect.getBoundingBox().width / 2, 10));
 
         // 吹き出しのしっぽみたいなやつ
         var tail = cc.Sprite.create(s_ImgChatTail);
         tail.setColor(cc.color(0, 0, 0));
         tail.setOpacity(200);
-        tail.setPosition(cc.p(msgRect.getBoundingBox().getWidth() / 2, -3));
+        tail.setPosition(cc.p(msgRect.getBoundingBox().width / 2, -3));
 
         msgRect.addChild(tt);
         msgRect.addChild(tail, -100);
@@ -301,7 +301,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     popNoDamageLabel_: function(popLeft) {
         var label = bq.Label.createWithShadow('Ineffective!', 20);
         var rect = this.getBoundingBox();
-        label.setPosition(cc.p(rect.getWidth()/2, rect.getHeight()));
+        label.setPosition(cc.p(rect.width / 2, rect.height));
         var d = popLeft ? -1 : 1;
         var action = cc.JumpTo.create(1.5, cc.p(d * 200, -100), 100, 1);
         var fadeOut = cc.FadeOut.create(1.5);
