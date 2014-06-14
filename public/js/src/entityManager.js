@@ -263,6 +263,16 @@ bq.EntityManager = cc.Class.extend({
     },
 
     /**
+     * @param {Object.<skill: bq.model.Skill, userId: string, targetPos: bq.model.Position>} data
+     */
+    fireSkill: function(data) {
+        var entity = this.getEntityById_(data.userId);
+        if (entity) {
+            entity.fireSkill(data.skill, data.targetPos);
+        }
+    },
+
+    /**
      * hpに増減があった
      * @param {Array.<Object>} data
      */

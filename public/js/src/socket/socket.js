@@ -119,7 +119,7 @@ bq.Socket = cc.Class.extend({
         // スキルが発動したよって
         this.socket.on('notify:skill:fire', function(data) {
             data.skill = new bq.model.Skill(data.skill);
-            alert(1);
+            entityManager.fireSkill(data);
         });
 
         /**

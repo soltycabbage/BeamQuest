@@ -1,1 +1,5 @@
-bq.skill = cc.Class.extend({});
+bq.skill = cc.Class.extend({
+
+    /** @protected */
+    fire: function() {}
+});

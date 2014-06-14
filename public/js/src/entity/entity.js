@@ -313,6 +313,16 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     },
 
     /**
+     * @param {bq.model.Skill} skill
+     * @param {bq.model.Position} targetPos
+     */
+    fireSkill: function(skillModel, targetPos) {
+        var skillFactory = bq.skill.SkillFactory.getInstance();
+        var skill = skillFactory.create(skillModel, this.model_, targetPos);
+        skill.fire();
+    },
+
+    /**
      * 常に動いているアニメーション(歩行アニメーションとか)を止める
      */
     stopForeverAnimation: function() {

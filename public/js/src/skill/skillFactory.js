@@ -7,11 +7,11 @@ bq.skill.SkillFactory = cc.Class.extend({
      * @return {bq.skill.Skill}
      */
     create: function(skillModel, user, targetPos) {
-        var s = bq.params.Skills;
+        var s = bq.Types.Skills;
            var clazz;
 
            switch(skillModel.id) {
-               case s.BURNSTRIKE.id:
+               case s.BURNSTRIKE:
                    clazz = bq.skill.BurnStrike;
                    break;
                default:
@@ -25,3 +25,9 @@ bq.skill.SkillFactory = cc.Class.extend({
            }
     }
 });
+
+bq.skill.SkillFactory.instance_ = new bq.skill.SkillFactory();
+
+bq.skill.SkillFactory.getInstance = function() {
+    return bq.skill.SkillFactory.instance_;
+};

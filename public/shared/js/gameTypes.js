@@ -22,6 +22,10 @@ bq.Types = {
         METEOR: 'meteor'
     },
 
+    Skills: {
+        BURNSTRIKE: '001_burnstrike'
+    },
+
     Items: {
         BEATS: 'beats',
         POTION: 'potion',
