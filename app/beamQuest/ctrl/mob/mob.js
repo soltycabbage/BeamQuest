@@ -80,7 +80,7 @@ var Mob = function() {
      * どのくらいの距離を離れたら敵視を解除するか(px)
      * @type {Number}
      */
-    this.attackCancelDistance = 500;
+    this.attackCancelDistance = 1000;
 
     /**
      * 攻撃をキャンセルした時とかに戻る位置
@@ -234,6 +234,12 @@ Mob.prototype.longRangeAttack = function() {
  */
 Mob.prototype.attackCancel = function() {
     this.isCancelAttacking_ = true;
+
+    // たまに無敵状態(isCancelがtrue)のままになっちゃうので時間経過でも無敵状態を解除するようにする
+    setTimeout(_.bind(function() {
+        this.isCancelAttacking_ = false;
+    }, this), 30000);
+    
     this.hateList = _.reject(this.hateList, function(h) {
         return h.entityId === this.hateTarget.model.id;
     }.bind(this));
@@ -250,7 +256,7 @@ Mob.prototype.attackCancel = function() {
 Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
     var shooter = entityStore.getPlayerById(mapId, shooterId);
     if (this.isCancelAttacking_ || !shooter) {
-        return {hpAmount: 0};
+        return { hpAmount: 0 };
     }
 
     // TODO: ほんとはクライアント側から指定されたビームtypeをそのまま使うべきではない
