@@ -283,7 +283,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var damage = Math.abs(amount);
         var label = bq.Label.createWithShadow(damage, 16, opt_color);
         var rect = this.getBoundingBox();
-        label.setPosition(cc.p(rect.getWidth()/2, rect.getHeight()));
+        label.setPosition(cc.p(rect.width / 2, rect.height));
         var d = opt_popLeft ? -1 : 1;
         var action = cc.JumpTo.create(1.5, cc.p(d * 200, -100), 100, 1);
         var fadeOut = cc.FadeOut.create(1.5);
