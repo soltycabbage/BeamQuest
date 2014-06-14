@@ -6,10 +6,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
     },
     init: function() {
         this._super();
-        this.setKeyboardEnabled(true);
-        this.setMouseEnabled(true);
-        var platform = cc.Application.getInstance().getTargetPlatform();
-        if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
+        if (cc.sys.isMobile) {
             this.setTouchEnabled(true);
         }
         this.defaultPlaceHolder_ = '< click here >';
@@ -17,7 +14,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
 
     onEnter: function() {
         this._super();
-        var size = cc.Director.getInstance().getWinSize();
+        var size = cc.director.getWinSize();
         var title = bq.Label.createWithShadow('- Beam Quest Online -', 50);
         title.setPosition(cc.p(size.width/2, size.height - 100));
         this.addChild(title);
@@ -26,7 +23,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
         label.setPosition(cc.p(size.width/2, size.height/2 + 50));
         this.addChild(label);
 
-        var nameField = cc.TextFieldTTF.create(this.defaultPlaceHolder_, 'systemFont', 32);
+        var nameField = new cc.TextFieldTTF(this.defaultPlaceHolder_, 'systemFont', 32);
         this.addChild(nameField);
         nameField.setPosition(cc.p(size.width / 2, size.height / 2));
         this.nameField_ = nameField;
@@ -35,6 +32,26 @@ bq.scene.LoginLayer = cc.Layer.extend({
         var versionSize = versionLabel.getContentSize();
         versionLabel.setPosition(cc.p(size.width - versionSize.width, versionSize.height));
         this.addChild(versionLabel);
+
+        cc.eventManager.addListener(cc.EventListener.create({
+            event: cc.EventListener.KEYBOARD,
+
+            onKeyReleased: function(key) {
+                if (key === cc.KEY.enter) {
+                    this.processLogin_(this.nameField_.getContentText());
+                }
+            }.bind(this)
+        }), this);
+
+        cc.eventManager.addListener(cc.EventListener.create({
+            event: cc.EventListener.MOUSE,
+
+            onMouseUp: function(evt) {
+                var rect = this.getTextInputRect_(this.nameField_);
+                var point = evt.getLocation();
+                this.enableIME_(cc.rectContainsPoint(rect, point));
+            }.bind(this)
+        }), this);
     },
 
     /**
@@ -44,14 +61,14 @@ bq.scene.LoginLayer = cc.Layer.extend({
      */
     processLogin_: function(userId) {
         var soc = bq.Socket.getInstance();
-        var hash = sys.localStorage.getItem('userHash:' + userId);
+        var hash = cc.sys.localStorage.getItem('userHash:' + userId);
         if (!hash) {
             hash = this.createHash_();
         }
 
         soc.tryLogin(userId, hash, function(data) {
             if (data.result === this.status.SUCCESS) {
-                sys.localStorage.setItem('userHash:' + userId, hash);
+                cc.sys.localStorage.setItem('userHash:' + userId, hash);
                 console.log(userId + 'がログインしました。');
                 this.welcomeToBeamQuestWorld_(userId, data);
             } else if (data.result === this.status.ERROR) {
@@ -79,10 +96,9 @@ bq.scene.LoginLayer = cc.Layer.extend({
     initPlayer_: function(userId, data) {
         // TODO: このクラスでframeCacheにセットするのはハイパー違和感があるので初期設定用のクラスとか作ってやりたい
         // init frame cache
-        var frameCache = cc.SpriteFrameCache.getInstance();
-        frameCache.addSpriteFrames(s_PlistPlayerWalking, s_ImgPlayerWalking);
-        frameCache.addSpriteFrames(s_PlistSimpleBeam, s_ImgSimpleBeam);
-        frameCache.addSpriteFrames(s_PlistPlayerMisc, s_ImgPlayerMisc);
+        cc.spriteFrameCache.addSpriteFrames(s_PlistPlayerWalking, s_ImgPlayerWalking);
+        cc.spriteFrameCache.addSpriteFrames(s_PlistSimpleBeam, s_ImgSimpleBeam);
+        cc.spriteFrameCache.addSpriteFrames(s_PlistPlayerMisc, s_ImgPlayerMisc);
 
         var player = new bq.entity.Player();
         var hud = bq.Hud.getInstance();
@@ -122,20 +138,6 @@ bq.scene.LoginLayer = cc.Layer.extend({
     createHash_: function() {
         var sid = bq.Socket.getInstance().socket.socket.sessionid;
         return CybozuLabs.MD5.calc(sid);
-    },
-
-    /** @override */
-    onMouseUp: function(evt) {
-        var rect = this.getTextInputRect_(this.nameField_);
-        var point = evt.getLocation();
-        this.enableIME_(cc.rectContainsPoint(rect, point));
-    },
-
-    /** @override */
-    onKeyUp: function(key) {
-        if (key === cc.KEY.enter) {
-            this.processLogin_(this.nameField_.getContentText());
-        }
     },
 
     /** @override */

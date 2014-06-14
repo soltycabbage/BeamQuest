@@ -1,0 +1,73 @@
+{
+    "debugMode":2,
+    "box2d":false,
+    "chipmunk":true,
+    "showFPS":true,
+    "frameRate":30,
+    "loadExtension":false,
+    "renderMode":0,
+    "id": "gameCanvas",
+    "engineDir": "lib/cocos2d-html5/",
+    "modules" : ["cocos2d", "chipmunk"],
+    "jsList":[
+        "shared/js/gameTypes.js",
+
+        "lib/jquery/dist/jquery.min.js",
+        "lib/underscore/underscore.js",
+        "js/lib/md5.js",
+        "js/lib/gamecontroller.min.js",
+        "js/lib/jquery.mouseinfobox.js",
+        "lib/jquery-ui/ui/minified/jquery-ui.min.js",
+        "js/lib/ejs.js",
+
+        "js/src/resource.js",
+
+        "js/src/model/model.js",
+        "js/src/model/position.js",
+        "js/src/model/entity.js",
+        "js/src/model/player.js",
+        "js/src/model/playerMove.js",
+        "js/src/model/beamPos.js",
+        "js/src/model/chat.js",
+        "js/src/model/mob.js",
+        "js/src/model/dropItem.js",
+
+        "js/src/entityManager.js",
+        "js/src/soundManager.js",
+        "js/src/socket/socket.js",
+        "js/src/config.js",
+        "js/src/bqLabel.js",
+
+        "js/src/chat.js",
+        "js/src/inputHandler.js",
+        "js/src/mapManager.js",
+        "js/src/beamManager.js",
+        "js/src/messageLog.js",
+
+        "js/src/hud/hudItem.js",
+        "js/src/hud/hpBpBar.js",
+        "js/src/hud/expBar.js",
+        "js/src/hud/level.js",
+        "js/src/hud/statusWindow.js",
+        "js/src/hud/hud.js",
+
+        "js/src/object/object.js",
+        "js/src/object/dropItem.js",
+
+        "js/src/entity/entity.js",
+        "js/src/entity/entityState.js",
+        "js/src/entity/targetLine.js",
+        "js/src/entity/animation.js",
+        "js/src/entity/player.js",
+        "js/src/entity/enemy.js",
+        "js/src/beam/beam.js",
+        "js/src/beam/beamFactory.js",
+        "js/src/ping.js",
+        "js/src/camera.js",
+
+        "js/src/scene/scene.js",
+        "js/src/scene/loading.js",
+        "js/src/scene/login.js",
+        "js/src/scene/beamQuest.js"
+    ]
+}

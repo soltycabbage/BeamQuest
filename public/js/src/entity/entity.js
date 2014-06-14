@@ -22,7 +22,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
      */
     ctor: function(spriteFrameName, frameMap) {
         this._super();
-        var spriteFrame = cc.SpriteFrameCache.getInstance().getSpriteFrame(spriteFrameName);
+        var spriteFrame = cc.spriteFrameCache.getSpriteFrame(spriteFrameName);
         spriteFrame && this.initWithSpriteFrame(spriteFrame); // TODO initWithSpriteFrameName ? iwg
         if ( frameMap ) {
             this.animations = bq.entity.Animation.createAnimations(frameMap);
@@ -78,7 +78,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var rect = this.getBoundingBox();
         var label = bq.Label.createWithShadow(this.name);
 
-        label.setPosition(cc.p(rect.getWidth() / 2, rect.getHeight() + 3));
+        label.setPosition(cc.p(rect.width / 2, rect.height + 3));
         this.addChild(label);
     },
 
@@ -164,19 +164,19 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         // 吹き出し
         var msgRect = cc.Sprite.create();
         msgRect.setTextureRect(cc.rect(0, 0, msg.length * 12 + 20, 20));
-        msgRect.setColor(cc.c3b(0, 0, 0));
+        msgRect.setColor(cc.color(0, 0, 0));
         msgRect.setOpacity(200);
-        msgRect.setPosition(cc.p(rect.getWidth() / 2, rect.getHeight() + 30));
+        msgRect.setPosition(cc.p(rect.width / 2, rect.height + 30));
 
         // label
         var tt = bq.Label.create(msg);
-        tt.setPosition(cc.p(msgRect.getBoundingBox().getWidth() / 2, 10));
+        tt.setPosition(cc.p(msgRect.getBoundingBox().width / 2, 10));
 
         // 吹き出しのしっぽみたいなやつ
         var tail = cc.Sprite.create(s_ImgChatTail);
-        tail.setColor(cc.c3b(0, 0, 0));
+        tail.setColor(cc.color(0, 0, 0));
         tail.setOpacity(200);
-        tail.setPosition(cc.p(msgRect.getBoundingBox().getWidth() / 2, -3));
+        tail.setPosition(cc.p(msgRect.getBoundingBox().width / 2, -3));
 
         msgRect.addChild(tt);
         msgRect.addChild(tail, -100);
@@ -250,7 +250,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     /**
      * @param {Object} hpData HP変動データ
      * @param {number} opt_popLeft trueならダメージラベルが左に飛ぶよ
-     * @param {cc.c3b=} opt_color ダメージラベルの色
+     * @param {cc.color=} opt_color ダメージラベルの色
      */
     updateHp: function(hpData, opt_popLeft, opt_color) {
         var amount = hpData.hpAmount;
@@ -335,14 +335,14 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     /**
      * @param {number} amount
      * @param {boolean=} opt_popLeft
-     * @param {cc.c3b=} opt_color
+     * @param {cc.color=} opt_color
      * @private
      */
     popDamageLabel_: function(amount, opt_popLeft, opt_color) {
         var damage = Math.abs(amount);
         var label = bq.Label.createWithShadow(damage, 16, opt_color);
         var rect = this.getBoundingBox();
-        label.setPosition(cc.p(rect.getWidth()/2, rect.getHeight()));
+        label.setPosition(cc.p(rect.width / 2, rect.height));
         var d = opt_popLeft ? -1 : 1;
         var action = cc.JumpTo.create(1.5, cc.p(d * 200, -100), 100, 1);
         var fadeOut = cc.FadeOut.create(1.5);
@@ -360,7 +360,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     popNoDamageLabel_: function(popLeft) {
         var label = bq.Label.createWithShadow('Ineffective!', 20);
         var rect = this.getBoundingBox();
-        label.setPosition(cc.p(rect.getWidth()/2, rect.getHeight()));
+        label.setPosition(cc.p(rect.width / 2, rect.height));
         var d = popLeft ? -1 : 1;
         var action = cc.JumpTo.create(1.5, cc.p(d * 200, -100), 100, 1);
         var fadeOut = cc.FadeOut.create(1.5);

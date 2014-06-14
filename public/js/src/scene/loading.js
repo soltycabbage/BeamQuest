@@ -6,7 +6,7 @@ bq.scene.LoadingLayer = cc.Layer.extend({
 
     init: function() {
         this._super();
-        var winSize = cc.Director.getInstance().getWinSize();
+        var winSize = cc.director.getWinSize();
 
         // ワールドマップを表示する
         var worldMap = cc.Sprite.create(s_ImgWorldMap);
@@ -20,7 +20,7 @@ bq.scene.LoadingLayer = cc.Layer.extend({
         chara.runAction(cc.Blink.create(10, 20));
         // 背景色を海の色で埋めておく
         var bgRect = cc.Sprite.create();
-        var oceanColor = cc.c3b(50, 121, 205);
+        var oceanColor = cc.color(50, 121, 205);
         bgRect.setTextureRect(cc.rect(0, 0, winSize.width, winSize.height));
         bgRect.setColor(oceanColor);
         bgRect.setPosition(cc.p(winSize.width/2, winSize.height/2));
@@ -34,7 +34,7 @@ bq.scene.LoadingLayer = cc.Layer.extend({
         this._super();
         setTimeout($.proxy(function() {
             this.showBar_(false);
-            cc.Director.getInstance().replaceScene(this.nextScene_);
+            cc.director.runScene(this.nextScene_);
         }, this), 1000);
     },
 
@@ -83,5 +83,5 @@ bq.scene.LoadingScene = cc.Scene.extend({
  * @param {cc.Scene} scene
  */
 bq.loadingTo = function(scene) {
-    cc.Director.getInstance().replaceScene(new bq.scene.LoadingScene(scene));
+    cc.director.runScene(new bq.scene.LoadingScene(scene));
 };
