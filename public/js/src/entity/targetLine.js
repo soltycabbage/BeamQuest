@@ -117,7 +117,7 @@ bq.entity.TargetLine = cc.Node.extend({
     initLine_: function() {
         var head = cc.Sprite.create();
         head.setTextureRect(cc.rect(0,0,3,3));
-        head.setColor(cc.c3b(255,10,10));
+        head.setColor(cc.color(255,10,10));
         head.setPosition(this.source_.getPosition());
         this.head_ = head;
         this.addChild(this.head_);
