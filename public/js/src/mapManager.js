@@ -80,7 +80,7 @@ bq.MapManager = cc.Class.extend({
     addDropItems: function(itemJsons) {
         _.forEach(itemJsons, $.proxy(function(itemJson) {
             var item =  new bq.object.DropItem(new bq.model.DropItem(itemJson));
-            bq.baseLayer.addChild(item, bq.config.zOrder.PLAYER - 50);
+            bq.baseLayer.addChild(item, bq.config.zOrder.DROP_ITEM);
             this.dropItems_[itemJson['dropId']] = item;
         }), this);
     },

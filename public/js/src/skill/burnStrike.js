@@ -17,6 +17,6 @@ bq.skill.BurnStrike = bq.skill.extend({
         }, this);
         burn.setPosition(cc.p(this.targetPos.x, this.targetPos.y));
         burn.runAction(cc.RepeatForever.create(cc.Animate.create(animation)));
-        bq.baseLayer.addChild(burn, bq.config.zOrder.MAP);
+        bq.baseLayer.addChild(burn, bq.config.zOrder.PLAYER - 2);
     }
 });

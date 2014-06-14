@@ -23,6 +23,7 @@ var BQConfig = cc.Class.extend({
             BASE_LAYER: 0,
             MAP: 100,          // tmxから生成したマップ
             PLAYER: 100,       // プレイヤー
+            DROP_ITEM: 50,     // ドロップアイテム
             BEHIND_LAYER: 150, // 背後に回るとプレイヤーが隠れる（木の裏とか）
             EXP_LABEL: 200,
             CHAT: 500,
