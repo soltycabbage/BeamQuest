@@ -508,14 +508,6 @@ bq.entity.Player.InputHandler = cc.Class.extend({
     handleNumKeyDown_: function(num) {
         $(bq.player).triggerHandler(bq.entity.Player.EventType.SELECT_HOT_BAR, [num]);
         bq.player.setSelectedHotbarNumber(num);
-        var selectedItem = $('#bq-hot-bar-item-' + num);
-        $('.bq-hot-bar-item').each(function(index, item) {
-            if ($(item).attr('id') === $(selectedItem).attr('id')) {
-                $(item).addClass('bq-hot-bar-item-selected');
-            } else {
-                $(item).removeClass('bq-hot-bar-item-selected');
-            }
-        });
     },
 
     /**
