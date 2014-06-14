@@ -116,6 +116,12 @@ bq.Socket = cc.Class.extend({
             entityManager.cast(data);
         });
 
+        // スキルが発動したよって
+        this.socket.on('notify:skill:fire', function(data) {
+            data.skill = new bq.model.Skill(data.skill);
+            alert(1);
+        });
+
         /**
          *  1対1の通信
          */

@@ -1,1 +1,1 @@
-bq.skill = {};
+bq.skill = cc.Class.extend({});

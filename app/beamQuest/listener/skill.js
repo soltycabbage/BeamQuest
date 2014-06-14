@@ -47,6 +47,22 @@ Skill.prototype.handleCastSkill_ = function(data) {
 };
 
 /**
+ * @param {!model.Skill} model
+ * @param {string} userId
+ * @param {!model.Position} targetPos
+ */
+Skill.prototype.fire = function(model, userId, targetPos) {
+   if (this.io_) {
+       var data = {
+           skill: model,
+           userId: userId,
+           targetPos: targetPos
+       };
+       this.io_.sockets.emit('notify:skill:fire', data);
+   }
+};
+
+/**
  * そのスキルor使用者のリキャストタイムとか残りBPとかを見て使用可能かどうかを返す
  * @param {model.Skill} skill
  * @param {ctrl.User} user

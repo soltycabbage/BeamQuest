@@ -24,6 +24,12 @@ var Skill = function(model, user, targetPos) {
      * @private
      */
     this.targetPos_ = targetPos;
+
+    /**
+     * @type {listener.Skill}
+     * @private
+     */
+    this.listener_ = require('beamQuest/listener/skill');
 };
 
 /**
@@ -35,6 +41,7 @@ Skill.prototype.fire = function() {
         this.user_.model.addBp(-this.model_.bp);
     }
 
+    this.listener_.fire(this.model_, this.user_.model.id, this.targetPos_);
 };
 
 module.exports = Skill;
