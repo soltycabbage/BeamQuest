@@ -1,5 +1,7 @@
 /**
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2008-2010 Ricardo Quesada
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
  Copyright (c) 2008, Luke Benstead.
  All rights reserved.
 
@@ -24,14 +26,16 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
- A 4x4 matrix
-
- mat =
- | 0   4   8  12 |
- | 1   5   9  13 |
- | 2   6  10  14 |
+/**
+ * <p>
+ A 4x4 matrix                         </br>
+ </br>
+ mat =                                 </br>
+ | 0   4   8  12 |                     </br>
+ | 1   5   9  13 |                     </br>
+ | 2   6  10  14 |                     </br>
  | 3   7  11  15 |
+ </p>
  */
 cc.kmMat4 = function () {
     this.mat = new Float32Array([0, 0, 0, 0,

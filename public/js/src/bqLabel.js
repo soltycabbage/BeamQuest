@@ -16,27 +16,30 @@ bq.Label.DEFAULT_FONT_SIZE = 11;
  */
 bq.Label.create = function(msg, opt_fontSize) {
     var fontSize = opt_fontSize || bq.Label.DEFAULT_FONT_SIZE;
-    return cc.LabelTTF.create(msg, bq.Label.DEFAULT_FONT, fontSize);
+    return new cc.LabelTTF(msg, bq.Label.DEFAULT_FONT, fontSize);
 };
 
 /**
  * ふちどりしたラベルを返す
  * @param {string} msg
  * @param {number=} opt_fontSize
- * @param {cc.c3b=} opt_color
+ * @param {cc.color=} opt_color
  * @return {cc.LabelTTF}
  */
 bq.Label.createWithShadow = function(msg, opt_fontSize, opt_color) {
-    var fontDef = {
+    var fontDef = new cc.FontDefinition();
+    var defs = {
         fontName: bq.Label.DEFAULT_FONT,
         fontSize: opt_fontSize || bq.Label.DEFAULT_FONT_SIZE,
         fontAlignmentH: cc.TEXT_ALIGNMENT_CENTER,
         fontAlignmentV: cc.VERTICAL_TEXT_ALIGNMENT_TOP,
-        fontFillColor: opt_color || cc.c3b(255, 255, 255),
+        fillStyle: opt_color || cc.color(255, 255, 255),
         strokeEnabled: true,
-        strokeColor: cc.c3b(0, 0, 0),
-        strokeSize: 2
+        strokeStyle: cc.color(0, 0, 0),
+        lineWidth: 2
     };
-
-    return cc.LabelTTF.createWithFontDefinition(msg, fontDef);
+    fontDef = _.extend(fontDef, defs);
+    var font = new cc.LabelTTF(msg);
+    font.setTextDefinition(fontDef);
+    return font;
 };

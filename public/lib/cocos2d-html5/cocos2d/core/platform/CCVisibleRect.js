@@ -1,7 +1,6 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
- Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -29,16 +28,16 @@
  *
  * @type Object
  */
-cc.VisibleRect = {
-    _topLeft:cc._pConst(0,0),
-    _topRight:cc._pConst(0,0),
-    _top:cc._pConst(0,0),
-    _bottomLeft:cc._pConst(0,0),
-    _bottomRight:cc._pConst(0,0),
-    _bottom:cc._pConst(0,0),
-    _center:cc._pConst(0,0),
-    _left:cc._pConst(0,0),
-    _right:cc._pConst(0,0),
+cc.visibleRect = {
+    _topLeft:cc.p(0,0),
+    _topRight:cc.p(0,0),
+    _top:cc.p(0,0),
+    _bottomLeft:cc.p(0,0),
+    _bottomRight:cc.p(0,0),
+    _bottom:cc.p(0,0),
+    _center:cc.p(0,0),
+    _left:cc.p(0,0),
+    _right:cc.p(0,0),
     _width:0,
     _height:0,
     init:function(size){
@@ -49,58 +48,81 @@ cc.VisibleRect = {
         var h = this._height;
 
         //top
-        this._topLeft._y = h;
-        this._topRight._x = w;
-        this._topRight._y = h;
-        this._top._x = w/2;
-        this._top._y = h;
+        this._topLeft.y = h;
+        this._topRight.x = w;
+        this._topRight.y = h;
+        this._top.x = w/2;
+        this._top.y = h;
 
         //bottom
-        this._bottomRight._x = w;
-        this._bottom._x = w/2;
+        this._bottomRight.x = w;
+        this._bottom.x = w/2;
 
         //center
-        this._center._x = w/2;
-        this._center._y = h/2;
+        this._center.x = w/2;
+        this._center.y = h/2;
 
         //left
-        this._left._y = h/2;
+        this._left.y = h/2;
 
         //right
-        this._right._x = w;
-        this._right._y = h/2;
-    },
-    getWidth:function(){
-        return this._width;
-    },
-    getHeight:function(){
-        return this._height;
-    },
-    topLeft:function(){
-        return this._topLeft;
-    },
-    topRight:function(){
-        return this._topRight;
-    },
-    top:function(){
-        return this._top;
-    },
-    bottomLeft:function(){
-        return this._bottomLeft;
-    },
-    bottomRight:function(){
-        return this._bottomRight;
-    },
-    bottom:function(){
-        return this._bottom;
-    },
-    center:function(){
-        return this._center;
-    },
-    left:function(){
-        return this._left;
-    },
-    right:function(){
-        return this._right;
+        this._right.x = w;
+        this._right.y = h/2;
     }
 };
+
+/** @expose */
+cc.visibleRect.width;
+cc.defineGetterSetter(cc.visibleRect, "width", function(){
+    return this._width;
+});
+/** @expose */
+cc.visibleRect.height;
+cc.defineGetterSetter(cc.visibleRect, "height", function(){
+    return this._height;
+});
+/** @expose */
+cc.visibleRect.topLeft;
+cc.defineGetterSetter(cc.visibleRect, "topLeft", function(){
+    return this._topLeft;
+});
+/** @expose */
+cc.visibleRect.topRight;
+cc.defineGetterSetter(cc.visibleRect, "topRight", function(){
+    return this._topRight;
+});
+/** @expose */
+cc.visibleRect.top;
+cc.defineGetterSetter(cc.visibleRect, "top", function(){
+    return this._top;
+});
+/** @expose */
+cc.visibleRect.bottomLeft;
+cc.defineGetterSetter(cc.visibleRect, "bottomLeft", function(){
+    return this._bottomLeft;
+});
+/** @expose */
+cc.visibleRect.bottomRight;
+cc.defineGetterSetter(cc.visibleRect, "bottomRight", function(){
+    return this._bottomRight;
+});
+/** @expose */
+cc.visibleRect.bottom;
+cc.defineGetterSetter(cc.visibleRect, "bottom", function(){
+    return this._bottom;
+});
+/** @expose */
+cc.visibleRect.center;
+cc.defineGetterSetter(cc.visibleRect, "center", function(){
+    return this._center;
+});
+/** @expose */
+cc.visibleRect.left;
+cc.defineGetterSetter(cc.visibleRect, "left", function(){
+    return this._left;
+});
+/** @expose */
+cc.visibleRect.right;
+cc.defineGetterSetter(cc.visibleRect, "right", function(){
+    return this._right;
+});

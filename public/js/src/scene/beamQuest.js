@@ -3,21 +3,16 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         'use strict';
 
         this._super();
-        this.setKeyboardEnabled(true);
-        var platform = cc.Application.getInstance().getTargetPlatform();
-        if (platform === cc.TARGET_PLATFORM.MOBILE_BROWSER) {
+        if (cc.sys.isMobile) {
             this.setTouchEnabled(true);
-        } else {
-            this.setMouseEnabled(true);
         }
 
         // TODO position.mapIdからロードするマップを取得する
-        var tileMap = new cc.TMXTiledMap();
-        tileMap.initWithTMXFile(bq.config.maps.area.START_MURA);
+        var tileMap = new cc.TMXTiledMap(bq.config.maps.area.START_MURA);
         tileMap.setPosition(cc.p(0,0));
 
         var behindMapLayer = tileMap.getLayer('GoBehind');
-        behindMapLayer.setZOrder(bq.config.zOrder.BEHIND_LAYER);
+        behindMapLayer.setLocalZOrder(bq.config.zOrder.BEHIND_LAYER);
         var mapManager = new bq.MapManager(tileMap);
         bq.mapManager = mapManager;
 
@@ -32,14 +27,17 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         var chat = new bq.Chat();
         this.inputHandler = new bq.InputHandler();
         this.inputHandler.attach(this);
-        this.inputHandler.addListener(bq.player.inputHandler);
-        this.inputHandler.addListener({
-            onKeyDown: function(key) {
+        cc.eventManager.addListener(bq.player.inputHandler.getMouseListener(), this);
+        cc.eventManager.addListener(bq.player.inputHandler.getKeyboardListener(), this);
+        cc.eventManager.addListener({
+            event: cc.EventListener.KEYBOARD,
+
+            onKeyPressed: function(key) {
                 if (key === cc.KEY.enter) {
                     chat.focusChat();
                 }
             }
-        });
+        }, this);
 
         this.initPing_();
         // HUD有効
@@ -79,7 +77,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
     initPing_: function() {
         'use strict';
 
-        if (! cc.Director.getInstance().isDisplayStats()) {
+        if (! cc.director.isDisplayStats()) {
             return;
         }
 
@@ -100,7 +98,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
 
         // 表示位置
         var margin = 5;
-        var winSize = cc.Director.getInstance().getWinSize();
+        var winSize = cc.director.getWinSize();
         pingLabel.setPosition(cc.p(margin, winSize.height - margin));
 
         // 表示内容更新処理
@@ -178,7 +176,7 @@ bq.scene.BeamQuestWorldScene = cc.Scene.extend({
     isAlreadyLogin_: function(userId) {
         'use strict';
 
-        userId = sys.localStorage.getItem('userHash:' + userId);
+        userId = cc.sys.localStorage.getItem('userHash:' + userId);
         return !!userId;
     }
 });

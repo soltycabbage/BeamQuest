@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
  Copyright (c) 2008 Radu Gruian
  Copyright (c) 2011 Vit Valentin
 
@@ -45,7 +45,7 @@
  * @param {Number} t
  * @return {cc.Point}
  */
-cc.CardinalSplineAt = function (p0, p1, p2, p3, tension, t) {
+cc.cardinalSplineAt = function (p0, p1, p2, p3, tension, t) {
     var t2 = t * t;
     var t3 = t2 * t;
 
@@ -126,17 +126,23 @@ cc.CardinalSplineTo = cc.ActionInterval.extend(/** @lends cc.CardinalSplineTo# *
     _previousPosition:null,
     _accumulatedDiff:null,
 
-    /**
-     * Constructor
-     */
-    ctor:function () {
+	/**
+	 * Creates an action with a Cardinal Spline array of points and tension
+	 *
+	 * Constructor of cc.CardinalSplineTo
+	 * @param {Number} duration
+	 * @param {Array} points array of control points
+	 * @param {Number} tension
+	 *
+	 * @example
+	 * //create a cc.CardinalSplineTo
+	 * var action1 = new cc.CardinalSplineTo(3, array, 0);
+	 */
+    ctor: function (duration, points, tension) {
         cc.ActionInterval.prototype.ctor.call(this);
 
         this._points = [];
-        this._deltaT = 0;
-        this._tension = 0;
-        this._previousPosition = null;
-        this._accumulatedDiff = null;
+		tension !== undefined && this.initWithDuration(duration, points, tension);
     },
 
     /**
@@ -175,8 +181,7 @@ cc.CardinalSplineTo = cc.ActionInterval.extend(/** @lends cc.CardinalSplineTo# *
         cc.ActionInterval.prototype.startWithTarget.call(this, target);
         // Issue #1441 from cocos2d-iphone
         this._deltaT = 1 / (this._points.length - 1);
-        var locPosition = this._target.getPosition();
-        this._previousPosition = cc.p(locPosition.x, locPosition.y);
+        this._previousPosition = cc.p(this.target.getPositionX(), this.target.getPositionY());
         this._accumulatedDiff = cc.p(0, 0);
     },
 
@@ -184,6 +189,7 @@ cc.CardinalSplineTo = cc.ActionInterval.extend(/** @lends cc.CardinalSplineTo# *
      * @param {Number} time
      */
     update:function (time) {
+        time = this._computeEaseTime(time);
         var p, lt;
         var ps = this._points;
         // eg.
@@ -199,7 +205,7 @@ cc.CardinalSplineTo = cc.ActionInterval.extend(/** @lends cc.CardinalSplineTo# *
             lt = (time - locDT * p) / locDT;
         }
 
-        var newPos = cc.CardinalSplineAt(
+        var newPos = cc.cardinalSplineAt(
             cc.getControlPointAt(ps, p - 1),
             cc.getControlPointAt(ps, p - 0),
             cc.getControlPointAt(ps, p + 1),
@@ -208,8 +214,8 @@ cc.CardinalSplineTo = cc.ActionInterval.extend(/** @lends cc.CardinalSplineTo# *
 
         if (cc.ENABLE_STACKABLE_ACTIONS) {
             var tempX, tempY;
-            tempX = this._target.getPositionX() - this._previousPosition.x;
-            tempY = this._target.getPositionY() - this._previousPosition.y;
+            tempX = this.target.getPositionX() - this._previousPosition.x;
+            tempY = this.target.getPositionY() - this._previousPosition.y;
             if (tempX != 0 || tempY != 0) {
                 var locAccDiff = this._accumulatedDiff;
                 tempX = locAccDiff.x + tempX;
@@ -237,7 +243,7 @@ cc.CardinalSplineTo = cc.ActionInterval.extend(/** @lends cc.CardinalSplineTo# *
      * @param {cc.Point} newPos
      */
     updatePosition:function (newPos) {
-        this._target.setPosition(newPos);
+        this.target.setPosition(newPos);
         this._previousPosition = newPos;
     },
 
@@ -271,11 +277,7 @@ cc.CardinalSplineTo = cc.ActionInterval.extend(/** @lends cc.CardinalSplineTo# *
  * var action1 = cc.CardinalSplineTo.create(3, array, 0);
  */
 cc.CardinalSplineTo.create = function (duration, points, tension) {
-    var ret = new cc.CardinalSplineTo();
-    if (ret.initWithDuration(duration, points, tension)) {
-        return ret;
-    }
-    return null;
+    return new cc.CardinalSplineTo(duration, points, tension);
 };
 
 /**
@@ -290,12 +292,19 @@ cc.CardinalSplineTo.create = function (duration, points, tension) {
 cc.CardinalSplineBy = cc.CardinalSplineTo.extend(/** @lends cc.CardinalSplineBy# */{
     _startPosition:null,
 
-    /**
-     * Constructor
-     */
-    ctor:function () {
+	/**
+	 * creates an action with a Cardinal Spline array of points and tension
+	 *
+	 * Constructor of cc.CardinalSplineBy
+	 * @param {Number} duration
+	 * @param {Array} points
+	 * @param {Number} tension
+	 */
+    ctor:function (duration, points, tension) {
         cc.CardinalSplineTo.prototype.ctor.call(this);
         this._startPosition = cc.p(0, 0);
+
+		tension !== undefined && this.initWithDuration(duration, points, tension);
     },
 
     /**
@@ -303,9 +312,8 @@ cc.CardinalSplineBy = cc.CardinalSplineTo.extend(/** @lends cc.CardinalSplineBy#
      */
     startWithTarget:function (target) {
         cc.CardinalSplineTo.prototype.startWithTarget.call(this, target);
-        var locPosition = target.getPosition();
-        this._startPosition.x = locPosition.x;
-        this._startPosition.y = locPosition.y;
+        this._startPosition.x = target.getPositionX();
+        this._startPosition.y = target.getPositionY();
     },
 
     /**
@@ -356,9 +364,9 @@ cc.CardinalSplineBy = cc.CardinalSplineTo.extend(/** @lends cc.CardinalSplineBy#
         var pos = this._startPosition;
         var posX = newPos.x + pos.x;
         var posY = newPos.y + pos.y;
-        this._target.setPosition(posX, posY);
-        this._previousPosition.x = posX;
-        this._previousPosition.y = posY;
+	    this._previousPosition.x = posX;
+	    this._previousPosition.y = posY;
+	    this.target.setPosition(posX, posY);
     },
 
     /**
@@ -381,10 +389,7 @@ cc.CardinalSplineBy = cc.CardinalSplineTo.extend(/** @lends cc.CardinalSplineBy#
  * @return {cc.CardinalSplineBy}
  */
 cc.CardinalSplineBy.create = function (duration, points, tension) {
-    var ret = new cc.CardinalSplineBy();
-    if (ret.initWithDuration(duration, points, tension))
-        return ret;
-    return null;
+    return new cc.CardinalSplineBy(duration, points, tension);
 };
 
 /**
@@ -400,8 +405,27 @@ cc.CardinalSplineBy.create = function (duration, points, tension) {
  * var action1 = cc.CatmullRomTo.create(3, array);
  */
 cc.CatmullRomTo = cc.CardinalSplineTo.extend(/** @lends cc.CatmullRomTo# */{
+
+	/**
+	 * creates an action with a Cardinal Spline array of points and tension
+	 *
+	 * Constructor of cc.CatmullRomTo
+	 * @param {Number} dt
+	 * @param {Array} points
+	 *
+	 * @example
+	 * var action1 = new cc.CatmullRomTo(3, array);
+	 */
+	ctor: function(dt, points) {
+		points && this.initWithDuration(dt, points);
+	},
+
     /**
-     *  initializes the action with a duration and an array of points
+     * Initializes the action with a duration and an array of points
+     *
+     * @function
+     * @param {Number} dt
+     * @param {Array} points
      */
     initWithDuration:function (dt, points) {
         return cc.CardinalSplineTo.prototype.initWithDuration.call(this, dt, points, 0.5);
@@ -428,10 +452,7 @@ cc.CatmullRomTo = cc.CardinalSplineTo.extend(/** @lends cc.CatmullRomTo# */{
  * var action1 = cc.CatmullRomTo.create(3, array);
  */
 cc.CatmullRomTo.create = function (dt, points) {
-    var ret = new cc.CatmullRomTo();
-    if (ret.initWithDuration(dt, points))
-        return ret;
-    return null;
+    return new cc.CatmullRomTo(dt, points);
 };
 
 /**
@@ -447,7 +468,29 @@ cc.CatmullRomTo.create = function (dt, points) {
  * var action1 = cc.CatmullRomBy.create(3, array);
  */
 cc.CatmullRomBy = cc.CardinalSplineBy.extend({
-    /** initializes the action with a duration and an array of points */
+
+	/**
+	 * Creates an action with a Cardinal Spline array of points and tension
+	 *
+	 * Constructor of cc.CatmullRomBy
+	 * @param {Number} dt
+	 * @param {Array} points
+	 *
+	 * @example
+	 * var action1 = new cc.CatmullRomBy(3, array);
+	 */
+	ctor: function(dt, points) {
+		cc.CardinalSplineBy.prototype.ctor.call(this);
+		points && this.initWithDuration(dt, points);
+	},
+
+    /**
+     * initializes the action with a duration and an array of points
+     *
+     * @function
+     * @param {Number} dt
+     * @param {Array} points
+     */
     initWithDuration:function (dt, points) {
         return cc.CardinalSplineTo.prototype.initWithDuration.call(this, dt, points, 0.5);
     },
@@ -464,14 +507,11 @@ cc.CatmullRomBy = cc.CardinalSplineBy.extend({
 });
 
 /**
- * creates an action with a Cardinal Spline array of points and tension
+ * Creates an action with a Cardinal Spline array of points and tension
  *
  * @example
  * var action1 = cc.CatmullRomBy.create(3, array);
  */
 cc.CatmullRomBy.create = function (dt, points) {
-    var ret = new cc.CatmullRomBy();
-    if (ret.initWithDuration(dt, points))
-        return ret;
-    return null;
+    return new cc.CatmullRomBy(dt, points);
 };

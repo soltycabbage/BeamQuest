@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -98,7 +99,7 @@ ccs.ComAttribute = ccs.Component.extend(/** @lends ccs.ComAttribute# */{
      * @param {String} key
      * @param {Boolean} value
      */
-    setCString: function (key, value) {
+    setString: function (key, value) {
         if (!key) {
             cc.log("Argument must be non-nil");
             return;
@@ -164,7 +165,7 @@ ccs.ComAttribute = ccs.Component.extend(/** @lends ccs.ComAttribute# */{
      * @param {String} key
      * @returns {String}
      */
-    getCString: function (key) {
+    getString: function (key) {
         var ret = this._jsonDict[key];
         return ret || "";
     },
@@ -183,10 +184,7 @@ ccs.ComAttribute = ccs.Component.extend(/** @lends ccs.ComAttribute# */{
      * @param path
      */
     parse:function(path){
-        var data = cc.FileUtils.getInstance().getTextFileData(path);
-        if (data) {
-            this._jsonDict = JSON.parse(data);
-        }
+        this._jsonDict = cc.loader.getRes(path);
     }
 });
 /**

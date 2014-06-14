@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -23,15 +24,10 @@
  ****************************************************************************/
 
 /**
- * Base class for ccs.ActionManager
- * @class
- * @extends ccs.Class
+ * @namespace Base singleton object for ccs.ActionManager
  */
-ccs.ActionManager = ccs.Class.extend(/** @lends ccs.ActionManager# */{
-    _actionDic: null,
-    ctor: function () {
-        this._actionDic = {};
-    },
+ccs.actionManager = /** @lends ccs.actionManager# */{
+    _actionDic: {},
 
     /**
      * Init properties with json dictionary
@@ -93,25 +89,12 @@ ccs.ActionManager = ccs.Class.extend(/** @lends ccs.ActionManager# */{
     releaseActions: function () {
         this._actionDic = {};
 
-    }
-});
-ccs.ActionManager._instance = null;
+    },
 
-/**
- * returns a shared instance of the CCSActionManager
- * @function
- * @return {ccs.ActionManager}
- */
-ccs.ActionManager.getInstance = function () {
-    if (!this._instance) {
-        this._instance = new ccs.ActionManager();
-    }
-    return this._instance;
-};
-
-/**
- * Purges ActionManager point.
- */
-ccs.ActionManager.purge = function(){
-    this._instance = null;
+	/**
+	 * Clear data: Release all actions.
+	 */
+	clear: function() {
+		this._actionDic = {};
+	}
 };

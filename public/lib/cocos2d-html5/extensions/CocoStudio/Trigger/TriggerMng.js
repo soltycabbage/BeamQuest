@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2013 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -22,15 +23,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-ccs.TriggerMng = ccs.Class.extend({
-    _eventTriggers: null,
-    _triggerObjs: null,
-    _movementDispatches: null,
-    ctor: function () {
-        this._eventTriggers = {};
-        this._triggerObjs = {};
-        this._movementDispatches = [];
-    },
+ccs.triggerManager = {
+    _eventTriggers: {},
+    _triggerObjs: {},
+    _movementDispatches: [],
 
     destroyInstance: function () {
         this.removeAll();
@@ -64,7 +60,7 @@ ccs.TriggerMng = ccs.Class.extend({
         if (!eventTriggers) {
             eventTriggers = [];
         }
-        if (!cc.ArrayContainsObject(eventTriggers, triggerObj)) {
+        if (eventTriggers.indexOf(triggerObj) == -1) {
             eventTriggers.push(triggerObj);
             this._eventTriggers[event] = eventTriggers;
         }
@@ -186,20 +182,12 @@ ccs.TriggerMng = ccs.Class.extend({
 
     removeAllArmatureMovementCallBack: function () {
         this._movementDispatches = [];
-    }
-});
+    },
 
-ccs.TriggerMng.triggerMngVersion = function () {
-    return "1.2.0.0";
+	version: function () {
+		return "1.2.0.0";
+	}
 };
-ccs.TriggerMng._instance = null;
-ccs.TriggerMng.getInstance = function () {
-    if (null == this._instance) {
-        this._instance = new ccs.TriggerMng();
-    }
-    return this._instance;
-};
-
 
 ccs.ArmatureMovementDispatcher = ccs.Class.extend({
     _mapEventAnimation: null,

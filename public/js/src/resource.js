@@ -9,13 +9,11 @@ bq.beams = [];
 // Note. 各種接頭辞をつけてね。(ex. 画像ならs_Img)
 
 // img
+// g_resourcesにも登録すること！
 var s_ImgChatTail      = 'res/img/chat_tail.png';
 var s_ImgPlayerWalking = 'res/img/player/walk.png';
-var s_ImgBeam0         = 'res/img/beam/star.png';
 var s_ImgSimpleBeam    = 'res/img/beam/simple.png';
-var s_ImgSmoke0        = 'res/img/beam/smoke.png';
 var s_ImgPlayerMisc    = 'res/img/player/misc.png';
-var s_ImgBeats100      = 'res/img/beats_100.png';
 var s_ImgWorldMap      = 'res/img/worldmap.png';
 var s_ImgMiniChara     = 'res/img/minichara.png';
 
@@ -50,12 +48,20 @@ var s_SeLogout       = 'res/sounds/Logout.m4a';
 var s_SeTargetLine   = 'res/sounds/TargetLine.m4a';
 
 var g_resources = [
-    //img
-    {type: 'image', src:s_StartVillageMapSet},
-    {type: 'image', src:s_SmallVillageMapSet},
-    {type: 'image', src:s_ImgChatTail},
-    {type: 'image', src:s_ImgPlayerWalking},
+    //tmx
+    //{type: 'tmx', src:s_ShinjukuTmx},
+    {type: 'tmx', src:s_StartVillageTmx},
+    {type: 'tmx', src:s_SmallVillageTmx},
 
+    //img
+    {type: 'png', src:s_StartVillageMapSet},
+    {type: 'png', src:s_SmallVillageMapSet},
+    {type: 'png', src:s_ImgChatTail},
+    {type: 'png', src:s_ImgPlayerWalking},
+    {type: 'png', src:s_ImgSimpleBeam},
+    {type: 'png', src:s_ImgPlayerMisc},
+    {type: 'png', src:s_ImgWorldMap},
+    {type: 'png', src:s_ImgMiniChara},
 
     //plist
     {type: 'plist', src:s_PlistPlayerWalking},
@@ -64,13 +70,8 @@ var g_resources = [
 
     //fnt
 
-    //tmx
-    //{type: 'tmx', src:s_ShinjukuTmx},
-    {type: 'tmx', src:s_StartVillageTmx},
-    {type: 'tmx', src:s_SmallVillageTmx},
-
     //bgm
-    {type:"bgm",src:s_BgmField}
+    {type:"m4a",src:s_BgmField}
 
     //effect
 ];
@@ -85,7 +86,7 @@ for (var i = 1; i <= KINDS_OF_ENEMY; i++) {
     var ename = 'res/img/enemy' + no;
     var image = ename + '.png';
     var plist = ename + '.plist';
-    g_resources.push({type: 'image', src: image});
+    g_resources.push({type: 'png', src: image});
     g_resources.push({type: 'plist', src: plist});
     g_sprite_frames.push({image: image, plist: plist});
 }

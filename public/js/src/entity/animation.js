@@ -25,9 +25,8 @@ bq.entity.Animation.createAnimation = function (frames, delay) {
     var animation = cc.Animation.create();
     animation.setDelayPerUnit(delay || 0.1);
 
-    var frameCache = cc.SpriteFrameCache.getInstance();
     _.forEach(frames, function (i) {
-        var frame = frameCache.getSpriteFrame(i);
+        var frame = cc.spriteFrameCache.getSpriteFrame(i);
         if ( !frame ) {
             cc.log("frame is "+frame);
         } else {

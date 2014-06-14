@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2013 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -22,11 +23,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-ccs.ObjectFactory = ccs.Class.extend({
-    _typeMap: null,
-    ctor: function () {
-        this._typeMap = {};
-    },
+ccs.objectFactory = {
+    _typeMap: {},
+
     destroyInstance: function () {
         this._instance = null;
     },
@@ -43,25 +42,12 @@ ccs.ObjectFactory = ccs.Class.extend({
     registerType: function (t) {
         this._typeMap[t._className] = t;
     }
-});
-
-ccs.ObjectFactory._instance = null;
-
-ccs.ObjectFactory.getInstance = function () {
-    if (!this._instance) {
-        this._instance = new ccs.ObjectFactory();
-    }
-    return this._instance;
 };
 
 ccs.TInfo = ccs.Class.extend({
     _className: "",
     _fun: null,
-    /**
-     *
-     * @param {String|ccs.TInfo}c
-     * @param {Function}f
-     */
+
     ctor: function (c, f) {
         if (f) {
             this._className = c;
@@ -70,6 +56,6 @@ ccs.TInfo = ccs.Class.extend({
             this._className = c._className;
             this._fun = c._fun;
         }
-        ccs.ObjectFactory.getInstance().registerType(this);
+        ccs.objectFactory.registerType(this);
     }
 });

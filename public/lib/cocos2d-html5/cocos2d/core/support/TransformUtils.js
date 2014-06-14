@@ -1,5 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2008-2010 Ricardo Quesada
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
  Copyright (c) 2009      Valentin Milea
 
  http://www.cocos2d-x.org
@@ -23,6 +25,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+/**
+ * convert an affine transform object to a kmMat4 object
+ * @param {cc.AffineTransform} trans
+ * @param {cc.kmMat4} mat
+ * @function
+ */
 cc.CGAffineToGL = function (trans, mat) {
     // | m[0] m[4] m[8]  m[12] |     | m11 m21 m31 m41 |     | a c 0 tx |
     // | m[1] m[5] m[9]  m[13] |     | m12 m22 m32 m42 |     | b d 0 ty |
@@ -38,6 +46,12 @@ cc.CGAffineToGL = function (trans, mat) {
     mat[13] = trans.ty;
 };
 
+/**
+ * Convert a kmMat4 object to an affine transform object
+ * @param {cc.kmMat4} mat
+ * @param {cc.AffineTransform} trans
+ * @function
+ */
 cc.GLToCGAffine = function (mat, trans) {
     trans.a = mat[0];
     trans.c = mat[4];

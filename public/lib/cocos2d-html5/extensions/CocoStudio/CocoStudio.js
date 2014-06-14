@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -22,20 +23,28 @@
  THE SOFTWARE.
  ****************************************************************************/
 /**
- * base namespace of cocostuidio
- * @namespace
+ * @namespace Base namespace of cocostuidio
+ * @name ccs
  */
 var ccs = ccs || {};
 
 /**
- * that same as cc.Class
+ * The same as cc.Class
  * @class
  */
 ccs.Class = ccs.Class || cc.Class;
 ccs.Class.extend = ccs.Class.extend || cc.Class.extend;
 
 /**
- * that same as cc.NodeRGBA
+ * The same as cc.Node
+ * @class
+ * @extends ccs.Class
+ */
+ccs.Node = ccs.Node || cc.Node;
+ccs.Node.extend = ccs.Node.extend || cc.Node.extend;
+
+/**
+ * The same as cc.RBGA
  * @class
  * @extends ccs.Class
  */
@@ -43,7 +52,7 @@ ccs.NodeRGBA = ccs.NodeRGBA || cc.NodeRGBA;
 ccs.NodeRGBA.extend = ccs.NodeRGBA.extend || cc.NodeRGBA.extend;
 
 /**
- * that same as cc.Sprite
+ * The same as cc.Sprite
  * @class
  * @extends ccs.Class
  */
@@ -51,7 +60,7 @@ ccs.Sprite = ccs.Sprite || cc.Sprite;
 ccs.Sprite.extend = ccs.Sprite.extend || cc.Sprite.extend;
 
 /**
- * that same as cc.Component
+ * The same as cc.Component
  * @class
  * @extends ccs.Class
  */
@@ -59,7 +68,7 @@ ccs.Component = ccs.Component || cc.Component;
 ccs.Component.extend = ccs.Component.extend || cc.Component.extend;
 
 /**
- * cocostudio version
+ * CocoStudio version
  * @type {string}
  */
-ccs.CocoStudioVersion = "1.0";
+ccs.cocostudioVersion = "v1.3.0.0";

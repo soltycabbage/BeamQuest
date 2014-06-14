@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -25,6 +25,7 @@
  ****************************************************************************/
 
 /**
+ * @memberOf cc
  * @function
  * @param {Number} a
  * @param {Number} b
@@ -42,11 +43,8 @@ cc.AffineTransform = function (a, b, c, d, tx, ty) {
     this.ty = ty;
 };
 
-cc.__AffineTransformMake = function (a, b, c, d, tx, ty) {
-    return {a: a, b: b, c: c, d: d, tx: tx, ty: ty};
-};
-
 /**
+ * @memberOf cc
  * @function
  * @param {Number} a
  * @param {Number} b
@@ -61,11 +59,8 @@ cc.AffineTransformMake = function (a, b, c, d, tx, ty) {
     return {a: a, b: b, c: c, d: d, tx: tx, ty: ty};
 };
 
-cc.__PointApplyAffineTransform = function (point, t) {
-    return {x: t.a * point.x + t.c * point.y + t.tx, y: t.b * point.x + t.d * point.y + t.ty};
-};
-
 /**
+ * @memberOf cc
  * @function
  * @param {cc.Point} point
  * @param {cc.AffineTransform} t
@@ -81,11 +76,8 @@ cc._PointApplyAffineTransform = function (x, y, t) {
         y: t.b * x + t.d * y + t.ty};
 };
 
-cc.__SizeApplyAffineTransform = function (size, t) {
-    return {width: t.a * size.width + t.c * size.height, height: t.b * size.width + t.d * size.height};
-};
-
 /**
+ * @memberOf cc
  * @function
  * @param {cc.Size} size
  * @param {cc.AffineTransform} t
@@ -97,6 +89,7 @@ cc.SizeApplyAffineTransform = function (size, t) {
 };
 
 /**
+ * @memberOf cc
  * @function
  * @return {cc.AffineTransform}
  * Constructor
@@ -106,6 +99,7 @@ cc.AffineTransformMakeIdentity = function () {
 };
 
 /**
+ * @memberOf cc
  * @function
  * @return {cc.AffineTransform}
  * Constructor
@@ -115,6 +109,7 @@ cc.AffineTransformIdentity = function () {
 };
 
 /**
+ * @memberOf cc
  * @function
  * @param {cc.Rect} rect
  * @param {cc.AffineTransform} anAffineTransform
@@ -164,6 +159,7 @@ cc._RectApplyAffineTransformIn = function(rect, anAffineTransform){
 };
 
 /**
+ * @memberOf cc
  * @function
  * @param {cc.AffineTransform} t
  * @param {Number} tx
@@ -183,6 +179,7 @@ cc.AffineTransformTranslate = function (t, tx, ty) {
 };
 
 /**
+ * @memberOf cc
  * @function
  * @param {cc.AffineTransform} t
  * @param {Number} sx
@@ -195,6 +192,7 @@ cc.AffineTransformScale = function (t, sx, sy) {
 };
 
 /**
+ * @memberOf cc
  * @function
  * @param {cc.AffineTransform} aTransform
  * @param {Number} anAngle
@@ -213,8 +211,11 @@ cc.AffineTransformRotate = function (aTransform, anAngle) {
         ty: aTransform.ty};
 };
 
-/** Concatenate `t2' to `t1' and return the result:<br/>
+/**
+ * Concatenate `t2' to `t1' and return the result:<br/>
  * t' = t1 * t2
+ * @memberOf cc
+ * @function
  * @param {cc.AffineTransform} t1
  * @param {cc.AffineTransform} t2
  * @return {cc.AffineTransform}
@@ -231,6 +232,7 @@ cc.AffineTransformConcat = function (t1, t2) {
 
 /**
  * Return true if `t1' and `t2' are equal, false otherwise.
+ * @memberOf cc
  * @function
  * @param {cc.AffineTransform} t1
  * @param {cc.AffineTransform} t2
@@ -242,6 +244,8 @@ cc.AffineTransformEqualToTransform = function (t1, t2) {
 };
 
 /**
+ * Get the invert value of an AffineTransform object
+ * @memberOf cc
  * @function
  * @param {cc.AffineTransform} t
  * @return {cc.AffineTransform}

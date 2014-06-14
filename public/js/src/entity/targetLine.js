@@ -117,7 +117,7 @@ bq.entity.TargetLine = cc.Node.extend({
     initLine_: function() {
         var head = cc.Sprite.create();
         head.setTextureRect(cc.rect(0,0,3,3));
-        head.setColor(cc.c3b(255,10,10));
+        head.setColor(cc.color(255,10,10));
         head.setPosition(this.source_.getPosition());
         this.head_ = head;
         this.addChild(this.head_);
@@ -145,7 +145,7 @@ bq.entity.TargetLine = cc.Node.extend({
         this.head_.setPosition(cc.pAdd(p1, cc.pMult(pSub, ratio)));
 
         this.line_.clear();
-        this.line_.drawSegment(this.tail_.getPosition(), this.head_.getPosition(), 2, cc.c4f(1, 0, 0, 1 - 0.7 * ratio));
-        this.line_.drawSegment(this.tail_.getPosition(), this.head_.getPosition(), 1, cc.c4f(1, 0.8, 0.8, 1 - 0.7 * ratio));
+        this.line_.drawSegment(this.tail_.getPosition(), this.head_.getPosition(), 2, cc.color(255, 0, 0, 255 - 255 * 0.7 * ratio));
+        this.line_.drawSegment(this.tail_.getPosition(), this.head_.getPosition(), 1, cc.color(255, 204, 204, 1 - 255 * 0.7 * ratio));
     }
 });

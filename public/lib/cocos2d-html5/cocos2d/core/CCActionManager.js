@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -41,7 +41,7 @@ cc.HashElement = cc.Class.extend(/** @lends cc.HashElement# */{
      */
     ctor:function () {
         this.actions = [];
-        this._target = null;
+        this.target = null;
         this.actionIndex = 0;
         this.currentAction = null; //CCAction
         this.currentActionSalvaged = false;
@@ -141,7 +141,7 @@ cc.ActionManager = cc.Class.extend({
             if (element.actions.indexOf(element.currentAction) !== -1 && !(element.currentActionSalvaged))
                 element.currentActionSalvaged = true;
 
-            element.actions = [];
+            element.actions.length = 0;
             if (this._currentTarget == element && !forceDelete) {
                 this._currentTargetSalvaged = true;
             } else {
@@ -167,7 +167,7 @@ cc.ActionManager = cc.Class.extend({
                 }
             }
         } else {
-            cc.log("cocos2d: removeAction: Target not found");
+            cc.log(cc._LogInfos.ActionManager_removeAction);
         }
     },
 
@@ -177,9 +177,9 @@ cc.ActionManager = cc.Class.extend({
      */
     removeActionByTag:function (tag, target) {
         if(tag == cc.ACTION_TAG_INVALID)
-            cc.log("cc.ActionManager.removeActionByTag(): an invalid tag");
-        if(!target)
-            throw "cc.ActionManager.removeActionByTag(): target must be non-null";
+            cc.log(cc._LogInfos.ActionManager_addAction);
+
+        cc.assert(target, cc._LogInfos.ActionManager_addAction);
 
         var element = this._hashTargets[target.__instanceId];
 
@@ -202,7 +202,7 @@ cc.ActionManager = cc.Class.extend({
      */
     getActionByTag:function (tag, target) {
         if(tag == cc.ACTION_TAG_INVALID)
-            cc.log("cc.ActionManager.getActionByTag(): an invalid tag");
+            cc.log(cc._LogInfos.ActionManager_getActionByTag);
 
         var element = this._hashTargets[target.__instanceId];
         if (element) {
@@ -213,7 +213,7 @@ cc.ActionManager = cc.Class.extend({
                         return action;
                 }
             }
-            cc.log("cocos2d : getActionByTag(tag =" + tag + "): Action not found");
+            cc.log(cc._LogInfos.ActionManager_getActionByTag_2, tag);
         }
         return null;
     },
@@ -253,6 +253,7 @@ cc.ActionManager = cc.Class.extend({
 
     /**
      * Pauses all running actions, returning a list of targets whose actions were paused.
+     * @return {Array}  a list of targets whose actions were paused.
      */
     pauseAllRunningActions:function(){
         var idsWithActions = [];
@@ -285,7 +286,7 @@ cc.ActionManager = cc.Class.extend({
      * because it uses this, so it can not be static
      */
     purgeSharedManager:function () {
-        cc.Director.getInstance().getScheduler().unscheduleUpdateForTarget(this);
+        cc.director.getScheduler().unscheduleUpdateForTarget(this);
     },
 
     //protected
@@ -295,7 +296,7 @@ cc.ActionManager = cc.Class.extend({
         if ((action == element.currentAction) && (!element.currentActionSalvaged))
             element.currentActionSalvaged = true;
 
-        cc.ArrayRemoveObjectAtIndex(element.actions,index);
+        element.actions.splice(index, 1);
 
         // update actionIndex in case we are in tick. looping over the actions
         if (element.actionIndex >= index)
@@ -313,7 +314,7 @@ cc.ActionManager = cc.Class.extend({
     _deleteHashElement:function (element) {
         if (element) {
             delete this._hashTargets[element.target.__instanceId];
-            cc.ArrayRemoveObject(this._arrayTargets, element);
+            cc.arrayRemoveObject(this._arrayTargets, element);
             element.actions = null;
             element.target = null;
         }
@@ -344,7 +345,8 @@ cc.ActionManager = cc.Class.extend({
                         continue;
 
                     locCurrTarget.currentActionSalvaged = false;
-                    locCurrTarget.currentAction.step(dt);
+                    //use for speed
+                    locCurrTarget.currentAction.step(dt * ( locCurrTarget.currentAction._speedMethod ? locCurrTarget.currentAction._speed : 1 ) );
                     if (locCurrTarget.currentActionSalvaged) {
                         // The currentAction told the node to remove it. To prevent the action from
                         // accidentally deallocating itself before finishing its step, we retained

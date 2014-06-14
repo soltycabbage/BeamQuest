@@ -1,5 +1,7 @@
 /**
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2008-2010 Ricardo Quesada
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
  Copyright (c) 2008, Luke Benstead.
  All rights reserved.
 
@@ -24,6 +26,14 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * The Quaternion class
+ * @param {Number} x
+ * @param {Number} y
+ * @param {Number} z
+ * @param {Number} w
+ * @constructor
+ */
 cc.kmQuaternion = function (x, y, z, w) {
     this.x = x || 0;
     this.y = y || 0;

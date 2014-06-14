@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2013 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -22,10 +23,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-cc.Component = cc.Class.extend({
+/**
+ * The base class of component in CocoStudio
+ * @class
+ * @extends cc.Class
+ */
+cc.Component = cc.Class.extend(/** @lends cc.Component# */{
     _owner: null,
-    _name: null,
-    _enabled:null,
+    _name: "",
+    _enabled: true,
 
     ctor:function(){
         this._owner = null;

@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2012+2013 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -22,10 +23,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-
 plugin.PluginType = {
     ADS:["AdSense"],
-    ANALYTICS:["AdsGoogle"],
+    ANALYTICS:["AdsGoogle","AnalyticsFlurry"],
     IAP:[""],
     SOCIAL:["SocialTwitter","SocialFacebook","SocialQzone","SocialQQWeibo","SocialWeibo"]
 };
@@ -50,7 +50,8 @@ plugin.PluginFactory = cc.Class.extend({
             case plugin.PluginType.ADS[0]:
                 ret = new plugin.ProtocolAds();
                 break;
-            case plugin.PluginType.ANALYTICS:
+            case plugin.PluginType.ANALYTICS[0]:
+            case plugin.PluginType.ANALYTICS[1]:
                 ret = new plugin.ProtocolAnalytics();
                 break;
             case plugin.PluginType.IAP:

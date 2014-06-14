@@ -1,7 +1,7 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011      Zynga Inc.
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -33,7 +33,8 @@ cc.Grabber = cc.Class.extend({
     _gl:null,
 
     ctor:function () {
-        this._gl = cc.renderContext;
+        cc._checkWebGLRenderMode();
+        this._gl = cc._renderContext;
         this._oldClearColor = [0, 0, 0, 0];
         this._oldFBO = null;
         // generate FBO

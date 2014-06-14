@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2013 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -23,7 +24,7 @@
  ****************************************************************************/
 
 ccs.sendEvent = function (event) {
-    var triggerObjArr = ccs.TriggerMng.getInstance().get(event);
+    var triggerObjArr = ccs.triggerManager.get(event);
     if (triggerObjArr == null) {
         return;
     }

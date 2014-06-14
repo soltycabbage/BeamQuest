@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2010-2012 cocos2d-x.org
+ Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -22,15 +23,16 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-ccs.SpriteFrameCacheHelper = ccs.Class.extend({
-    _textureAtlasDic:null,
+/**
+ * @namespace <p>
+ *     The sprite frame cache helper
+ */
+ccs.spriteFrameCacheHelper = /** @lends cc.spriteFrameCacheHelper# */ {
+    _textureAtlasDic:{},
     _imagePaths:[],
-    ctor:function () {
-        this._textureAtlasDic = {};
-        this._imagePaths = [];
-    },
+
     addSpriteFrameFromFile:function (plistPath, imagePath) {
-        cc.SpriteFrameCache.getInstance().addSpriteFrames(plistPath, imagePath);
+        cc.spriteFrameCache.addSpriteFrames(plistPath, imagePath);
     },
 
     getTexureAtlasWithTexture:function (texture) {
@@ -39,18 +41,14 @@ ccs.SpriteFrameCacheHelper = ccs.Class.extend({
         var textureName = texture.getName();
         var atlas = this._textureAtlasDic[textureName];
         if (atlas == null) {
-            atlas = cc.TextureAtlas.createWithTexture(texture, 20);
+            atlas = cc.TextureAtlas.create(texture, 20);
             this._textureAtlasDic[textureName] = atlas;
         }
         return atlas;
-    }
-});
-ccs.SpriteFrameCacheHelper.getInstance = function () {
-    if (!this._instance) {
-        this._instance = new ccs.SpriteFrameCacheHelper();
-    }
-    return this._instance;
-};
-ccs.SpriteFrameCacheHelper.purge = function () {
-    this._instance = null;
+    },
+
+	clear: function () {
+		this._textureAtlasDic = {};
+		this._imagePaths = [];
+	}
 };
