@@ -4,7 +4,7 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>burn1.gif</key>
+            <key>burn0.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,2},{128,128}}</string>
@@ -17,7 +17,7 @@
                 <key>sourceSize</key>
                 <string>{128,128}</string>
             </dict>
-            <key>burn2.gif</key>
+            <key>burn1.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{132,2},{128,128}}</string>
@@ -30,7 +30,7 @@
                 <key>sourceSize</key>
                 <string>{128,128}</string>
             </dict>
-            <key>burn3.gif</key>
+            <key>burn2.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{262,2},{128,128}}</string>
@@ -43,7 +43,7 @@
                 <key>sourceSize</key>
                 <string>{128,128}</string>
             </dict>
-            <key>burn4.gif</key>
+            <key>burn3.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{392,2},{128,128}}</string>

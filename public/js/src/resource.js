@@ -16,6 +16,7 @@ var s_ImgSimpleBeam    = 'res/img/beam/simple.png';
 var s_ImgPlayerMisc    = 'res/img/player/misc.png';
 var s_ImgWorldMap      = 'res/img/worldmap.png';
 var s_ImgMiniChara     = 'res/img/minichara.png';
+var s_ImgEffectBurn    = 'res/img/effect/burn.png';
 
 // path prefix
 var s_PrefixDropItem = 'res/img/object/dropitem/';
@@ -33,6 +34,7 @@ var s_SmallVillageMapSet =  'res/map/tile_small_village.png';
 var s_PlistPlayerWalking =  'res/img/player/walk.plist';
 var s_PlistSimpleBeam    =  'res/img/beam/simple.plist';
 var s_PlistPlayerMisc    =  'res/img/player/misc.plist';
+var s_PlistEffectBurn    =  'res/img/effect/burn.plist';
 
 // sounds
 var s_BgmField       = 'res/sounds/Field.m4a';
@@ -62,11 +64,13 @@ var g_resources = [
     {type: 'png', src:s_ImgPlayerMisc},
     {type: 'png', src:s_ImgWorldMap},
     {type: 'png', src:s_ImgMiniChara},
+    {type: 'png', src:s_ImgEffectBurn},
 
     //plist
     {type: 'plist', src:s_PlistPlayerWalking},
     {type: 'plist', src:s_PlistSimpleBeam},
     {type: 'plist', src:s_PlistPlayerMisc},
+    {type: 'plist', src:s_PlistEffectBurn},
 
     //fnt
 
