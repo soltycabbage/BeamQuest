@@ -5,7 +5,7 @@ var path     = require('path'),
     http     = require('http'),
     socketIo = require('socket.io'),
     log4js   = require('log4js'),
-    redis = require('socket.io/lib/stores/redis')
+    redis = require('socket.io/lib/stores/redis'),
     config   = require('config');
 
 var app = express();
