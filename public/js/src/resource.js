@@ -9,13 +9,11 @@ bq.beams = [];
 // Note. 各種接頭辞をつけてね。(ex. 画像ならs_Img)
 
 // img
+// g_resourcesにも登録すること！
 var s_ImgChatTail      = 'res/img/chat_tail.png';
 var s_ImgPlayerWalking = 'res/img/player/walk.png';
-var s_ImgBeam0         = 'res/img/beam/star.png';
 var s_ImgSimpleBeam    = 'res/img/beam/simple.png';
-var s_ImgSmoke0        = 'res/img/beam/smoke.png';
 var s_ImgPlayerMisc    = 'res/img/player/misc.png';
-var s_ImgBeats100      = 'res/img/beats_100.png';
 var s_ImgWorldMap      = 'res/img/worldmap.png';
 var s_ImgMiniChara     = 'res/img/minichara.png';
 
@@ -60,7 +58,10 @@ var g_resources = [
     {type: 'png', src:s_SmallVillageMapSet},
     {type: 'png', src:s_ImgChatTail},
     {type: 'png', src:s_ImgPlayerWalking},
-
+    {type: 'png', src:s_ImgSimpleBeam},
+    {type: 'png', src:s_ImgPlayerMisc},
+    {type: 'png', src:s_ImgWorldMap},
+    {type: 'png', src:s_ImgMiniChara},
 
     //plist
     {type: 'plist', src:s_PlistPlayerWalking},
