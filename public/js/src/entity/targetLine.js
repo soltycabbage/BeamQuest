@@ -145,7 +145,7 @@ bq.entity.TargetLine = cc.Node.extend({
         this.head_.setPosition(cc.pAdd(p1, cc.pMult(pSub, ratio)));
 
         this.line_.clear();
-        this.line_.drawSegment(this.tail_.getPosition(), this.head_.getPosition(), 2, cc.color(1, 0, 0, 1 - 0.7 * ratio));
-        this.line_.drawSegment(this.tail_.getPosition(), this.head_.getPosition(), 1, cc.color(1, 0.8, 0.8, 1 - 0.7 * ratio));
+        this.line_.drawSegment(this.tail_.getPosition(), this.head_.getPosition(), 2, cc.color(255, 0, 0, 255 - 255 * 0.7 * ratio));
+        this.line_.drawSegment(this.tail_.getPosition(), this.head_.getPosition(), 1, cc.color(255, 204, 204, 1 - 255 * 0.7 * ratio));
     }
 });
