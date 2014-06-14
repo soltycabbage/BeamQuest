@@ -63,6 +63,11 @@
             'js/src/object/object.js',
             'js/src/object/dropItem.js',
 
+            // skill
+            'js/src/skill/skill.js',
+            'js/src/skill/skillFactory.js',
+            'js/src/skill/burnStrike.js',
+
             // entity
             'js/src/entity/entity.js',
             'js/src/entity/entityState.js',
