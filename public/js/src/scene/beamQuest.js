@@ -27,14 +27,17 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         var chat = new bq.Chat();
         this.inputHandler = new bq.InputHandler();
         this.inputHandler.attach(this);
-        this.inputHandler.addListener(bq.player.inputHandler);
-        this.inputHandler.addListener({
-            onKeyDown: function(key) {
+        cc.eventManager.addListener(bq.player.inputHandler.getMouseListener(), this);
+        cc.eventManager.addListener(bq.player.inputHandler.getKeyboardListener(), this);
+        cc.eventManager.addListener({
+            event: cc.EventListener.KEYBOARD,
+
+            onKeyPressed: function(key) {
                 if (key === cc.KEY.enter) {
                     chat.focusChat();
                 }
             }
-        });
+        }, this);
 
         this.initPing_();
         // HUD有効

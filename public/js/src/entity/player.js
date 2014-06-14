@@ -482,7 +482,33 @@ bq.entity.Player.InputHandler = cc.Class.extend({
                 $(item).removeClass('bq-hot-bar-item-selected');
             }
         });
+    },
+
+    /**
+     * マウス入力応急処置 for cocos2d-js v3.0beta
+     * @return {cc.EventListener}
+     */
+    getMouseListener: function() {
+        return cc.EventListener.create({
+            event: cc.EventListener.MOUSE,
+
+            onMouseDown: _.bind(this.onMouseDown, this)
+        });
+    },
+
+    /**
+     * キー入力応急処置 for cocos2d-js v3.0beta
+     * @return {cc.EventListener}
+     */
+    getKeyboardListener: function() {
+        return cc.EventListener.create({
+            event: cc.EventListener.KEYBOARD,
+
+            onKeyPressed: _.bind(this.onKeyDown, this),
+            onKeyReleased: _.bind(this.onKeyUp, this)
+        });
     }
+
 });
 
 /**
