@@ -18,6 +18,9 @@ var Entity = function(opt_data) {
     /** @type {number} */
     this.id = this.data.id;
 
+    /** @type {bq.Types.EntityType} */
+    this.type = this.data.type;
+
     /** @type {string} */
     this.name = this.data.name;
 
@@ -101,6 +104,7 @@ Entity.prototype.toJSON = function() {
     var json = {};
     json.hash = this.hash;
     json.id = this.id;
+    json.type = this.type;
     json.name = this.name;
     json.maxHp = this.maxHp;
     json.hp =  this.hp;

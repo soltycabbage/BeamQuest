@@ -9,6 +9,9 @@ var util = require('util'),
 var Player = function(opt_data) {
     Entity.apply(this, arguments);
 
+    /** @override */
+    this.type = bq.Types.EntityType.PLAYER;
+
     /** @type {model.BaseStatus} */
     this.baseStatus = new BaseStatusModel(this.data.status);
 

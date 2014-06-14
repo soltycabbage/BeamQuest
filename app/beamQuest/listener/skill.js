@@ -11,7 +11,7 @@ var Skill = function() {
 Skill.prototype.listen = function(socket, io) {
     this.socket_ = socket;
     this.io_ = io;
-
+    this.factory_ = require('beamQuest/factory/skillFactory');
     this.socket_.on('skill:cast', this.handleCastSkill_.bind(this));
 };
 
@@ -38,9 +38,10 @@ Skill.prototype.handleCastSkill_ = function(data) {
 
             // キャストタイム終了後、スキル使用者のBPを減らす。
             // キャストが中断されない前提。
-            setTimeout(function() {
-                player.model.addBp(-targetSkill.bp);
-            }, targetSkill.castTime);
+            setTimeout(_.bind(function() {
+                var s = this.factory_.create(targetSkill, player, data.position);
+                s && s.fire();
+            }, this), targetSkill.castTime);
         }
     }
 };

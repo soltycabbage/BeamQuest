@@ -6,6 +6,9 @@ bq.model.Entity = bq.model.extend({
         /** @type {number} */
         this.id;
 
+        /** @type {bq.Types.EntityType} */
+        this.type;
+
         /** @type {string} */
         this.name;
 
@@ -34,6 +37,7 @@ bq.model.Entity = bq.model.extend({
     /** @override */
     parse: function(json) {
         this.id = json['id'];
+        this.type = json['type'];
         this.name = json['name'];
         this.maxHp = json['maxHp'];
         this.hp = json['hp'];
