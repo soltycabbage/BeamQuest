@@ -110,7 +110,7 @@ bq.entity.Player = bq.entity.Entity.extend({
             var hotNum = this.selectedHotbarNumber_ === 0 ? 8 : this.selectedHotbarNumber_ - 1;
             var item = this.model_.hotbarItems[hotNum];
             destination['mapId'] = this.model_.position.mapId;
-            this.socket.castSkill(item.id, this.model_.id, destination)
+            this.socket.castSkill(item.id, this.model_.id, destination);
         } else {
             this.shootInternal_(destination);
         }
