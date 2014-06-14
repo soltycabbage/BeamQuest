@@ -83,7 +83,7 @@ bq.beam.Beam = cc.PhysicsSprite.extend({
         this.setPosition(src);
         var v = cc.pSub(dest, src);
         var vn = cc.pMult(cc.pNormalize(v), speed);
-        var rotate = -1.0 * ( cc.RADIANS_TO_DEGREES(cc.pToAngle(vn)) -90);
+        var rotate = -1.0 * ( cc.radiansToDegrees(cc.pToAngle(vn)) -90);
         this.setRotation(rotate);
 
         // 力を与えてそっちに飛ばす TODO 他人が打ったビームの場合いらないかも
