@@ -16,7 +16,14 @@ bq.skill.BurnStrike = bq.skill.extend({
             animation.addSpriteFrame(frame);
         }, this);
         burn.setPosition(cc.p(this.targetPos.x, this.targetPos.y));
-        burn.runAction(cc.RepeatForever.create(cc.Animate.create(animation)));
+        var removeFunc = cc.CallFunc.create(function() {
+            burn.removeFromParent();
+        });
+        burn.runAction(cc.Spawn.create(
+            cc.Repeat.create(cc.Animate.create(animation), 100),
+            cc.Sequence.create(cc.DelayTime.create(5), cc.FadeOut.create(1), removeFunc)
+        ));
+
         bq.baseLayer.addChild(burn, bq.config.zOrder.PLAYER - 2);
     }
 });

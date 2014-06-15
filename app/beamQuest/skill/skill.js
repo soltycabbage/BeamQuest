@@ -62,7 +62,6 @@ Skill.prototype.applyDamage = function(damage) {
                 entity.hateList && entity.applyHate(this.user.model.id, damage);
             }
         }
-
     }, this));
 };
 
