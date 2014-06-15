@@ -1,5 +1,6 @@
 var PlayerCtrl = require('beamQuest/ctrl/player'),
-    entityStore = require('beamQuest/store/entities');
+    entityStore = require('beamQuest/store/entities'),
+    MobCtrl = require('beamQuest/ctrl/mob/mob');
 
 /**
  * @constructor
@@ -51,14 +52,18 @@ Skill.prototype.fire = function() {
  */
 Skill.prototype.applyDamage = function(damage) {
     if (this.user.model.type === bq.Types.EntityType.PLAYER) {
-        var mobs = this.getMobsByRadius();
+        var entities = this.getMobsByRadius();
     }
 
-    _.forEach(mobs, function(mob) {
-        if (mob && mob.model) {
-            mob.model.addHp(damage);
+    _.forEach(entities, _.bind(function(entity) {
+        if (entity && entity.model) {
+            entity.model.addHp(-damage);
+            if (entity instanceof MobCtrl) {
+                entity.hateList && entity.applyHate(this.user.model.id, damage);
+            }
         }
-    });
+
+    }, this));
 };
 
 /**

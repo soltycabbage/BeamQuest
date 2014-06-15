@@ -22,12 +22,12 @@ util.inherits(BurnStrike, Skill);
 BurnStrike.prototype.fire = function() {
     BurnStrike.super_.prototype.fire.apply(this);
 
-    this.applyDamage(-10);
+    this.applyDamage(10);
     this.interval_ = setInterval(_.bind(function() {
         if (this.dotCount_++ > this.maxDotCount_) {
             clearInterval(this.interval_);
         }
-        this.applyDamage(-10);
+        this.applyDamage(10);
     }, this), 500);
 };
 
