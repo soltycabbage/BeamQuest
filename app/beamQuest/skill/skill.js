@@ -1,4 +1,5 @@
-var PlayerCtrl = require('beamQuest/ctrl/player');
+var PlayerCtrl = require('beamQuest/ctrl/player'),
+    entityStore = require('beamQuest/store/entities');
 
 /**
  * @constructor
@@ -9,21 +10,21 @@ var PlayerCtrl = require('beamQuest/ctrl/player');
 var Skill = function(model, user, targetPos) {
     /**
      * @type {!ctrl.Entity} スキル使用者
-     * @private
+     * @protecter
      */
-    this.user_ = user;
+    this.user = user;
 
     /**
      * @type {model.Skill}
-     * @private
+     * @protected
      */
-    this.model_ = model;
+    this.model = model;
 
     /**
      * @type {model.Position}
-     * @private
+     * @protected
      */
-    this.targetPos_ = targetPos;
+    this.targetPos = targetPos;
 
     /**
      * @type {listener.Skill}
@@ -37,11 +38,43 @@ var Skill = function(model, user, targetPos) {
  */
 Skill.prototype.fire = function() {
     // BPを減らす。BPの概念があるのはプレイヤーのみ
-    if (this.user_ instanceof PlayerCtrl) {
-        this.user_.model.addBp(-this.model_.bp);
+    if (this.user instanceof PlayerCtrl) {
+        this.user.model.addBp(-this.model.bp);
     }
 
-    this.listener_.fire(this.model_, this.user_.model.id, this.targetPos_);
+    this.listener_.fire(this.model, this.user.model.id, this.targetPos);
+};
+
+/**
+ * 効果範囲内にダメージを与える
+ * @param {number} damage
+ */
+Skill.prototype.applyDamage = function(damage) {
+    if (this.user.model.type === bq.Types.EntityType.PLAYER) {
+        var mobs = this.getMobsByRadius();
+    }
+
+    _.forEach(mobs, function(mob) {
+        if (mob && mob.model) {
+            mob.model.addHp(damage);
+        }
+    });
+};
+
+/**
+ * 指定座標を中心とする半径radiusの円内に含まれるMobを返す
+ * @return {Array.<ctrl.Entity>}
+ */
+Skill.prototype.getMobsByRadius = function() {
+    return entityStore.getMobsByRadius(this.targetPos, this.model.radius);
+};
+
+/**
+ * 指定座標を中心とする半径radiusの円内に含まれるPlayerを返す
+ * @return {Array.<ctrl.Entity>}
+ */
+Skill.prototype.getPlayersByRadius = function() {
+    return entityStore.getPlayersByRadius(this.targetPos, this.model.radius);
 };
 
 module.exports = Skill;

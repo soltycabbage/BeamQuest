@@ -124,14 +124,6 @@ bq.EntityManager = cc.Class.extend({
      * @param {Object} data
      */
     hitEntity: function(data) {
-        var enemy = this.enemys_[data.entity.id];
-
-        // 右から当たったら左にダメージラベルがぴょーんて飛ぶ
-        if (enemy) {
-            var hitRight = (enemy.getPosition().x - data.beamPos.x) < 0;
-            enemy.updateHp({entity: data.entity, hpAmount: data.hpAmount}, hitRight);
-        }
-
         // ビームを消す
         bq.BeamManager.getInstance().disposeBeam(data);
     },

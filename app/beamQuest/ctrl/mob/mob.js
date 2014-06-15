@@ -289,15 +289,6 @@ Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
 /**
  * @override
  */
-Mob.prototype.handleAddHp = function(amount) {
-    if (this.model.hp <= 0) { // 死
-        this.death();
-    }
-};
-
-/**
- * @override
- */
 Mob.prototype.death = function() {
     itemListener.drop(this.chooseDropItems_(), this.model.position);
     entityListener.killMob(this);
