@@ -26,7 +26,9 @@ BurnStrike.prototype.fire = function() {
         if (this.dotCount_++ > this.maxDotCount_) {
             clearInterval(this.interval_);
         }
-        this.applyDamage(10);
+        // TODO: ダメージ計算
+        var damage = 10 + Math.floor(10 * Math.random());
+        this.applyDamage(damage);
     }, this), 500);
 };
 
