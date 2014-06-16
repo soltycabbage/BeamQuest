@@ -67,9 +67,12 @@ bq.skill.BurnStrike = bq.skill.extend({
         var removeFunc = cc.CallFunc.create(function() {
             burn.removeFromParent();
         });
-        burn.runAction(cc.Spawn.create(
-            cc.Repeat.create(cc.Animate.create(animation), 100),
-            cc.Sequence.create(cc.DelayTime.create(5), cc.FadeOut.create(1), removeFunc)
+        burn.setOpacity(0);
+        burn.runAction(
+            cc.Spawn.create(
+                cc.FadeIn.create(0.3, 255),
+                cc.Repeat.create(cc.Animate.create(animation), 100),
+                cc.Sequence.create(cc.DelayTime.create(5), cc.FadeOut.create(1), removeFunc)
         ));
 
         bq.baseLayer.addChild(burn, bq.config.zOrder.PLAYER - 2);
