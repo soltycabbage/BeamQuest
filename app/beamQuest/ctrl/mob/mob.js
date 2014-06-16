@@ -269,9 +269,6 @@ Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
         this.model.defence / 4);
 
     this.applyHate(shooterId, damage);
-
-    // ヘイト値の大きい順にソートしておく
-    this.hateList = _.sortBy(this.hateList, function(h) {return -h.hate;});
     this.model.addHp(-damage);
     return {hpAmount: -damage};
 };
@@ -292,6 +289,8 @@ Mob.prototype.applyHate = function(entityId, hate) {
         // ダメージ量がそのままヘイト値になる
         hateTarget.hate += hate;
     }
+    // ヘイト値の大きい順にソートしておく
+    this.hateList = _.sortBy(this.hateList, function(h) {return -h.hate;});
 };
 
 /**
