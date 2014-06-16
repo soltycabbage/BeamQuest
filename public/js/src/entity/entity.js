@@ -127,7 +127,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
             this.runAction(act);
         }
     },
-    
+
     /**
      * 死にモーション
      * @param {boolean=} opt_skipRemove 見かけ上非表示にするだけでレイヤーから消したくない時はtrue
@@ -318,7 +318,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
      */
     fireSkill: function(skillModel, targetPos) {
         var skillFactory = bq.skill.SkillFactory.getInstance();
-        var skill = skillFactory.create(skillModel, this.model_, targetPos);
+        var skill = skillFactory.create(skillModel, this, targetPos);
         skill.fire();
     },
 

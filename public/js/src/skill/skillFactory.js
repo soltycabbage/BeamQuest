@@ -2,7 +2,7 @@ bq.skill.SkillFactory = cc.Class.extend({
     /**
      * スキルmodelに該当するskillクラスをnewして返す
      * @param {bq.model.Skill} skillModel
-     * @param {bq.model.Entity} user
+     * @param {bq.entity.Entity} user
      * @param {bq.model.Position} targetPos
      * @return {bq.skill.Skill}
      */

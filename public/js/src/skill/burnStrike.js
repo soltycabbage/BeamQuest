@@ -18,7 +18,7 @@ bq.skill.BurnStrike = bq.skill.extend({
         particle.setTexture(texture);
         particle.setPosition(cc.p(0, 0));
 
-        fireBall.setPosition(cc.p(this.user.position.x, this.user.position.y));
+        fireBall.setPosition(cc.p(this.user.x, this.user.y));
         fireBall.addChild(particle);
         fireBall.runAction(
             cc.Sequence.create(
