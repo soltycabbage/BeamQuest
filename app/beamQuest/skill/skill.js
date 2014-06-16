@@ -51,8 +51,9 @@ Skill.prototype.fire = function() {
  * @param {number} damage
  */
 Skill.prototype.applyDamage = function(damage) {
+    var entities = [];
     if (this.user.model.type === bq.Types.EntityType.PLAYER) {
-        var entities = this.getMobsByRadius();
+        entities = this.getMobsByRadius();
     }
 
     _.forEach(entities, _.bind(function(entity) {
