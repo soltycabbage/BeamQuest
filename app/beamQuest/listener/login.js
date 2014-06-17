@@ -54,6 +54,7 @@ exports.listen = function(socket, io) {
         model.position = new positionModel(model.position);
         var player = new playerCtrl();
         player.setModel(model);
+        player.respawn();
         return player;
     }
 
