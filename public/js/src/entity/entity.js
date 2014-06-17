@@ -102,6 +102,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
      * @param {cc.p} pos
      */
     moveTo: function(pos) {
+        this.setOpacity(255);
         var moveActTag = 'entity_move_' + this.name;
         var move = cc.MoveTo.create(0.2, pos);
         if (this.currentState == bq.entity.EntityState.Mode.walking) {
