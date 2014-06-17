@@ -5,7 +5,7 @@ var path     = require('path'),
     http     = require('http'),
     socketIo = require('socket.io'),
     log4js   = require('log4js'),
-    redis = require('socket.io/lib/stores/redis'),
+    redis = require('socket.io-redis'),
     config   = require('config');
 
 var app = express();
@@ -72,15 +72,10 @@ var io = socketIo.listen(server);
 var CONFIG = config.session;
 logger.info('session type: ' + CONFIG.type);
 if (CONFIG.type === 'redis') {
-    var redisConf = {
+    io.set('log level', 1);
+    io.adapter(redis({
         host: CONFIG.host,
         port: CONFIG.port
-    };
-    io.set('log level', 1);
-    io.set('store', new redis({
-        redisPub: redisConf,
-        redisSub: redisConf,
-        redisClient: redisConf
     }));
 }
 
