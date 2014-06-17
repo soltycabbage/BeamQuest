@@ -173,6 +173,9 @@ bq.EntityManager = cc.Class.extend({
      * @param {bq.model.PlayerMove} moveData
      */
     createOtherPlayer: function(moveData) {
+        if (this.otherPlayers_[moveData.userId]) {
+            return;
+        }
         var data = {
             idle_bottom:      ["b0_0.png", "b0_1.png", "b0_2.png", "b0_3.png"],
             step_bottom:      ["b0_4.png", "b0_5.png", "b0_6.png", "b0_7.png"]
