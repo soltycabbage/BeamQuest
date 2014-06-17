@@ -81,7 +81,9 @@ Player.prototype.update = function() {
 
 Player.prototype.respawn = function() {
     this.model.isDeath = false;
-    this.model.addHp(this.model.maxHp);
+    if (this.model.hp <= 0) {
+        this.model.addHp(this.model.maxHp);
+    }
 };
 
 /** @override */

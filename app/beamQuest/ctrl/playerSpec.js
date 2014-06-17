@@ -34,10 +34,21 @@ describe('test: ctrl/player', function() {
         expect(sut.model).to.be(model);
     });
 
-    it('respawnしたらisDeathフラグが下りて全回復する', function() {
+    it('HP0状態でrespawnしたらisDeathフラグが下りて全回復する', function() {
+        sut.model.hp = 0;
+        sut.model.isDeath = true;
+
         sut.respawn();
         expect(sut.model.isDeath).to.be(false);
         expect(sut.model.hp).to.be(sut.model.maxHp);
+    });
+
+    it('HPが残っている状態でrespawnしたら（ログイン時とか）isDeathフラグが下りるだけで全回復しない', function() {
+        sut.model.hp = 10;
+        sut.model.isDeath = true;
+        sut.respawn();
+        expect(sut.model.isDeath).to.be(false);
+        expect(sut.model.hp).to.be(10);
     });
 
     it('経験値が入ったらレベルが上がる', function() {
