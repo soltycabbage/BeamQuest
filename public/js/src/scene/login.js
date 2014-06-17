@@ -63,7 +63,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
         var soc = bq.Socket.getInstance();
         var hash = cc.sys.localStorage.getItem('userHash:' + userId);
         if (!hash) {
-            hash = this.createHash_();
+            hash = this.createHash_(userId);
         }
 
         soc.tryLogin(userId, hash, function(data) {
@@ -132,12 +132,13 @@ bq.scene.LoginLayer = cc.Layer.extend({
 
     /**
      * パスワードの代わりにランダムハッシュを使う
+     * @param {string} userId
      * @return {string}
      * @private
      */
-    createHash_: function() {
-        var sid = bq.Socket.getInstance().socket.socket.sessionid;
-        return CybozuLabs.MD5.calc(sid);
+    createHash_: function(userId) {
+        var randomStr = userId + new Date().toString();
+        return CybozuLabs.MD5.calc(randomStr);
     },
 
     /** @override */
