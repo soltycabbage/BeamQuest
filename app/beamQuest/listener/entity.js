@@ -68,7 +68,7 @@ Entity.prototype.startAttackShortRange = function(mobId, srcPos, destPos, range,
 
 /**
  * hpの増減をクライアントに伝える
- * @param {Array.<entity: model.Entity, hpAmount: number>} hpAmounts
+ * @param {Array.<entity: model.Entity, hpAmount: number, isCritical: boolean>} hpAmounts
  */
 Entity.prototype.updateHp = function(data) {
     if (this.io_) {
@@ -78,7 +78,7 @@ Entity.prototype.updateHp = function(data) {
 
 /**
  * bpの増減をクライアントに伝える
- * @param {Object.<entity: model.Player, bpAmount: number>} data
+ * @param {Object.<entity: model.Player, bpAmount: number, isCritical: boolean>} data
  */
 Entity.prototype.updateBp = function(data) {
     if (this.io_ && data.entity) {

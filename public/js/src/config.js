@@ -21,9 +21,10 @@ var BQConfig = cc.Class.extend({
         // SpriteのZOrder（重なり順)
         this.zOrder = {
             BASE_LAYER: 0,
+            GROUND_EFFECT: 25, // 地面に描画されるエフェクト
+            DROP_ITEM: 50,     // ドロップアイテム
             MAP: 100,          // tmxから生成したマップ
             PLAYER: 100,       // プレイヤー
-            DROP_ITEM: 50,     // ドロップアイテム
             BEHIND_LAYER: 150, // 背後に回るとプレイヤーが隠れる（木の裏とか）
             EXP_LABEL: 200,
             CHAT: 500,

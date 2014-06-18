@@ -30,7 +30,7 @@ bq.skill.BurnStrike = bq.skill.extend({
             )
         );
 
-        bq.baseLayer.addChild(fireBall, bq.config.zOrder.PLAYER - 2);
+        bq.baseLayer.addChild(fireBall, bq.config.zOrder.GROUND_EFFECT);
         return deferred.promise();
     },
 
@@ -75,6 +75,6 @@ bq.skill.BurnStrike = bq.skill.extend({
                 cc.Sequence.create(cc.DelayTime.create(5), cc.FadeOut.create(1), removeFunc)
         ));
 
-        bq.baseLayer.addChild(burn, bq.config.zOrder.PLAYER - 2);
+        bq.baseLayer.addChild(burn, bq.config.zOrder.GROUND_EFFECT);
     }
 });

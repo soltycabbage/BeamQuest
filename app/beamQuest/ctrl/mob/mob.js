@@ -263,14 +263,20 @@ Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
     //       サーバ側に保存してあるプレイヤーの装備しているビームを参照すべき
     var beam = bq.params.Beams[beamType.toUpperCase()];
 
-    // TODO: ダメージ計算
+    // TODO: ダメージ計算(どこかにロジックをまとめたい）
     // いまんとこドラクエ式 (攻撃力/2) - (防御力/4)
     var damage = Math.floor((Math.random() * beam.atk / 2 + beam.atk + shooter.model.attack) / 2 -
         this.model.defence / 4);
 
+    // TODO: クリティカル計算
+    var isCritical = false;
+    if (Math.floor(Math.random() * 100) < 10) {
+        isCritical = true;
+        damage *= 2;
+    }
+
     this.applyHate(shooterId, damage);
-    this.model.addHp(-damage);
-    return {hpAmount: -damage};
+    this.model.addHp(-damage, isCritical);
 };
 
 /**

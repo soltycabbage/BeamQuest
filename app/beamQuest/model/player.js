@@ -94,10 +94,11 @@ Player.prototype.updateStatus = function() {
 
 /**
  * @param {number} amount
+ * @param {boolean=] opt_isCritical
  */
-Player.prototype.addBp = function(amount) {
+Player.prototype.addBp = function(amount, opt_isCritical) {
     this.bp = Math.max(0, Math.min(this.maxBp, this.bp + amount));
-    this.emit('addBp', amount);
+    this.emit('addBp', amount, !!opt_isCritical);
 };
 
 /**

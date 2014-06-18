@@ -257,7 +257,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var amount = hpData.hpAmount;
         if (amount < 0) { // ダメージ
             bq.soundManager.playEffect(s_SeDamage);
-            this.popDamageLabel_(amount, !!opt_popLeft, opt_color);
+            this.popDamageLabel_(hpData, !!opt_popLeft, opt_color);
         } else if (amount > 0) { // 回復
             // TODO
         } else { // ノーダメやで
@@ -334,14 +334,19 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     },
 
     /**
-     * @param {number} amount
+     * @param {Object} hpData
      * @param {boolean=} opt_popLeft
      * @param {cc.color=} opt_color
      * @private
      */
-    popDamageLabel_: function(amount, opt_popLeft, opt_color) {
+    popDamageLabel_: function(hpData, opt_popLeft, opt_color) {
+        var amount = hpData.hpAmount;
         var damage = Math.abs(amount);
-        var label = bq.Label.createWithShadow(damage, 16, opt_color);
+        var size = hpData.isCritical ? 32 : 16;
+        if (hpData.isCritical) {
+            damage += '!!';
+        }
+        var label = bq.Label.createWithShadow(damage, size, opt_color);
         var rect = this.getBoundingBox();
         label.setPosition(cc.p(rect.width / 2, rect.height));
         var d = opt_popLeft ? -1 : 1;

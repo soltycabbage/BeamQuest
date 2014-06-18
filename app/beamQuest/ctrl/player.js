@@ -50,10 +50,12 @@ Player.prototype.setModel = function(model) {
 };
 
 /**
+ * @param {number} amount
+ * @param {boolean} isCritical
  * @private
  */
-Player.prototype.handleAddBp_ = function(amount) {
-    entityListener.updateBp({entity: this.model, bpAmount: amount});
+Player.prototype.handleAddBp_ = function(amount, isCritical) {
+    entityListener.updateBp({entity: this.model, bpAmount: amount, isCritical: isCritical});
 };
 
 Player.prototype.update = function() {

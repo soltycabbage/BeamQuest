@@ -26,9 +26,14 @@ BurnStrike.prototype.fire = function() {
         if (this.dotCount_++ > this.maxDotCount_) {
             clearInterval(this.interval_);
         }
-        // TODO: ダメージ計算
+        // TODO: ダメージ計算、クリティカル判定
         var damage = 10 + Math.floor(10 * Math.random());
-        this.applyDamage(damage);
+        var isCritical = false;
+        if (Math.floor(Math.random() * 100) < 20) { // とりあえずクリティカル率20％
+            isCritical = true;
+            damage *= 2;
+        }
+        this.applyDamage(damage, isCritical);
     }, this), 500);
 };
 
