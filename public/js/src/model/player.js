@@ -49,5 +49,6 @@ bq.model.Player = bq.model.Entity.extend({
         this.nextLvExp = json['nextLvExp'];
         this.lv = json['lv'];
         this.beam = json['beam'];
+        this.hotbarItems = json['hotbarItems'];
     }
 });

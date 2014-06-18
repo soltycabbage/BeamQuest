@@ -9,6 +9,9 @@ var util = require('util'),
 var Player = function(opt_data) {
     Entity.apply(this, arguments);
 
+    /** @override */
+    this.type = bq.Types.EntityType.PLAYER;
+
     /** @type {model.BaseStatus} */
     this.baseStatus = new BaseStatusModel(this.data.status);
 
@@ -52,6 +55,13 @@ var Player = function(opt_data) {
 
     /** @type {Beam} */
     this.beam = bq.params.Beams.NORMAL1;
+
+    /**
+     * ホットバーに登録されているitem一覧
+     * itemはユーザが実行可能なもの（スキル、アイテムなど）が対象となる
+     * @type {Array.<model.Skill|model.Item>}
+     */
+    this.hotbarItems = this.data.hotbarItems || this.skills;
 
     /** @type {Socket} */
     this.socket = this.data.socket || null;
@@ -137,6 +147,7 @@ Player.prototype.toJSON = function() {
     json.lv = this.lv;
     json.isDeath = this.isDeath;
     json.beam = this.beam;
+    json.hotbarItems = this.toArrayJSON(this.hotbarItems);
     return json;
 };
 

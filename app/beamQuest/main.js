@@ -3,6 +3,7 @@ var ping = require('beamQuest/listener/ping'),
     world = require('beamQuest/listener/world'),
     beam = require('beamQuest/listener/beam'),
     entity = require('beamQuest/listener/entity'),
+    skill = require('beamQuest/listener/skill'),
     entities = require('beamQuest/store/entities'),
     item = require('beamQuest/listener/item'),
     mapStore = require('beamQuest/store/maps'),
@@ -33,6 +34,7 @@ exports.start = function(io) {
             login.listen(socket, io);
             world.listen(socket);
             beam.listen(socket, io);
+            skill.listen(socket, io);
             entity.listen(socket, io);
             item.listen(socket, io);
             ping.listen(socket);

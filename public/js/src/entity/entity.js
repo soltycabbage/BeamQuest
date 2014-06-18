@@ -15,6 +15,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     currentDirection:null,
     model_: null,
     shape_: null,
+    isCasting: false, // スキルキャスト中ならtrue
 
     /**
      * @param {string} spriteFrameName *.plistの<key>に設定されてるframeName
@@ -127,7 +128,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
             this.runAction(act);
         }
     },
-    
+
     /**
      * 死にモーション
      * @param {boolean=} opt_skipRemove 見かけ上非表示にするだけでレイヤーから消したくない時はtrue
@@ -148,6 +149,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
 
     /** 復活処理 */
     respawn: function() {
+        this.isCasting = false;
         var fadeIn = cc.FadeIn.create(0.8);
         this.runAction(fadeIn);
     },
@@ -262,6 +264,63 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
             bq.soundManager.playEffect(s_SeNoDamage);
             this.popNoDamageLabel_(!!opt_popLeft);
         }
+    },
+
+    /**
+     * キャストを開始する
+     * @param {Object.<mapId: string, userId: string, skill: bq.model.Skill>} data
+     */
+    cast: function(data) {
+        // すでにキャスト中ならキャストできない
+        if (this.isCasting) {
+            // TODO: メッセージを出す
+            return;
+        }
+        this.isCasting = true;
+        var castTime = data.skill.castTime;
+        var entityRect = this.getBoundingBox();
+        var castBarWidth = 100;
+        var castBarHeight = 10;
+
+        var rect = cc.Sprite.create();
+        rect.setTextureRect(cc.rect(0, 0, castBarWidth, castBarHeight));
+        rect.setColor(cc.color(77, 50, 255));
+        rect.setOpacity(200);
+        rect.setPosition(cc.p(entityRect.width / 2 - castBarWidth / 2,
+            entityRect.height + 18));
+        rect.setAnchorPoint(0, 0.5);
+
+        var rectOuter = cc.Sprite.create();
+        rectOuter.setTextureRect(cc.rect(0, 0, castBarWidth + 2, castBarHeight + 2));
+        rectOuter.setColor(cc.color(0, 0, 0));
+        rectOuter.setOpacity(100);
+        rectOuter.setAnchorPoint(0, 0.5);
+        rectOuter.setPosition(cc.p(-1, 5));
+        rect.addChild(rectOuter, -1);
+
+        var skillName = bq.Label.createWithShadow(data.skill.name, 10, cc.color(200, 255, 30));
+        skillName.setPosition(cc.p(entityRect.width / 2, entityRect.height + 33));
+
+        var scaleAnim = cc.ScaleTo.create(castTime / 1000, 0, 1);
+        rect.runAction(cc.Sequence.create(scaleAnim,
+            cc.CallFunc.create(_.bind(function() {
+                rect.removeFromParent();
+                skillName.removeFromParent();
+                this.isCasting = false;
+            }, this)))
+        );
+        this.addChild(skillName, bq.config.zOrder.CHAT + 1);
+        this.addChild(rect, bq.config.zOrder.CHAT + 1);
+    },
+
+    /**
+     * @param {bq.model.Skill} skill
+     * @param {bq.model.Position} targetPos
+     */
+    fireSkill: function(skillModel, targetPos) {
+        var skillFactory = bq.skill.SkillFactory.getInstance();
+        var skill = skillFactory.create(skillModel, this, targetPos);
+        skill.fire();
     },
 
     /**

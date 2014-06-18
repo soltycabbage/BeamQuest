@@ -31,6 +31,7 @@
         "js/src/model/chat.js",
         "js/src/model/mob.js",
         "js/src/model/dropItem.js",
+        "js/src/model/skill.js",
 
         "js/src/entityManager.js",
         "js/src/soundManager.js",
@@ -49,6 +50,7 @@
         "js/src/hud/expBar.js",
         "js/src/hud/level.js",
         "js/src/hud/statusWindow.js",
+        "js/src/hud/hotBar.js",
         "js/src/hud/hud.js",
 
         "js/src/object/object.js",
@@ -64,6 +66,10 @@
         "js/src/beam/beamFactory.js",
         "js/src/ping.js",
         "js/src/camera.js",
+
+        "js/src/skill/skill.js",
+        "js/src/skill/skillFactory.js",
+        "js/src/skill/burnStrike.js",
 
         "js/src/scene/scene.js",
         "js/src/scene/loading.js",

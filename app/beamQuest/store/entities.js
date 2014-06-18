@@ -72,8 +72,23 @@ Entities.prototype.getPlayerById = function(mapId, playerId) {
     if (this.mapPlayers_[mapId]) {
         return this.mapPlayers_[mapId][playerId] || null;
     }
+    return null;
 };
 
+/**
+ * @return {Object}
+ */
+Entities.prototype.getPlayers = function() {
+    return this.mapPlayers_;
+};
+
+/**
+ * @param {number} mapId
+ * @return {Array.<ctrl.Player>}
+ */
+Entities.prototype.getMobsByMapId = function(mapId) {
+    return this.mapPlayers_[mapId];
+};
 /**
  * @param {number} mapId
  * @param {ctrl.Player} player
@@ -120,6 +135,14 @@ Entities.prototype.removeMob = function(mob) {
  */
 Entities.prototype.getMobs = function() {
     return this.mapMobs_;
+};
+
+/**
+ * @param {number} mapId
+ * @return {Array.<ctrl.Mob>}
+ */
+Entities.prototype.getMobsByMapId = function(mapId) {
+    return this.mapMobs_[mapId];
 };
 
 /**
@@ -170,6 +193,49 @@ Entities.prototype.updatePlayerPosition = function(data) {
         player.model.position.x = data.x;
         player.model.position.y = data.y;
     }
+};
+
+/**
+ * 指定座標を中心とする半径rの円内に含まれるMobを返す
+ * @param {model.Position} targetPos
+ * @param {number} r
+ * @return {Array.<ctrl.Entity>}
+ */
+Entities.prototype.getMobsByRadius = function(targetPos, r) {
+    var mobs = this.getMobsByMapId(targetPos.mapId, r);
+    return this.getEntitiesByRadiusInternal_(targetPos, r, mobs);
+};
+
+/**
+ * 指定座標を中心とする半径rの円内に含まれるPlayerを返す
+ * @param {model.Position} targetPos
+ * @param {number} r
+ * @return {Array.<ctrl.Entity>}
+ */
+Entities.prototype.getPlayersByRadius = function(targetPos, r) {
+    var players = this.getPlayersByMapId(targetPos.mapId);
+    return this.getEntitiesByRadiusInternal_(targetPos, r, players);
+};
+
+/**
+ * @param {Array.<ctrl.Entity>} entities
+ * @param {number} r
+ * @return {Array.<ctrl.Entity>}
+ * @private
+ */
+Entities.prototype.getEntitiesByRadiusInternal_ = function(targetPos, r, entities) {
+    var result = [];
+    var r2 = Math.pow(r, 2);
+
+    _.forEach(entities, function(entity) {
+        var px = entity.model.position.x - targetPos.x;
+        var py = entity.model.position.y - targetPos.y;
+            var entDist = Math.pow(px, 2) + Math.pow(py, 2);
+        if (r2 >= entDist) {
+            result.push(entity);
+        }
+    });
+    return result;
 };
 
 var instance_ = new Entities();

@@ -8,6 +8,9 @@ var util = require('util'),
 var Mob = function(opt_data) {
     Entity.apply(this, arguments);
 
+    /** @override */
+    this.type = bq.Types.EntityType.MOB;
+
     /**
      * 獲得経験値的な
      * @type {number}

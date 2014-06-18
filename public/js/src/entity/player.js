@@ -13,6 +13,7 @@ bq.entity.Player = bq.entity.Entity.extend({
     state: bq.entity.EntityState.Mode.stop,  // 動いてるとか止まってるとかの状態
     POSITION_SEND_INTERVAL: 0.15,            // 位置情報を何秒ごとに送信するか
     prevPos_: {x: 0, y: 0},                  // 前回送信時の座標
+    selectedHotbarNumber_: null,             // 選択中のホットバーitem
 
     ctor:function () {
         this._super('b0_0.png', this.getKeyFrameMap_());
@@ -32,6 +33,7 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.initBp();
         this.initExp();
         this.initLevel();
+        this.initHotbar();
     },
 
     /** @override */
@@ -98,16 +100,21 @@ bq.entity.Player = bq.entity.Entity.extend({
     },
 
     /**
-     * destination までビームを出す
+     * destination までビームorスキルを発動する
      *
      * @param {cc.p} destination
      */
     shoot: function(destination) {
-        // BPが残ってるかチェック
-
-        //撃てるならBPを減らす
-
-        this.shootInternal_(destination);
+        // スキル選択中ならスキル発動
+        if (this.selectedHotbarNumber_ !== null && !this.isCasting) {
+            var hotNum = this.selectedHotbarNumber_ === 0 ? 8 : this.selectedHotbarNumber_ - 1;
+            var item = this.model_.hotbarItems[hotNum];
+            var dest = bq.camera.convertWindowPositionToWorldPosition(destination);
+            dest['mapId'] = this.model_.position.mapId;
+            this.socket.castSkill(item.id, this.model_.id, dest);
+        } else {
+            this.shootInternal_(destination);
+        }
     },
 
     /**
@@ -153,6 +160,19 @@ bq.entity.Player = bq.entity.Entity.extend({
     },
 
     /**
+     * 習得スキル一覧からホットバーに配置する
+     */
+    initHotbar: function() {
+        var items = this.model_.hotbarItems;
+        _.forEach(items, function(item, index) {
+            var hotNum = (index + 1) % 10;
+            var hotbarItem = $('#bq-hot-bar-item-' + hotNum);
+            var img = $('<img/>').attr('src', 'res/img/icon/'+ item.id + '.png');
+            hotbarItem.append(img);
+        });
+    },
+
+    /**
      * @param {Object.<exp: number, prevLvExp: number, currentExp: number, nextLvExp: number> data
      */
     updateExp: function(data) {
@@ -175,6 +195,18 @@ bq.entity.Player = bq.entity.Entity.extend({
      */
     setProfile: function(data) {
         this.name = data.name;
+    },
+
+    /**
+     * 押された数字キーに対応するitemを選択した状態にする
+     * @param {number} num
+     */
+    setSelectedHotbarNumber: function(num) {
+        if (this.selectedHotbarNumber_ !== num) {
+            this.selectedHotbarNumber_ = num;
+        } else {
+            this.selectedHotbarNumber_ = null;
+        }
     },
 
     /** @override */
@@ -289,7 +321,8 @@ bq.entity.Player.EventType = {
     INIT_LEVEL: 'updatelevel',
     UPDATE_HP: 'updatehp',
     UPDATE_BP: 'updatebp',
-    UPDATE_EXP: 'updateexp'
+    UPDATE_EXP: 'updateexp',
+    SELECT_HOT_BAR: 'selecthotbar'
 };
 
 bq.entity.Player.InputHandler = cc.Class.extend({
@@ -474,14 +507,8 @@ bq.entity.Player.InputHandler = cc.Class.extend({
      * @private
      */
     handleNumKeyDown_: function(num) {
-        var selectedItem = $('#bq-hot-bar-item-' + num);
-        $('.bq-hot-bar-item').each(function(index, item) {
-            if ($(item).attr('id') === $(selectedItem).attr('id')) {
-                $(item).addClass('bq-hot-bar-item-selected');
-            } else {
-                $(item).removeClass('bq-hot-bar-item-selected');
-            }
-        });
+        $(bq.player).triggerHandler(bq.entity.Player.EventType.SELECT_HOT_BAR, [num]);
+        bq.player.setSelectedHotbarNumber(num);
     },
 
     /**

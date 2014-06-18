@@ -6,6 +6,9 @@ bq.model.Entity = bq.model.extend({
         /** @type {number} */
         this.id;
 
+        /** @type {bq.Types.EntityType} */
+        this.type;
+
         /** @type {string} */
         this.name;
 
@@ -25,15 +28,20 @@ bq.model.Entity = bq.model.extend({
         /** @type {bq.model.Position} */
         this.position;
 
+        /** @type {Array.<bq.model.Skill>} */
+        this.skills;
+
         this._super(json);
     },
 
     /** @override */
     parse: function(json) {
         this.id = json['id'];
+        this.type = json['type'];
         this.name = json['name'];
         this.maxHp = json['maxHp'];
         this.hp = json['hp'];
         this.position = new bq.model.Position(json['position']);
+        this.skills = this.parseArray(json['skills'], bq.model.Skill);
     }
 });

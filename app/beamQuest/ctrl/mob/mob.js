@@ -268,31 +268,29 @@ Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
     var damage = Math.floor((Math.random() * beam.atk / 2 + beam.atk + shooter.model.attack) / 2 -
         this.model.defence / 4);
 
-    // 攻撃を与えたユーザのIDをヘイトリストに突っ込む
-    var hateTarget = _.find(this.hateList, function(h) {
-        return h.entityId === shooterId;
-    });
-
-    if (!hateTarget) {
-        this.hateList.push({entityId: shooterId, hate: damage});
-    } else {
-        // ダメージ量がそのままヘイト値になる
-        hateTarget.hate += damage;
-    }
-
-    // ヘイト値の大きい順にソートしておく
-    this.hateList = _.sortBy(this.hateList, function(h) {return -h.hate;});
+    this.applyHate(shooterId, damage);
     this.model.addHp(-damage);
     return {hpAmount: -damage};
 };
 
 /**
- * @override
+ * 攻撃を与えたユーザのIDをヘイトリストに突っ込む
+ * @param {string} entityId
+ * @param {number} hate
  */
-Mob.prototype.handleAddHp = function(amount) {
-    if (this.model.hp <= 0) { // 死
-        this.death();
+Mob.prototype.applyHate = function(entityId, hate) {
+    var hateTarget = _.find(this.hateList, function(h) {
+        return h.entityId === entityId;
+    });
+
+    if (!hateTarget) {
+        this.hateList.push({entityId: entityId, hate: hate});
+    } else {
+        // ダメージ量がそのままヘイト値になる
+        hateTarget.hate += hate;
     }
+    // ヘイト値の大きい順にソートしておく
+    this.hateList = _.sortBy(this.hateList, function(h) {return -h.hate;});
 };
 
 /**

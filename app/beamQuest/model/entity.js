@@ -1,6 +1,7 @@
 var util = require('util'),
     Model = require('beamQuest/model/model'),
-    positionModel = require('beamQuest/model/position');
+    positionModel = require('beamQuest/model/position'),
+    skillModel = require('beamQuest/model/skill');
 
 
 /**
@@ -16,6 +17,9 @@ var Entity = function(opt_data) {
 
     /** @type {number} */
     this.id = this.data.id;
+
+    /** @type {bq.Types.EntityType} */
+    this.type = this.data.type;
 
     /** @type {string} */
     this.name = this.data.name;
@@ -46,6 +50,12 @@ var Entity = function(opt_data) {
 
     /** @type {model.Position} */
     this.position = this.data.position || new positionModel();
+
+    /**
+     * 使用可能スキル一覧
+     * @type {Array.<model.Skill>}
+     */
+    this.skills = this.data.skills || this.getPresetSkills_();
 };
 util.inherits(Entity, Model);
 
@@ -78,17 +88,30 @@ Entity.prototype.addHp = function(amount) {
     this.emit('addHp', amount);
 };
 
+/**
+ * レベル1から習得してるスキルを返す
+ * @return {Array.<mode.Skill>}
+ * @private
+ */
+Entity.prototype.getPresetSkills_ = function() {
+    var skills = [];
+    skills.push(new skillModel(bq.params.Skills.BURNSTRIKE));
+    return skills;
+};
+
 /** @override */
 Entity.prototype.toJSON = function() {
     var json = {};
     json.hash = this.hash;
     json.id = this.id;
+    json.type = this.type;
     json.name = this.name;
     json.maxHp = this.maxHp;
     json.hp =  this.hp;
     json.attack = this.attack;
     json.defence = this.defence;
     json.position = this.position.toJSON();
+    json.skills = this.toArrayJSON(this.skills);
     return json;
 };
 

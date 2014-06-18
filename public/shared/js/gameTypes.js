@@ -22,6 +22,10 @@ bq.Types = {
         METEOR: 'meteor'
     },
 
+    Skills: {
+        BURNSTRIKE: '001_burnstrike'
+    },
+
     Items: {
         BEATS: 'beats',
         POTION: 'potion',
@@ -33,5 +37,10 @@ bq.Types = {
         MONEY: 'money',   // 貨幣になるアイテム
         EQUIP: 'equip',   // 装備することができるアイテム
         EVENT: 'evemt'    // イベントで使うアイテム
+    },
+
+    EntityType: {
+        PLAYER: 'player', // プレイヤー
+        MOB:    'mob'     // 敵キャラ
     }
 };

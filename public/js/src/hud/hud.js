@@ -9,6 +9,7 @@ bq.Hud = cc.Node.extend({
         this.expBar_ = new bq.hud.ExpBar();
         this.level_ = new bq.hud.Level();
         this.statusWindow_ = new bq.hud.StatusWindow();
+        this.hotBar_ = new bq.hud.HotBar();
     },
 
     /**
@@ -22,6 +23,7 @@ bq.Hud = cc.Node.extend({
         $(player).on(bq.entity.Player.EventType.UPDATE_BP, _.bind(this.handleUpdateBp_, this));
         $(player).on(bq.entity.Player.EventType.UPDATE_EXP, _.bind(this.handleUpdateExp_, this));
         $(player).on(bq.entity.Player.EventType.INIT_LEVEL, _.bind(this.handleInitLevel_, this));
+        $(player).on(bq.entity.Player.EventType.SELECT_HOT_BAR, _.bind(this.handleSelectHotBar_, this));
     },
 
     enable: function(enabled) {
@@ -99,6 +101,16 @@ bq.Hud = cc.Node.extend({
      */
     handleInitLevel_: function(evt, level) {
         this.level_.initLevel(level);
+    },
+
+    /**
+     * ホットバー選択
+     * @param {Event} evt
+     * @param {number} selectNumber 0-9の数字
+     * @private
+     */
+    handleSelectHotBar_: function(evt, selectNumber) {
+        this.hotBar_.select(selectNumber);
     }
 });
 

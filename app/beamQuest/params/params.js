@@ -8,4 +8,5 @@ require('beamQuest/params/entities');
 require('beamQuest/params/beams');
 require('beamQuest/params/jobs');
 require('beamQuest/params/items');
+require('beamQuest/params/skills');
 
