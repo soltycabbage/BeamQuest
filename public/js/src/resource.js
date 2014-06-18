@@ -30,6 +30,7 @@ var s_StartVillageTmx    =  'res/map/map_village.tmx';
 var s_StartVillageMapSet =  'res/map/tile_village.png';
 var s_SmallVillageTmx    =  'res/map/map_small_village.tmx';
 var s_SmallVillageMapSet =  'res/map/tile_small_village.png';
+var s_NoneTmx            =  'res/map/none.tmx';
 
 // plist
 var s_PlistPlayerWalking =  'res/img/player/walk.plist';
@@ -56,6 +57,7 @@ var g_resources = [
     //{type: 'tmx', src:s_ShinjukuTmx},
     {type: 'tmx', src:s_StartVillageTmx},
     {type: 'tmx', src:s_SmallVillageTmx},
+    {type: 'tmx', src:s_NoneTmx},
 
     //img
     {type: 'png', src:s_StartVillageMapSet},
