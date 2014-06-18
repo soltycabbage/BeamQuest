@@ -9,7 +9,9 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         tileMap.setPosition(cc.p(0,0));
 
         var behindMapLayer = tileMap.getLayer('GoBehind');
-        behindMapLayer.setLocalZOrder(bq.config.zOrder.BEHIND_LAYER);
+        if (behindMapLayer) {
+            behindMapLayer.setLocalZOrder(bq.config.zOrder.BEHIND_LAYER);
+        }
         var mapManager = new bq.MapManager(tileMap);
         bq.mapManager = mapManager;
 
