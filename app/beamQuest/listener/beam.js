@@ -50,8 +50,7 @@ exports.listen = function(socket, io) {
             beamTag: data.tag,
             beamPos: {x: data.x, y: data.y}
         };
-        var additionalHitResult = entity.beamHit(beamType, data.shooterId, data.mapId);
-        hitResult = _.extend(additionalHitResult, hitResult);
+        entity.beamHit(beamType, data.shooterId, data.mapId);
         io.sockets.emit('notify:beam:hit:entity', hitResult);
     }
 

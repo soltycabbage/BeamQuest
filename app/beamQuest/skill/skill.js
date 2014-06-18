@@ -49,8 +49,9 @@ Skill.prototype.fire = function() {
 /**
  * 効果範囲内にダメージを与える
  * @param {number} damage
+ * @param {boolean=} opt_isCritical
  */
-Skill.prototype.applyDamage = function(damage) {
+Skill.prototype.applyDamage = function(damage, opt_isCritical) {
     var entities = [];
     if (this.user.model.type === bq.Types.EntityType.PLAYER) {
         entities = this.getMobsByRadius();
@@ -58,7 +59,7 @@ Skill.prototype.applyDamage = function(damage) {
 
     _.forEach(entities, _.bind(function(entity) {
         if (entity && entity.model) {
-            entity.model.addHp(-damage);
+            entity.model.addHp(-damage, !!opt_isCritical);
             if (entity instanceof MobCtrl) {
                 entity.hateList && entity.applyHate(this.user.model.id, damage);
             }

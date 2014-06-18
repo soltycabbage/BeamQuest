@@ -82,10 +82,11 @@ Entity.prototype.setPosition = function(position) {
  * 減らす場合は負の数を指定
  *
  * @param {number} amount
+ * @param {boolean=} opt_isCritical クリティカルヒットの場合true
  */
-Entity.prototype.addHp = function(amount) {
+Entity.prototype.addHp = function(amount, opt_isCritical) {
     this.hp = Math.max(0, Math.min(this.maxHp, this.hp + amount));
-    this.emit('addHp', amount);
+    this.emit('addHp', amount, !!opt_isCritical);
 };
 
 /**
