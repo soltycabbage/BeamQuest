@@ -3,9 +3,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         'use strict';
 
         this._super();
-        if (cc.sys.isMobile) {
-            this.setTouchEnabled(true);
-        }
 
         // TODO position.mapIdからロードするマップを取得する
         var tileMap = new cc.TMXTiledMap(bq.config.maps.area.START_MURA);
