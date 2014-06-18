@@ -31,10 +31,10 @@ Entity.prototype.setModel = function(model) {
  * @protected
  */
 Entity.prototype.handleAddHp = function(amount, isCritical) {
-    var hpDatas = [
+    var hpData = [
         {entity: this.model, hpAmount: amount, isCritical: isCritical}
     ];
-    entityListener.updateHp(hpDatas);
+    entityListener.updateHp(hpData);
     if (this.model.hp <= 0) {
         this.death();
     }
