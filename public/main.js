@@ -14,7 +14,7 @@ cc.game.onStart = function(){
     // initialize sound manager
     bq.soundManager = new bq.SoundManager({
         musicVolume:  0.1,
-        effectVolume: 0.1
+        effectVolume: 1.0
     });
 
     //load resources
