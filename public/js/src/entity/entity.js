@@ -320,7 +320,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var fadeOut = cc.FadeOut.create(0.5);
         var callFunc = cc.CallFunc.create(_.bind(function() {
             this.hpGauge_ && this.hpGauge_.removeFromParent();
-        }, this))
+        }, this));
         this.hpGauge_.runAction(cc.Sequence.create(fadeOut, callFunc));
     },
 
