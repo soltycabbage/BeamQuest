@@ -264,7 +264,66 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
             bq.soundManager.playEffect(s_SeNoDamage);
             this.popNoDamageLabel_(!!opt_popLeft);
         }
+
+        // HPバーを頭上に表示
+        var maxHp = hpData.entity.maxHp;
+        var currentHp = hpData.entity.hp;
+        if (maxHp !== currentHp) {
+            this.showHpGauge(hpData.entity.maxHp, hpData.entity.hp);
+        } else {
+            this.hideHpGauge_();
+        }
     },
+
+    /**
+     * 頭上にHPバーを表示する
+     * @param {number} maxHp 最大HP
+     * @param {number} hp 現在HP
+     */
+    showHpGauge: function(maxHp, hp) {
+        if (this.hpGauge_) {
+            this.hpGauge_.removeFromParent();
+        }
+        var ratio = hp / maxHp;
+        var gaugeWidth = 70;
+        var gaugeHeight = 4;
+        var entityRect = this.getBoundingBox();
+        var rect = cc.Sprite.create();
+        rect.setTextureRect(cc.rect(0, 0, gaugeWidth * ratio, gaugeHeight));
+        rect.setColor(cc.color(255, 20, 5));
+        rect.setOpacity(255);
+        rect.setPosition(cc.p(entityRect.width / 2 - gaugeWidth / 2,
+            entityRect.height + 15));
+        rect.setAnchorPoint(0, 0.5);
+
+        var rectOuter = cc.Sprite.create();
+        rectOuter.setTextureRect(cc.rect(0, 0, gaugeWidth + 2, gaugeHeight + 2));
+        rectOuter.setColor(cc.color(0, 0, 0));
+        rectOuter.setOpacity(255);
+        rectOuter.setAnchorPoint(0, 0.5);
+        rectOuter.setPosition(cc.p(-1, 2));
+        rect.addChild(rectOuter, -1);
+
+        this.hpGauge_ = rect;
+        this.addChild(rect, bq.config.zOrder.CHAT + 1);
+    },
+
+    /**
+     * HPバーを隠す
+     * @private
+     */
+    hideHpGauge_: function() {
+        if (!this.hpGauge_) {
+            return;
+        }
+
+        var fadeOut = cc.FadeOut.create(0.5);
+        var callFunc = cc.CallFunc.create(_.bind(function() {
+            this.hpGauge_ && this.hpGauge_.removeFromParent();
+        }, this))
+        this.hpGauge_.runAction(cc.Sequence.create(fadeOut, callFunc));
+    },
+
 
     /**
      * キャストを開始する
@@ -281,13 +340,14 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var entityRect = this.getBoundingBox();
         var castBarWidth = 100;
         var castBarHeight = 10;
+        var barTop = 25;
 
         var rect = cc.Sprite.create();
         rect.setTextureRect(cc.rect(0, 0, castBarWidth, castBarHeight));
         rect.setColor(cc.color(77, 50, 255));
         rect.setOpacity(200);
         rect.setPosition(cc.p(entityRect.width / 2 - castBarWidth / 2,
-            entityRect.height + 18));
+            entityRect.height + barTop));
         rect.setAnchorPoint(0, 0.5);
 
         var rectOuter = cc.Sprite.create();
@@ -299,7 +359,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         rect.addChild(rectOuter, -1);
 
         var skillName = bq.Label.createWithShadow(data.skill.name, 10, cc.color(200, 255, 30));
-        skillName.setPosition(cc.p(entityRect.width / 2, entityRect.height + 33));
+        skillName.setPosition(cc.p(entityRect.width / 2, entityRect.height + barTop + castBarHeight + 5));
 
         var scaleAnim = cc.ScaleTo.create(castTime / 1000, 0, 1);
         rect.runAction(cc.Sequence.create(scaleAnim,
