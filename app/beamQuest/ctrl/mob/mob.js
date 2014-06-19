@@ -256,7 +256,8 @@ Mob.prototype.attackCancel = function() {
 Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
     var shooter = entityStore.getPlayerById(mapId, shooterId);
     if (this.isCancelAttacking_ || !shooter) {
-        return { hpAmount: 0 };
+        this.model.addHp(0);
+        return;
     }
 
     // TODO: ほんとはクライアント側から指定されたビームtypeをそのまま使うべきではない
