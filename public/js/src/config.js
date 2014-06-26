@@ -12,10 +12,18 @@ var BQConfig = cc.Class.extend({
         this.maps = {
             TILE_SIZE: 32, // グリッド1マスのサイズ (px)
             area: { // エリアごとのマップファイルを定義していく
-                SHINJUKU: s_ShinjukuTmx, // 新宿
-                SMALL_MURA: s_SmallVillageTmx, // 小さい村
-                START_MURA: s_StartVillageTmx, // 最初の村
-                MU:         s_NoneTmx          // 無
+                SHINJUKU: {
+                    filename: s_ShinjukuTmx
+                }, // 新宿
+                SMALL_MURA: {
+                    filename: s_SmallVillageTmx
+                }, // 小さい村
+                START_MURA: {
+                    filename: s_StartVillageTmx
+                }, // 最初の村
+                MU: {
+                    filname: s_NoneTmx
+                } // 無
             }
         };
 
