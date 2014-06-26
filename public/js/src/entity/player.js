@@ -15,6 +15,8 @@ bq.entity.Player = bq.entity.Entity.extend({
     prevPos_: {x: 0, y: 0},                  // 前回送信時の座標
     selectedHotbarNumber_: null,             // 選択中のホットバーitem
 
+    mapId: 0,                                // 現在いる mapId
+
     ctor:function () {
         this._super('b0_0.png', this.getKeyFrameMap_());
         this.currentDirection = bq.entity.EntityState.Direction.bottom;
@@ -84,16 +86,14 @@ bq.entity.Player = bq.entity.Entity.extend({
         var absolPos = this.getPosition();
         var posData = {
             userId: this.name,
-            mapId: 1, // TODO: MapID の実装
             x: absolPos.x,
             y: absolPos.y
         };
 
         // 前回送信時と位置が変わってなかったら送信しない
-        if (this.prevPos_.mapId === posData.mapId && this.prevPos_.x === posData.x && this.prevPos_.y === posData.y) {
+        if (this.prevPos_.x === posData.x && this.prevPos_.y === posData.y) {
             return;
         }
-        this.prevPos_.mapId = posData.mapId;
         this.prevPos_.x = posData.x;
         this.prevPos_.y = posData.y;
         this.socket.sendPlayerPosition(posData);
@@ -113,7 +113,6 @@ bq.entity.Player = bq.entity.Entity.extend({
                 this.shootInternal_(destination);
             }
             var dest = bq.camera.convertWindowPositionToWorldPosition(destination);
-            dest['mapId'] = this.model_.position.mapId;
             this.socket.castSkill(item.id, this.model_.id, dest);
         } else {
             this.shootInternal_(destination);
@@ -131,7 +130,6 @@ bq.entity.Player = bq.entity.Entity.extend({
 
         var json = { // TODO モデル化したい気持ち
             shooterId: this.name,
-            mapId: 1, // TODO mapId
             src: {x: src.x, y: src.y},
             dest: {x: dest.x, y: dest.y},
             tag: parseInt(new Date().getTime()) + this.name
@@ -394,7 +392,7 @@ bq.entity.Player.InputHandler = cc.Class.extend({
         this.addDownKey_(key);
         switch(key) {
             case cc.KEY.i: // iキーでステータスウィンドウを開く
-                bq.Hud.getInstance().openStatusWindow(bq.player.name, bq.player.getModel().position.mapId);
+                bq.Hud.getInstance().openStatusWindow(bq.player.name);
                 break;
             case cc.KEY['1']:
             case cc.KEY['2']:

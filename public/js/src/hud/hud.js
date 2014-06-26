@@ -37,10 +37,9 @@ bq.Hud = cc.Node.extend({
     /**
      * ステータスウィンドウを開く
      * @param {string} entityId
-     * @param {string} mapId
      */
-    openStatusWindow: function(entityId, mapId) {
-        this.statusWindow_.open(entityId, mapId);
+    openStatusWindow: function(entityId) {
+        this.statusWindow_.open(entityId);
     },
 
     /**
