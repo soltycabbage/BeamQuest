@@ -22,7 +22,7 @@ var BQConfig = cc.Class.extend({
                     filename: s_StartVillageTmx
                 }, // 最初の村
                 MU: {
-                    filname: s_NoneTmx
+                    filename: s_NoneTmx
                 } // 無
             }
         };
