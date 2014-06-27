@@ -284,28 +284,47 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         if (this.hpGauge_) {
             this.hpGauge_.removeFromParent();
         }
+
+        var prevHp = this.prevHp_? this.prevHp_ : hp;
         var ratio = hp / maxHp;
+        var prevHpRatio = prevHp / maxHp;
         var gaugeWidth = 70;
         var gaugeHeight = 4;
         var entityRect = this.getBoundingBox();
+        var currentHpWidth = gaugeWidth * ratio;
+        var prevHpWidth = gaugeWidth * prevHpRatio;
+
+        // HP部分
         var rect = cc.Sprite.create();
-        rect.setTextureRect(cc.rect(0, 0, gaugeWidth * ratio, gaugeHeight));
+        rect.setTextureRect(cc.rect(0, 0, currentHpWidth, gaugeHeight));
         rect.setColor(cc.color(255, 20, 5));
-        rect.setOpacity(255);
         rect.setPosition(cc.p(entityRect.width / 2 - gaugeWidth / 2,
             entityRect.height + 15));
         rect.setAnchorPoint(0, 0.5);
 
+        // HP減少したときの差分のとこ
+        var rectInner = cc.Sprite.create();
+        rectInner.setTextureRect(cc.rect(0, 0, prevHpWidth, gaugeHeight));
+        rectInner.setColor(cc.color(255, 170, 170));
+        rectInner.setPosition(cc.p(0, 2));
+        rectInner.setAnchorPoint(0, 0.5);
+        rectInner.runAction(cc.ScaleTo.create(0.5, currentHpWidth / prevHpWidth, 1));
+
+        // 黒背景
         var rectOuter = cc.Sprite.create();
         rectOuter.setTextureRect(cc.rect(0, 0, gaugeWidth + 2, gaugeHeight + 2));
         rectOuter.setColor(cc.color(0, 0, 0));
-        rectOuter.setOpacity(255);
         rectOuter.setAnchorPoint(0, 0.5);
         rectOuter.setPosition(cc.p(-1, 2));
-        rect.addChild(rectOuter, -1);
+
+        rect.addChild(rectInner, -1);
+        rect.addChild(rectOuter, -2);
 
         this.hpGauge_ = rect;
         this.addChild(rect, bq.config.zOrder.CHAT + 1);
+
+        // 次に表示した時にどのくらいHPが増減したかを知りたいので記録しておく
+        this.prevHp_ = hp;
     },
 
     /**
