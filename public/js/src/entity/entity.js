@@ -357,14 +357,14 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         this.isCasting = true;
         var castTime = data.skill.castTime;
         var entityRect = this.getBoundingBox();
-        var castBarWidth = 100;
-        var castBarHeight = 10;
-        var barTop = 25;
+        var castBarWidth = 70;
+        var castBarHeight = 5;
+        var barTop = 20;
 
         var rect = cc.Sprite.create();
         rect.setTextureRect(cc.rect(0, 0, castBarWidth, castBarHeight));
-        rect.setColor(cc.color(77, 50, 255));
-        rect.setOpacity(200);
+        rect.setColor(cc.color(153, 228, 255));
+        rect.setOpacity(255);
         rect.setPosition(cc.p(entityRect.width / 2 - castBarWidth / 2,
             entityRect.height + barTop));
         rect.setAnchorPoint(0, 0.5);
@@ -372,9 +372,9 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var rectOuter = cc.Sprite.create();
         rectOuter.setTextureRect(cc.rect(0, 0, castBarWidth + 2, castBarHeight + 2));
         rectOuter.setColor(cc.color(0, 0, 0));
-        rectOuter.setOpacity(100);
+        rectOuter.setOpacity(255);
         rectOuter.setAnchorPoint(0, 0.5);
-        rectOuter.setPosition(cc.p(-1, 5));
+        rectOuter.setPosition(cc.p(-1, 2));
         rect.addChild(rectOuter, -1);
 
         var skillName = bq.Label.createWithShadow(data.skill.name, 10, cc.color(200, 255, 30));
