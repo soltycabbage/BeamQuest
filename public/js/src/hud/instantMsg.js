@@ -49,9 +49,14 @@ bq.hud.InstantMsg = bq.hud.HudItem.extend({
     },
 
     updateLayout_: function() {
+        var gainPadding = this.msgPadding_;
+        var oldestMsg = _.last(this.msgs_);
+        if (oldestMsg) {
+            gainPadding = parseInt(oldestMsg.css('bottom'), 10);
+        }
         _.forEach(this.msgs_, _.bind(function(msg) {
             var currentBottom = parseInt(msg.css('bottom'), 10);
-            msg.animate({'bottom': currentBottom - this.msgPadding_ + 'px'}, 200);
+            msg.animate({'bottom': currentBottom - gainPadding + 'px'}, 200);
         }, this));
     }
 });
