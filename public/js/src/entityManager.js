@@ -68,7 +68,7 @@ bq.EntityManager = cc.Class.extend({
         if (!otherPlayer) {
             this.createOtherPlayer(moveData);
         } else {
-            otherPlayer.moveTo(cc.p(moveData.x, moveData.y));
+            otherPlayer.moveTo(cc.p(moveData.x, moveData.y), moveData.direction);
         }
     },
 
@@ -168,11 +168,7 @@ bq.EntityManager = cc.Class.extend({
         if (this.otherPlayers_[moveData.userId]) {
             return;
         }
-        var data = {
-            idle_bottom:      ["b0_0.png", "b0_1.png", "b0_2.png", "b0_3.png"],
-            step_bottom:      ["b0_4.png", "b0_5.png", "b0_6.png", "b0_7.png"]
-        }; // TODO 関数にする
-        var other = new bq.entity.Entity('b0_0.png', data);
+        var other = new bq.entity.Entity('b0_0.png', bq.entity.Player.KEY_FRAME_MAP);
         other.updateAnimation(bq.entity.EntityState.Mode.stop, bq.entity.EntityState.Direction.bottom);
         other.name = moveData.userId;
         other.showName(moveData.userId, true);
