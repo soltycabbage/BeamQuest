@@ -59,14 +59,15 @@ bq.object.DropItem = bq.object.Object.extend({
     },
 
     /**
-     * @param {bq.model.Position}
+     * @param {bq.model.Position} pos
+     * @param {string} pickerId
      */
-    pickAndRemove: function(pos) {
+    pickAndRemove: function(pos, pickerId) {
         var moveTo = cc.MoveTo.create(0.2, cc.p(pos.x, pos.y));
         var fadeOut = cc.FadeOut.create(0.1);
         var removeFunc = cc.CallFunc.create($.proxy(this.removeFromParent, this));
         this.runAction(cc.Sequence.create(cc.Spawn.create(moveTo, fadeOut), removeFunc));
-        if (this.model_.dropperId === bq.player.name) {
+        if (pickerId === bq.player.name) {
             this.playSound_();
         }
     },

@@ -92,7 +92,7 @@ bq.MapManager = cc.Class.extend({
     removeDropItem: function(itemJson) {
         if (this.dropItems_[itemJson['dropId']]) {
             var item = this.dropItems_[itemJson['dropId']];
-            item.pickAndRemove(itemJson['pickerPosition']);
+            item.pickAndRemove(itemJson['pickerPosition'], itemJson['pickerId']);
             delete this.dropItems_[itemJson['dropId']];
         }
     }
