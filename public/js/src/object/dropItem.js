@@ -66,6 +66,21 @@ bq.object.DropItem = bq.object.Object.extend({
         var fadeOut = cc.FadeOut.create(0.1);
         var removeFunc = cc.CallFunc.create($.proxy(this.removeFromParent, this));
         this.runAction(cc.Sequence.create(cc.Spawn.create(moveTo, fadeOut), removeFunc));
+        if (this.model_.dropperId === bq.player.name) {
+            this.playSound_();
+        }
+    },
+
+    /**
+     * 取得音を鳴らす
+     * @private
+     */
+    playSound_: function() {
+        if (this.model_.item.type === bq.Types.ItemType.MONEY) {
+            bq.soundManager.playEffect(s_SeMoney);
+        } else {
+            bq.soundManager.playEffect(s_SePyu);
+        }
     },
 
     /**
