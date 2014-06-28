@@ -101,8 +101,9 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     /**
      * 指定位置に移動する
      * @param {cc.p} pos
+     * @param {string} direction
      */
-    moveTo: function(pos) {
+    moveTo: function(pos, direction) {
         this.setOpacity(255);
         var moveActTag = 'entity_move_' + this.name;
         var move = cc.MoveTo.create(0.2, pos);
@@ -117,11 +118,11 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
             move.setTag(moveActTag);
             this.runAction(move);
         } else {
-            this.updateAnimation(bq.entity.EntityState.Mode.walking, null);
+            this.updateAnimation(bq.entity.EntityState.Mode.walking, direction);
             // 移動したあと急に止めるとアニメーションが不自然になるので少し遅延を入れる
             var delay = cc.DelayTime.create(0.2);
             var changeAnime = cc.CallFunc.create(function () {
-                this.updateAnimation(bq.entity.EntityState.Mode.stop, null);
+                this.updateAnimation(bq.entity.EntityState.Mode.stop, direction);
             }.bind(this));
 
             var act = cc.Sequence.create([move, delay, changeAnime]);
@@ -233,7 +234,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
             return;
         }
         if ( state === this.currentState && direction === this.currentDirection ) {
-            return ;
+            return;
         }
         state = state ? state : this.currentState;
         direction = direction ? direction : this.currentDirection;
@@ -241,7 +242,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         this.currentState = state;
         this.currentDirection = direction;
 
-        var animation = this.getAnimationByNameDirection(state,direction);
+        var animation = this.getAnimationByNameDirection(state, direction);
         animation.setTag('walk');
 
         this.stopForeverAnimation();
