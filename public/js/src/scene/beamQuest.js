@@ -61,7 +61,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         bq.space.addShape(shape);
 
         this.scheduleUpdate();
-        bq.soundManager.playMusic(s_BgmField, true);
+        bq.soundManager.playMusic(s_BgmField2, true);
         this.addChild(baseLayer, bq.config.zOrder.BASE_LAYER);
         bq.baseLayer = baseLayer;
         return true;
