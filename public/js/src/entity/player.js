@@ -86,7 +86,8 @@ bq.entity.Player = bq.entity.Entity.extend({
             userId: this.name,
             mapId: 1, // TODO: MapID の実装
             x: absolPos.x,
-            y: absolPos.y
+            y: absolPos.y,
+            direction: this.currentDirection
         };
 
         // 前回送信時と位置が変わってなかったら送信しない

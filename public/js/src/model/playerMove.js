@@ -12,6 +12,9 @@ bq.model.PlayerMove = bq.model.extend({
         /** @type {number} */
         this.y;
 
+        /** @type {bq.entity.EntityState.Direction} */
+        this.direction;
+
         this._super(json);
     },
 
@@ -21,5 +24,6 @@ bq.model.PlayerMove = bq.model.extend({
         this.mapId = json['mapId'];
         this.x = json['x'];
         this.y = json['y'];
+        this.direction = json['direction'];
     }
 });
