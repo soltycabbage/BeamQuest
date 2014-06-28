@@ -91,7 +91,7 @@ bq.object.DropItem = bq.object.Object.extend({
      */
     addInstantMsg_: function() {
         var hud = bq.Hud.getInstance();
-        var itemName = '<span style="color: cyan;">' + this.model_.item.name + '</span>'
+        var itemName = '<span style="color: cyan;">' + this.model_.item.name + '</span>';
         if (this.model_.item.type === bq.Types.ItemType.MONEY) {
             hud.addInstantMsg(this.model_.num + this.model_.item.name + 'を手に入れた！');
         } else if (this.model_.num > 1) {
