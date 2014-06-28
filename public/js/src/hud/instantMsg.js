@@ -12,13 +12,6 @@ bq.hud.InstantMsg = bq.hud.HudItem.extend({
         this.msgs_ = [];
 
         /**
-         * メッセージの挿入位置(px)
-         * @type {number}
-         * @private
-         */
-        this.msgBottom_ = 0;
-
-        /**
          * メッセージの間隔(px)
          * @type {number}
          * @private
@@ -30,7 +23,7 @@ bq.hud.InstantMsg = bq.hud.HudItem.extend({
          * @type {number}
          * @private
          */
-        this.msgTime_ = 5000;
+        this.msgTime_ = 9000;
     },
 
     /**
@@ -38,7 +31,11 @@ bq.hud.InstantMsg = bq.hud.HudItem.extend({
      */
     addMsg: function(msg) {
         var msgEl = $('<div/>').html(msg).addClass('bq-instant-msg-item');
-        msgEl.css('bottom', this.msgBottom_ + this.msgs_.length * this.msgPadding_);
+        var top = 0;
+        if (this.msgs_[0]) {
+            top = parseInt(this.msgs_[0].css('bottom'), 10) + this.msgPadding_;
+        }
+        msgEl.css('bottom', top);
         this.msgs_.unshift(msgEl);
         this.inner_.append(msgEl);
         msgEl.animate({left: 0}, 250);
@@ -46,14 +43,12 @@ bq.hud.InstantMsg = bq.hud.HudItem.extend({
             msgEl.animate({left: '-200px', opacity: 0}, 250, 'swing', _.bind(function() {
                 this.msgs_ = _.without(this.msgs_, msgEl);
                 this.updateLayout_();
+                msgEl.remove();
             }, this));
         }, this), this.msgTime_);
     },
 
     updateLayout_: function() {
-        if (this.msgBottom_ > 0) {
-            this.msgBottom_ -= this.msgPadding_;
-        }
         _.forEach(this.msgs_, _.bind(function(msg) {
             var currentBottom = parseInt(msg.css('bottom'), 10);
             msg.animate({'bottom': currentBottom - this.msgPadding_ + 'px'}, 200);
