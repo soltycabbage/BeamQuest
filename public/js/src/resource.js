@@ -39,7 +39,9 @@ var s_PlistEffectBurn    =  'res/img/effect/burn.plist';
 var s_PlistEffectExplode = 'res/img/effect/explodingRing.plist';
 
 // sounds
-var s_BgmField       = 'res/sounds/Field.m4a';
+var s_BgmField       = 'res/sounds/bgm/Field.m4a';  // テンテテン　テン　テン
+var s_BgmField2      = 'res/sounds/bgm/Field2.m4a'; // 草原チックなやつ
+
 var s_SeBeamSimple1  = 'res/sounds/BeamSimple1.m4a';
 var s_SeBeamSp1      = 'res/sounds/BeamAp1.m4a';
 var s_SeDamage       = 'res/sounds/Damage.ogg';
@@ -78,7 +80,8 @@ var g_resources = [
     //fnt
 
     //bgm
-    {type:"m4a",src:s_BgmField}
+    {type:"m4a",src:s_BgmField},
+    {type:"m4a",src:s_BgmField2}
 
     //effect
 ];
