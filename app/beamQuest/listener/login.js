@@ -20,14 +20,17 @@ exports.listen = function(socket, io) {
     function login_(loginData) {
         var respond_ = function(result) { socket.emit('login:receive', result); };
         userStore.find(loginData.userId, function(error, userData) {
+            // システムエラー
             if (error) {
                 return respond_(error);
             }
 
+            // ユーザは存在するが認証失敗
             if (userData && userData.hash !== loginData.hash) {
                 return respond_({result: 'error', message: 'すでに存在するキャラクターです。'});
             }
 
+            // ログイン成功 または 新規ユーザ作成
             var player = (userData) ? createPlayer_(userData) : createNewPlayer_(loginData);
             addLoginUser_(player);
 
