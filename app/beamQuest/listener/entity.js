@@ -125,7 +125,8 @@ Entity.prototype.addExp = function(playerId, mob) {
             exp: mob.model.exp,
             prevLvExp: player.model.prevLvExp,
             currentExp: player.model.exp,
-            nextLvExp: player.model.nextLvExp
+            nextLvExp: player.model.nextLvExp,
+            mobName: mob.model.name
         });
     }        
 };

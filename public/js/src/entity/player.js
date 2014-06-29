@@ -182,6 +182,8 @@ bq.entity.Player = bq.entity.Entity.extend({
     updateExp: function(data) {
         this.popExpLabel(data.exp);
         this.model_.addExp(data.exp);
+        bq.Hud.getInstance().addInstantMsg(
+            data.mobName + 'を倒した！ <span style="color: cyan;">' + data.exp + '</span>の経験値を獲得！');
         $(this).triggerHandler(bq.entity.Player.EventType.UPDATE_EXP, [data.prevLvExp, data.currentExp, data.nextLvExp]);
     },
 
