@@ -69,6 +69,7 @@ bq.object.DropItem = bq.object.Object.extend({
         this.runAction(cc.Sequence.create(cc.Spawn.create(moveTo, fadeOut), removeFunc));
         if (pickerId === bq.player.name) {
             this.playSound_();
+            this.addInstantMsg_();
         }
     },
 
@@ -81,6 +82,22 @@ bq.object.DropItem = bq.object.Object.extend({
             bq.soundManager.playEffect(s_SeMoney);
         } else {
             bq.soundManager.playEffect(s_SePyu);
+        }
+    },
+
+    /**
+     * インスタントメッセージにログを残す
+     * @private
+     */
+    addInstantMsg_: function() {
+        var hud = bq.Hud.getInstance();
+        var itemName = '<span style="color: cyan;">' + this.model_.item.name + '</span>';
+        if (this.model_.item.type === bq.Types.ItemType.MONEY) {
+            hud.addInstantMsg(this.model_.num + this.model_.item.name + 'を手に入れた！');
+        } else if (this.model_.num > 1) {
+            hud.addInstantMsg(itemName + ' を' + this.model_.num + 'つ手に入れた！');
+        } else {
+            hud.addInstantMsg(itemName + ' を手に入れた！');
         }
     },
 
