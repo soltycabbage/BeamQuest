@@ -23,15 +23,23 @@ bq.hud.InstantMsg = bq.hud.HudItem.extend({
          * @type {number}
          * @private
          */
-        this.msgTime_ = 9000;
+        this.msgDuration_ = 9000;
     },
 
     /**
      * @param {string} msg
+     * @param {number=} opt_duration
+     * @param {cc.color=} opt_color
      */
-    addMsg: function(msg) {
+    addMsg: function(msg, opt_duration, opt_color) {
         var msgEl = $('<div/>').html(msg).addClass('bq-instant-msg-item');
         var top = 0;
+        var duration = opt_duration || this.msgDuration_;
+
+        if (opt_color) {
+            msgEl.css('background', 'rgba(' +
+                opt_color.r + ',' + opt_color.g + ',' + opt_color.b + ',0.6)');
+        }
         if (this.msgs_[0]) {
             top = parseInt(this.msgs_[0].css('bottom'), 10) + this.msgPadding_;
         }
@@ -45,7 +53,7 @@ bq.hud.InstantMsg = bq.hud.HudItem.extend({
                 this.updateLayout_();
                 msgEl.remove();
             }, this));
-        }, this), this.msgTime_);
+        }, this), duration);
     },
 
     updateLayout_: function() {

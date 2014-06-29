@@ -137,7 +137,13 @@ bq.Socket = cc.Class.extend({
 
         // BPが足りないよって
         this.socket.on('user:status:bp:lack', function(data) {
-            bq.player.showMessage('BP足りひん'); // TODO 適切なアナウンスにする
+            if (!this.isLackMsgShowing_) {
+                this.isLackMsgShowing_ = true;
+                bq.Hud.getInstance().addInstantMsg('BPが不足しています。', 1000, cc.color(255, 0, 0));
+                setTimeout(_.bind(function() {
+                    this.isLackMsgShowing_ = false;
+                }, this), 1200);
+            }
         });
     },
 

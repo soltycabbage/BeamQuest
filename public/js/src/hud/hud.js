@@ -114,8 +114,9 @@ bq.Hud = cc.Node.extend({
         this.hotBar_.select(selectNumber);
     },
 
-    addInstantMsg: function(msg) {
-        this.instantMsg_.addMsg(msg);
+
+    addInstantMsg: function(msg, opt_duration, opt_color) {
+        this.instantMsg_.addMsg(msg, opt_duration, opt_color);
     }
 });
 
