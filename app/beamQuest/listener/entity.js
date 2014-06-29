@@ -1,3 +1,5 @@
+var userStore = require('beamQuest/store/userStore');
+
 /**
  * @fileoverview Entityの状態が変化した時などなどを扱う
  */
@@ -21,10 +23,14 @@ Entity.prototype.listen = function(socket, io) {
  * @private
  */
 Entity.prototype.handlePlayerMove_ = function(socket, data) {
-    // プレイヤーが移動したら位置情報が送られてくる
-    this.entitiesStore_.updatePlayerPosition(data);
-    // 自分以外の全プレイヤーにブロードキャスト
-    socket.broadcast.emit('notify:user:move', data);
+    userStore.getSessionData(socket.id, 'mapId', function(err, mapId) {
+        data.mapId = mapId;
+
+        // プレイヤーが移動したら位置情報が送られてくる
+        this.entitiesStore_.updatePlayerPosition(data);
+        // 自分以外の全プレイヤーにブロードキャスト
+        socket.broadcast.emit('notify:user:move', data);
+    }.bind(this));
 };
 
 /**
