@@ -10,8 +10,21 @@ Entity.prototype.listen = function(socket, io) {
     this.io_ = io;
     this.entitiesStore_ = require('beamQuest/store/entities');
 
+    this.socket_.on('user:position:update', this.handlePlayerMove_.bind(this, this.socket_));
     this.socket_.on('user:respawn', this.handleRespawn.bind(this));
     this.socket_.on('user:status:get', this.handleGetStatus_.bind(this, this.socket_));
+};
+
+/**
+ * プレイヤーの移動
+ * @param {Object} data
+ * @private
+ */
+Entity.prototype.handlePlayerMove_ = function(socket, data) {
+    // プレイヤーが移動したら位置情報が送られてくる
+    this.entitiesStore_.updatePlayerPosition(data);
+    // 自分以外の全プレイヤーにブロードキャスト
+    socket.broadcast.emit('notify:user:move', data);
 };
 
 /**
@@ -112,7 +125,8 @@ Entity.prototype.addExp = function(playerId, mob) {
             exp: mob.model.exp,
             prevLvExp: player.model.prevLvExp,
             currentExp: player.model.exp,
-            nextLvExp: player.model.nextLvExp
+            nextLvExp: player.model.nextLvExp,
+            mobName: mob.model.name
         });
     }        
 };

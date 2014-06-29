@@ -10,6 +10,7 @@ bq.Hud = cc.Node.extend({
         this.level_ = new bq.hud.Level();
         this.statusWindow_ = new bq.hud.StatusWindow();
         this.hotBar_ = new bq.hud.HotBar();
+        this.instantMsg_ = new bq.hud.InstantMsg();
     },
 
     /**
@@ -110,6 +111,10 @@ bq.Hud = cc.Node.extend({
      */
     handleSelectHotBar_: function(evt, selectNumber) {
         this.hotBar_.select(selectNumber);
+    },
+
+    addInstantMsg: function(msg) {
+        this.instantMsg_.addMsg(msg);
     }
 });
 
