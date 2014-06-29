@@ -602,18 +602,17 @@ body {
   position: absolute;
   left: -10px;
   bottom: 130px;
-  height: 260px;
   width: 300px;
 }
 
-/* line 520, ../scss/layout.scss */
+/* line 519, ../scss/layout.scss */
 .bq-instant-msg-inner {
   position: absolute;
   bottom: 0;
   width: 100%;
 }
 
-/* line 526, ../scss/layout.scss */
+/* line 525, ../scss/layout.scss */
 .bq-instant-msg-item {
   font-family: systemFont;
   font-size: 8pt;
