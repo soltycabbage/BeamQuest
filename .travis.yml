@@ -1,12 +1,12 @@
 language: node_js
 node_js:
-  - "0.10"
+- '0.10'
 before_script:
-  - npm install -g grunt-cli
+- npm install -g grunt-cli
 deploy:
   provider: heroku
   api_key:
-    secure: eHPCNRCYBc6WkXefKnfCJRDhzTud2WTc9m6NxrFYLeIHhy7JyD1AmajcilZUXzcVInOLqo3xHuOXM2dn2wEJTI4NsZyB20EtWLqk3J4CngaHK0vQESiLDYmnyrnTm757wns7D/AqGn5nPirLtySMsHY0vMK905N+wDexgxtelbk=
+    secure: OAIqG75aQ+iNyuRoBk6iLB1Cqtn6HSbONgRUdbKOnXF/2ysAfbhmXd+wPDNmYlEYqSYECz3T89V0nqTH7ky1H+z9VCOrQP9dZwykAsZbQwED70HC1KiPZKxG6R0PWyqPa6qEDnO8iqGaP1g/JDfVf8sETr07u+rhKoffvxIwgf4=
   app: beamquest-dev
   on:
     repo: soltycabbage/BeamQuest
