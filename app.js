@@ -19,7 +19,7 @@ if ('development' == env) {
     expressLogWrapper.setLevel('INFO');
 }
 
-if ('production' == env) {
+if ('production' == env || 'heroku' == env) {
     expressLogWrapper.setLevel('WARN');
 }
 
