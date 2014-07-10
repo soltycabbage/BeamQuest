@@ -40,6 +40,7 @@ Skill.prototype.handleCastSkill_ = function(data) {
 
                 // キャストタイム終了後、スキル使用者のBPを減らす。
                 // キャストが中断されない前提。
+                data.position.mapId = mapId;
                 setTimeout(_.bind(function() {
                     var s = this.factory_.create(targetSkill, player, data.position);
                     s && s.fire();
