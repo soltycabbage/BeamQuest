@@ -54,6 +54,7 @@ var s_SeLogout       = 'res/sounds/Logout.m4a';
 var s_SeTargetLine   = 'res/sounds/TargetLine.m4a';
 var s_SeMoney        = 'res/sounds/Money.m4a';
 var s_SePyu          = 'res/sounds/Pyu.m4a';
+var s_SeError          = 'res/sounds/Error.m4a';
 
 var g_resources = [
     //tmx
@@ -87,7 +88,8 @@ var g_resources = [
 
     //effect
     {type: "m4a", src: s_SeMoney},
-    {type: "m4a", src: s_SePyu}
+    {type: "m4a", src: s_SePyu},
+    {type: "m4a", src: s_SeError},
 ];
 
 var g_sprite_frames = [

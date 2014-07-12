@@ -140,6 +140,7 @@ bq.Socket = cc.Class.extend({
             if (!this.isLackMsgShowing_) {
                 this.isLackMsgShowing_ = true;
                 bq.Hud.getInstance().addInstantMsg('BPが不足しています。', 1000, cc.color(255, 0, 0));
+                bq.soundManager.playEffect(s_SeError);
                 setTimeout(_.bind(function() {
                     this.isLackMsgShowing_ = false;
                 }, this), 1200);
