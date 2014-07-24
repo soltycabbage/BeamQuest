@@ -13,10 +13,9 @@ bq.hud.StatusWindow = bq.hud.HudItem.extend({
 
     /**
      * @param {string} entityId
-     * @param {string} mapId
      */
-    open: function(entityId, mapId) {
-        bq.Socket.getInstance().requestEntityStatus(entityId, mapId, function(data) {
+    open: function(entityId) {
+        bq.Socket.getInstance().requestEntityStatus(entityId, function(data) {
             this.render_(data);
 
             $('#bq-status-window').dialog(
