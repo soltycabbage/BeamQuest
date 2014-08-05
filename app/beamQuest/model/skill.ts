@@ -1,5 +1,3 @@
-/// <reference path="model.ts" />
-
 import  Model = require('beamQuest/model/model');
 
 /**
