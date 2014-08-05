@@ -4,7 +4,7 @@
 import events = require('events');
 
 class Model extends events.EventEmitter {
-    data: Object;
+    data: any;
 
     constructor(opt_data: Object) {
         super();
@@ -15,7 +15,7 @@ class Model extends events.EventEmitter {
      * @returns {{}}
      * @protected
      */
-    toJSON() {
+    toJSON(): any {
         return {};
     }
 
@@ -53,4 +53,4 @@ class Model extends events.EventEmitter {
     }
 }
 
-module.exports = Model;
+export = Model;
