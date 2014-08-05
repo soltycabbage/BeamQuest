@@ -1,45 +1,36 @@
-var util = require('util'),
-    MapModel = require('beamQuest/model/map');
-
-var FieldMap = function(opt_data) {
-    MapModel.apply(this, arguments);
-    /**
-     * マップ上に存在できるmobの最大値。mobCountがこの数以下になるとmobがPOPする
-     * @type {number}
-     */
-    this.maxMobCount = this.data.maxMobCount || 0;
-
-    /**
-     * マップに存在するmobの数
-     * @type {number}
-     */
-    this.mobCount = this.data.mobCount || 0;
-
-    /**
-     *  マップに存在するドロップアイテム (key: dropId)
-     * @type {Object.<model.DropItem>}
-     */
-    this.dropItems = this.data.dropItems || {};
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
 };
-util.inherits(FieldMap, MapModel);
+var MapModel = require('beamQuest/model/map');
 
-/**
- * @param {Array.<model.DropItem>} items
- */
-FieldMap.prototype.addDropItems = function(items) {
-    _.forEach(items, function(item) {
-        this.dropItems[item.dropId] = item;
-    }.bind(this));
-};
+var FieldMap = (function (_super) {
+    __extends(FieldMap, _super);
+    function FieldMap(opt_data) {
+        _super.call(this, opt_data);
 
-/** @override */
-FieldMap.prototype.toJSON = function() {
-    var json = FieldMap.super_.prototype.toJSON.apply(this);
-    json.maxMobCount = this.maxMobCount;
-    json.mobCount = this.mobCount;
-    json.dropItems = this.toObjectJSON(this.dropItems);
-    return json;
-};
+        this.maxMobCount = this.data.maxMobCount || 0;
+        this.mobCount = this.data.mobCount || 0;
+        this.dropItems = this.data.dropItems || {};
+    }
+    FieldMap.prototype.addDropItems = function (items) {
+        var _this = this;
+        _.forEach(items, function (item) {
+            _this.dropItems[item.dropId] = item;
+        });
+    };
 
+    FieldMap.prototype.toJSON = function () {
+        var json = _super.prototype.toJSON.call(this);
+        json.maxMobCount = this.maxMobCount;
+        json.mobCount = this.mobCount;
+        json.dropItems = this.toObjectJSON(this.dropItems);
+        return json;
+    };
+    return FieldMap;
+})(MapModel);
 
 module.exports = FieldMap;
+//# sourceMappingURL=fieldMap.js.map
