@@ -1,8 +1,8 @@
 import Model = require('beamQuest/model/model');
 
 class MapModel extends Model {
-    DEFAULT_NAME = 'map';
-    DEFAULT_SIZE = {width: 100, height: 100};
+    static DEFAULT_NAME = 'map';
+    static DEFAULT_SIZE = {width: 100, height: 100};
 
     id: number;
     name: string;
@@ -20,9 +20,9 @@ class MapModel extends Model {
     constructor(opt_data) {
         super(opt_data);
         this.id = this.data.id;
-        this.name = this.data.name || this.DEFAULT_NAME;
+        this.name = this.data.name || MapModel.DEFAULT_NAME;
         this.tmxObj = this.data.tmxObj || null;
-        this.size = this.data.size || this.DEFAULT_SIZE;
+        this.size = this.data.size || MapModel.DEFAULT_SIZE;
     }
 
     toJSON() : any {

@@ -10,12 +10,10 @@ var MapModel = (function (_super) {
     __extends(MapModel, _super);
     function MapModel(opt_data) {
         _super.call(this, opt_data);
-        this.DEFAULT_NAME = 'map';
-        this.DEFAULT_SIZE = { width: 100, height: 100 };
         this.id = this.data.id;
-        this.name = this.data.name || this.DEFAULT_NAME;
+        this.name = this.data.name || MapModel.DEFAULT_NAME;
         this.tmxObj = this.data.tmxObj || null;
-        this.size = this.data.size || this.DEFAULT_SIZE;
+        this.size = this.data.size || MapModel.DEFAULT_SIZE;
     }
     MapModel.prototype.toJSON = function () {
         var json = _super.prototype.toJSON.call(this);
@@ -23,6 +21,8 @@ var MapModel = (function (_super) {
         json.name = this.name;
         return json;
     };
+    MapModel.DEFAULT_NAME = 'map';
+    MapModel.DEFAULT_SIZE = { width: 100, height: 100 };
     return MapModel;
 })(Model);
 

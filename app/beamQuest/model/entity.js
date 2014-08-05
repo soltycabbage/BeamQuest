@@ -16,18 +16,15 @@ var Entity = (function (_super) {
     __extends(Entity, _super);
     function Entity(opt_data) {
         _super.call(this, opt_data);
-        this.DEFAULT_MAX_HP = 100;
-        this.DEFAULT_ATTACK = 1;
-        this.DEFAULT_DEFENCE = 1;
 
         this.hash = this.data.hash;
         this.id = this.data.id;
         this.type = this.data.type;
         this.name = this.data.name;
-        this.maxHp = this.data.maxHp || this.DEFAULT_MAX_HP;
+        this.maxHp = this.data.maxHp || Entity.DEFAULT_MAX_HP;
         this.hp = _.isUndefined(this.data.hp) ? this.maxHp : this.data.hp;
-        this.attack = this.data.attack || this.DEFAULT_ATTACK;
-        this.defence = this.data.defence || this.DEFAULT_DEFENCE;
+        this.attack = this.data.attack || Entity.DEFAULT_ATTACK;
+        this.defence = this.data.defence || Entity.DEFAULT_DEFENCE;
         this.position = this.data.position || new Position(null);
         this.skills = this.data.skills || this.getPresetSkills();
     }
@@ -76,6 +73,9 @@ var Entity = (function (_super) {
         json.skills = this.toArrayJSON(this.skills);
         return json;
     };
+    Entity.DEFAULT_MAX_HP = 100;
+    Entity.DEFAULT_ATTACK = 1;
+    Entity.DEFAULT_DEFENCE = 1;
     return Entity;
 })(Model);
 

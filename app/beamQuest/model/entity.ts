@@ -23,9 +23,9 @@ class Entity extends Model {
     /** @var 使用可能スキル一覧 */
     skills: Skill[];
 
-    DEFAULT_MAX_HP = 100;
-    DEFAULT_ATTACK = 1;
-    DEFAULT_DEFENCE = 1;
+    static DEFAULT_MAX_HP:number = 100;
+    static DEFAULT_ATTACK:number = 1;
+    static DEFAULT_DEFENCE:number = 1;
 
     constructor(opt_data) {
         super(opt_data);
@@ -34,10 +34,10 @@ class Entity extends Model {
         this.id       = this.data.id;
         this.type     = this.data.type;
         this.name     = this.data.name;
-        this.maxHp    = this.data.maxHp || this.DEFAULT_MAX_HP;
+        this.maxHp    = this.data.maxHp || Entity.DEFAULT_MAX_HP;
         this.hp       = _.isUndefined(this.data.hp) ? this.maxHp : this.data.hp;
-        this.attack   = this.data.attack || this.DEFAULT_ATTACK;
-        this.defence  = this.data.defence || this.DEFAULT_DEFENCE;
+        this.attack   = this.data.attack || Entity.DEFAULT_ATTACK;
+        this.defence  = this.data.defence || Entity.DEFAULT_DEFENCE;
         this.position = this.data.position || new Position(null);
         this.skills   = this.data.skills || this.getPresetSkills();
     }
