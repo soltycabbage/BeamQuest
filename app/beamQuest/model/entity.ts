@@ -1,7 +1,8 @@
 import Model    = require('beamQuest/model/model');
 import Position = require('beamQuest/model/position');
 import Skill    = require('beamQuest/model/skill');
-import Skills   = require('beamQuest/params/skills');
+
+declare var bq: any;
 
 /**
  * NPC, PC, mob などの基底クラス
@@ -69,7 +70,7 @@ class Entity extends Model {
      */
     private getPresetSkills(): Skill[] {
         var skills = [];
-        skills.push(new Skill(Skills.BURNSTRIKE));
+        skills.push(new Skill(bq.params.Skills.BURNSTRIKE));
         return skills;
     }
 

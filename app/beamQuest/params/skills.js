@@ -1,7 +1,7 @@
 /**
 * @fileoverview スキル一覧
 */
-var data = {
+module.exports = {
     BURNSTRIKE: {
         id: '001_burnstrike',
         name: 'バーンストライク',
@@ -14,5 +14,3 @@ var data = {
     }
 };
 
-module.exports = data;
-//# sourceMappingURL=skills.js.map

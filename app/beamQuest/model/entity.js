@@ -7,7 +7,6 @@ var __extends = this.__extends || function (d, b) {
 var Model = require('beamQuest/model/model');
 var Position = require('beamQuest/model/position');
 var Skill = require('beamQuest/model/skill');
-var Skills = require('beamQuest/params/skills');
 
 /**
 * NPC, PC, mob などの基底クラス
@@ -55,7 +54,7 @@ var Entity = (function (_super) {
     */
     Entity.prototype.getPresetSkills = function () {
         var skills = [];
-        skills.push(new Skill(Skills.BURNSTRIKE));
+        skills.push(new Skill(bq.params.Skills.BURNSTRIKE));
         return skills;
     };
 
