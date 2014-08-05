@@ -1,20 +1,29 @@
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
-var Model = require('beamQuest/model/model');
-var PositionModel = require('beamQuest/model/position');
-var ItemModel = require('beamQuest/model/item');
+import Model = require('beamQuest/model/model');
+import PositionModel = require('beamQuest/model/position');
+import ItemModel = require('beamQuest/model/item');
+
+declare var bq: any;
 
 /**
-* ドロップ情報のmodel
-*/
-var DropItem = (function (_super) {
-    __extends(DropItem, _super);
-    function DropItem(opt_data) {
-        _super.call(this, opt_data);
+ * ドロップ情報のmodel
+ */
+class DropItem extends Model {
+    /** ドロップしたアイテムのID @type {bq.Types.Items} */
+    itemId: any;
+    /** アイテム情報 @type {model.Item} */
+    item: ItemModel;
+    /** 個数  */
+    num: number;
+    /** ドロップさせたEntityのID */
+    dropperId: number;
+    /** ドロップした時刻 (unix time [msec]) */
+    droppedAt: number;
+    /** ドロップした座標 */
+    position: PositionModel;
+    /** ドロップアイテムごとに付けられるユニークID  */
+    dropId: string;
+    constructor(opt_data) {
+        super(opt_data);
 
         this.itemId = this.data.itemId;
         this.item = this.data.item;
@@ -28,18 +37,19 @@ var DropItem = (function (_super) {
         this.position = this.data.position || new PositionModel(null);
         this.dropId = this.data.dropId || this.generateDropId();
     }
-    DropItem.prototype.generateDropId = function () {
+
+    private generateDropId(): string {
         // テキトーな乱数をくっつけて同時期にドロップしたアイテム同士のID重複を防ぐ
         var r = Math.floor(Math.random() * 1000000);
         return [this.itemId, this.dropperId, this.droppedAt, r].join('_');
-    };
+    }
 
-    DropItem.prototype.setPosition = function (position) {
+    setPosition(position: PositionModel): void {
         this.position = position;
-    };
+    }
 
-    DropItem.prototype.toJSON = function () {
-        var json = _super.prototype.toJSON.call(this);
+    toJSON() {
+        var json = super.toJSON();
         json.dropId = this.dropId;
         json.itemId = this.itemId;
         json.item = this.item.toJSON();
@@ -48,9 +58,7 @@ var DropItem = (function (_super) {
         json.droppedAt = this.droppedAt;
         json.position = this.position.toJSON();
         return json;
-    };
-    return DropItem;
-})(Model);
+    }
+}
 
-module.exports = DropItem;
-//# sourceMappingURL=dropItem.js.map
+export = DropItem;
