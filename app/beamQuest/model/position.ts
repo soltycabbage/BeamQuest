@@ -4,9 +4,9 @@ import Model = require('beamQuest/model/model');
  * 位置情報
  */
 class Position extends Model {
-    mapId: Number;
-    x: Number;
-    y: Number;
+    mapId: number;
+    x: number;
+    y: number;
 
     /**
      * @param opt_data

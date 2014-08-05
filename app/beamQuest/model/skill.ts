@@ -15,19 +15,19 @@ class Skill extends Model {
     info: string;
 
     /** @var 消費BP */
-    bp: Number;
+    bp: number;
 
     /** @var キャストタイム。使用開始してから発動するまでの時間(msec) */
-    castTime: Number;
+    castTime: number;
 
     /** @var リキャストタイム。発動してから再使用可能になるまでの時間(msec) */
-    recastTime: Number;
+    recastTime: number;
 
     /** @var 射程距離(px) */
-    range: Number
+    range: number
 
     /** @var 有効半径(px) */
-    radius: Number;
+    radius: number;
 
     /**
      * @param opt_data

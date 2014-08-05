@@ -4,7 +4,7 @@ class MapModel extends Model {
     DEFAULT_NAME = 'map';
     DEFAULT_SIZE = {width: 100, height: 100};
 
-    id: Number;
+    id: number;
     name: string;
     /**
      * tmx ファイル

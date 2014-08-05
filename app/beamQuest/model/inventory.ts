@@ -8,7 +8,7 @@ class Inventory extends Model {
     items: Object;
 
     /** 所持金 */
-    money: Number;
+    money: number;
 
     constructor(opt_data) {
         super(opt_data);

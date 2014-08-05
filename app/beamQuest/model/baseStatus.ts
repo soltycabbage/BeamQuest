@@ -4,40 +4,23 @@ import Model = require('beamQuest/model/model');
  * Entityの基本ステータス
  */
 class BaseStatus extends Model {
-    /**
-     * 体力
-     * HPが上がる
-     */
-    con: Number;
+    /** 体力 HPが上がる */
+    con: number;
 
-    /**
-     * 知力
-     * BPが上がる
-     */
-    int: Number;
+    /** 知力 BPが上がる */
+    int: number;
 
-    /**
-     * 筋力
-     * 攻撃力があがる。この世界では筋力の強さがビームの強さになる、というテイで
-     */
-    str: Number;
+    /** 筋力 攻撃力があがる。この世界では筋力の強さがビームの強さになる、というテイで */
+    str: number;
 
-    /**
-     * 体幹
-     * 防御力が上がる
-     */
-    def: Number;
+    /** 体幹 防御力が上がる */
+    def: number;
 
-    /**
-     * センス
-     */
-    sns: Number;
+    /** センス */
+    sns: number;
 
-    /**
-     * 運
-     * クリティカルヒットとか。たまに経験値もクリティカルヒットする
-     */
-    luk: Number;
+    /** 運 クリティカルヒットとか。たまに経験値もクリティカルヒットする */
+    luk: number;
 
     constructor(opt_data: any) {
         super(opt_data);
