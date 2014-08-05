@@ -1,67 +1,39 @@
-var util = require('util'),
-    Model = require('beamQuest/model/model');
+/// <reference path="model.ts" />
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var Model = require('beamQuest/model/model');
 
 /**
- * Entityの基本ステータス
- * @constructor
- * @extends {model.Model}
- */
-var BaseStatus = function(opt_data) {
-    Model.apply(this, arguments);
+* Entityの基本ステータス
+*/
+var BaseStatus = (function (_super) {
+    __extends(BaseStatus, _super);
+    function BaseStatus(opt_data) {
+        _super.call(this, opt_data);
 
-    /**
-     * 体力
-     * HPが上がる
-     * @type {number}
-     */
-    this.con = this.data.con || 1;
-
-    /**
-     * 知力
-     * BPが上がる
-     * @type {number}
-     */
-    this.int = this.data.int || 1;
-
-    /**
-     * 筋力
-     * 攻撃力があがる。この世界では筋力の強さがビームの強さになる、というテイで
-     * @type {number}
-     */
-    this.str = this.data.str || 1;
-
-    /**
-     * 体幹
-     * 防御力が上がる
-     * @type {number}
-     */
-    this.def = this.data.def || 1;
-
-    /**
-     * センス
-     * @type {number}
-     */
-    this.sns = this.data.sns || 1;
-
-    /**
-     * 運
-     * クリティカルヒットとか。たまに経験値もクリティカルヒットする
-     * @type {number}
-     */
-    this.luk = this.data.luk || 1;
-};
-util.inherits(BaseStatus, Model);
-
-/** @override */
-BaseStatus.prototype.toJSON = function() {
-    var json = {};
-    json.con = this.con;
-    json.int = this.int;
-    json.str = this.str;
-    json.def = this.def;
-    json.sns = this.sns;
-    json.luk = this.luk;
-    return json;
-};
+        this.con = this.data.con || 1;
+        this.int = this.data.int || 1;
+        this.str = this.data.str || 1;
+        this.def = this.data.def || 1;
+        this.sns = this.data.sns || 1;
+        this.luk = this.data.luk || 1;
+    }
+    BaseStatus.prototype.toJSON = function () {
+        var json = _super.prototype.toJSON.call(this);
+        json.con = this.con;
+        json.int = this.int;
+        json.str = this.str;
+        json.def = this.def;
+        json.sns = this.sns;
+        json.luk = this.luk;
+        return json;
+    };
+    return BaseStatus;
+})(Model);
 
 module.exports = BaseStatus;
+//# sourceMappingURL=baseStatus.js.map
