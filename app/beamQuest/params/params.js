@@ -4,9 +4,9 @@
 require('shared/js/gameTypes');
 bq.params = {};
 
-require('beamQuest/params/entities');
-require('beamQuest/params/beams');
-require('beamQuest/params/jobs');
-require('beamQuest/params/items');
-require('beamQuest/params/skills');
+bq.params.Entities = require('beamQuest/params/entities');
+bq.params.Beams    = require('beamQuest/params/beams');
+bq.params.Jobs     = require('beamQuest/params/jobs');
+bq.params.Items    = require('beamQuest/params/items');
+bq.params.Skills   = require('beamQuest/params/skills');
 

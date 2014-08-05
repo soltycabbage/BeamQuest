@@ -1,7 +1,7 @@
 /**
  * @fileoverview entityの各種ステータスを定義
  */
-bq.params.Entities = {
+module.exports = {
     // Mobs
     KAMUTARO: {
         // id: 識別用ID、 name: 表示名,
