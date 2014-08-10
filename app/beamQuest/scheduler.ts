@@ -20,7 +20,7 @@ class Scheduler {
 
     public static getInstance():Scheduler
     {
-        if(Scheduler.instance_ === null) {
+        if(Scheduler.instance_ === undefined) {
             Scheduler.instance_ = new Scheduler();
         }
         return Scheduler.instance_;

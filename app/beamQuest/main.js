@@ -7,7 +7,7 @@ var ping = require('beamQuest/listener/ping'),
     entities = require('beamQuest/store/entities'),
     item = require('beamQuest/listener/item'),
     mapStore = require('beamQuest/store/maps'),
-    scheduler = require('beamQuest/scheduler'),
+    Scheduler = require('beamQuest/scheduler'),
     usage = require('usage');
 
 exports.start = function(io) {
@@ -51,7 +51,7 @@ exports.start = function(io) {
     }
 
     function main() {
-        scheduler.update();
+        Scheduler.getInstance().update();
     }
 
     function logUsage() {

@@ -12,7 +12,7 @@ var Scheduler = (function () {
         this.targets_ = [];
     }
     Scheduler.getInstance = function () {
-        if (Scheduler.instance_ === null) {
+        if (Scheduler.instance_ === undefined) {
             Scheduler.instance_ = new Scheduler();
         }
         return Scheduler.instance_;
