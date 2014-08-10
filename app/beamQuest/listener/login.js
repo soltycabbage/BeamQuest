@@ -2,7 +2,7 @@ var playerModel = require('beamQuest/model/player'),
     playerCtrl = require('beamQuest/ctrl/player'),
     positionModel = require('beamQuest/model/position'),
     entities = require('beamQuest/store/entities'),
-    userStore = require('beamQuest/store/userStore');
+    UserStore = require('beamQuest/store/userStore');
 var kvs = require('beamQuest/store/kvs').createClient();
 
 exports.listen = function(socket, io) {
@@ -19,7 +19,7 @@ exports.listen = function(socket, io) {
 
     function login_(loginData) {
         var respond_ = function(result) { socket.emit('login:receive', result); };
-        userStore.find(loginData.userId, function(error, userData) {
+        UserStore.getInstance().find(loginData.userId, function(error, userData) {
             if (error) {
                 return respond_(error);
             }
@@ -85,14 +85,14 @@ exports.listen = function(socket, io) {
         var model = player.model;
         var position = model.position;
         entities.addPlayer(position.mapId, player);
-        userStore.saveSessionData(socket.id, 'userId', player.model.id);
-        userStore.saveSessionData(socket.id, 'mapId', player.model.position.mapId);
+        UserStore.getInstance().saveSessionData(socket.id, 'userId', player.model.id);
+        UserStore.getInstance().saveSessionData(socket.id, 'mapId', player.model.position.mapId);
         player.scheduleUpdate();
         socket.broadcast.emit('notify:user:login', {'userId': model.id});
 
         // 接続が切れたらログアウト扱い
         socket.on('disconnect', function() {
-            userStore.save(player);
+            UserStore.getInstance().save(player);
             entities.removePlayer(position.mapId, player);
             player.unscheduleUpdate();
             socket.broadcast.emit('notify:user:logout', {'userId': player.model.id});

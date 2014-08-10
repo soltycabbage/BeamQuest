@@ -1,4 +1,4 @@
-var userStore = require('beamQuest/store/userStore');
+var UserStore = require('beamQuest/store/userStore');
 
 /**
  * @fileoverview Entityの状態が変化した時などなどを扱う
@@ -23,7 +23,7 @@ Entity.prototype.listen = function(socket, io) {
  * @private
  */
 Entity.prototype.handlePlayerMove_ = function(socket, data) {
-    userStore.getSessionData(socket.id, 'mapId', function(err, mapId) {
+    UserStore.getInstance().getSessionData(socket.id, 'mapId', function(err, mapId) {
         data.mapId = mapId;
 
         // プレイヤーが移動したら位置情報が送られてくる

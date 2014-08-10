@@ -4,11 +4,11 @@
 
 var entities = require('beamQuest/store/entities');
 var maps = require('beamQuest/store/maps');
-var userStore = require('beamQuest/store/userStore');
+var UserStore = require('beamQuest/store/userStore');
 
 exports.listen = function(socket, io) {
     socket.on('beam:shoot', function(data) {
-        userStore.getSessionData(socket.id, 'mapId', function(err, mapId) {
+        UserStore.getInstance().getSessionData(socket.id, 'mapId', function(err, mapId) {
             var result = data;
             result.success = true;
             var player = entities.getPlayerById(mapId, data.shooterId);

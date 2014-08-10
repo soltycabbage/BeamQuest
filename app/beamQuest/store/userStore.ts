@@ -1,62 +1,64 @@
-var kvs = require('beamQuest/store/kvs');
+import kvs = require('beamQuest/store/kvs');
 
-var UserStore = (function () {
-    function UserStore() {
-        if (UserStore.instance_) {
+class UserStore {
+    private static instance_:UserStore;
+    public static getInstance():UserStore {
+        if (UserStore.instance_ === undefined) {
+            UserStore.instance_ = new UserStore();
+        }
+        return UserStore.instance_;
+    }
+
+    constructor() {
+        if (UserStore.instance_){
             throw new Error("Error: Instantiation failed: Use Scheduler.getInstance() instead of new.");
         }
         UserStore.instance_ = this;
 
         this.store = kvs.createClient();
     }
-    UserStore.getInstance = function () {
-        if (UserStore.instance_ === undefined) {
-            UserStore.instance_ = new UserStore();
-        }
-        return UserStore.instance_;
-    };
 
-    UserStore.prototype.getStoreKey_ = function (userId) {
+    store;
+
+    private getStoreKey_(userId) {
         return "user:" + userId;
-    };
-    UserStore.prototype.getSessionKey_ = function (sessionId) {
+    }
+    private getSessionKey_(sessionId) {
         return 'session:' + sessionId;
-    };
+    }
 
-    UserStore.prototype.find = function (userId, callback) {
+    find(userId, callback) {
         var storeKey = this.getStoreKey_(userId);
-        this.store.get(storeKey, function (error, val) {
+        this.store.get(storeKey, function(error, val) {
             if (error) {
                 callback(error);
             }
             var userData = (val) ? JSON.parse(val) : null;
             callback(null, userData);
         });
-    };
+    }
 
-    UserStore.prototype.save = function (user) {
+    save(user) {
         var storeKey = this.getStoreKey_(user.model.id);
         var data = JSON.stringify(user.model.toJSON());
         this.store.set(storeKey, data);
-    };
+    }
 
     // redis のラッパすぎて抽象化できておらず
-    UserStore.prototype.getSessionData = function (sessionId, name, callback) {
+    getSessionData(sessionId, name, callback) {
         var storeKey = this.getSessionKey_(sessionId);
-        this.store.hget(storeKey, name, function (error, val) {
+        this.store.hget(storeKey, name, function(error, val) {
             if (error) {
                 callback(error);
             }
             callback(null, val);
         });
-    };
+    }
 
-    UserStore.prototype.saveSessionData = function (sessionId, name, data) {
+    saveSessionData(sessionId, name, data) {
         var storeKey = this.getSessionKey_(sessionId);
         this.store.hset(storeKey, name, data);
-    };
-    return UserStore;
-})();
+    }
+}
 
-module.exports = UserStore;
-//# sourceMappingURL=userStore.js.map
+export = UserStore;

@@ -1,6 +1,6 @@
 var mapStore = require('beamQuest/store/maps'),
     entityStore = require('beamQuest/store/entities'),
-    userStore = require('beamQuest/store/userStore');
+    UserStore = require('beamQuest/store/userStore');
 
 /**
  * @fileoverview アイテムの取得/ドロップなどなど
@@ -23,7 +23,7 @@ Skill.prototype.listen = function(socket, io) {
  */
 Skill.prototype.handleCastSkill_ = function(data) {
     if (this.io_ && data && data.skillId && data.position) {
-        var mapId = userStore.getSessionData(this.socket_.id, 'mapId', function(err, mapId) {
+        var mapId = UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', function(err, mapId) {
             var player = entityStore.getPlayerById(mapId, data.userId);
             if (!player) { return; }
             var skills = player.model.skills;

@@ -1,6 +1,6 @@
 var util = require('util'),
     EntityCtrl = require('beamQuest/ctrl/entity'),
-    userStore = require('beamQuest/store/userStore'),
+    UserStore = require('beamQuest/store/userStore'),
     entityListener = require('beamQuest/listener/entity');
 
 // TODO 外にだして
@@ -61,7 +61,7 @@ Player.prototype.handleAddBp_ = function(amount, isCritical) {
 Player.prototype.update = function() {
     this.updateCount_++;
     if (this.updateCount_ % config.SAVE_INTERVAL === 0) {
-        userStore.save(this);
+        UserStore.getInstance().save(this);
     }
 
     // 自動回復(HP)
