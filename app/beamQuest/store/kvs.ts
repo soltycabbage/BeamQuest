@@ -1,51 +1,59 @@
 /// <reference path="../../../typings/node_redis/node_redis.d.ts" />
 /// <reference path="../../../typings/config/config.d.ts" />
-var redis = require('redis');
-var config = require('config');
+
+import redis = require('redis');
+import config = require('config');
+
+declare var logger: any;
 
 var CONFIG = config.kvs;
 
 /**
-* @fileoverview オンメモリのKVS的なやつ。redisに置き換える？
-*/
-var SessionStore = (function () {
-    function SessionStore() {
+ * @fileoverview オンメモリのKVS的なやつ。redisに置き換える？
+ */
+class SessionStore {
+    private session_: Object;
+    private isEnd: boolean;
+
+    constructor() {
         this.session_ = {};
-        this.isEnd = false;
+        this.isEnd =  false;
     }
-    SessionStore.prototype.get = function (key, callback) {
+
+    get(key, callback) {
         if (this.isEnd) {
             callback('connection already closed', null);
         }
         if (key in this.session_) {
             callback(null, this.session_[key]);
-        } else {
+        }
+        else {
             callback(null, null);
         }
-    };
+    }
 
-    SessionStore.prototype.set = function (key, value) {
+    set(key, value) {
         this.session_[key] = value;
-    };
+    }
 
-    SessionStore.prototype.del = function (key) {
+    del(key) {
         delete this.session_[key];
-    };
+    }
 
-    SessionStore.prototype.flushall = function (callback) {
+    flushall(callback) {
         if (this.isEnd) {
             callback(false);
         }
         this.session_ = {};
         logger.info('kvs flushall');
         callback(true);
-    };
+    }
 
-    SessionStore.prototype.end = function () {
+    end() {
         this.isEnd = true;
-    };
+    }
 
-    SessionStore.createClient = function () {
+    static createClient(): any {
         logger.info('kvs type: ' + CONFIG.type);
         if (CONFIG.type === 'memory') {
             return SessionStore;
@@ -55,9 +63,7 @@ var SessionStore = (function () {
             return client;
         }
         return null;
-    };
-    return SessionStore;
-})();
+    }
+}
 
-module.exports = SessionStore;
-//# sourceMappingURL=kvs.js.map
+export = SessionStore;
