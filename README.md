@@ -1,4 +1,4 @@
-# BeamQuestOnline [![Build Status](https://travis-ci.org/soltycabbage/BeamQuest.svg)](https://travis-ci.org/soltycabbage/BeamQuest)
+# BeamQuestOnline [![Build Status](https://travis-ci.org/soltycabbage/BeamQuest.svg)](https://travis-ci.org/soltycabbage/BeamQuest) [![Dependency Status](https://www.versioneye.com/user/projects/53e310b5e0a2295226000025/badge.svg?style=flat)](https://www.versioneye.com/user/projects/53e310b5e0a2295226000025)
 
 ブラウザで動くちっさいMMO作ってみようぜプロジェクト。
 
