@@ -1,5 +1,8 @@
-import EntitiesStore = require('beamQuest/store/entities');
+/// <reference path="../../../typings/tsd.d.ts" />
+
 import UserStore = require('beamQuest/store/userStore');
+
+declare var EntitiesStore:any;
 
 /**
  * @fileoverview Entityの状態が変化した時などなどを扱う
@@ -31,6 +34,8 @@ class Entity {
         this.socket_.on('user:position:update', this.handlePlayerMove_.bind(this, this.socket_));
         this.socket_.on('user:respawn', this.handleRespawn.bind(this));
         this.socket_.on('user:status:get', this.handleGetStatus_.bind(this, this.socket_));
+
+        EntitiesStore = require('beamQuest/store/entities');
     }
 
     /**

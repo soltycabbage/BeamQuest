@@ -1,4 +1,4 @@
-var EntitiesStore = require('beamQuest/store/entities');
+/// <reference path="../../../typings/tsd.d.ts" />
 var UserStore = require('beamQuest/store/userStore');
 
 /**
@@ -25,6 +25,8 @@ var Entity = (function () {
         this.socket_.on('user:position:update', this.handlePlayerMove_.bind(this, this.socket_));
         this.socket_.on('user:respawn', this.handleRespawn.bind(this));
         this.socket_.on('user:status:get', this.handleGetStatus_.bind(this, this.socket_));
+
+        EntitiesStore = require('beamQuest/store/entities');
     };
 
     /**
