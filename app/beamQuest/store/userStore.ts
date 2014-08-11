@@ -11,7 +11,7 @@ class UserStore {
 
     constructor() {
         if (UserStore.instance_){
-            throw new Error("Error: Instantiation failed: Use Scheduler.getInstance() instead of new.");
+            throw new Error("Error: Instantiation failed: Use UserStore.getInstance() instead of new.");
         }
         UserStore.instance_ = this;
 
