@@ -3,7 +3,7 @@
  */
 
 var entities = require('beamQuest/store/entities');
-var maps = require('beamQuest/store/maps');
+var Maps = require('beamQuest/store/maps');
 var UserStore = require('beamQuest/store/userStore');
 
 exports.listen = function(socket, io) {
@@ -95,7 +95,7 @@ exports.listen = function(socket, io) {
     function isHitObject_(data) {
         var beamPos = {x: data.x, y: data.y};
 
-        var map = maps.getMapById(data.mapId) || {};
+        var map = Maps.getInstance().getMapById(data.mapId) || {};
 
         var tileSize = map.model.objTmx.tileWidth;
         var sizeY = map.model.objTmx.height;

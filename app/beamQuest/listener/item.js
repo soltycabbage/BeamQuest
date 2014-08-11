@@ -1,4 +1,4 @@
-var mapStore = require('beamQuest/store/maps'),
+var MapStore = require('beamQuest/store/maps'),
     entityStore = require('beamQuest/store/entities');
 
 /**
@@ -22,7 +22,7 @@ Item.prototype.listen = function(socket, io) {
  */
 Item.prototype.drop = function(dropItems, position) {
     if (this.io_ && !_.isEmpty(dropItems)) {
-        var map = mapStore.getMapById(position.mapId);
+        var map = MapStore.getInstance().getMapById(position.mapId);
         var datas = [];
         _.forEach(dropItems, function(dropItem) {
             var p = _.clone(position);

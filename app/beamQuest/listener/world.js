@@ -2,7 +2,7 @@
  * @fileoverview ワールド全体のイベント（mob/npcの移動, ログイン数、天気、時刻）などなどを扱う
  */
 var entities = require('beamQuest/store/entities'),
-    mapStore = require('beamQuest/store/maps');
+    MapStore = require('beamQuest/store/maps');
 
 exports.listen = function(socket) {
     // マップに存在するEntityの一覧を返す
@@ -19,7 +19,7 @@ exports.listen = function(socket) {
     // マップに存在するドロップアイテムの一覧を返す
     // @type {Object.<mapId:number>} data
     socket.on('world:dropitems:get', function(data) {
-        var map = mapStore.getMapById(data.mapId);
+        var map = MapStore.getInstance().getMapById(data.mapId);
         if (map) {
             var result = {
                 dropitems: map.model.toObjectJSON(map.model.dropItems)

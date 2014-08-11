@@ -1,66 +1,50 @@
-var mapModel = require('beamQuest/model/fieldMap'),
-    tmx = require('tmx-parser'),
-    deferred = require('deferred');
-
+/// <reference path="../../../typings/tmx-parser/tmx-parser.d.ts" />
+/// <reference path="../../../typings/deferred/deferred.d.ts" />
 /**
- * ゲーム内のマップの状態を保持しておくクラス
- * @constructor
- */
-var Maps = function() {
+* ゲーム内のマップの状態を保持しておくクラス
+* @constructor
+*/
+var Maps = (function () {
+    function Maps() {
+        if (Maps.instance_) {
+            throw new Error("Error: Instantiation failed: Use Maps.getInstance() instead of new.");
+        }
+        Maps.instance_ = this;
+
+        this.maps_ = [];
+    }
+    Maps.getInstance = function () {
+        if (Maps.instance_ === undefined) {
+            Maps.instance_ = new Maps();
+        }
+        return Maps.instance_;
+    };
+
     /**
-     * マップの状態としてもっておきたいもの
-     * - マップID
-     * - マップの名前
-     * - マップ上に存在するmobの数（常に一定数になるようにPOPを調整したい時に使う）
-     * - マップ上のドロップアイテム
-     * @type {Array.<ctrl.FieldMap>}
-     * @private
-     */
-    this.maps_ = [];
-};
+    * 一時的に中の処理を mani.js に投げた．
+    * 詳細はコミットログを参照
+    */
+    Maps.prototype.init = function () {
+    };
 
-/**
- */
-Maps.prototype.init = function() {
-    var FieldMapCtrl = require('beamQuest/ctrl/fieldMap');
-    var d = deferred();
-    // NOTE マップ情報の保存先がまだ決まってないので直接書いてる。将来的にはファイルorDBから取ってくる？
-    var map = new mapModel({
-        id: 1,
-        name: 'しんじゅく', // TODO 最初の村の名前は? (iwg)
-        maxMobCount: 30,
-        mobCount: 0
-    });
+    /**
+    * @return {Array.<ctrl.FieldMap>}
+    */
+    Maps.prototype.getMaps = function () {
+        return this.maps_;
+    };
 
-    tmx.parseFile('public/res/map/map_village.tmx', function(err, m) {
-        if (err) throw err;
-        map.objTmx = m;
-        map.size = {width: m.width * m.tileWidth, height: m.height * m.tileHeight};
-        var mapCtrl = new FieldMapCtrl(map);
-        this.maps_.push(mapCtrl);
-        d.resolve();
-    }.bind(this));
+    /**
+    * @param {number} mapId
+    * @return {ctrl.FieldMap}
+    */
+    Maps.prototype.getMapById = function (mapId) {
+        return _.find(this.maps_, function (map) {
+            return map.model.id === mapId;
+        }) || null;
+    };
+    return Maps;
+})();
 
-    return d.promise();
-};
-
-/**
- * @return {Array.<ctrl.FieldMap>}
- */
-Maps.prototype.getMaps = function() {
-    return this.maps_;
-};
-
-/**
- * @param {number} mapId
- * @return {ctrl.FieldMap}
- */
-Maps.prototype.getMapById = function(mapId) {
-    return _.find(this.maps_, function(map) {
-        return map.model.id === mapId;
-    }) || null;
-};
-
-var instance_ = new Maps();
-
-module.exports = instance_;
+module.exports = Maps;
+//# sourceMappingURL=maps.js.map

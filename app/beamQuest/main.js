@@ -6,8 +6,11 @@ var ping = require('beamQuest/listener/ping'),
     skill = require('beamQuest/listener/skill'),
     entities = require('beamQuest/store/entities'),
     item = require('beamQuest/listener/item'),
-    mapStore = require('beamQuest/store/maps'),
+    MapStore = require('beamQuest/store/maps'),
+    mapModel = require('beamQuest/model/fieldMap'),
     Scheduler = require('beamQuest/scheduler'),
+    tmx = require('tmx-parser'),
+    deferred = require('deferred'),
     usage = require('usage');
 
 exports.start = function(io) {
@@ -16,8 +19,26 @@ exports.start = function(io) {
      * @private
      */
     function initDependencies_() {
-        var mapDeferred = mapStore.init();
-        mapDeferred.then(init_);
+        var FieldMapCtrl = require('beamQuest/ctrl/fieldMap');
+        var d = deferred();
+        // NOTE マップ情報の保存先がまだ決まってないので直接書いてる。将来的にはファイルorDBから取ってくる？
+        var map = new mapModel({
+            id: 1,
+            name: 'しんじゅく', // TODO 最初の村の名前は? (iwg)
+            maxMobCount: 30,
+            mobCount: 0
+        });
+
+        tmx.parseFile('public/res/map/map_village.tmx', function(err, m) {
+            if (err) throw err;
+            map.objTmx = m;
+            map.size = {width: m.width * m.tileWidth, height: m.height * m.tileHeight};
+            var mapCtrl = new FieldMapCtrl(map);
+            MapStore.getInstance().getMaps().push(mapCtrl);
+            d.resolve();
+        }.bind(this));
+
+        d.promise().then(init_);
     }
 
     function init_() {
@@ -25,7 +46,7 @@ exports.start = function(io) {
             STEP_INTERVAL: 30 // mainループの間隔(msec)
         };
         entities.init();
-        _.each(mapStore.getMaps(), function(map) {
+        _.each(MapStore.getInstance().getMaps(), function(map) {
             map.initMobs();
         }.bind(this));
 

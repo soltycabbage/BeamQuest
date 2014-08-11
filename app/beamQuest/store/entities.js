@@ -1,4 +1,4 @@
-var mapStore = require('beamQuest/store/maps'),
+var MapStore = require('beamQuest/store/maps'),
     deferred = require('deferred');
 
 
@@ -40,7 +40,7 @@ var Entities = function() {
  */
 Entities.prototype.init = function() {
     var d = deferred();
-    _.each(mapStore.getMaps(), function(map) {
+    _.each(MapStore.getInstance().getMaps(), function(map) {
         this.mapPlayers_[map.model.id] = {};
         this.mapMobs_[map.model.id] = {};
         this.mapNpcs_[map.model.id] = {};
@@ -122,7 +122,7 @@ Entities.prototype.addMob = function(map, mob) {
  * @param {ctrl.Mob} mob
  */
 Entities.prototype.removeMob = function(mob) {
-    var map = mapStore.getMapById(mob.model.position.mapId);
+    var map = MapStore.getInstance().getMapById(mob.model.position.mapId);
     if (map) {
         map.model.mobCount--;
         delete this.mapMobs_[map.model.id][mob.model.id];

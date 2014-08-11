@@ -1,5 +1,4 @@
-var mapStore = require('beamQuest/store/maps'),
-    entityStore = require('beamQuest/store/entities'),
+var entityStore = require('beamQuest/store/entities'),
     UserStore = require('beamQuest/store/userStore');
 
 /**
