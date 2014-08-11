@@ -1,7 +1,7 @@
 var util = require('util'),
     MobModel = require('beamQuest/model/mob'),
     positionModel = require('beamQuest/model/position'),
-    entitiesStore = require('beamQuest/store/entities'),
+    EntitiesStore = require('beamQuest/store/entities'),
     EntityCtrl = require('beamQuest/ctrl/entity'),
     MobCtrl = require('beamQuest/ctrl/mob/mob');
 
@@ -10,8 +10,6 @@ var FieldMap = function(map) {
     this.scheduleUpdate();
 
     this.model = map;
-
-    entitiesStore = require('beamQuest/store/entities');
 
     setInterval(this.spawnMob_.bind(this), FieldMap.POP_INTERVAL);
 };
@@ -49,7 +47,7 @@ FieldMap.prototype.spawnMob_ = function() {
         mobModel.setPosition(position);
         mob.setModel(mobModel);
         mob.startPos = _.clone(position);
-        entitiesStore.addMob(this.model, mob);
+        EntitiesStore.getInstance().addMob(this.model, mob);
     }
 };
 

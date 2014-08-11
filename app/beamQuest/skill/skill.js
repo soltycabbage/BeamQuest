@@ -1,5 +1,5 @@
 var PlayerCtrl = require('beamQuest/ctrl/player'),
-    entityStore = require('beamQuest/store/entities'),
+    EntityStore = require('beamQuest/store/entities'),
     MobCtrl = require('beamQuest/ctrl/mob/mob');
 
 /**
@@ -72,7 +72,7 @@ Skill.prototype.applyDamage = function(damage, opt_isCritical) {
  * @return {Array.<ctrl.Entity>}
  */
 Skill.prototype.getMobsByRadius = function() {
-    return entityStore.getMobsByRadius(this.targetPos, this.model.radius);
+    return EntityStore.getInstance().getMobsByRadius(this.targetPos, this.model.radius);
 };
 
 /**
@@ -80,7 +80,7 @@ Skill.prototype.getMobsByRadius = function() {
  * @return {Array.<ctrl.Entity>}
  */
 Skill.prototype.getPlayersByRadius = function() {
-    return entityStore.getPlayersByRadius(this.targetPos, this.model.radius);
+    return EntityStore.getInstance().getPlayersByRadius(this.targetPos, this.model.radius);
 };
 
 module.exports = Skill;

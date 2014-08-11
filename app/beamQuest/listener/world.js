@@ -1,7 +1,7 @@
 /**
  * @fileoverview ワールド全体のイベント（mob/npcの移動, ログイン数、天気、時刻）などなどを扱う
  */
-var entities = require('beamQuest/store/entities'),
+var Entities = require('beamQuest/store/entities'),
     MapStore = require('beamQuest/store/maps');
 
 exports.listen = function(socket) {
@@ -9,8 +9,8 @@ exports.listen = function(socket) {
     // @type {Object.<mapId:number>} data
     socket.on('world:entities:get', function(data) {
         var result = {
-            players: entities.getPlayersJSON(data.mapId),
-            mobs: entities.getMobsJSON(data.mapId)
+            players: Entities.getInstance().getPlayersJSON(data.mapId),
+            mobs: Entities.getInstance().getMobsJSON(data.mapId)
             // npc: entities.getNpc() みたいな感じを想定
         };
         socket.emit('world:entities:receive', result);

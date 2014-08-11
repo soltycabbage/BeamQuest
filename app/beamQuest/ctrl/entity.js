@@ -1,7 +1,7 @@
 var util = require('util'),
     EntityModel = require('beamQuest/model/entity'),
     ScheduleTarget = require('beamQuest/scheduleTarget'),
-    entityListener = require('beamQuest/listener/entity');
+    EntityListener = require('beamQuest/listener/entity');
 
 /**
  * すべてのmob、playerの基底クラス。
@@ -34,7 +34,7 @@ Entity.prototype.handleAddHp = function(amount, isCritical) {
     var hpData = [
         {entity: this.model, hpAmount: amount, isCritical: isCritical}
     ];
-    entityListener.updateHp(hpData);
+    EntityListener.getInstance().updateHp(hpData);
     if (this.model.hp <= 0) {
         this.death();
     }

@@ -1,4 +1,4 @@
-var entityStore = require('beamQuest/store/entities'),
+var EntityStore = require('beamQuest/store/entities'),
     UserStore = require('beamQuest/store/userStore');
 
 /**
@@ -23,7 +23,7 @@ Skill.prototype.listen = function(socket, io) {
 Skill.prototype.handleCastSkill_ = function(data) {
     if (this.io_ && data && data.skillId && data.position) {
         var mapId = UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', function(err, mapId) {
-            var player = entityStore.getPlayerById(mapId, data.userId);
+            var player = EntityStore.getInstance().getPlayerById(mapId, data.userId);
             if (!player) { return; }
             var skills = player.model.skills;
             var targetSkill = _.find(skills, function(skill) {

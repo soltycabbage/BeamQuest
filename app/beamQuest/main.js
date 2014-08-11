@@ -2,9 +2,9 @@ var ping = require('beamQuest/listener/ping'),
     login = require('beamQuest/listener/login'),
     world = require('beamQuest/listener/world'),
     beam = require('beamQuest/listener/beam'),
-    entity = require('beamQuest/listener/entity'),
+    Entity = require('beamQuest/listener/entity'),
     skill = require('beamQuest/listener/skill'),
-    entities = require('beamQuest/store/entities'),
+    Entities = require('beamQuest/store/entities'),
     item = require('beamQuest/listener/item'),
     MapStore = require('beamQuest/store/maps'),
     mapModel = require('beamQuest/model/fieldMap'),
@@ -45,7 +45,7 @@ exports.start = function(io) {
         var config = {
             STEP_INTERVAL: 30 // mainループの間隔(msec)
         };
-        entities.init();
+        Entities.getInstance().init();
         _.each(MapStore.getInstance().getMaps(), function(map) {
             map.initMobs();
         }.bind(this));
@@ -56,7 +56,7 @@ exports.start = function(io) {
             world.listen(socket);
             beam.listen(socket, io);
             skill.listen(socket, io);
-            entity.listen(socket, io);
+            Entity.getInstance().listen(socket, io);
             item.listen(socket, io);
             ping.listen(socket);
 

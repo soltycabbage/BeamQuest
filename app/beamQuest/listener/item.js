@@ -1,5 +1,5 @@
 var MapStore = require('beamQuest/store/maps'),
-    entityStore = require('beamQuest/store/entities');
+    EntityStore = require('beamQuest/store/entities');
 
 /**
  * @fileoverview アイテムの取得/ドロップなどなど
@@ -45,8 +45,8 @@ Item.prototype.drop = function(dropItems, position) {
  */
 Item.prototype.handlePickItem_ = function(data) {
     if (this.io_ && data && data.mapId && data.pickerId && data.dropId) {
-        var map = mapStore.getMapById(data.mapId);
-        var picker = entityStore.getPlayerById(data.mapId, data.pickerId);
+        var map = MapStore.getInstance().getMapById(data.mapId);
+        var picker = EntityStore.getInstance().getPlayerById(data.mapId, data.pickerId);
         if (map && picker) {
             var dropItem = map.model.dropItems[data.dropId];
             if (dropItem) {

@@ -1,7 +1,7 @@
 var util = require('util'),
     EntityCtrl = require('beamQuest/ctrl/entity'),
     UserStore = require('beamQuest/store/userStore'),
-    entityListener = require('beamQuest/listener/entity');
+    EntityListener = require('beamQuest/listener/entity');
 
 // TODO 外にだして
 var config = {
@@ -55,7 +55,7 @@ Player.prototype.setModel = function(model) {
  * @private
  */
 Player.prototype.handleAddBp_ = function(amount, isCritical) {
-    entityListener.updateBp({entity: this.model, bpAmount: amount, isCritical: isCritical});
+    EntityListener.getInstance().updateBp({entity: this.model, bpAmount: amount, isCritical: isCritical});
 };
 
 Player.prototype.update = function() {
@@ -131,7 +131,7 @@ Player.prototype.getLevelUpCount_ = function(exp, nextLevel) {
 Player.prototype.levelUp_ = function(lvUpCount) {
     this.model.addLevel(lvUpCount);
     logger.info('player levelUp [playerId=' + this.model.id + ', level=' + this.model.lv +']');
-    entityListener.levelUp(this.model);
+    EntityListener.getInstance().levelUp(this.model);
 };
 
 module.exports = Player;

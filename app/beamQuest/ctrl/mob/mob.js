@@ -1,7 +1,6 @@
 var util = require('util'),
     EntityCtrl = require('beamQuest/ctrl/entity'),
-    entityStore = require('beamQuest/store/entities'),
-    entityListener = require('beamQuest/listener/entity'),
+    EntityListener = require('beamQuest/listener/entity'),
     itemListener = require('beamQuest/listener/item'),
     distance = require('beamQuest/math/euclideanDistance'),
     manhattanDistance = require('beamQuest/math/manhattanDistance'),
@@ -88,7 +87,7 @@ var Mob = function() {
      */
     this.startPos = null;
 
-    entityStore = require('beamQuest/store/entities');
+    EntityStore = require('beamQuest/store/entities');
 };
 util.inherits(Mob, EntityCtrl);
 
@@ -96,7 +95,7 @@ util.inherits(Mob, EntityCtrl);
 Mob.prototype.update = function() {
     if (!_.isEmpty(this.hateList)) {
         var targetId = this.hateList[0].entityId;
-        var targetEntity = entityStore.getPlayerById(this.model.position.mapId, targetId);
+        var targetEntity = EntityStore.getInstance().getPlayerById(this.model.position.mapId, targetId);
         if (targetEntity && targetEntity.model.isDeath) {
             this.hateList.shift();
             if (_.isEmpty(this.hateList) && this.startPos) {
@@ -116,7 +115,7 @@ Mob.prototype.update = function() {
  */
 Mob.prototype.attackTo = function(entity) {
     if (this.hateTarget !== entity) {
-        entityListener.targetTo(this, entity);
+        EntityListener.getInstance().targetTo(this, entity);
     }
     this.hateTarget = entity;
     this.moveTo(this.hateTarget.model.position);
@@ -181,11 +180,11 @@ Mob.prototype.moveTo = function(targetPos, opt_speed) {
  * 現在の位置情報を更新する
  */
 Mob.prototype.updatePosition = function() {
-    var entity = entityStore.getMobById(this.model.position.mapId, this.model.id);
+    var entity = EntityStore.getInstance().getMobById(this.model.position.mapId, this.model.id);
     if (entity) {
         entity.model.position.x = this.model.position.x;
         entity.model.position.y = this.model.position.y;
-        entityListener.moveMob(entity);
+        EntityListener.getInstance().moveMob(entity);
     }
 };
 
@@ -199,7 +198,7 @@ Mob.prototype.shortRangeAttack = function() {
         var destPos = this.hateTarget.model.position;
         var range = 100; // TODO: 攻撃の種類によって設定できるように
         var castTime = 1000;
-        entityListener.startAttackShortRange(this.model.id, srcPos, destPos, range, castTime);
+        EntityListener.getInstance().startAttackShortRange(this.model.id, srcPos, destPos, range, castTime);
 
         this.timeout_ = setTimeout(function() {
             if (this.hateTarget) {
@@ -254,7 +253,7 @@ Mob.prototype.attackCancel = function() {
 
 /** @override */
 Mob.prototype.beamHit = function(beamType, shooterId, mapId) {
-    var shooter = entityStore.getPlayerById(mapId, shooterId);
+    var shooter = EntityStore.getInstance().getPlayerById(mapId, shooterId);
     if (this.isCancelAttacking_ || !shooter) {
         this.model.addHp(0);
         return;
@@ -305,8 +304,8 @@ Mob.prototype.applyHate = function(entityId, hate) {
  */
 Mob.prototype.death = function() {
     itemListener.drop(this.chooseDropItems_(), this.model.position);
-    entityListener.killMob(this);
-    entityStore.removeMob(this);
+    EntityListener.getInstance().killMob(this);
+    EntityStore.getInstance().removeMob(this);
 };
 
 /**

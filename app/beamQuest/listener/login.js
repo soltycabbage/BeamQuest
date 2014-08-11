@@ -1,7 +1,7 @@
 var playerModel = require('beamQuest/model/player'),
     playerCtrl = require('beamQuest/ctrl/player'),
     positionModel = require('beamQuest/model/position'),
-    entities = require('beamQuest/store/entities'),
+    Entities = require('beamQuest/store/entities'),
     UserStore = require('beamQuest/store/userStore');
 var kvs = require('beamQuest/store/kvs').createClient();
 
@@ -84,7 +84,7 @@ exports.listen = function(socket, io) {
     function addLoginUser_(player) {
         var model = player.model;
         var position = model.position;
-        entities.addPlayer(position.mapId, player);
+        Entities.getInstance().addPlayer(position.mapId, player);
         UserStore.getInstance().saveSessionData(socket.id, 'userId', player.model.id);
         UserStore.getInstance().saveSessionData(socket.id, 'mapId', player.model.position.mapId);
         player.scheduleUpdate();
@@ -93,7 +93,7 @@ exports.listen = function(socket, io) {
         // 接続が切れたらログアウト扱い
         socket.on('disconnect', function() {
             UserStore.getInstance().save(player);
-            entities.removePlayer(position.mapId, player);
+            Entities.getInstance().removePlayer(position.mapId, player);
             player.unscheduleUpdate();
             socket.broadcast.emit('notify:user:logout', {'userId': player.model.id});
         });

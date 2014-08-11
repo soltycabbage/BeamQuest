@@ -2,7 +2,7 @@
  * @fileoverview ビームの発射などなどを扱う
  */
 
-var entities = require('beamQuest/store/entities');
+var Entities = require('beamQuest/store/entities');
 var Maps = require('beamQuest/store/maps');
 var UserStore = require('beamQuest/store/userStore');
 
@@ -11,7 +11,7 @@ exports.listen = function(socket, io) {
         UserStore.getInstance().getSessionData(socket.id, 'mapId', function(err, mapId) {
             var result = data;
             result.success = true;
-            var player = entities.getPlayerById(mapId, data.shooterId);
+            var player = Entities.getInstance().getPlayerById(mapId, data.shooterId);
             if (player) {
                 var beam =  player.model.beam;
                 result.beamId = beam.id;
@@ -64,7 +64,7 @@ exports.listen = function(socket, io) {
      */
     function isHitEntity_(data) {
         var beamPos = {x: data.x, y: data.y};
-        var mobs = entities.getMobs()[data.mapId] || {};
+        var mobs = Entities.getInstance().getMobs()[data.mapId] || {};
         var collideRect = {width: 32, height: 32}; // 当たり判定の範囲（これもビームごとに決められるようにしたい）
         return _.find(mobs, function(mob) {
             return pointInRect_(beamPos, mob.model.position, collideRect);
