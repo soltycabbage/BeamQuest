@@ -5,7 +5,7 @@ var ping = require('beamQuest/listener/ping'),
     Entity = require('beamQuest/listener/entity'),
     skill = require('beamQuest/listener/skill'),
     Entities = require('beamQuest/store/entities'),
-    item = require('beamQuest/listener/item'),
+    Item = require('beamQuest/listener/item'),
     MapStore = require('beamQuest/store/maps'),
     mapModel = require('beamQuest/model/fieldMap'),
     Scheduler = require('beamQuest/scheduler'),
@@ -57,7 +57,7 @@ exports.start = function(io) {
             beam.listen(socket, io);
             skill.listen(socket, io);
             Entity.getInstance().listen(socket, io);
-            item.listen(socket, io);
+            Item.getInstance().listen(socket, io);
             ping.listen(socket);
 
             // チャット

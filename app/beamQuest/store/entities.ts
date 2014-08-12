@@ -4,6 +4,7 @@ import EntityListener = require('beamQuest/listener/entity');
 import MapStore = require('beamQuest/store/maps');
 import MapModel = require('beamQuest/model/fieldMap');
 import PositionModel = require('beamQuest/model/position');
+import PlayerCtrl = require('beamQuest/ctrl/player');
 import deferred = require('deferred');
 
 declare var logger: any;
@@ -86,7 +87,7 @@ class EntitiesStore {
      * @param {string} playerId
      * @return {ctrl.Player}
      */
-    getPlayerById(mapId, playerId) {
+    getPlayerById(mapId, playerId) : PlayerCtrl {
         if (this.mapPlayers_[mapId]) {
             return this.mapPlayers_[mapId][playerId] || null;
         }
