@@ -1,7 +1,7 @@
 var ping = require('beamQuest/listener/ping'),
     login = require('beamQuest/listener/login'),
     world = require('beamQuest/listener/world'),
-    beam = require('beamQuest/listener/beam'),
+    Beam = require('beamQuest/listener/beam'),
     Entity = require('beamQuest/listener/entity'),
     skill = require('beamQuest/listener/skill'),
     Entities = require('beamQuest/store/entities'),
@@ -54,7 +54,7 @@ exports.start = function(io) {
         io.sockets.on('connection', function(socket) {
             login.listen(socket, io);
             world.listen(socket);
-            beam.listen(socket, io);
+            Beam.getInstance().listen(socket, io);
             skill.listen(socket, io);
             Entity.getInstance().listen(socket, io);
             Item.getInstance().listen(socket, io);
