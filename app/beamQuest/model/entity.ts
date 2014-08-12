@@ -58,7 +58,7 @@ class Entity extends Model {
      * @param {number} amount
      * @param {boolean=} opt_isCritical クリティカルヒットの場合true
      */
-    addHp(amount: number, opt_isCritical: boolean): void {
+    addHp(amount: number, opt_isCritical?: boolean): void {
         this.hp = Math.max(0, Math.min(this.maxHp, this.hp + amount));
         this.emit('addHp', amount, !!opt_isCritical);
     }
