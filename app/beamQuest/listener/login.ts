@@ -1,11 +1,11 @@
-var PlayerModel = require('beamQuest/model/player');
-var PlayerCtrl = require('beamQuest/ctrl/player');
-var PositionModel = require('beamQuest/model/position');
-var Entities = require('beamQuest/store/entities');
-var UserStore = require('beamQuest/store/userStore');
+import PlayerModel = require('beamQuest/model/player');
+import PlayerCtrl = require('beamQuest/ctrl/player');
+import PositionModel = require('beamQuest/model/position');
+import Entities = require('beamQuest/store/entities');
+import UserStore = require('beamQuest/store/userStore');
 var kvs = require('beamQuest/store/kvs').createClient();
 
-function listen(socket, io) {
+export function listen(socket, io) {
     socket.on('login', onLogin);
 
     function onLogin(data) {
@@ -18,34 +18,32 @@ function listen(socket, io) {
     }
 
     function login_(loginData) {
-        var respond_ = function (result) {
-            socket.emit('login:receive', result);
-        };
-        UserStore.getInstance().find(loginData.userId, function (error, userData) {
+        var respond_ = function(result) { socket.emit('login:receive', result); };
+        UserStore.getInstance().find(loginData.userId, function(error, userData) {
             if (error) {
                 return respond_(error);
             }
 
             if (userData && userData.hash !== loginData.hash) {
-                return respond_({ result: 'error', message: 'すでに存在するキャラクターです。' });
+                return respond_({result: 'error', message: 'すでに存在するキャラクターです。'});
             }
 
             var player = (userData) ? createPlayer_(userData) : createNewPlayer_(loginData);
             addLoginUser_(player);
 
-            return respond_({ result: 'success', player: player.model.toJSON() });
+            return respond_({result: 'success', player: player.model.toJSON()});
         });
     }
 
     /**
-    * @param {string} userId
-    * @return {Object}
-    * @private
-    */
+     * @param {string} userId
+     * @return {Object}
+     * @private
+     */
     function validateUserId_(userId) {
-        var result = null;
+        var result:any = null;
         if (!userId.match(/^[a-zA-Zぁ-んァ-ン0-9]+$/)) {
-            result = { result: 'error', message: '使用できないキャラクター名です。' };
+            result = {result: 'error', message: '使用できないキャラクター名です。'};
         }
         return result;
     }
@@ -80,9 +78,9 @@ function listen(socket, io) {
     }
 
     /**
-    * @param {string} userId
-    * @private
-    */
+     * @param {string} userId
+     * @private
+     */
     function addLoginUser_(player) {
         var model = player.model;
         var position = model.position;
@@ -90,16 +88,14 @@ function listen(socket, io) {
         UserStore.getInstance().saveSessionData(socket.id, 'userId', player.model.id);
         UserStore.getInstance().saveSessionData(socket.id, 'mapId', player.model.position.mapId);
         player.scheduleUpdate();
-        socket.broadcast.emit('notify:user:login', { 'userId': model.id });
+        socket.broadcast.emit('notify:user:login', {'userId': model.id});
 
         // 接続が切れたらログアウト扱い
-        socket.on('disconnect', function () {
+        socket.on('disconnect', function() {
             UserStore.getInstance().save(player);
             Entities.getInstance().removePlayer(position.mapId, player);
             player.unscheduleUpdate();
-            socket.broadcast.emit('notify:user:logout', { 'userId': player.model.id });
+            socket.broadcast.emit('notify:user:logout', {'userId': player.model.id});
         });
     }
 }
-exports.listen = listen;
-//# sourceMappingURL=login.js.map
