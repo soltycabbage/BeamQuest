@@ -1,6 +1,7 @@
 var PlayerCtrl = require('beamQuest/ctrl/player'),
     EntityStore = require('beamQuest/store/entities'),
-    MobCtrl = require('beamQuest/ctrl/mob/mob');
+    MobCtrl = require('beamQuest/ctrl/mob/mob'),
+    SkillListener = require('beamQuest/listener/skill');
 
 /**
  * @constructor
@@ -26,12 +27,6 @@ var Skill = function(model, user, targetPos) {
      * @protected
      */
     this.targetPos = targetPos;
-
-    /**
-     * @type {listener.Skill}
-     * @private
-     */
-    this.listener_ = require('beamQuest/listener/skill');
 };
 
 /**
@@ -43,7 +38,7 @@ Skill.prototype.fire = function() {
         this.user.model.addBp(-this.model.bp);
     }
 
-    this.listener_.fire(this.model, this.user.model.id, this.targetPos);
+    SkillListener.getInstance().fire(this.model, this.user.model.id, this.targetPos);
 };
 
 /**

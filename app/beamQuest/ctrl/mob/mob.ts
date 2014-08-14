@@ -1,27 +1,54 @@
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
-var EntityCtrl = require('beamQuest/ctrl/entity');
-var EntityListener = require('beamQuest/listener/entity');
-var ItemListener = require('beamQuest/listener/item');
-var distance = require('beamQuest/math/distance');
-var DropItemModel = require('beamQuest/model/dropItem');
+import EntityCtrl = require('beamQuest/ctrl/entity');
+import EntityListener = require('beamQuest/listener/entity');
+import ItemListener = require('beamQuest/listener/item');
+import distance = require('beamQuest/math/distance');
+import DropItemModel = require('beamQuest/model/dropItem');
+import PositionModel = require('beamQuest/model/position');
+import EntityStore = require('beamQuest/store/entities');
 
-var EntityStore = require('beamQuest/store/entities');
+declare var bq: any;
 
 /**
-* すべてのmobの基底クラス
-* 基本的なAIなどはここに書く。
-* プレイヤーとの距離（近距離、中距離、遠距離）によって攻撃パターンが変化する。
-* 特殊なAIを実装したい場合は新たにクラスを作ってこのクラスを継承し、各種メソッドをoverrideすること。
-*/
-var Mob = (function (_super) {
-    __extends(Mob, _super);
-    function Mob() {
-        _super.call(this);
+ * すべてのmobの基底クラス
+ * 基本的なAIなどはここに書く。
+ * プレイヤーとの距離（近距離、中距離、遠距離）によって攻撃パターンが変化する。
+ * 特殊なAIを実装したい場合は新たにクラスを作ってこのクラスを継承し、各種メソッドをoverrideすること。
+ */
+class Mob extends EntityCtrl {
+    /**
+     * 移動速度
+     * TODO: このへんはmobの種類によって変えられるようにする
+     */
+    moveSpeed:number;
+    /** 近接攻撃の射程(px) */
+    attackShortRange:number;
+    /** 中距離攻撃の射程(px) */
+    attackMiddleRange:number;
+    /** 遠距離攻撃の射程(px)  */
+    attackLongRange:number;
+    /**
+     * ヘイトリスト
+     * @type {Array.<Object.<entityId: string, hate: number>>}
+     */
+    hateList:any[];
+    /** trueなら攻撃を受けるまで敵対行動を取らないタイプのmob */
+    isPassive:boolean;
+    /** 行動中(攻撃モーション中 etc）ならtrue */
+    private isActive_:boolean;
+    /** 敵対行動を中止して攻撃開始位置に戻っている間true */
+    private isCancelAttacking_:boolean;
+    /** * 攻撃対象のEntity */
+    hateTarget:EntityCtrl;
+    /** どのくらいの距離を離れたら敵視を解除するか(px) */
+    attackCancelDistance:number;
+    /** * 攻撃をキャンセルした時とかに戻る位置 */
+    startPos:PositionModel;
+
+    private interval_:any;
+    private timeout_:any;
+
+    constructor() {
+        super();
 
         this.scheduleUpdate();
 
@@ -37,7 +64,8 @@ var Mob = (function (_super) {
         this.attackCancelDistance = 1000;
         this.startPos = null;
     }
-    Mob.prototype.update = function () {
+
+    update() {
         if (!_.isEmpty(this.hateList)) {
             var targetId = this.hateList[0].entityId;
             var targetEntity = EntityStore.getInstance().getPlayerById(this.model.position.mapId, targetId);
@@ -48,32 +76,32 @@ var Mob = (function (_super) {
                     this.isActive_ = false;
                     this.attackCancel();
                 }
-            } else if (targetEntity) {
+            } else if (targetEntity) { // ターゲットが同じマップ内にいるなら攻撃を仕掛ける
                 this.attackTo(targetEntity);
             }
         }
-    };
+
+    }
 
     /**
-    * 指定IDに敵対行動を取る
-    * @param {ctrl.Entity} entity
-    */
-    Mob.prototype.attackTo = function (entity) {
+     * 指定IDに敵対行動を取る
+     * @param {ctrl.Entity} entity
+     */
+     attackTo(entity:EntityCtrl) {
         if (this.hateTarget !== entity) {
             EntityListener.getInstance().targetTo(this, entity);
         }
         this.hateTarget = entity;
         this.moveTo(this.hateTarget.model.position);
-    };
+    }
 
     /**
-    * 移動
-    * @param {model.Position} targetPos
-    * @param {number=} opt_speed intervalの間隔(msec)
-    */
-    Mob.prototype.moveTo = function (targetPos, opt_speed) {
-        var _this = this;
-        if (this.isActive_) {
+     * 移動
+     * @param {model.Position} targetPos
+     * @param {number=} opt_speed intervalの間隔(msec)
+     */
+    moveTo(targetPos:PositionModel, opt_speed?:number) {
+        if (this.isActive_) { // 攻撃動作中の時はmoveTo命令が来ても無視する
             this.interval_ && clearInterval(this.interval_);
             return;
         }
@@ -98,9 +126,7 @@ var Mob = (function (_super) {
         }
         var interval = opt_speed || 300;
         var step = Math.ceil(dist / this.moveSpeed);
-        if (step <= 0) {
-            return;
-        }
+        if (step <= 0) { return; }
         var count = 1;
         var v = distance.manhattan(this.model.position, targetPos);
         var vx = Math.ceil(v.x / step);
@@ -111,81 +137,83 @@ var Mob = (function (_super) {
         this.updatePosition();
 
         clearInterval(this.interval_);
-        this.interval_ = setInterval(function () {
+        this.interval_ = setInterval(() => {
             if (step > count++) {
-                _this.model.position.x += vx;
-                _this.model.position.y += vy;
-                _this.updatePosition();
+                this.model.position.x += vx;
+                this.model.position.y += vy;
+                this.updatePosition();
             } else {
-                _this.isCancelAttacking_ = false;
-                clearInterval(_this.interval_);
+                this.isCancelAttacking_ = false;
+                clearInterval(this.interval_);
             }
         }, interval);
-    };
+    }
 
     /**
-    * 現在の位置情報を更新する
-    */
-    Mob.prototype.updatePosition = function () {
-        var entity = EntityStore.getInstance().getMobById(this.model.position.mapId, this.model.id);
+     * 現在の位置情報を更新する
+     */
+    updatePosition() {
+        var entity:any = EntityStore.getInstance().getMobById(this.model.position.mapId, this.model.id);
         if (entity) {
             entity.model.position.x = this.model.position.x;
             entity.model.position.y = this.model.position.y;
             EntityListener.getInstance().moveMob(entity);
         }
-    };
+    }
 
     /**
-    * 近接攻撃をする
-    */
-    Mob.prototype.shortRangeAttack = function () {
-        var _this = this;
+     * 近接攻撃をする
+     */
+    shortRangeAttack() {
         if (!this.isActive_ && this.hateTarget) {
             this.isActive_ = true;
             var srcPos = this.model.position;
             var destPos = this.hateTarget.model.position;
-            var range = 100;
+            var range = 100; // TODO: 攻撃の種類によって設定できるように
             var castTime = 1000;
             EntityListener.getInstance().startAttackShortRange(this.model.id, srcPos, destPos, range, castTime);
 
-            this.timeout_ = setTimeout(function () {
-                if (_this.hateTarget) {
+            this.timeout_ = setTimeout(() => {
+                if (this.hateTarget) {
                     // TODO: 範囲内に対象がいるかどうかチェックする
+
                     // ダメージテキトー
-                    var damage = -Math.floor(_this.model.attack / 2 + _this.model.attack / 2 * Math.random() - _this.hateTarget.model.defence / 4);
-                    _this.hateTarget.model.addHp(damage);
+                    var damage = -Math.floor(this.model.attack / 2 + this.model.attack / 2 * Math.random() -
+                        this.hateTarget.model.defence / 4);
+                    this.hateTarget.model.addHp(damage);
                 }
-                _this.isActive_ = false;
+                this.isActive_ = false;
             }, castTime);
         }
-    };
+    }
 
     /**
-    * 中距離攻撃をする
-    */
-    Mob.prototype.middleRangeAttack = function () {
-    };
+     * 中距離攻撃をする
+     */
+    middleRangeAttack() {
+
+    }
 
     /**
-    * 遠距離攻撃をする
-    */
-    Mob.prototype.longRangeAttack = function () {
-    };
+     * 遠距離攻撃をする
+     */
+    longRangeAttack() {
+
+    }
 
     /**
-    * 敵対行動を中止する
-    */
-    Mob.prototype.attackCancel = function () {
-        var _this = this;
+     * 敵対行動を中止する
+     */
+    attackCancel() {
         this.isCancelAttacking_ = true;
 
         // たまに無敵状態(isCancelがtrue)のままになっちゃうので時間経過でも無敵状態を解除するようにする
-        setTimeout(_.bind(function () {
+        setTimeout(_.bind(function() {
             this.isCancelAttacking_ = false;
         }, this), 30000);
 
-        this.hateList = _.reject(this.hateList, function (h) {
-            return h.entityId === _this.hateTarget.model.id;
+        this.hateList = _.reject(this.hateList, (h) => {
+            return h.entityId === this.hateTarget.model.id;
         });
 
         this.hateTarget = null;
@@ -194,10 +222,10 @@ var Mob = (function (_super) {
             this.isActive_ = false;
             this.moveTo(this.startPos, 50);
         }
-    };
+    }
 
     /** @override */
-    Mob.prototype.beamHit = function (beamType, shooterId, mapId) {
+    beamHit(beamType, shooterId, mapId) {
         var shooter = EntityStore.getInstance().getPlayerById(mapId, shooterId);
         if (this.isCancelAttacking_ || !shooter) {
             this.model.addHp(0);
@@ -210,7 +238,8 @@ var Mob = (function (_super) {
 
         // TODO: ダメージ計算(どこかにロジックをまとめたい）
         // いまんとこドラクエ式 (攻撃力/2) - (防御力/4)
-        var damage = Math.floor((Math.random() * beam.atk / 2 + beam.atk + shooter.model.attack) / 2 - this.model.defence / 4);
+        var damage = Math.floor((Math.random() * beam.atk / 2 + beam.atk + shooter.model.attack) / 2 -
+            this.model.defence / 4);
 
         // TODO: クリティカル計算
         var isCritical = false;
@@ -221,68 +250,61 @@ var Mob = (function (_super) {
 
         this.applyHate(shooterId, damage);
         this.model.addHp(-damage, isCritical);
-    };
+    }
 
     /**
-    * 攻撃を与えたユーザのIDをヘイトリストに突っ込む
-    * @param {string} entityId
-    * @param {number} hate
-    */
-    Mob.prototype.applyHate = function (entityId, hate) {
-        var hateTarget = _.find(this.hateList, function (h) {
-            return h.entityId === entityId;
-        });
+     * 攻撃を与えたユーザのIDをヘイトリストに突っ込む
+     * @param {string} entityId
+     * @param {number} hate
+     */
+    applyHate(entityId:string, hate:number) {
+        var hateTarget:any = _.find(this.hateList, (h) => h.entityId === entityId);
 
         if (!hateTarget) {
-            this.hateList.push({ entityId: entityId, hate: hate });
+            this.hateList.push({entityId: entityId, hate: hate});
         } else {
             // ダメージ量がそのままヘイト値になる
             hateTarget.hate += hate;
         }
-
         // ヘイト値の大きい順にソートしておく
-        this.hateList = _.sortBy(this.hateList, function (h) {
-            return -h.hate;
-        });
-    };
+        this.hateList = _.sortBy(this.hateList, (h) => -h.hate);
+    }
 
     /**
-    * @override
-    */
-    Mob.prototype.death = function () {
+     * @override
+     */
+    death() {
         ItemListener.getInstance().drop(this.chooseDropItems_(), this.model.position);
         EntityListener.getInstance().killMob(this);
         EntityStore.getInstance().removeMob(this);
-    };
+    }
 
     /**
-    * ドロップするアイテムの抽選をする
-    * @return {Array.<string>}
-    */
-    Mob.prototype.chooseDropItems_ = function () {
-        var _this = this;
+     * ドロップするアイテムの抽選をする
+     * @return {Array.<string>}
+     */
+    private chooseDropItems_(): DropItemModel[] {
         var result = [];
-        var dropItems = this.model.drop;
+        var dropItems:any =  this.model.drop;
         var money = this.model.money;
-
         // 設定値+10%の範囲で適当に分散
         money += Math.floor(Math.random() * money * 0.1);
         result.push(this.createDropItem_(bq.Types.Items.BEATS, money));
-        _.forEach(dropItems, function (item) {
+        _.forEach(dropItems, (item:any) => {
             if (Math.floor(Math.random() * item['rate']) === 0) {
-                result.push(_this.createDropItem_(item.id, 1));
+                result.push(this.createDropItem_(item.id, 1));
             }
         });
 
         return result;
-    };
+    }
 
     /**
-    * @param {bq.Types.Items} itemId
-    * @param {string} num
-    * @return {!model.DropItem}
-    */
-    Mob.prototype.createDropItem_ = function (itemId, num) {
+     * @param {bq.Types.Items} itemId
+     * @param {string} num
+     * @return {!model.DropItem}
+     */
+    private createDropItem_(itemId, num:number): DropItemModel {
         var dropperId = !_.isEmpty(this.hateList) ? this.hateList[0]['entityId'] : null;
         var dropItem = new DropItemModel({
             itemId: itemId,
@@ -292,19 +314,17 @@ var Mob = (function (_super) {
         });
 
         return dropItem;
-    };
+    }
 
     /**
-    * メモリリークしないよう参照を切っとく
-    */
-    Mob.prototype.dispose = function () {
+     * メモリリークしないよう参照を切っとく
+     */
+    dispose() {
         delete this.hateList;
         delete this.model;
         this.interval_ && clearInterval(this.interval_);
         this.timeout_ && clearTimeout(this.timeout_);
-    };
-    return Mob;
-})(EntityCtrl);
+    }
+}
 
-module.exports = Mob;
-//# sourceMappingURL=mob.js.map
+export = Mob;
