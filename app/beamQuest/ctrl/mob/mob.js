@@ -2,8 +2,7 @@ var util = require('util'),
     EntityCtrl = require('beamQuest/ctrl/entity'),
     EntityListener = require('beamQuest/listener/entity'),
     itemListener = require('beamQuest/listener/item'),
-    distance = require('beamQuest/math/euclideanDistance'),
-    manhattanDistance = require('beamQuest/math/manhattanDistance'),
+    distance = require('beamQuest/math/distance'),
     DropItemModel = require('beamQuest/model/dropItem');
 
 /**
@@ -134,11 +133,11 @@ Mob.prototype.moveTo = function(targetPos, opt_speed) {
     }
 
     // ターゲットまでの距離を計算
-    var dist = distance(this.model.position, targetPos);
+    var dist = distance.euclidean(this.model.position, targetPos);
 
     // 攻撃開始地点から一定距離離れたら攻撃を諦めて攻撃開始地点に戻る
     if (this.startPos && !this.isCancelAttacking_) {
-        var distanceFromStartPos = distance(this.startPos, this.model.position);
+        var distanceFromStartPos = distance.euclidean(this.startPos, this.model.position);
         if (distanceFromStartPos > this.attackCancelDistance) {
             this.attackCancel();
             return;
@@ -155,7 +154,7 @@ Mob.prototype.moveTo = function(targetPos, opt_speed) {
     var step = Math.ceil(dist / this.moveSpeed);
     if (step <= 0) { return; }
     var count = 1;
-    var v = manhattanDistance(this.model.position, targetPos);
+    var v = distance.manhattan(this.model.position, targetPos);
     var vx = Math.ceil(v.x / step);
     var vy = Math.ceil(v.y / step);
 
