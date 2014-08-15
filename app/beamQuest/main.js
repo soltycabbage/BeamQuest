@@ -1,13 +1,16 @@
 var ping = require('beamQuest/listener/ping'),
     login = require('beamQuest/listener/login'),
-    world = require('beamQuest/listener/world'),
-    beam = require('beamQuest/listener/beam'),
-    entity = require('beamQuest/listener/entity'),
-    skill = require('beamQuest/listener/skill'),
-    entities = require('beamQuest/store/entities'),
-    item = require('beamQuest/listener/item'),
-    mapStore = require('beamQuest/store/maps'),
-    scheduler = require('beamQuest/scheduler'),
+    World = require('beamQuest/listener/world'),
+    Beam = require('beamQuest/listener/beam'),
+    Entity = require('beamQuest/listener/entity'),
+    Skill = require('beamQuest/listener/skill'),
+    Entities = require('beamQuest/store/entities'),
+    Item = require('beamQuest/listener/item'),
+    MapStore = require('beamQuest/store/maps'),
+    mapModel = require('beamQuest/model/fieldMap'),
+    Scheduler = require('beamQuest/scheduler'),
+    tmx = require('tmx-parser'),
+    deferred = require('deferred'),
     usage = require('usage');
 
 exports.start = function(io) {
@@ -16,27 +19,45 @@ exports.start = function(io) {
      * @private
      */
     function initDependencies_() {
-        var mapDeferred = mapStore.init();
-        mapDeferred.then(init_);
+        var FieldMapCtrl = require('beamQuest/ctrl/fieldMap');
+        var d = deferred();
+        // NOTE マップ情報の保存先がまだ決まってないので直接書いてる。将来的にはファイルorDBから取ってくる？
+        var map = new mapModel({
+            id: 1,
+            name: 'しんじゅく', // TODO 最初の村の名前は? (iwg)
+            maxMobCount: 30,
+            mobCount: 0
+        });
+
+        tmx.parseFile('public/res/map/map_village.tmx', function(err, m) {
+            if (err) throw err;
+            map.objTmx = m;
+            map.size = {width: m.width * m.tileWidth, height: m.height * m.tileHeight};
+            var mapCtrl = new FieldMapCtrl(map);
+            MapStore.getInstance().getMaps().push(mapCtrl);
+            d.resolve();
+        }.bind(this));
+
+        d.promise().then(init_);
     }
 
     function init_() {
         var config = {
             STEP_INTERVAL: 30 // mainループの間隔(msec)
         };
-        entities.init();
-        _.each(mapStore.getMaps(), function(map) {
+        Entities.getInstance().init();
+        _.each(MapStore.getInstance().getMaps(), function(map) {
             map.initMobs();
         }.bind(this));
 
 
         io.sockets.on('connection', function(socket) {
             login.listen(socket, io);
-            world.listen(socket);
-            beam.listen(socket, io);
-            skill.listen(socket, io);
-            entity.listen(socket, io);
-            item.listen(socket, io);
+            World.getInstance().listen(socket);
+            Beam.getInstance().listen(socket, io);
+            Skill.getInstance().listen(socket, io);
+            Entity.getInstance().listen(socket, io);
+            Item.getInstance().listen(socket, io);
             ping.listen(socket);
 
             // チャット
@@ -51,7 +72,7 @@ exports.start = function(io) {
     }
 
     function main() {
-        scheduler.update();
+        Scheduler.getInstance().update();
     }
 
     function logUsage() {

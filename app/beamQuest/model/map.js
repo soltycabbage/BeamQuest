@@ -1,42 +1,30 @@
-var util = require('util'),
-    Model = require('beamQuest/model/model');
-
-/**
- * @constructor
- * @extends {model.Model}
- */
-var MapModel = function(opt_data) {
-    Model.apply(this, arguments);
-
-    /** @type {number} */
-    this.id = this.data.id;
-
-    /** @type {string} */
-    this.name = this.data.name || MapModel.DEFAULT_NAME;
-
-    /**
-     * tmx ファイル
-     * @type {null|*}
-     */
-    this.tmxObj = this.data.tmxObj || null;
-
-    /**
-     * マップサイズ
-     * @type {Object.<width:number, height: number>}
-     */
-    this.size = this.data.size || MapModel.DEFAULT_SIZE;
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
 };
-util.inherits(MapModel, Model);
+var Model = require('beamQuest/model/model');
 
-MapModel.DEFAULT_NAME = 'map';
-MapModel.DEFAULT_SIZE = {width: 100, height: 100};
-
-/** @override */
-MapModel.prototype.toJSON = function() {
-    var json = MapModel.super_.prototype.toJSON.apply(this);
-    json.id = this.id;
-    json.name = this.name;
-    return json;
-};
+var MapModel = (function (_super) {
+    __extends(MapModel, _super);
+    function MapModel(opt_data) {
+        _super.call(this, opt_data);
+        this.id = this.data.id;
+        this.name = this.data.name || MapModel.DEFAULT_NAME;
+        this.tmxObj = this.data.tmxObj || null;
+        this.size = this.data.size || MapModel.DEFAULT_SIZE;
+    }
+    MapModel.prototype.toJSON = function () {
+        var json = _super.prototype.toJSON.call(this);
+        json.id = this.id;
+        json.name = this.name;
+        return json;
+    };
+    MapModel.DEFAULT_NAME = 'map';
+    MapModel.DEFAULT_SIZE = { width: 100, height: 100 };
+    return MapModel;
+})(Model);
 
 module.exports = MapModel;
+//# sourceMappingURL=map.js.map

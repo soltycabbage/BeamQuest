@@ -13,10 +13,15 @@ module.exports = function(grunt) {
                 tasks: ['compass']
             },
 
-            scripts: {
-                files: ['app/**/*.js', 'public/**/*.js'],
+            frontScripts: {
+                files: ['public/**/*.js'],
                 tasks: ['jshint']
             },
+
+//            typeScripts: {
+//                files: ['app/beamQuest/**/*.ts'],
+//                tasks: ['tslint']
+//            },
 
             options: {
                 nospawn: true
@@ -24,7 +29,7 @@ module.exports = function(grunt) {
         },
 
         jshint: {
-            all: ['<%= watch.scripts.files %>'],
+            all: ['<%= watch.frontScripts.files %>'],
             options: grunt.file.readJSON('.jshintrc')
         },
 

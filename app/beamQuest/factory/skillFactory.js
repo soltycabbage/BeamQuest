@@ -1,31 +1,45 @@
-var SkillFactory = function() {
-};
+var BurnStrike = require('beamQuest/skill/burnStrike');
 
-/**
- * スキルmodelに該当するskillクラスをnewして返す
- * @param {!model.Skill} skillModel スキルmodel
- * @param {!ctrl.Entity} user スキル使用者
- * @param {!model.Position} targetPos スキルのターゲット座標
- */
-SkillFactory.prototype.create = function(skillModel, user, targetPos) {
-    var s = bq.params.Skills;
-    var clazz;
+var SkillFactory = (function () {
+    function SkillFactory() {
+        if (SkillFactory.instance_) {
+            throw new Error("Error: Instantiation failed: Use SkillFactory.getInstance() instead of new.");
+        }
+        SkillFactory.instance_ = this;
+    }
+    SkillFactory.getInstance = function () {
+        if (SkillFactory.instance_ === undefined) {
+            SkillFactory.instance_ = new SkillFactory();
+        }
+        return SkillFactory.instance_;
+    };
 
-    switch(skillModel.id) {
-        case s.BURNSTRIKE.id:
-            clazz = require('beamQuest/skill/burnStrike');
-            break;
-        default:
+    /**
+    * スキルmodelに該当するskillクラスをnewして返す
+    * @param {!model.Skill} skillModel スキルmodel
+    * @param {!ctrl.Entity} user スキル使用者
+    * @param {!model.Position} targetPos スキルのターゲット座標
+    */
+    SkillFactory.prototype.create = function (skillModel, user, targetPos) {
+        var s = bq.params.Skills;
+        var clazz;
+
+        switch (skillModel.id) {
+            case s.BURNSTRIKE.id:
+                clazz = BurnStrike;
+                break;
+            default:
+                return null;
+        }
+
+        if (clazz) {
+            return new clazz(skillModel, user, targetPos);
+        } else {
             return null;
-    }
+        }
+    };
+    return SkillFactory;
+})();
 
-    if (clazz) {
-        return new clazz(skillModel, user, targetPos);
-    } else {
-        return null;
-    }
-};
-
-
-var instance_ = new SkillFactory();
-module.exports = instance_;
+module.exports = SkillFactory;
+//# sourceMappingURL=skillFactory.js.map

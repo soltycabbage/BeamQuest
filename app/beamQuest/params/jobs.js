@@ -1,7 +1,7 @@
 /**
  * ジョブの設定値
  */
-bq.params.Jobs = {
+module.exports = {
     // すっぴん
     NOVICE: {
         // 1ポイントにつき上昇する能力値の倍率

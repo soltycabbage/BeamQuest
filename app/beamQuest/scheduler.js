@@ -1,39 +1,49 @@
+/// <reference path="../../typings/underscore/underscore.d.ts" />
 /**
- * ループ毎に処理を行うクラスを管理するクラス
- * @constructor
- */
-bq.Scheduler = function() {
+* ループ毎に処理を行うクラスを管理するクラス
+*/
+var Scheduler = (function () {
+    function Scheduler() {
+        if (Scheduler.instance_) {
+            throw new Error("Error: Instantiation failed: Use Scheduler.getInstance() instead of new.");
+        }
+        Scheduler.instance_ = this;
+
+        this.targets_ = [];
+    }
+    Scheduler.getInstance = function () {
+        if (Scheduler.instance_ === undefined) {
+            Scheduler.instance_ = new Scheduler();
+        }
+        return Scheduler.instance_;
+    };
+
     /**
-     * @type {Array.<bq.ScheduleTarget>}
-     * @private
-     */
-    this.targets_ = [];
-};
+    * クラスをスケジューラーに登録する
+    */
+    Scheduler.prototype.add = function (target) {
+        this.targets_.push(target);
+    };
 
-/**
- * クラスをスケジューラーに登録する
- * @param {bq.ScheduleTarget} target
- */
-bq.Scheduler.prototype.add = function(target) {
-    this.targets_.push(target);
-};
+    /**
+    * クラスをスケジューラーから削除する
+    */
+    Scheduler.prototype.remove = function (target) {
+        this.targets_ = _.reject(this.targets_, function (element) {
+            return element === target;
+        });
+    };
 
-/**
- * クラスをスケジューラーから削除する
- * @param {bq.ScheduleTarget} target
- */
-bq.Scheduler.prototype.remove = function(target) {
-    this.targets_ = _.reject(this.targets_, function(element) { return element === target; });
-};
+    /**
+    * スケジューラーに登録されたクラスが持つupdate()メソッドを順次呼んでいく
+    */
+    Scheduler.prototype.update = function () {
+        _.each(this.targets_, function (target) {
+            target.update();
+        });
+    };
+    return Scheduler;
+})();
 
-/**
- * スケジューラーに登録されたクラスが持つupdate()メソッドを順次呼んでいく
- */
-bq.Scheduler.prototype.update = function() {
-    _.each(this.targets_, function(target) {
-        target.update();
-    });
-};
-
-var instance_ = new bq.Scheduler();
-module.exports = instance_;
+module.exports = Scheduler;
+//# sourceMappingURL=scheduler.js.map

@@ -1,49 +1,74 @@
-/**
- * @fileoverview オンメモリのKVS的なやつ。redisに置き換える？
- */
-var redis = require('redis'),
-    CONFIG = require('config').kvs;
+/// <reference path="../../../typings/node_redis/node_redis.d.ts" />
+/// <reference path="../../../typings/config/config.d.ts" />
+var redis = require('redis');
+var config = require('config');
 
-var SessionStore = {
-    session_: {},
-    isEnd: false,
-    get: function (key, callback) {
+var CONFIG = config.kvs;
+
+/**
+* @fileoverview オンメモリのKVS的なやつ。redisに置き換える？
+*/
+var SessionStore = (function () {
+    function SessionStore() {
+        if (SessionStore.instance_) {
+            throw new Error("Error: Instantiation failed: Use SessionStore.getInstance() instead of new.");
+        }
+        SessionStore.instance_ = this;
+
+        this.session_ = {};
+        this.isEnd = false;
+    }
+    SessionStore.getInstance = function () {
+        if (SessionStore.instance_ === undefined) {
+            SessionStore.instance_ = new SessionStore();
+        }
+        return SessionStore.instance_;
+    };
+
+    SessionStore.prototype.get = function (key, callback) {
         if (this.isEnd) {
             callback('connection already closed', null);
         }
         if (key in this.session_) {
             callback(null, this.session_[key]);
-        }
-        else {
+        } else {
             callback(null, null);
         }
-    },
-    set: function (key, value) {
+    };
+
+    SessionStore.prototype.set = function (key, value) {
         this.session_[key] = value;
-    },
-    del: function (key) {
+    };
+
+    SessionStore.prototype.del = function (key) {
         delete this.session_[key];
-    },
-    flushall: function(callback) {
+    };
+
+    SessionStore.prototype.flushall = function (callback) {
         if (this.isEnd) {
             callback(false);
         }
         this.session_ = {};
         logger.info('kvs flushall');
         callback(true);
-    },
-    end: function() {
-        this.isEnd = true;
-    }
-};
+    };
 
-exports.createClient = function() {
+    SessionStore.prototype.end = function () {
+        this.isEnd = true;
+    };
+    return SessionStore;
+})();
+
+function createClient() {
     logger.info('kvs type: ' + CONFIG.type);
     if (CONFIG.type === 'memory') {
-        return SessionStore;
+        return SessionStore.getInstance();
     } else if (CONFIG.type === 'redis') {
         var client = redis.createClient(CONFIG.port, CONFIG.host);
         client.auth(CONFIG.pass);
         return client;
     }
-};
+    return null;
+}
+exports.createClient = createClient;
+//# sourceMappingURL=kvs.js.map
