@@ -4,7 +4,6 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var EntityCtrl = require('beamQuest/ctrl/entity');
 var EntityListener = require('beamQuest/listener/entity');
 var ItemListener = require('beamQuest/listener/item');
 var distance = require('beamQuest/math/distance');

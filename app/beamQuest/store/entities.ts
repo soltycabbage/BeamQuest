@@ -4,6 +4,7 @@ import EntityListener = require('beamQuest/listener/entity');
 import MapStore = require('beamQuest/store/maps');
 import MapModel = require('beamQuest/model/fieldMap');
 import PositionModel = require('beamQuest/model/position');
+import EntityCtrl = require('beamQuest/ctrl/entity');
 import PlayerCtrl = require('beamQuest/ctrl/player');
 import deferred = require('deferred');
 
@@ -221,7 +222,7 @@ class EntitiesStore {
      * @param {number} r
      * @return {Array.<ctrl.Entity>}
      */
-    getMobsByRadius(targetPos:PositionModel, r) {
+    getMobsByRadius(targetPos:PositionModel, r): EntityCtrl[] {
         var mobs:any = this.getMobsByMapId(targetPos.mapId);
         return this.getEntitiesStoreByRadiusInternal_(targetPos, r, mobs);
     }
@@ -232,7 +233,7 @@ class EntitiesStore {
      * @param {number} r
      * @return {Array.<ctrl.Entity>}
      */
-    getPlayersByRadius(targetPos:PositionModel, r) {
+    getPlayersByRadius(targetPos:PositionModel, r): EntityCtrl[] {
         var players:any = this.getPlayersByMapId(targetPos.mapId);
         return this.getEntitiesStoreByRadiusInternal_(targetPos, r, players);
     }
@@ -242,7 +243,7 @@ class EntitiesStore {
      * @param {number} r
      * @return {Array.<ctrl.Entity>}
      */
-    private getEntitiesStoreByRadiusInternal_(targetPos, r, entities) {
+    private getEntitiesStoreByRadiusInternal_(targetPos, r, entities): EntityCtrl[] {
         var result = [];
         var r2 = Math.pow(r, 2);
 

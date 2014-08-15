@@ -1,3 +1,5 @@
+var BurnStrike = require('beamQuest/skill/burnStrike');
+
 var SkillFactory = (function () {
     function SkillFactory() {
         if (SkillFactory.instance_) {
@@ -24,7 +26,7 @@ var SkillFactory = (function () {
 
         switch (skillModel.id) {
             case s.BURNSTRIKE.id:
-                clazz = require('beamQuest/skill/burnStrike');
+                clazz = BurnStrike;
                 break;
             default:
                 return null;
