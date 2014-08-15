@@ -13,8 +13,13 @@ module.exports = function(grunt) {
                 tasks: ['compass']
             },
 
-            scripts: {
-                files: ['app/**/*.js', 'public/**/*.js'],
+            backScripts: {
+                files: ['public/**/*.js'],
+                tasks: ['jshint']
+            },
+
+            frontScripts: {
+                files: ['public/**/*.js'],
                 tasks: ['jshint']
             },
 
@@ -24,7 +29,7 @@ module.exports = function(grunt) {
         },
 
         jshint: {
-            all: ['<%= watch.scripts.files %>'],
+            all: ['<%= watch.frontScripts.files %>'],
             options: grunt.file.readJSON('.jshintrc')
         },
 

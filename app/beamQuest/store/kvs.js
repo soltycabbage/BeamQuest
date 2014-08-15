@@ -10,9 +10,21 @@ var CONFIG = config.kvs;
 */
 var SessionStore = (function () {
     function SessionStore() {
+        if (SessionStore.instance_) {
+            throw new Error("Error: Instantiation failed: Use SessionStore.getInstance() instead of new.");
+        }
+        SessionStore.instance_ = this;
+
         this.session_ = {};
         this.isEnd = false;
     }
+    SessionStore.getInstance = function () {
+        if (SessionStore.instance_ === undefined) {
+            SessionStore.instance_ = new SessionStore();
+        }
+        return SessionStore.instance_;
+    };
+
     SessionStore.prototype.get = function (key, callback) {
         if (this.isEnd) {
             callback('connection already closed', null);
@@ -44,20 +56,19 @@ var SessionStore = (function () {
     SessionStore.prototype.end = function () {
         this.isEnd = true;
     };
-
-    SessionStore.createClient = function () {
-        logger.info('kvs type: ' + CONFIG.type);
-        if (CONFIG.type === 'memory') {
-            return SessionStore;
-        } else if (CONFIG.type === 'redis') {
-            var client = redis.createClient(CONFIG.port, CONFIG.host);
-            client.auth(CONFIG.pass);
-            return client;
-        }
-        return null;
-    };
     return SessionStore;
 })();
 
-module.exports = SessionStore;
+function createClient() {
+    logger.info('kvs type: ' + CONFIG.type);
+    if (CONFIG.type === 'memory') {
+        return SessionStore.getInstance();
+    } else if (CONFIG.type === 'redis') {
+        var client = redis.createClient(CONFIG.port, CONFIG.host);
+        client.auth(CONFIG.pass);
+        return client;
+    }
+    return null;
+}
+exports.createClient = createClient;
 //# sourceMappingURL=kvs.js.map

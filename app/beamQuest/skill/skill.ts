@@ -32,10 +32,14 @@ class Skill {
      */
     targetPos:PositionModel;
 
-    construcor(model:SkillModel, user:EntityCtrl, targetPos:PositionModel) {
+    private skillListener:any;
+
+    constructor(model:SkillModel, user:EntityCtrl, targetPos:PositionModel) {
         this.user = user;
         this.model = model;
         this.targetPos = targetPos;
+
+        this.skillListener = require('beamQuest/listener/skill').getInstance();
     }
     /**
      * スキルを実行する
@@ -46,7 +50,7 @@ class Skill {
             this.user.model.addBp(-this.model.bp);
         }
 
-        require('beamQuest/listener/skill').fire(this.model, this.user.model.id, this.targetPos);
+        this.skillListener.fire(this.model, this.user.model.id, this.targetPos);
     }
 
     /**
@@ -54,7 +58,7 @@ class Skill {
      * @param {number} damage
      * @param {boolean=} opt_isCritical
      */
-    applyDamage(damage, opt_isCritical) {
+    applyDamage(damage:number, opt_isCritical?:boolean) {
         var entities = [];
         if (this.user.model.type === bq.Types.EntityType.PLAYER) {
             entities = this.getMobsByRadius();

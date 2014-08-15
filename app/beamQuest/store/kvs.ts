@@ -12,13 +12,26 @@ var CONFIG = config.kvs;
  * @fileoverview オンメモリのKVS的なやつ。redisに置き換える？
  */
 class SessionStore {
-    private session_: Object;
-    private isEnd: boolean;
+    private static instance_:SessionStore;
+    public static getInstance():SessionStore {
+        if (SessionStore.instance_ === undefined) {
+            SessionStore.instance_ = new SessionStore();
+        }
+        return SessionStore.instance_;
+    }
 
     constructor() {
+        if (SessionStore.instance_){
+            throw new Error("Error: Instantiation failed: Use SessionStore.getInstance() instead of new.");
+        }
+        SessionStore.instance_ = this;
+
         this.session_ = {};
         this.isEnd =  false;
     }
+
+    private session_: Object;
+    private isEnd: boolean;
 
     get(key, callback) {
         if (this.isEnd) {
@@ -53,17 +66,16 @@ class SessionStore {
         this.isEnd = true;
     }
 
-    static createClient(): any {
-        logger.info('kvs type: ' + CONFIG.type);
-        if (CONFIG.type === 'memory') {
-            return SessionStore;
-        } else if (CONFIG.type === 'redis') {
-            var client = redis.createClient(CONFIG.port, CONFIG.host);
-            client.auth(CONFIG.pass);
-            return client;
-        }
-        return null;
-    }
 }
 
-export = SessionStore;
+export function createClient(): any {
+    logger.info('kvs type: ' + CONFIG.type);
+    if (CONFIG.type === 'memory') {
+        return SessionStore.getInstance();
+    } else if (CONFIG.type === 'redis') {
+        var client = redis.createClient(CONFIG.port, CONFIG.host);
+        client.auth(CONFIG.pass);
+        return client;
+    }
+    return null;
+}

@@ -9,14 +9,13 @@ var EntityStore = require('beamQuest/store/entities');
 * @param {!model.Position} targetPos
 */
 var Skill = (function () {
-    function Skill() {
-    }
-    Skill.prototype.construcor = function (model, user, targetPos) {
+    function Skill(model, user, targetPos) {
         this.user = user;
         this.model = model;
         this.targetPos = targetPos;
-    };
 
+        this.skillListener = require('beamQuest/listener/skill').getInstance();
+    }
     /**
     * スキルを実行する
     */
@@ -26,7 +25,7 @@ var Skill = (function () {
             this.user.model.addBp(-this.model.bp);
         }
 
-        require('beamQuest/listener/skill').fire(this.model, this.user.model.id, this.targetPos);
+        this.skillListener.fire(this.model, this.user.model.id, this.targetPos);
     };
 
     /**

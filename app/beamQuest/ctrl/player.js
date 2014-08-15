@@ -4,6 +4,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+var EntityCtrl = require('beamQuest/ctrl/entity');
 var UserStore = require('beamQuest/store/userStore');
 var EntityListener = require('beamQuest/listener/entity');
 
