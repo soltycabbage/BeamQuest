@@ -5,7 +5,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var Skill = require('beamquest/skill/skill');
+var Skill = require('beamQuest/skill/skill');
 
 /**
 * バーンストライク

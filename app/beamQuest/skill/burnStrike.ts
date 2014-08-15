@@ -1,9 +1,9 @@
 /// <reference path="../../../typings/tsd.d.ts" />
 
-import SkillModel = require('beamquest/model/skill');
-import PositionModel = require('beamquest/model/position');
-import EntityCtrl = require('beamquest/ctrl/entity');
-import Skill = require('beamquest/skill/skill');
+import SkillModel = require('beamQuest/model/skill');
+import PositionModel = require('beamQuest/model/position');
+import EntityCtrl = require('beamQuest/ctrl/entity');
+import Skill = require('beamQuest/skill/skill');
 
 
 /**
