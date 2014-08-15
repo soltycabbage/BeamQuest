@@ -13,15 +13,15 @@ module.exports = function(grunt) {
                 tasks: ['compass']
             },
 
-            backScripts: {
-                files: ['public/**/*.js'],
-                tasks: ['jshint']
-            },
-
             frontScripts: {
                 files: ['public/**/*.js'],
                 tasks: ['jshint']
             },
+
+//            typeScripts: {
+//                files: ['app/beamQuest/**/*.ts'],
+//                tasks: ['tslint']
+//            },
 
             options: {
                 nospawn: true
