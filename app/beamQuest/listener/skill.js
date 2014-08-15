@@ -1,6 +1,8 @@
 var EntityStore = require('beamQuest/store/entities');
 var UserStore = require('beamQuest/store/userStore');
 
+var SkillFactory = require('beamQuest/factory/skillFactory');
+
 /**
 * @fileoverview アイテムの取得/ドロップなどなど
 */
@@ -21,7 +23,6 @@ var Skill = (function () {
     Skill.prototype.listen = function (socket, io) {
         this.socket_ = socket;
         this.io_ = io;
-        this.factory_ = require('beamQuest/factory/skillFactory');
         this.socket_.on('skill:cast', this.handleCastSkill_.bind(this));
     };
 
@@ -53,7 +54,7 @@ var Skill = (function () {
                     // キャストが中断されない前提。
                     data.position.mapId = mapId;
                     setTimeout(function () {
-                        var s = _this.factory_.create(targetSkill, player, data.position);
+                        var s = SkillFactory.getInstance().create(targetSkill, player, data.position);
                         s && s.fire();
                     }, targetSkill.castTime);
                 }

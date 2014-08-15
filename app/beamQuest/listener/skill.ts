@@ -3,6 +3,7 @@ import UserStore = require('beamQuest/store/userStore');
 import SkillModel = require('beamQuest/model/skill');
 import PositionModel = require('beamQuest/model/position');
 import PlayerCtrl = require('beamQuest/ctrl/player');
+import SkillFactory = require('beamQuest/factory/skillFactory');
 
 /**
  * @fileoverview アイテムの取得/ドロップなどなど
@@ -26,12 +27,10 @@ class Skill {
 
     private socket_;
     private io_;
-    private factory_;
 
     listen(socket, io) {
         this.socket_ = socket;
         this.io_ = io;
-        this.factory_ = require('beamQuest/factory/skillFactory');
         this.socket_.on('skill:cast', this.handleCastSkill_.bind(this));
     }
 
@@ -60,7 +59,7 @@ class Skill {
                     // キャストが中断されない前提。
                     data.position.mapId = mapId;
                     setTimeout(() => {
-                        var s = this.factory_.create(targetSkill, player, data.position);
+                        var s = SkillFactory.getInstance().create(targetSkill, player, data.position);
                         s && s.fire();
                     }, targetSkill.castTime);
                 }
