@@ -58,7 +58,7 @@ class EntitiesStore {
     /**
      * @return {deferred.promise}
      */
-   init() {
+    init() {
         var d = deferred();
         _.each(MapStore.getInstance().getMaps(), (map:any) => {
             this.mapPlayers_[map.model.id] = {};
@@ -167,7 +167,7 @@ class EntitiesStore {
 
     /**
      * @param {number mapId
- * @param {string} mobId
+     * @param {string} mobId
      * @return {ctrl.Mob}
      */
     getMobById(mapId, mobId) {
