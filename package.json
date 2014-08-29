@@ -10,7 +10,7 @@
     "body-parser": "1.6.5",
     "config": "1.0.2",
     "deferred": "0.7.1",
-    "ejs": "0.8.6",
+    "ejs": "1.0.0",
     "errorhandler": "1.1.1",
     "express": "4.8.5",
     "jade": "1.5.0",
