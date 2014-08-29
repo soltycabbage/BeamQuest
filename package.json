@@ -14,7 +14,7 @@
     "errorhandler": "1.0.0",
     "express": "4.1.1",
     "jade": "*",
-    "log4js": "0.6.9",
+    "log4js": "0.6.20",
     "redis": "0.9.1",
     "socket.io": " 1.0.4",
     "socket.io-redis": "^0.1.3",
