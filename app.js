@@ -27,7 +27,9 @@ app.set('port', process.env.PORT || 3000);
 app.use(require('static-favicon')());
 app.use(log4js.connectLogger(expressLogWrapper, {level: log4js.levels.INFO}));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 var backend = require('beamQuestBackend/main');
