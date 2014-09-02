@@ -24,8 +24,9 @@
  ****************************************************************************/
 
 /**
- * Base singleton object for ccs.sceneReader
- * @namespace ccs.sceneReader
+ * ccs.sceneReader is the reader for Cocos Studio scene editor.
+ * @class
+ * @name ccs.sceneReader
  */
 ccs.sceneReader = /** @lends ccs.sceneReader# */{
     _baseBath:"",

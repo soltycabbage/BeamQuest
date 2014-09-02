@@ -24,41 +24,53 @@
  ****************************************************************************/
 
 /**
- * Base class for ccui.ListView
+ * The list view control of Cocos UI.
  * @class
  * @extends ccui.ScrollView
+ * @example
+ * var listView = new ccui.ListView();
+ * // set list view ex direction
+ * listView.setDirection(ccui.ScrollView.DIR_VERTICAL);
+ * listView.setTouchEnabled(true);
+ * listView.setBounceEnabled(true);
+ * listView.setBackGroundImage("res/cocosui/green_edit.png");
+ * listView.setBackGroundImageScale9Enabled(true);
+ * listView.setContentSize(cc.size(240, 130));
+ * this.addChild(listView);
  */
 ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
     _model: null,
     _items: null,
     _gravity: null,
     _itemsMargin: 0,
-    _listViewEventListener: null,
-    _listViewEventSelector: null,
+
     _curSelectedIndex: 0,
     _refreshViewDirty: true,
-    _className:"ListView",
+
+    _listViewEventListener: null,
+    _listViewEventSelector: null,
+    _eventCallback: null,
     /**
      * allocates and initializes a UIListView.
-     * Constructor of ccui.ListView
+     * Constructor of ccui.ListView, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
      * @example
      * // example
-     * var uiPageView = new ccui.ListView();
+     * var aListView = new ccui.ListView();
      */
     ctor: function () {
         ccui.ScrollView.prototype.ctor.call(this);
-        this._model = null;
         this._items = [];
         this._gravity = ccui.ListView.GRAVITY_CENTER_HORIZONTAL;
-        this._itemsMargin = 0;
-        this._listViewEventListener = null;
-        this._listViewEventSelector = null;
-        this._curSelectedIndex = 0;
-        this._refreshViewDirty = true;
+        this.setTouchEnabled(true);
 
-        //this.init();
+        this.init();
     },
 
+    /**
+     * Initializes a ccui.ListView. Please do not call this function by yourself, you should pass the parameters to constructor to initialize it.
+     * @returns {boolean}
+     * @override
+     */
     init: function () {
         if (ccui.ScrollView.prototype.init.call(this)) {
             this.setLayoutType(ccui.Layout.LINEAR_VERTICAL);
@@ -68,51 +80,46 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
     },
 
     /**
-     * Sets a item model for listview. A model will be cloned for adding default item.
+     * Sets a item model for ListView. A model will be cloned for adding default item.
      * @param {ccui.Widget} model
      */
     setItemModel: function (model) {
-        if (!model) {
+        if (!model)
             return;
-        }
         this._model = model;
     },
 
-    updateInnerContainerSize: function () {
+    _updateInnerContainerSize: function () {
+        var locItems = this._items, length, i;
         switch (this.direction) {
             case ccui.ScrollView.DIR_VERTICAL:
-                var length = this._items.length;
+                length = locItems.length;
                 var totalHeight = (length - 1) * this._itemsMargin;
-                for (var i = 0; i < length; i++) {
-                    var item = this._items[i];
-                    totalHeight += item.getContentSize().height;
+                for (i = 0; i < length; i++) {
+                    totalHeight += locItems[i].getContentSize().height;
                 }
-                var finalWidth = this._contentSize.width;
-                var finalHeight = totalHeight;
-                this.setInnerContainerSize(cc.size(finalWidth, finalHeight));
+                this.setInnerContainerSize(cc.size(this._contentSize.width, totalHeight));
                 break;
             case ccui.ScrollView.DIR_HORIZONTAL:
-                var length = this._items.length;
+                length = locItems.length;
                 var totalWidth = (length - 1) * this._itemsMargin;
-                for (var i = 0; i < length; i++) {
-                    var item = this._items[i];
-                    totalWidth += item.getContentSize().width;
+                for (i = 0; i < length; i++) {
+                    totalWidth += locItems[i].getContentSize().width;
                 }
-                var finalWidth = totalWidth;
-                var finalHeight = this._contentSize.height;
-                this.setInnerContainerSize(cc.size(finalWidth, finalHeight));
+                this.setInnerContainerSize(cc.size(totalWidth, this._contentSize.height));
                 break;
             default:
                 break;
         }
     },
 
-    remedyLayoutParameter: function (item) {
+    _remedyLayoutParameter: function (item) {
         if (!item)
             return;
+        var llp;
         switch (this.direction) {
             case ccui.ScrollView.DIR_VERTICAL:
-                var llp = item.getLayoutParameter();
+                llp = item.getLayoutParameter();
                 if (!llp) {
                     var defaultLp = ccui.LinearLayoutParameter.create();
                     switch (this._gravity) {
@@ -154,7 +161,7 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
                 }
                 break;
             case ccui.ScrollView.DIR_HORIZONTAL:
-                var llp = item.getLayoutParameter();
+                llp = item.getLayoutParameter();
                 if (!llp) {
                     var defaultLp = ccui.LinearLayoutParameter.create();
                     switch (this._gravity) {
@@ -201,80 +208,99 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
     },
 
     /**
-     * Push back a default item(create by a cloned model) into listview.
+     * Push back a default item(create by a cloned model) into ListView.
      */
     pushBackDefaultItem: function () {
-        if (!this._model) {
+        if (!this._model)
             return;
-        }
         var newItem = this._model.clone();
-        this.remedyLayoutParameter(newItem);
+        this._remedyLayoutParameter(newItem);
         this.addChild(newItem);
         this._refreshViewDirty = true;
     },
 
     /**
-     * Insert a default item(create by a cloned model) into listview.
+     * Insert a default item(create by a cloned model) into ListView.
      * @param {Number} index
      */
     insertDefaultItem: function (index) {
-        if (!this._model) {
+        if (!this._model)
             return;
-        }
         var newItem = this._model.clone();
         this._items.splice(index, 0, newItem);
         ccui.ScrollView.prototype.addChild.call(this, newItem);
-        this.remedyLayoutParameter(newItem);
+        this._remedyLayoutParameter(newItem);
 
         this._refreshViewDirty = true;
     },
 
     /**
-     * Push back custom item into listview.
+     * Push back custom item into ListView.
      * @param {ccui.Widget} item
      */
     pushBackCustomItem: function (item) {
-        this.remedyLayoutParameter(item);
+        this._remedyLayoutParameter(item);
         this.addChild(item);
         this._refreshViewDirty = true;
     },
 
+    /**
+     * add child to ListView
+     * @override
+     * @param {cc.Node} widget
+     * @param {Number} [zOrder]
+     * @param {Number|String} [tag]  tag or name
+     */
     addChild: function (widget, zOrder, tag) {
         if (widget) {
             zOrder = zOrder || widget.getLocalZOrder();
-            tag = tag || widget.getTag();
+            tag = tag || widget.getName();
             ccui.ScrollView.prototype.addChild.call(this, widget, zOrder, tag);
-            this._items.push(widget);
+            if(widget instanceof ccui.Widget)
+                this._items.push(widget);
         }
     },
 
-    removeChild: function(widget, cleaup){
+    /**
+     * remove child from ListView
+     * @override
+     * @param {cc.Node} widget
+     * @param {Boolean} [cleanup=true]
+     */
+    removeChild: function(widget, cleanup){
         if (widget) {
             var index = this._items.indexOf(widget);
             if(index > -1)
                 this._items.splice(index, 1);
-            ccui.ScrollView.prototype.removeChild.call(this, widget, cleaup);
+            ccui.ScrollView.prototype.removeChild.call(this, widget, cleanup);
         }
     },
 
+    /**
+     * Removes all children from ccui.ListView.
+     */
     removeAllChildren: function(){
         this.removeAllChildrenWithCleanup(true);
     },
 
+    /**
+     * Removes all children from ccui.ListView and do a cleanup all running actions depending on the cleanup parameter.
+     * @param {Boolean} cleanup
+     */
     removeAllChildrenWithCleanup: function(cleanup){
         ccui.ScrollView.prototype.removeAllChildrenWithCleanup.call(this, cleanup);
         this._items = [];
     },
 
     /**
-     * Push back custom item into listview.
+     * Push back custom item into ccui.ListView.
      * @param {ccui.Widget} item
      * @param {Number} index
      */
     insertCustomItem: function (item, index) {
         this._items.splice(index, 0, item);
         ccui.ScrollView.prototype.addChild.call(this, item);
-        this.remedyLayoutParameter(item);
+        this._remedyLayoutParameter(item);
         this._refreshViewDirty = true;
     },
 
@@ -286,17 +312,20 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
         var item = this.getItem(index);
         if (!item)
             return;
-        this.removeChild(item);
+        this.removeChild(item, true);
         this._refreshViewDirty = true;
     },
 
     /**
-     * Removes the last item of listview.
+     * Removes the last item of ccui.ListView.
      */
     removeLastItem: function () {
         this.removeItem(this._items.length - 1);
     },
 
+    /**
+     * Removes all items from ccui.ListView.
+     */
     removeAllItems: function(){
         this.removeAllChildren();
     },
@@ -307,9 +336,8 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
      * @returns {ccui.Widget}
      */
     getItem: function (index) {
-        if (index < 0 || index >= this._items.length) {
+        if (index < 0 || index >= this._items.length)
             return null;
-        }
         return this._items[index];
     },
 
@@ -323,21 +351,20 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
 
     /**
      * Returns the index of item.
-     * @param {ccui.Widget} item
-     * @returns {Number}
+     * @param {ccui.Widget} item the item which need to be checked.
+     * @returns {Number} the index of item.
      */
     getIndex: function (item) {
         return this._items.indexOf(item);
     },
 
     /**
-     * Changes the gravity of listview.
+     * Changes the gravity of ListView.
      * @param {ccui.ListView.GRAVITY_LEFT|ccui.ListView.GRAVITY_RIGHT|ccui.ListView.GRAVITY_CENTER_HORIZONTAL|ccui.ListView.GRAVITY_BOTTOM|ccui.ListView.GRAVITY_CENTER_VERTICAL} gravity
      */
     setGravity: function (gravity) {
-        if (this._gravity == gravity) {
+        if (this._gravity == gravity)
             return;
-        }
         this._gravity = gravity;
         this._refreshViewDirty = true;
     },
@@ -347,15 +374,14 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
      * @param {Number} margin
      */
     setItemsMargin: function (margin) {
-        if (this._itemsMargin == margin) {
+        if (this._itemsMargin == margin)
             return;
-        }
         this._itemsMargin = margin;
         this._refreshViewDirty = true;
     },
 
     /**
-     * Get the margin between each item.
+     * Returns the margin between each item.
      * @returns {Number}
      */
     getItemsMargin:function(){
@@ -363,7 +389,7 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
     },
 
     /**
-     * Changes scroll direction of scrollview.
+     * Changes scroll direction of ccui.ListView.
      * @param {ccui.ScrollView.DIR_NONE | ccui.ScrollView.DIR_VERTICAL | ccui.ScrollView.DIR_HORIZONTAL | ccui.ScrollView.DIR_BOTH} dir
      */
     setDirection: function (dir) {
@@ -384,19 +410,30 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
     },
 
     /**
-     * request refresh view
+     * Requests refresh list view.
      */
     requestRefreshView: function () {
         this._refreshViewDirty = true;
     },
 
+    /**
+     * Refreshes list view.
+     */
     refreshView: function () {
-        for (var i = 0; i < this._items.length; i++) {
-            var item = this._items[i];
+        var locItems = this._items;
+        for (var i = 0; i < locItems.length; i++) {
+            var item = locItems[i];
             item.setLocalZOrder(i);
-            this.remedyLayoutParameter(item);
+            this._remedyLayoutParameter(item);
         }
-        this.updateInnerContainerSize();
+        this._updateInnerContainerSize();
+    },
+
+    /**
+     * provides a public _doLayout function for Editor. it calls _doLayout.
+     */
+    doLayout: function(){
+        this._doLayout();
     },
 
     _doLayout: function(){
@@ -408,30 +445,41 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
     },
 
     /**
-     *  add event listener
+     * Adds event listener to ccui.ListView.
      * @param {Function} selector
      * @param {Object} target
+     * @deprecated since v3.0, please use addEventListener instead.
      */
     addEventListenerListView: function (selector, target) {
         this._listViewEventListener = target;
         this._listViewEventSelector = selector;
     },
 
+    /**
+     * Adds event listener to ccui.ListView.
+     * @param {function} callback
+     */
     addEventListener: function(callback){
         this._eventCallback = callback;
     },
 
-    selectedItemEvent: function (event) {
-        var eventEnum = (event == ccui.Widget.TOUCH_BAGAN) ? ccui.ListView.ON_SELECTED_ITEM_START : ccui.ListView.ON_SELECTED_ITEM_END;
+    _selectedItemEvent: function (event) {
+        var eventEnum = (event == ccui.Widget.TOUCH_BEGAN) ? ccui.ListView.ON_SELECTED_ITEM_START : ccui.ListView.ON_SELECTED_ITEM_END;
         if (this._listViewEventListener && this._listViewEventSelector)
             this._listViewEventSelector.call(this._listViewEventListener, this, eventEnum);
         if(this._eventCallback)
             this._eventCallback(this, eventEnum);
     },
 
-    interceptTouchEvent: function (handleState, sender, touchPoint) {
-        ccui.ScrollView.prototype.interceptTouchEvent.call(this, handleState, sender, touchPoint);
-        if (handleState != 1) {
+    /**
+     * Intercept touch event, handle its child's touch event.
+     * @param {Number} eventType
+     * @param {ccui.Widget} sender
+     * @param {cc.Touch} touch
+     */
+    interceptTouchEvent: function (eventType, sender, touch) {
+        ccui.ScrollView.prototype.interceptTouchEvent.call(this, eventType, sender, touch);
+        if (eventType != ccui.Widget.TOUCH_MOVED) {
             var parent = sender;
             while (parent) {
                 if (parent && parent.getParent() == this._innerContainer) {
@@ -441,36 +489,36 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
                 parent = parent.getParent();
             }
             if (sender.isHighlighted())
-                this.selectedItemEvent(handleState);
+                this._selectedItemEvent(eventType);
         }
     },
 
     /**
-     * get current selected index
+     * Returns current selected index
      * @returns {number}
      */
     getCurSelectedIndex: function () {
         return this._curSelectedIndex;
     },
 
-    onSizeChanged: function () {
-        ccui.ScrollView.prototype.onSizeChanged.call(this);
+    _onSizeChanged: function () {
+        ccui.ScrollView.prototype._onSizeChanged.call(this);
         this._refreshViewDirty = true;
     },
 
     /**
-     * Returns the "class name" of widget.
+     * Returns the "class name" of ccui.ListView.
      * @returns {string}
      */
     getDescription: function () {
         return "ListView";
     },
 
-    createCloneInstance: function () {
+    _createCloneInstance: function () {
         return ccui.ListView.create();
     },
 
-    copyClonedWidgetChildren: function (model) {
+    _copyClonedWidgetChildren: function (model) {
         var arrayItems = model.getItems();
         for (var i = 0; i < arrayItems.length; i++) {
             var item = arrayItems[i];
@@ -478,22 +526,23 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
         }
     },
 
-    copySpecialProperties: function (listView) {
-        ccui.ScrollView.prototype.copySpecialProperties.call(this, listView);
-        this.setItemModel(listView._model);
-        this.setItemsMargin(listView._itemsMargin);
-        this.setGravity(listView._gravity);
+    _copySpecialProperties: function (listView) {
+        if(listView instanceof ccui.ListView){
+            ccui.ScrollView.prototype._copySpecialProperties.call(this, listView);
+            this.setItemModel(listView._model);
+            this.setItemsMargin(listView._itemsMargin);
+            this.setGravity(listView._gravity);
 
-        this._listViewEventListener = listView._listViewEventListener;
-        this._listViewEventSelector = listView._listViewEventSelector;
-        this._eventCallback = listView._eventCallback;
-
+            this._listViewEventListener = listView._listViewEventListener;
+            this._listViewEventSelector = listView._listViewEventSelector;
+            this._eventCallback = listView._eventCallback;
+        }
     }
 });
 
 /**
  * allocates and initializes a UIListView.
- * @constructs
+ * @deprecated since v3.0, please use new ccui.ListView() instead.
  * @example
  * // example
  * var uiPageView = ccui.ListView.create();
@@ -504,15 +553,60 @@ ccui.ListView.create = function () {
 
 // Constants
 //listView event type
+/**
+ * The flag selected item of ccui.ListView's event.
+ * @constant
+ * @type {number}
+ */
 ccui.ListView.EVENT_SELECTED_ITEM = 0;
 
+/**
+ * The flag selected item start of ccui.ListView's event.
+ * @constant
+ * @type {number}
+ */
 ccui.ListView.ON_SELECTED_ITEM_START = 0;
+/**
+ * The flag selected item end of ccui.ListView's event.
+ * @constant
+ * @type {number}
+ */
 ccui.ListView.ON_SELECTED_ITEM_END = 1;
 
 //listView gravity
+/**
+ * The left flag of ccui.ListView's gravity.
+ * @constant
+ * @type {number}
+ */
 ccui.ListView.GRAVITY_LEFT = 0;
+/**
+ * The right flag of ccui.ListView's gravity.
+ * @constant
+ * @type {number}
+ */
 ccui.ListView.GRAVITY_RIGHT = 1;
+/**
+ * The center horizontal flag of ccui.ListView's gravity.
+ * @constant
+ * @type {number}
+ */
 ccui.ListView.GRAVITY_CENTER_HORIZONTAL = 2;
+/**
+ * The top flag of ccui.ListView's gravity.
+ * @constant
+ * @type {number}
+ */
 ccui.ListView.GRAVITY_TOP = 3;
+/**
+ * The bottom flag of ccui.ListView's gravity.
+ * @constant
+ * @type {number}
+ */
 ccui.ListView.GRAVITY_BOTTOM = 4;
+/**
+ * The center vertical flag of ccui.ListView's gravity.
+ * @constant
+ * @type {number}
+ */
 ccui.ListView.GRAVITY_CENTER_VERTICAL = 5;

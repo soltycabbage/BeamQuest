@@ -40,72 +40,109 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
     _imageRendererAdaptDirty: true,
 
     /**
-     * allocates and initializes a UIImageView.
-     * Constructor of ccui.ImageView
+     * allocates and initializes a ccui.ImageView.
+     * Constructor of ccui.ImageView, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
+     * @param {String} imageFileName
+     * @param {Number} [texType==ccui.Widget.LOCAL_TEXTURE]
      * @example
      * // example
      * var uiImageView = new ccui.ImageView;
      */
-    ctor: function () {
+    ctor: function (imageFileName, texType) {
         this._capInsets = cc.rect(0,0,0,0);
-        this._imageTextureSize = cc.size(this._size.width, this._size.height);
+        this._imageTextureSize = cc.size(this._capInsets.width, this._capInsets.height);
         ccui.Widget.prototype.ctor.call(this);
+
+        texType && this.init(imageFileName, texType);
     },
 
+    /**
+     * Initializes an imageView. please do not call this function by yourself, you should pass the parameters to constructor to initialize it.
+     * @param {String} imageFileName
+     * @param {Number} [texType==ccui.Widget.LOCAL_TEXTURE]
+     * @returns {boolean}
+     */
     init: function(imageFileName, texType){
-        ccui.Widget.prototype.init.call(this);
-         if(imageFileName !== undefined)
-            this.loadTexture(imageFileName, texType);
-        return true;
+        if(ccui.Widget.prototype.init.call(this)){
+            if(imageFileName === undefined)
+                this._imageTexType = ccui.Widget.LOCAL_TEXTURE;
+            else
+                this.loadTexture(imageFileName, texType);
+            return true;
+        }
+        return false;
     },
 
-    initRenderer: function () {
+    _initRenderer: function () {
         this._imageRenderer = cc.Sprite.create();
         this.addProtectedChild(this._imageRenderer, ccui.ImageView.RENDERER_ZORDER, -1);
     },
 
     /**
-     * Load textures for button.
+     * Loads textures for button.
      * @param {String} fileName
      * @param {ccui.Widget.LOCAL_TEXTURE|ccui.Widget.PLIST_TEXTURE} texType
      */
     loadTexture: function (fileName, texType) {
-        if (!fileName)
+        if (!fileName) {
             return;
+        }
+        var self = this;
         texType = texType || ccui.Widget.LOCAL_TEXTURE;
         this._textureFile = fileName;
         this._imageTexType = texType;
-        var imageRenderer = this._imageRenderer;
-        switch (this._imageTexType) {
+        var imageRenderer = self._imageRenderer;
+
+        switch (self._imageTexType) {
             case ccui.Widget.LOCAL_TEXTURE:
-                if (this._scale9Enabled) {
+                if(self._scale9Enabled){
                     imageRenderer.initWithFile(fileName);
-                    imageRenderer.setCapInsets(this._capInsets);
-                } else
-                    imageRenderer.setTexture(fileName);
+                    imageRenderer.setCapInsets(self._capInsets);
+                }else{
+                    //SetTexture cannot load resource
+                    imageRenderer.initWithFile(fileName);
+                }
                 break;
             case ccui.Widget.PLIST_TEXTURE:
-                if (this._scale9Enabled) {
+                if(self._scale9Enabled){
                     imageRenderer.initWithSpriteFrameName(fileName);
-                    imageRenderer.setCapInsets(this._capInsets);
-                } else
-                    imageRenderer.setSpriteFrame(fileName);
+                    imageRenderer.setCapInsets(self._capInsets);
+                }else{
+                    //SetTexture cannot load resource
+                    imageRenderer.initWithSpriteFrameName(fileName);
+                }
                 break;
             default:
                 break;
         }
-        this._imageTextureSize = imageRenderer.getContentSize();
-        this.updateFlippedX();
-        this.updateFlippedY();
-        imageRenderer.setColor(this.getColor());
-        imageRenderer.setOpacity(this.getOpacity());
 
-        this._updateContentSizeWithTextureSize(this._imageTextureSize);
-        this._imageRendererAdaptDirty = true;
+        if(!imageRenderer.texture || !imageRenderer.texture.isLoaded()){
+            imageRenderer.addLoadedEventListener(function(){
+                self._findLayout();
+
+                self._imageTextureSize = imageRenderer.getContentSize();
+                self._updateFlippedX();
+                self._updateFlippedY();
+
+                self._updateChildrenDisplayedRGBA();
+
+                self._updateContentSizeWithTextureSize(self._imageTextureSize);
+                self._imageRendererAdaptDirty = true;
+            });
+        }
+
+        self._imageTextureSize = imageRenderer.getContentSize();
+        self._updateFlippedX();
+        self._updateFlippedY();
+
+        this._updateChildrenDisplayedRGBA();
+
+        self._updateContentSizeWithTextureSize(self._imageTextureSize);
+        self._imageRendererAdaptDirty = true;
     },
 
     /**
-     * set texture rect
+     * Sets texture rect
      * @param {cc.Rect} rect
      */
     setTextureRect: function (rect) {
@@ -113,25 +150,18 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
             this._imageRenderer.setTextureRect(rect);
     },
 
-    updateFlippedX: function () {
+    _updateFlippedX: function () {
         if (this._scale9Enabled)
             this._imageRenderer.setScaleX(this._flippedX ? -1 : 1);
         else
             this._imageRenderer.setFlippedX(this._flippedX);
     },
 
-    updateFlippedY: function () {
+    _updateFlippedY: function () {
         if (this._scale9Enabled)
             this._imageRenderer.setScaleY(this._flippedY ? -1 : 1);
         else
             this._imageRenderer.setFlippedY(this._flippedY);
-    },
-
-    adaptRenderers: function(){
-        if (this._imageRendererAdaptDirty){
-            this.imageTextureScaleChangedWithSize();
-            this._imageRendererAdaptDirty = false;
-        }
     },
 
     /**
@@ -146,7 +176,7 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
         this.removeProtectedChild(this._imageRenderer);
         this._imageRenderer = null;
         if (this._scale9Enabled) {
-            this._imageRenderer = cc.Scale9Sprite.create();
+            this._imageRenderer = new ccui.Scale9Sprite();
         } else {
             this._imageRenderer = cc.Sprite.create();
         }
@@ -162,7 +192,7 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
     },
 
     /**
-     * Get button is using scale9 renderer or not.
+     * Returns ImageView is using scale9 renderer or not.
      * @returns {Boolean}
      */
     isScale9Enabled:function(){
@@ -170,7 +200,8 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
     },
 
     /**
-     * ignoreContentAdaptWithSize
+     * Ignore the imageView's custom size, true that imageView will ignore it's custom size, use renderer's content size, false otherwise.
+     * @override
      * @param {Boolean} ignore
      */
     ignoreContentAdaptWithSize: function (ignore) {
@@ -185,116 +216,90 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
      * @param {cc.Rect} capInsets
      */
     setCapInsets: function (capInsets) {
-        this._capInsets = capInsets;
+        if(!capInsets)
+            return;
+        var locInsets = this._capInsets;
+        locInsets.x = capInsets.x;
+        locInsets.y = capInsets.y;
+        locInsets.width = capInsets.width;
+        locInsets.height = capInsets.height;
+
         if (!this._scale9Enabled)
             return;
         this._imageRenderer.setCapInsets(capInsets);
     },
 
     /**
-     * Get cap insets.
+     * Returns cap insets of ccui.ImageView.
      * @returns {cc.Rect}
      */
     getCapInsets:function(){
-        return this._capInsets;
+        return cc.rect(this._capInsets);
     },
 
-    /**
-     * override "setAnchorPoint" of widget.
-     * @param {cc.Point|Number} point The anchor point of UIImageView or The anchor point.x of UIImageView.
-     * @param {Number} [y] The anchor point.y of UIImageView.
-     */
-    setAnchorPoint: function (point, y) {
-        if(y === undefined){
-	        ccui.Widget.prototype.setAnchorPoint.call(this, point);
-	        this._imageRenderer.setAnchorPoint(point);
-        } else {
-	        ccui.Widget.prototype.setAnchorPoint.call(this, point, y);
-	        this._imageRenderer.setAnchorPoint(point, y);
-        }
-    },
-	_setAnchorX: function (value) {
-		ccui.Widget.prototype._setAnchorX.call(this, value);
-		this._imageRenderer._setAnchorX(value);
-	},
-	_setAnchorY: function (value) {
-		ccui.Widget.prototype._setAnchorY.call(this, value);
-		this._imageRenderer._setAnchorY(value);
-	},
-
-
-    onSizeChanged: function () {
-        ccui.Widget.prototype.onSizeChanged.call(this);
+    _onSizeChanged: function () {
+        ccui.Widget.prototype._onSizeChanged.call(this);
         this._imageRendererAdaptDirty = true;
     },
 
-    /**
-     * override "getContentSize" method of widget.
-     * @returns {cc.Size}
-     */
-    getContentSize: function () {
-        return this._imageTextureSize;
+    _adaptRenderers: function(){
+        if (this._imageRendererAdaptDirty){
+            this._imageTextureScaleChangedWithSize();
+            this._imageRendererAdaptDirty = false;
+        }
     },
-	_getWidth: function () {
-		return this._imageTextureSize.width;
-	},
-	_getHeight: function () {
-		return this._imageTextureSize.height;
-	},
 
     /**
-     * override "getVirtualRenderer" method of widget.
+     * Returns the image's texture size.
+     * @returns {cc.Size}
+     */
+    getVirtualRendererSize: function(){
+        return cc.size(this._imageTextureSize);
+    },
+
+    /**
+     * Returns the renderer of ccui.ImageView
+     * @override
      * @returns {cc.Node}
      */
     getVirtualRenderer: function () {
         return this._imageRenderer;
     },
 
-    imageTextureScaleChangedWithSize: function () {
+    _imageTextureScaleChangedWithSize: function () {
         if (this._ignoreSize) {
             if (!this._scale9Enabled)
                 this._imageRenderer.setScale(1.0);
         } else {
             if (this._scale9Enabled)
-                this._imageRenderer.setPreferredSize(this._size);
+                this._imageRenderer.setPreferredSize(this._contentSize);
             else {
                 var textureSize = this._imageRenderer.getContentSize();
                 if (textureSize.width <= 0.0 || textureSize.height <= 0.0) {
                     this._imageRenderer.setScale(1.0);
                     return;
                 }
-                this._imageRenderer.setScaleX(this._size.width / textureSize.width);
-                this._imageRenderer.setScaleY(this._size.height / textureSize.height);
+                this._imageRenderer.setScaleX(this._contentSize.width / textureSize.width);
+                this._imageRenderer.setScaleY(this._contentSize.height / textureSize.height);
             }
         }
         this._imageRenderer.setPosition(this._contentSize.width / 2.0, this._contentSize.height / 2.0);
     },
 
-    updateTextureColor: function () {
-        this.updateColorToRenderer(this._imageRenderer);
-    },
-
-    updateTextureOpacity: function () {
-        this.updateOpacityToRenderer(this._imageRenderer);
-    },
-
     /**
-     * Returns the "class name" of widget.
+     * Returns the "class name" of ccui.ImageView.
+     * @override
      * @returns {string}
      */
     getDescription: function () {
         return "ImageView";
     },
 
-    getVirtualRendererSize: function(){
-
-    },
-
-    createCloneInstance:function(){
+    _createCloneInstance:function(){
         return ccui.ImageView.create();
     },
 
-    copySpecialProperties: function (imageView) {
+    _copySpecialProperties: function (imageView) {
         if(imageView instanceof ccui.ImageView){
             this._prevIgnoreSize = imageView._prevIgnoreSize;
             this.setScale9Enabled(imageView._scale9Enabled);
@@ -306,7 +311,8 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
 });
 
 /**
- * allocates and initializes a UIImageView.
+ * Allocates and initializes a UIImageView.
+ * @deprecated since v3.0, please use new ccui.ImageView() instead.
  * @param {string} imageFileName
  * @param {Number} texType
  * @return {ccui.ImageView}
@@ -315,11 +321,13 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
  * var uiImageView = ccui.ImageView.create();
  */
 ccui.ImageView.create = function (imageFileName, texType) {
-    var imageView = new ccui.ImageView();
-    if(imageFileName !== undefined)
-        imageView.init(imageFileName, texType);
-    return imageView;
+    return new ccui.ImageView(imageFileName, texType);
 };
 
 // Constants
+/**
+ * The zOrder value of ccui.ImageView's renderer.
+ * @constant
+ * @type {number}
+ */
 ccui.ImageView.RENDERER_ZORDER = -1;

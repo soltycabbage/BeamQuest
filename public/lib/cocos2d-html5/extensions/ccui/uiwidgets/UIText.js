@@ -25,7 +25,7 @@
 
 
 /**
- * Base class for ccui.Button
+ * The text control of Cocos UI.
  * @class
  * @extends ccui.Widget
  *
@@ -57,17 +57,31 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
 
     /**
      * allocates and initializes a UILabel.
-     * Constructor of ccui.Text
+     * Constructor of ccui.Text. override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
+     * @param {String} textContent
+     * @param {String} fontName
+     * @param {Number} fontSize
      * @example
      * // example
      * var uiLabel = new ccui.Text();
      */
-    ctor: function () {
+    ctor: function (textContent, fontName, fontSize) {
         this._type = ccui.Text.Type.SYSTEM;
         this._textAreaSize = cc.size(0, 0);
         ccui.Widget.prototype.ctor.call(this);
+
+        fontSize && this.init(textContent, fontName, fontSize);
+
     },
 
+    /**
+     * Initializes a ccui.Text. Please do not call this function by yourself, you should pass the parameters to constructor to initialize it.
+     * @param {String} textContent
+     * @param {String} fontName
+     * @param {Number} fontSize
+     * @returns {boolean}
+     * @override
+     */
     init: function (textContent, fontName, fontSize) {
         if (ccui.Widget.prototype.init.call(this)) {
             if(arguments.length > 0){
@@ -80,14 +94,14 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
         return false;
     },
 
-    initRenderer: function () {
-        this._labelRenderer = cc.LabelTTF.create();
-        cc.Node.prototype.addChild.call(this, this._labelRenderer, ccui.Text.RENDERER_ZORDER, -1);
+    _initRenderer: function () {
+        this._labelRenderer = new cc.LabelTTF();
+        this.addProtectedChild(this._labelRenderer, ccui.Text.RENDERER_ZORDER, -1);
     },
 
     /**
-     * Changes the  value of label.
-     * @deprecated
+     * Changes the  value of ccui.Text.
+     * @deprecated since v3.0, please use setString() instead.
      * @param {String} text
      */
     setText: function (text) {
@@ -96,19 +110,18 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
     },
 
     /**
-     * Changes the  value of label.
+     * Changes the  value of ccui.Text.
      * @param {String} text
      */
     setString: function (text) {
         this._labelRenderer.setString(text);
-//        this.labelScaleChangedWithSize();
         this._updateContentSizeWithTextureSize(this._labelRenderer.getContentSize());
         this._labelRendererAdaptDirty = true;
     },
 
     /**
-     * Gets the string value of label.
-     * @deprecated
+     * Gets the string value of ccui.Text.
+     * @deprecated since v3.0, please use getString instead.
      * @returns {String}
      */
     getStringValue: function () {
@@ -117,7 +130,7 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
     },
 
     /**
-     * Gets the string value of label.
+     * Gets the string value of ccui.Text.
      * @returns {String}
      */
     getString: function () {
@@ -125,32 +138,26 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
     },
 
     /**
-     * Gets the string length of label.
+     * Gets the string length of ccui.Text.
      * @returns {Number}
      */
     getStringLength: function () {
-//        var str = this._labelRenderer.getString();
-//        return str.length;
         return this._labelRenderer.getStringLength();
     },
 
     /**
-     * set fontSize
+     * Sets fontSize
      * @param {Number} size
      */
     setFontSize: function (size) {
-        this._fontSize = size;
         this._labelRenderer.setFontSize(size);
-//        this.labelScaleChangedWithSize();
-//        var config = this._labelRenderer.getTTFConfig();
-//        config.fontSize = size;
-//        this._fontSize = size;
+        this._fontSize = size;
         this._updateContentSizeWithTextureSize(this._labelRenderer.getContentSize());
         this._labelRendererAdaptDirty = true;
     },
 
     /**
-     * Get font Size
+     * Returns font Size of ccui.Text
      * @returns {Number}
      */
     getFontSize: function () {
@@ -158,62 +165,75 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
     },
 
     /**
-     * Set font name
+     * Sets font name
      * @return {String} name
      */
     setFontName: function (name) {
         this._fontName = name;
         this._labelRenderer.setFontName(name);
-//        this.labelScaleChangedWithSize();
-//        if(FileUtils::getInstance()->isFileExist(name))
-//        {
-//            TTFConfig config = _labelRenderer->getTTFConfig();
-//            config.fontFilePath = name;
-//            config.fontSize = _fontSize;
-//            _labelRenderer->setTTFConfig(config);
-//            _type = Type::TTF;
-//        }
-//        else{
-//            _labelRenderer->setSystemFontName(name);
-//            _type = Type::SYSTEM;
-//        }
-//        _fontName = name;
         this._updateContentSizeWithTextureSize(this._labelRenderer.getContentSize());
         this._labelRendererAdaptDirty = true;
     },
 
     /**
-     * set textAreaSize
+     * Returns font name of ccui.Text.
+     * @returns {string}
+     */
+    getFontName: function () {
+        return this._fontName;
+    },
+
+    _setFont: function (font) {
+        var res = cc.LabelTTF._fontStyleRE.exec(font);
+        if (res) {
+            this._fontSize = parseInt(res[1]);
+            this._fontName = res[2];
+            this._labelRenderer._setFont(font);
+            this._labelScaleChangedWithSize();
+        }
+    },
+    _getFont: function () {
+        return this._labelRenderer._getFont();
+    },
+
+    /**
+     * Returns the type of ccui.Text.
+     * @returns {null}
+     */
+    getType: function(){
+        return  this._type;
+    },
+
+    /**
+     * Sets text Area Size
      * @param {cc.Size} size
      */
     setTextAreaSize: function (size) {
-//        this._textAreaSize.width = size.width;
-//        this._textAreaSize.height = size.height;
         this._labelRenderer.setDimensions(size);
-//        this.labelScaleChangedWithSize();
-
         this._updateContentSizeWithTextureSize(this._labelRenderer.getContentSize());
         this._labelRendererAdaptDirty = true;
     },
+
+    /**
+     * Returns renderer's dimension.
+     * @returns {cc.Size}
+     */
     getTextAreaSize: function(){
         return this._labelRenderer.getDimensions();
     },
 
     /**
-     * set Horizontal Alignment of cc.LabelTTF
+     * Sets Horizontal Alignment of cc.LabelTTF
      * @param {cc.TEXT_ALIGNMENT_LEFT|cc.TEXT_ALIGNMENT_CENTER|cc.TEXT_ALIGNMENT_RIGHT} alignment Horizontal Alignment
      */
     setTextHorizontalAlignment: function (alignment) {
-//        this._textHorizontalAlignment = alignment;
         this._labelRenderer.setHorizontalAlignment(alignment);
-//        this.labelScaleChangedWithSize();
-
         this._updateContentSizeWithTextureSize(this._labelRenderer.getContentSize());
         this._labelRendererAdaptDirty = true;
     },
 
     /**
-     * Return Horizontal Alignment of label
+     * Returns Horizontal Alignment of label
      * @returns {TEXT_ALIGNMENT_LEFT|TEXT_ALIGNMENT_CENTER|TEXT_ALIGNMENT_RIGHT}
      */
     getTextHorizontalAlignment: function () {
@@ -221,19 +241,17 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
     },
 
     /**
-     * Set Vertical Alignment of label
+     * Sets Vertical Alignment of label
      * @param {cc.VERTICAL_TEXT_ALIGNMENT_TOP|cc.VERTICAL_TEXT_ALIGNMENT_CENTER|cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM} alignment
      */
     setTextVerticalAlignment: function (alignment) {
-//        this._textVerticalAlignment = alignment;
         this._labelRenderer.setVerticalAlignment(alignment);
-//        this.labelScaleChangedWithSize();
         this._updateContentSizeWithTextureSize(this._labelRenderer.getContentSize());
         this._labelRendererAdaptDirty = true;
     },
 
     /**
-     * Get text vertical alignment.
+     * Gets text vertical alignment.
      * @returns {VERTICAL_TEXT_ALIGNMENT_TOP|VERTICAL_TEXT_ALIGNMENT_CENTER|VERTICAL_TEXT_ALIGNMENT_BOTTOM}
      */
     getTextVerticalAlignment: function () {
@@ -256,215 +274,138 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
         return this._touchScaleChangeEnabled;
     },
 
-    onPressStateChangedToNormal: function () {
-        if (!this._touchScaleChangeEnabled) {
+    _onPressStateChangedToNormal: function () {
+        if (!this._touchScaleChangeEnabled)
             return;
-        }
         this._labelRenderer.setScaleX(this._normalScaleValueX);
         this._labelRenderer.setScaleY(this._normalScaleValueY);
     },
 
-    onPressStateChangedToPressed: function () {
-        if (!this._touchScaleChangeEnabled) {
+    _onPressStateChangedToPressed: function () {
+        if (!this._touchScaleChangeEnabled)
             return;
-        }
         this._labelRenderer.setScaleX(this._normalScaleValueX + this._onSelectedScaleOffset);
         this._labelRenderer.setScaleY(this._normalScaleValueY + this._onSelectedScaleOffset);
     },
 
-    onPressStateChangedToDisabled: function () {
-
+    _onPressStateChangedToDisabled: function () {
     },
 
-    updateFlippedX: function () {
-
+    _updateFlippedX: function () {
         if (this._flippedX)
-        {
             this._labelRenderer.setScaleX(-1.0);
-        }
         else
-        {
             this._labelRenderer.setScaleX(1.0);
-        }
     },
 
-    onSizeChanged: function () {
-        ccui.Widget.prototype.onSizeChanged.call(this);
-//        this.labelScaleChangedWithSize();
+    _updateFlippedY: function () {
+        if (this._flippedY)
+            this._labelRenderer.setScaleY(-1.0);
+        else
+            this._labelRenderer.setScaleY(1.0);
+    },
+
+    _onSizeChanged: function () {
+        ccui.Widget.prototype._onSizeChanged.call(this);
         this._labelRendererAdaptDirty = true;
     },
 
-    adaptRenderers: function(){
-        if (this._labelRendererAdaptDirty)
-        {
-            this.labelScaleChangedWithSize();
+    _adaptRenderers: function(){
+        if (this._labelRendererAdaptDirty) {
+            this._labelScaleChangedWithSize();
             this._labelRendererAdaptDirty = false;
         }
     },
 
+    /**
+     * Returns the renderer's content size.
+     * @override
+     * @returns {cc.Size}
+     */
     getVirtualRendererSize: function(){
         return this._labelRenderer.getContentSize();
     },
 
     /**
-     * override "getVirtualRenderer" method of widget.
+     * Returns the renderer of ccui.Text.
      * @returns {cc.Node}
      */
     getVirtualRenderer: function () {
         return this._labelRenderer;
     },
 
-    labelScaleChangedWithSize: function () {
+    _labelScaleChangedWithSize: function () {
+        var locContentSize = this._contentSize;
         if (this._ignoreSize) {
-            //this._labelRenderer.setDimensions(cc.size(0, 0));
             this._labelRenderer.setScale(1.0);
             this._normalScaleValueX = this._normalScaleValueY = 1;
         } else {
-            this._labelRenderer.setDimensions(cc.size(this._contentSize.width, this._contentSize.height));
+            this._labelRenderer.setDimensions(cc.size(locContentSize.width, locContentSize.height));
             var textureSize = this._labelRenderer.getContentSize();
             if (textureSize.width <= 0.0 || textureSize.height <= 0.0) {
                 this._labelRenderer.setScale(1.0);
                 return;
             }
-            var scaleX = this._contentSize.width / textureSize.width;
-            var scaleY = this._contentSize.height / textureSize.height;
+            var scaleX = locContentSize.width / textureSize.width;
+            var scaleY = locContentSize.height / textureSize.height;
             this._labelRenderer.setScaleX(scaleX);
             this._labelRenderer.setScaleY(scaleY);
             this._normalScaleValueX = scaleX;
             this._normalScaleValueY = scaleY;
         }
-        this._labelRenderer.setPosition(this._contentSize.width / 2.0, this._contentSize.height / 2.0);
+        this._labelRenderer.setPosition(locContentSize.width / 2.0, locContentSize.height / 2.0);
     },
 
     /**
-     * Returns the "class name" of widget.
+     * Returns the "class name" of ccui.Text.
      * @returns {string}
      */
     getDescription: function () {
         return "Label";
     },
 
+    /**
+     * Enables shadow style and sets color, offset and blur radius styles.
+     * @param {cc.Color} shadowColor
+     * @param {cc.Size} offset
+     * @param {Number} blurRadius
+     */
     enableShadow: function(shadowColor, offset, blurRadius){
         this._labelRenderer.enableShadow(shadowColor, offset, blurRadius);
     },
 
+    /**
+     * Enables outline style and sets outline's color and size.
+     * @param {cc.Color} outlineColor
+     * @param {cc.Size} outlineSize
+     */
     enableOutline: function(outlineColor, outlineSize){
         this._labelRenderer.enableOutline(outlineColor, outlineSize);
     },
 
+    /**
+     * Enables glow color
+     * @param glowColor
+     */
     enableGlow: function(glowColor){
         if (this._type == ccui.Text.Type.TTF)
             this._labelRenderer.enableGlow(glowColor);
     },
 
+    /**
+     * Disables renderer's effect.
+     */
     disableEffect: function(){
-        this._labelRenderer.disableEffect();
+        if(this._labelRenderer.disableEffect)
+            this._labelRenderer.disableEffect();
     },
 
-    createCloneInstance: function () {
+    _createCloneInstance: function () {
         return ccui.Text.create();
     },
 
-    /**
-     * Get font name
-     * @returns {string}
-     */
-    getFontName: function () {
-        return this._fontName;
-    },
-
-    getType: function(){
-        return  this._type;
-    },
-
-    _setFont: function (font) {
-        var res = cc.LabelTTF._fontStyleRE.exec(font);
-        if (res) {
-            this._fontSize = parseInt(res[1]);
-            this._fontName = res[2];
-            this._labelRenderer._setFont(font);
-            this.labelScaleChangedWithSize();
-        }
-    },
-    _getFont: function () {
-        return this._labelRenderer._getFont();
-    },
-    _setBoundingWidth: function (value) {
-        this._textAreaSize.width = value;
-        this._labelRenderer._setBoundingWidth(value);
-        this.labelScaleChangedWithSize();
-    },
-    _setBoundingHeight: function (value) {
-        this._textAreaSize.height = value;
-        this._labelRenderer._setBoundingHeight(value);
-        this.labelScaleChangedWithSize();
-    },
-    _getBoundingWidth: function () {
-        return this._textAreaSize.width;
-    },
-    _getBoundingHeight: function () {
-        return this._textAreaSize.height;
-    },
-//
-//    /**
-//     * Gets the touch scale enabled of label.
-//     * @returns {Boolean}
-//     */
-//    getTouchScaleChangeAble: function () {
-//        return this.isTouchScaleChangeEnabled();
-//    },
-//
-//    updateFlippedY: function () {
-//        this._labelRenderer.setFlippedY(this._flippedY);
-//    },
-//
-//    /**
-//     * override "setAnchorPoint" of widget.
-//     * @param {cc.Point|Number} point The anchor point of UILabel or The anchor point.x of UILabel.
-//     * @param {Number} [y] The anchor point.y of UILabel.
-//     */
-//    setAnchorPoint: function (point, y) {
-//        if (y === undefined) {
-//            ccui.Widget.prototype.setAnchorPoint.call(this, point);
-//            this._labelRenderer.setAnchorPoint(point);
-//        } else {
-//            ccui.Widget.prototype.setAnchorPoint.call(this, point, y);
-//            this._labelRenderer.setAnchorPoint(point, y);
-//        }
-//    },
-//    _setAnchorX: function (value) {
-//        ccui.Widget.prototype._setAnchorX.call(this, value);
-//        this._labelRenderer._setAnchorX(value);
-//    },
-//    _setAnchorY: function (value) {
-//        ccui.Widget.prototype._setAnchorY.call(this, value);
-//        this._labelRenderer._setAnchorY(value);
-//    },
-//
-//    /**
-//     * override "getContentSize" method of widget.
-//     * @returns {cc.Size}
-//     */
-//    getContentSize: function () {
-//        return this._labelRenderer.getContentSize();
-//    },
-//    _getWidth: function () {
-//        return this._labelRenderer._getWidth();
-//    },
-//    _getHeight: function () {
-//        return this._labelRenderer._getHeight();
-//    },
-//
-//    updateTextureColor: function () {
-//        this.updateColorToRenderer(this._labelRenderer);
-//    },
-//
-//    updateTextureOpacity: function () {
-//        this.updateOpacityToRenderer(this._labelRenderer);
-//    },
-//
-    copySpecialProperties: function (uiLabel) {
-        if(uiLabel instanceof uiLabel){
+    _copySpecialProperties: function (uiLabel) {
+        if(uiLabel instanceof ccui.Text){
             this.setFontName(uiLabel._fontName);
             this.setFontSize(uiLabel.getFontSize());
             this.setString(uiLabel.getString());
@@ -473,7 +414,25 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
             this.setTextHorizontalAlignment(uiLabel._labelRenderer.getHorizontalAlignment());
             this.setTextVerticalAlignment(uiLabel._labelRenderer.getVerticalAlignment());
         }
+    },
+
+    _setBoundingWidth: function (value) {
+        this._textAreaSize.width = value;
+        this._labelRenderer._setBoundingWidth(value);
+        this._labelScaleChangedWithSize();
+    },
+    _setBoundingHeight: function (value) {
+        this._textAreaSize.height = value;
+        this._labelRenderer._setBoundingHeight(value);
+        this._labelScaleChangedWithSize();
+    },
+    _getBoundingWidth: function () {
+        return this._textAreaSize.width;
+    },
+    _getBoundingHeight: function () {
+        return this._textAreaSize.height;
     }
+
 });
 
 var _p = ccui.Text.prototype;
@@ -511,31 +470,26 @@ _p = null;
 
 /**
  * allocates and initializes a UILabel.
- * @constructs
+ * @deprecated since v3.0, please use new ccui.Text() instead.
  * @return {ccui.Text}
  * @example
  * // example
  * var uiLabel = ccui.Text.create();
  */
 ccui.Label = ccui.Text.create = function (textContent, fontName, fontSize) {
-    var widget = new ccui.Text();
-    if(arguments.length > 0){
-        if (widget && widget.init(textContent, fontName, fontSize))
-        {
-            return widget;
-        }
-    }else{
-        if (widget && widget.init())
-        {
-            return widget;
-        }
-    }
-    return null;
+    return new ccui.Text(textContent, fontName, fontSize);
 };
 
+/**
+ * The zOrder value of ccui.Text's renderer.
+ * @constant
+ * @type {number}
+ */
 ccui.Text.RENDERER_ZORDER = -1;
 
-
+/**
+ * @ignore
+ */
 ccui.Text.Type = {
     SYSTEM: 0,
     TTF: 1

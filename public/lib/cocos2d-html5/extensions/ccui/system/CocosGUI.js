@@ -22,9 +22,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+
 /**
- *  Base namespace of Cocos GUI
- * @namespace ccui
+ * The namespace of Cocos UI
+ * @namespace
+ * @name ccui
  */
 var ccui = ccui || {};
 
@@ -44,25 +46,17 @@ ccui.Class.extend = ccui.Class.extend || cc.Class.extend;
 ccui.Node = ccui.Node || cc.Node;
 ccui.Node.extend = ccui.Node.extend || cc.Node.extend;
 
-/**
- * that same as cc.NodeRGBA
- * @class
- * @extends ccui.Node
- */
-ccui.NodeRGBA = ccui.NodeRGBA || cc.NodeRGBA;
-ccui.NodeRGBA.extend = ccui.NodeRGBA.extend || cc.NodeRGBA.extend;
-
 
 /**
  * that same as cc.Node
  * @class
- * @extends ccui.NodeRGBA
+ * @extends ccui.Node
  */
 ccui.ProtectedNode = ccui.ProtectedNode || cc.ProtectedNode;
 ccui.ProtectedNode.extend = ccui.ProtectedNode.extend || cc.ProtectedNode.extend;
 
 /**
- * Cocos GUI version
+ * Cocos UI version
  * @type {String}
  */
 ccui.cocosGUIVersion = "CocosGUI v1.0.0.0";

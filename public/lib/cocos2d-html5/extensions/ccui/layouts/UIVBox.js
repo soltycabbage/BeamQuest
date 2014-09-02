@@ -24,36 +24,55 @@
  ****************************************************************************/
 
 /**
- * Base class for ccui.RelativeBox
+ * The vertical box of Cocos UI. Its layout type is ccui.Layout.LINEAR_VERTICAL.
  * @class
  * @extends ccui.Layout
  */
-ccui.VBox = ccui.Layout.extend(/** @lends ccui.RelativeBox# */{
+ccui.VBox = ccui.Layout.extend(/** @lends ccui.VBox# */{
+    /**
+     * The constructor of ccui.VBox
+     * @function
+     * @param {cc.Size} size
+     */
+    ctor: function(size){
+        if(size)
+            this.initWithSize(size);
+        else
+            this.init();
+    },
 
+    /**
+     * Initializes a VBox. please do not call this function by yourself, you should pass the parameters to constructor to initialize it.
+     * @override
+     * @returns {boolean}
+     */
     init: function(){
         if(ccui.Layout.prototype.init.call(this)){
-            this.setLayoutType(ccui.Layout.VERTICAL);
+            this.setLayoutType(ccui.Layout.LINEAR_VERTICAL);
             return true;
         }
         return false;
     },
 
+    /**
+     * Initializes a VBox with size.
+     * @param {cc.Size} size
+     * @returns {boolean}
+     */
     initWithSize: function(size){
         if(this.init()){
-            this.setSize(size);
+            this.setContentSize(size);
             return true;
         }
         return false;
     }
 });
 
+/**
+ * Creates a VBox
+ * @param {cc.Size} size
+ * @returns {ccui.VBox}
+ */
 ccui.VBox.create = function(size){
-    var widget = new ccui.VBox();
-    if(size){
-        if(widget.initWithSize()){
-            return widget;
-        }
-        return null;
-    }
-    return widget;
+    return new ccui.VBox(size);
 };
