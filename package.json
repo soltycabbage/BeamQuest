@@ -13,7 +13,7 @@
     "ejs": "1.0.0",
     "errorhandler": "1.1.1",
     "express": "4.8.7",
-    "jade": "1.5.0",
+    "jade": "1.6.0",
     "log4js": "0.6.20",
     "redis": "0.12.1",
     "socket.io": " 1.0.6",
