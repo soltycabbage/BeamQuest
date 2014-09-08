@@ -1,6 +1,11 @@
 /// <reference path="../../../typings/tsd.d.ts" />
 
 import UserStore = require('beamQuest/store/userStore');
+import PlayerModel = require('beamQuest/model/player');
+import PositionModel = require('beamQuest/model/position');
+import PlayerCtrl = require('beamQuest/ctrl/player');
+import MobCtrl = require('beamQuest/ctrl/mob/mob');
+import EntityCtrl = require('beamQuest/ctrl/entity');
 
 declare var EntitiesStore:any;
 
@@ -55,9 +60,9 @@ class Entity {
 
     /**
      * mobがPOPするよってクライアントに伝える
-     * @param {ctrl.Mob} mob
+     * @param {MobCtrl} mob
      */
-    popMob(mob:any) {
+    popMob(mob: MobCtrl) {
         if (this.io_) {
             var data = {mob: mob.model.toJSON()};
             this.io_.sockets.emit('notify:entity:mob:pop', data);
@@ -66,9 +71,9 @@ class Entity {
 
     /**
      * mobが動いたよってクライアントに伝える
-     * @param {ctrl.Mob} mob
+     * @param {MobCtrl} mob
      */
-    moveMob(mob:any) {
+    moveMob(mob: MobCtrl) {
         if (this.io_) {
             this.io_.sockets.emit('notify:entity:mob:move', {mob: mob.model.toJSON()});
         }
@@ -76,10 +81,10 @@ class Entity {
 
     /**
      * mobがタゲったよってクライアントに伝える
-     * @param {ctrl.Mob} mob
-     * @param {ctrl.Entity} entity
+     * @param {MobCtrl} mob
+     * @param {EntityCtrl} entity
      */
-    targetTo(mob:any, entity:any) {
+    targetTo(mob: MobCtrl, entity:EntityCtrl) {
         var data = {mob: mob.model.toJSON(), target: entity.model.toJSON()};
         this.io_.sockets.emit('notify:entity:mob:targetTo', data);
     }
@@ -87,12 +92,12 @@ class Entity {
     /**
      * mobが近接攻撃の構えを取ったよってクライアントに伝える
      * @param {string} mobId
-     * @param {model.Position} srcPos
-     * @param {model.Position} destPos
+     * @param {PositionModel} srcPos
+     * @param {PositionModel} destPos
      * @param {number} range 射程距離(px)
      * @param {number} castTime 発動までの時間(msec)
      */
-    startAttackShortRange(mobId, srcPos, destPos, range, castTime) {
+    startAttackShortRange(mobId: string, srcPos: PositionModel, destPos: PositionModel, range: number, castTime: number) {
         if (this.io_) {
             this.io_.sockets.emit('notify:entity:mob:startAttackShortRange',
                 {
@@ -127,9 +132,9 @@ class Entity {
 
     /**
      * Mob殺すよってクライアントに伝える
-     * @param {ctrl.Mob} mob
+     * @param {MobCtrl} mob
      */
-    killMob(mob:any) {
+    killMob(mob: MobCtrl) {
         var data = {entity: mob.model.toJSON()};
         this.io_.sockets.emit('notify:entity:mob:kill', data);
         _.each(mob.hateList, (hate:any) => {
@@ -140,9 +145,9 @@ class Entity {
     /**
      * mobのもつ経験値をplayerに与える
      * @param {string} playerId
-     * @param {ctrl.Mob} mob
+     * @param {MobCtrl} mob
      */
-    addExp(playerId, mob:any) {
+    addExp(playerId: string, mob: MobCtrl) {
         var player:any = EntitiesStore.getInstance().getPlayerById(playerId);
         if (player) {
             player.addExp(mob.model.exp);
@@ -158,17 +163,17 @@ class Entity {
 
     /**
      * レベルアップしたよってクライアントに伝える
-     * @param {model.Player} playerModel
+     * @param {PlayerModel} playerModel
      */
-    levelUp(playerModel) {
+    levelUp(playerModel: PlayerModel) {
         this.io_.sockets.emit('notify:entity:player:levelup', playerModel);
     }
 
     /**
      * player死んだよってクライアントに伝える
-     * @param player
+     * @param {PlayerCtrl} player
      */
-    killPlayer(player) {
+    killPlayer(player:PlayerCtrl) {
         var data = {entity: player.model.toJSON()};
         this.io_.sockets.emit('notify:entity:player:kill', data);
     }

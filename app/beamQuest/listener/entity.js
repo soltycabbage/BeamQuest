@@ -55,7 +55,7 @@ var Entity = (function () {
 
     /**
     * mobがPOPするよってクライアントに伝える
-    * @param {ctrl.Mob} mob
+    * @param {MobCtrl} mob
     */
     Entity.prototype.popMob = function (mob) {
         if (this.io_) {
@@ -66,7 +66,7 @@ var Entity = (function () {
 
     /**
     * mobが動いたよってクライアントに伝える
-    * @param {ctrl.Mob} mob
+    * @param {MobCtrl} mob
     */
     Entity.prototype.moveMob = function (mob) {
         if (this.io_) {
@@ -76,8 +76,8 @@ var Entity = (function () {
 
     /**
     * mobがタゲったよってクライアントに伝える
-    * @param {ctrl.Mob} mob
-    * @param {ctrl.Entity} entity
+    * @param {MobCtrl} mob
+    * @param {EntityCtrl} entity
     */
     Entity.prototype.targetTo = function (mob, entity) {
         var data = { mob: mob.model.toJSON(), target: entity.model.toJSON() };
@@ -87,8 +87,8 @@ var Entity = (function () {
     /**
     * mobが近接攻撃の構えを取ったよってクライアントに伝える
     * @param {string} mobId
-    * @param {model.Position} srcPos
-    * @param {model.Position} destPos
+    * @param {PositionModel} srcPos
+    * @param {PositionModel} destPos
     * @param {number} range 射程距離(px)
     * @param {number} castTime 発動までの時間(msec)
     */
@@ -126,7 +126,7 @@ var Entity = (function () {
 
     /**
     * Mob殺すよってクライアントに伝える
-    * @param {ctrl.Mob} mob
+    * @param {MobCtrl} mob
     */
     Entity.prototype.killMob = function (mob) {
         var _this = this;
@@ -140,7 +140,7 @@ var Entity = (function () {
     /**
     * mobのもつ経験値をplayerに与える
     * @param {string} playerId
-    * @param {ctrl.Mob} mob
+    * @param {MobCtrl} mob
     */
     Entity.prototype.addExp = function (playerId, mob) {
         var player = EntitiesStore.getInstance().getPlayerById(playerId);
@@ -158,7 +158,7 @@ var Entity = (function () {
 
     /**
     * レベルアップしたよってクライアントに伝える
-    * @param {model.Player} playerModel
+    * @param playerModel
     */
     Entity.prototype.levelUp = function (playerModel) {
         this.io_.sockets.emit('notify:entity:player:levelup', playerModel);
