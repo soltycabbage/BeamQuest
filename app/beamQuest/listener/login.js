@@ -86,7 +86,7 @@ function listen(socket, io) {
     function addLoginUser_(player) {
         var model = player.model;
         var position = model.position;
-        Entities.getInstance().addPlayer(position.mapId, player);
+        Entities.getInstance().addPlayer(player);
         UserStore.getInstance().saveSessionData(socket.id, 'userId', player.model.id);
         UserStore.getInstance().saveSessionData(socket.id, 'mapId', player.model.position.mapId);
         player.scheduleUpdate();
@@ -95,7 +95,7 @@ function listen(socket, io) {
         // 接続が切れたらログアウト扱い
         socket.on('disconnect', function () {
             UserStore.getInstance().save(player);
-            Entities.getInstance().removePlayer(position.mapId, player);
+            Entities.getInstance().removePlayer(player);
             player.unscheduleUpdate();
             socket.broadcast.emit('notify:user:logout', { 'userId': player.model.id });
         });

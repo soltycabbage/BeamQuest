@@ -2,8 +2,6 @@
 var EntityListener = require('beamQuest/listener/entity');
 var MapStore = require('beamQuest/store/maps');
 
-var deferred = require('deferred');
-
 /**
 * ゲーム内のEntityの状態を保持しておくクラス
 */
@@ -14,8 +12,8 @@ var EntitiesStore = (function () {
         }
         EntitiesStore.instance_ = this;
 
-        this.mapPlayers_ = {};
-        this.mapMobs_ = {};
+        this.mapPlayers_ = [];
+        this.mapMobs_ = [];
         this.mapNpcs_ = {};
     }
     EntitiesStore.getInstance = function () {
@@ -25,47 +23,34 @@ var EntitiesStore = (function () {
         return EntitiesStore.instance_;
     };
 
-    /**
-    * @return {deferred.promise}
-    */
     EntitiesStore.prototype.init = function () {
-        var _this = this;
-        var d = deferred();
-        _.each(MapStore.getInstance().getMaps(), function (map) {
-            _this.mapPlayers_[map.model.id] = {};
-            _this.mapMobs_[map.model.id] = {};
-            _this.mapNpcs_[map.model.id] = {};
-        });
-        return d.resolve();
+        this.mapPlayers_ = [];
+        this.mapMobs_ = [];
+        this.mapNpcs_ = [];
     };
 
     /**
-    * @param {number} mapId
     * @param {ctrl.Player} player
     */
-    EntitiesStore.prototype.addPlayer = function (mapId, player) {
-        var players = this.mapPlayers_[mapId] || [], isAdd = !_.contains(players, player.model.id);
+    EntitiesStore.prototype.addPlayer = function (player) {
+        var isAdd = !_.contains(this.mapPlayers_, player.model.id);
 
         if (isAdd) {
-            players[player.model.id] = player;
+            this.mapPlayers_[player.model.id] = player;
         }
-        logger.info('player add [mapId=' + mapId + ',playerId=' + player.model.id + ',isAdd=' + isAdd + ']');
+        logger.info('player add [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ',isAdd=' + isAdd + ']');
     };
 
     /**
-    * @param {number} mapId
     * @param {string} playerId
     * @return {ctrl.Player}
     */
-    EntitiesStore.prototype.getPlayerById = function (mapId, playerId) {
-        if (this.mapPlayers_[mapId]) {
-            return this.mapPlayers_[mapId][playerId] || null;
-        }
-        return null;
+    EntitiesStore.prototype.getPlayerById = function (playerId) {
+        return this.mapPlayers_[playerId] || null;
     };
 
     /**
-    * @return {Object}
+    * @return PlayerCtrl[]
     */
     EntitiesStore.prototype.getPlayers = function () {
         return this.mapPlayers_;
@@ -73,24 +58,23 @@ var EntitiesStore = (function () {
 
     /**
     * @param {number} mapId
-    * @return {Array.<ctrl.Player>}
+    * @return {PlayerCtrl[]}
     */
     EntitiesStore.prototype.getPlayersByMapId = function (mapId) {
-        return this.mapPlayers_[mapId];
+        return _.filter(this.mapPlayers_, function (player) {
+            return player.model.mapId === mapId;
+        });
     };
 
     /**
-    * @param {number} mapId
     * @param {ctrl.Player} player
     */
-    EntitiesStore.prototype.removePlayer = function (mapId, player) {
-        var players = this.mapPlayers_[mapId] || [];
-
-        if (players[player.model.id]) {
-            delete players[player.model.id];
-            logger.info('player remove [mapId=' + mapId + ',playerId=' + player.model.id + ']');
+    EntitiesStore.prototype.removePlayer = function (player) {
+        if (this.mapPlayers_[player.model.id]) {
+            delete this.mapPlayers_[player.model.id];
+            logger.info('player remove [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ']');
         } else {
-            logger.warn('cannot remove player [mapId=' + mapId + ',playerId=' + player.model.id + ']');
+            logger.warn('cannot remove player [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ']');
         }
     };
 
@@ -99,9 +83,8 @@ var EntitiesStore = (function () {
     * @param {ctrl.Mob} mob
     */
     EntitiesStore.prototype.addMob = function (map, mob) {
-        var mobs = this.mapMobs_[map.id] || [];
-        if (!_.contains(mobs, mob.model.id)) {
-            mobs[mob.model.id] = mob;
+        if (!_.contains(this.mapMobs_, mob.model.id)) {
+            this.mapMobs_[mob.model.id] = mob;
             map.mobCount++;
             EntityListener.getInstance().popMob(mob);
         }
@@ -120,53 +103,37 @@ var EntitiesStore = (function () {
     };
 
     /**
-    * @return {Object}
+    * @return {MobCtrl[]}
     */
     EntitiesStore.prototype.getMobs = function () {
         return this.mapMobs_;
     };
 
     /**
-    * @param {number} mapId
-    * @return {Array.<ctrl.Mob>}
-    */
-    EntitiesStore.prototype.getMobsByMapId = function (mapId) {
-        return this.mapMobs_[mapId];
-    };
-
-    /**
-    * @param {number mapId
     * @param {string} mobId
     * @return {ctrl.Mob}
     */
-    EntitiesStore.prototype.getMobById = function (mapId, mobId) {
-        if (this.mapMobs_[mapId]) {
-            return this.mapMobs_[mapId][mobId] || null;
-        }
-        return null;
+    EntitiesStore.prototype.getMobById = function (mobId) {
+        return this.mapMobs_[mobId] || null;
     };
 
     /**
-    * @param {number} mapId
     * @return {Object}
     */
-    EntitiesStore.prototype.getPlayersJSON = function (mapId) {
+    EntitiesStore.prototype.getPlayersJSON = function () {
         var json = {};
-        var players = this.mapPlayers_[mapId] || [];
-        _.each(players, function (player, key) {
+        _.each(this.mapPlayers_, function (player, key) {
             json[key] = player.model.toJSON();
         });
         return json;
     };
 
     /**
-    * @param {number} mapId
     * @return {Object}
     */
-    EntitiesStore.prototype.getMobsJSON = function (mapId) {
+    EntitiesStore.prototype.getMobsJSON = function () {
         var json = {};
-        var mobs = this.mapMobs_[mapId] || [];
-        _.each(mobs, function (mob, key) {
+        _.each(this.mapMobs_, function (mob, key) {
             json[key] = mob.model.toJSON();
         });
         return json;
@@ -176,7 +143,7 @@ var EntitiesStore = (function () {
     * @param {Object.{userId, mapId, x, y}} data
     */
     EntitiesStore.prototype.updatePlayerPosition = function (data) {
-        var player = this.mapPlayers_[data.mapId][data.userId];
+        var player = this.mapPlayers_[data.userId];
         if (player) {
             player.model.position.mapId = data.mapId;
             player.model.position.x = data.x;
@@ -191,8 +158,7 @@ var EntitiesStore = (function () {
     * @return {Array.<ctrl.Entity>}
     */
     EntitiesStore.prototype.getMobsByRadius = function (targetPos, r) {
-        var mobs = this.getMobsByMapId(targetPos.mapId);
-        return this.getEntitiesStoreByRadiusInternal_(targetPos, r, mobs);
+        return this.getEntitiesStoreByRadiusInternal_(targetPos, r, this.getMobs());
     };
 
     /**
@@ -207,8 +173,9 @@ var EntitiesStore = (function () {
     };
 
     /**
-    * @param {Array.<ctrl.Entity>} entities
+    * @param {Position} targetPos
     * @param {number} r
+    * @param {MobCtrl[]} entities
     * @return {Array.<ctrl.Entity>}
     */
     EntitiesStore.prototype.getEntitiesStoreByRadiusInternal_ = function (targetPos, r, entities) {

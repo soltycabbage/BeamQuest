@@ -34,7 +34,7 @@ var Skill = (function () {
         var _this = this;
         if (this.io_ && data && data.skillId && data.position) {
             var mapId = UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', function (err, mapId) {
-                var player = EntityStore.getInstance().getPlayerById(mapId, data.userId);
+                var player = EntityStore.getInstance().getPlayerById(data.userId);
                 if (!player) {
                     return;
                 }

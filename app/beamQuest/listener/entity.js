@@ -143,8 +143,7 @@ var Entity = (function () {
     * @param {ctrl.Mob} mob
     */
     Entity.prototype.addExp = function (playerId, mob) {
-        var mapId = mob.model.position.mapId;
-        var player = EntitiesStore.getInstance().getPlayerById(mapId, playerId);
+        var player = EntitiesStore.getInstance().getPlayerById(playerId);
         if (player) {
             player.addExp(mob.model.exp);
             player.model.socket.emit('user:status:exp:update', {
@@ -180,9 +179,8 @@ var Entity = (function () {
     */
     Entity.prototype.handleRespawn = function (data) {
         if (data) {
-            var mapId = data.position.mapId;
             var playerId = data.id;
-            var player = EntitiesStore.getInstance().getPlayerById(mapId, playerId);
+            var player = EntitiesStore.getInstance().getPlayerById(playerId);
             if (player) {
                 player.respawn();
                 var d = { entity: player.model.toJSON() };
@@ -198,7 +196,7 @@ var Entity = (function () {
     */
     Entity.prototype.handleGetStatus_ = function (data) {
         if (data) {
-            var player = EntitiesStore.getInstance().getPlayerById(data.mapId, data.entityId);
+            var player = EntitiesStore.getInstance().getPlayerById(data.entityId);
             if (player) {
                 this.socket_.emit('user:status:receive', player.model.toJSON());
             }

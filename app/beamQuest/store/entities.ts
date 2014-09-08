@@ -6,6 +6,7 @@ import MapModel = require('beamQuest/model/fieldMap');
 import PositionModel = require('beamQuest/model/position');
 import EntityCtrl = require('beamQuest/ctrl/entity');
 import PlayerCtrl = require('beamQuest/ctrl/player');
+import MobCtrl = require('beamQuest/ctrl/mob/mob');
 import deferred = require('deferred');
 
 declare var logger: any;
@@ -28,26 +29,16 @@ class EntitiesStore {
         }
         EntitiesStore.instance_ = this;
 
-        this.mapPlayers_ = {};
-        this.mapMobs_ = {};
+        this.mapPlayers_ = [];
+        this.mapMobs_ = [];
         this.mapNpcs_ = {};
     }
 
-    /**
-     * マップごとのプレイヤー一覧
-     * @typedef {
-     *    mapId: {
-     *       userId: ctrl.Player
-     *    }
-     * }
-     */
-    private mapPlayers_;
+    /** マップごとのプレイヤー一覧 */
+    private mapPlayers_:PlayerCtrl[];
 
-    /**
-     * マップごとのmob一覧
-     * @type {Object}
-     */
-    private mapMobs_;
+    /** マップごとのmob一覧 */
+    private mapMobs_:MobCtrl[];
 
     /**
      * マップごとのnpc一覧
@@ -55,48 +46,34 @@ class EntitiesStore {
      */
     private mapNpcs_;
 
-    /**
-     * @return {deferred.promise}
-     */
     init() {
-        var d = deferred();
-        _.each(MapStore.getInstance().getMaps(), (map:any) => {
-            this.mapPlayers_[map.model.id] = {};
-            this.mapMobs_[map.model.id] = {};
-            this.mapNpcs_[map.model.id] = {};
-
-        });
-        return d.resolve();
+        this.mapPlayers_ = [];
+        this.mapMobs_ = [];
+        this.mapNpcs_ = [];
     }
 
     /**
-     * @param {number} mapId
      * @param {ctrl.Player} player
      */
-    addPlayer(mapId, player:any) {
-        var players = this.mapPlayers_[mapId] || [],
-            isAdd = !_.contains(players, player.model.id);
+    addPlayer(player:any) {
+        var isAdd = !_.contains(this.mapPlayers_, player.model.id);
 
         if (isAdd) {
-            players[player.model.id] = player;
+            this.mapPlayers_[player.model.id] = player;
         }
-        logger.info('player add [mapId=' + mapId + ',playerId=' + player.model.id + ',isAdd=' + isAdd + ']');
+        logger.info('player add [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ',isAdd=' + isAdd + ']');
     }
 
     /**
-     * @param {number} mapId
      * @param {string} playerId
      * @return {ctrl.Player}
      */
-    getPlayerById(mapId, playerId) : PlayerCtrl {
-        if (this.mapPlayers_[mapId]) {
-            return this.mapPlayers_[mapId][playerId] || null;
-        }
-        return null;
+    getPlayerById(playerId) : PlayerCtrl {
+        return this.mapPlayers_[playerId] || null;
     }
 
     /**
-     * @return {Object}
+     * @return PlayerCtrl[]
      */
     getPlayers() {
         return this.mapPlayers_;
@@ -104,24 +81,24 @@ class EntitiesStore {
 
     /**
      * @param {number} mapId
-     * @return {Array.<ctrl.Player>}
+     * @return {PlayerCtrl[]}
      */
     getPlayersByMapId(mapId:number) {
-        return this.mapPlayers_[mapId];
+        return _.filter(this.mapPlayers_, (player:PlayerCtrl) => {
+            return player.model.mapId === mapId;
+        });
     }
 
     /**
-     * @param {number} mapId
      * @param {ctrl.Player} player
      */
-    removePlayer(mapId:number, player:any) {
-        var players = this.mapPlayers_[mapId] || [];
+    removePlayer(player:any) {
 
-        if (players[player.model.id]) {
-            delete players[player.model.id];
-            logger.info('player remove [mapId=' + mapId + ',playerId=' + player.model.id + ']');
+        if (this.mapPlayers_[player.model.id]) {
+            delete this.mapPlayers_[player.model.id];
+            logger.info('player remove [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ']');
         } else {
-            logger.warn('cannot remove player [mapId=' + mapId + ',playerId=' + player.model.id + ']');
+            logger.warn('cannot remove player [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ']');
         }
     }
 
@@ -130,9 +107,8 @@ class EntitiesStore {
      * @param {ctrl.Mob} mob
      */
     addMob(map:MapModel, mob:any) {
-        var mobs = this.mapMobs_[map.id] || [];
-        if (!_.contains(mobs, mob.model.id)) {
-            mobs[mob.model.id] = mob;
+        if (!_.contains(this.mapMobs_, mob.model.id)) {
+            this.mapMobs_[mob.model.id] = mob;
             map.mobCount++;
             EntityListener.getInstance().popMob(mob);
         }
@@ -151,40 +127,26 @@ class EntitiesStore {
     }
 
     /**
-     * @return {Object}
+     * @return {MobCtrl[]}
      */
     getMobs() {
         return this.mapMobs_;
     }
 
     /**
-     * @param {number} mapId
-     * @return {Array.<ctrl.Mob>}
-     */
-     getMobsByMapId(mapId) {
-        return this.mapMobs_[mapId];
-    }
-
-    /**
-     * @param {number mapId
      * @param {string} mobId
      * @return {ctrl.Mob}
      */
-    getMobById(mapId, mobId) {
-        if (this.mapMobs_[mapId]) {
-            return this.mapMobs_[mapId][mobId] || null;
-        }
-        return null;
+    getMobById(mobId) {
+        return this.mapMobs_[mobId] || null;
     }
 
     /**
-     * @param {number} mapId
      * @return {Object}
      */
-    getPlayersJSON(mapId:any) {
+    getPlayersJSON() {
         var json = {};
-        var players = this.mapPlayers_[mapId] || [];
-        _.each(players, (player:any, key) => {
+        _.each(this.mapPlayers_, (player:PlayerCtrl, key) => {
             json[key] = player.model.toJSON();
         });
         return json;
@@ -192,13 +154,11 @@ class EntitiesStore {
 
 
     /**
-     * @param {number} mapId
      * @return {Object}
      */
-    getMobsJSON(mapId:number) {
+    getMobsJSON() {
         var json = {};
-        var mobs = this.mapMobs_[mapId] || [];
-        _.each(mobs, (mob:any, key) => {
+        _.each(this.mapMobs_, (mob:any, key) => {
             json[key] = mob.model.toJSON();
         });
         return json;
@@ -208,7 +168,7 @@ class EntitiesStore {
      * @param {Object.{userId, mapId, x, y}} data
      */
     updatePlayerPosition(data) {
-        var player = this.mapPlayers_[data.mapId][data.userId];
+        var player = this.mapPlayers_[data.userId];
         if (player) {
             player.model.position.mapId = data.mapId;
             player.model.position.x = data.x;
@@ -223,8 +183,7 @@ class EntitiesStore {
      * @return {Array.<ctrl.Entity>}
      */
     getMobsByRadius(targetPos:PositionModel, r): EntityCtrl[] {
-        var mobs:any = this.getMobsByMapId(targetPos.mapId);
-        return this.getEntitiesStoreByRadiusInternal_(targetPos, r, mobs);
+        return this.getEntitiesStoreByRadiusInternal_(targetPos, r, this.getMobs());
     }
 
     /**
@@ -239,11 +198,12 @@ class EntitiesStore {
     }
 
     /**
-     * @param {Array.<ctrl.Entity>} entities
+     * @param {Position} targetPos
      * @param {number} r
+     * @param {MobCtrl[]} entities
      * @return {Array.<ctrl.Entity>}
      */
-    private getEntitiesStoreByRadiusInternal_(targetPos, r, entities): EntityCtrl[] {
+    private getEntitiesStoreByRadiusInternal_(targetPos, r, entities:MobCtrl[]): EntityCtrl[] {
         var result = [];
         var r2 = Math.pow(r, 2);
 

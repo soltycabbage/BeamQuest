@@ -57,7 +57,7 @@ var Item = (function () {
     Item.prototype.handlePickItem_ = function (data) {
         if (this.io_ && data && data.mapId && data.pickerId && data.dropId) {
             var map = MapStore.getInstance().getMapById(data.mapId);
-            var picker = EntityStore.getInstance().getPlayerById(data.mapId, data.pickerId);
+            var picker = EntityStore.getInstance().getPlayerById(data.pickerId);
             if (map && picker) {
                 var dropItem = map.model.dropItems[data.dropId];
                 if (dropItem) {

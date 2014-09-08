@@ -40,7 +40,7 @@ var Mob = (function (_super) {
     Mob.prototype.update = function () {
         if (!_.isEmpty(this.hateList)) {
             var targetId = this.hateList[0].entityId;
-            var targetEntity = EntityStore.getInstance().getPlayerById(this.model.position.mapId, targetId);
+            var targetEntity = EntityStore.getInstance().getPlayerById(targetId);
             if (targetEntity && targetEntity.model.isDeath) {
                 this.hateList.shift();
                 if (_.isEmpty(this.hateList) && this.startPos) {
@@ -127,7 +127,7 @@ var Mob = (function (_super) {
     * 現在の位置情報を更新する
     */
     Mob.prototype.updatePosition = function () {
-        var entity = EntityStore.getInstance().getMobById(this.model.position.mapId, this.model.id);
+        var entity = EntityStore.getInstance().getMobById(this.model.id);
         if (entity) {
             entity.model.position.x = this.model.position.x;
             entity.model.position.y = this.model.position.y;
@@ -197,8 +197,8 @@ var Mob = (function (_super) {
     };
 
     /** @override */
-    Mob.prototype.beamHit = function (beamType, shooterId, mapId) {
-        var shooter = EntityStore.getInstance().getPlayerById(mapId, shooterId);
+    Mob.prototype.beamHit = function (beamType, shooterId) {
+        var shooter = EntityStore.getInstance().getPlayerById(shooterId);
         if (this.isCancelAttacking_ || !shooter) {
             this.model.addHp(0);
             return;
