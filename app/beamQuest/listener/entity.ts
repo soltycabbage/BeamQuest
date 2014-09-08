@@ -31,9 +31,9 @@ class Entity {
         this.socket_ = socket;
         this.io_ = io;
 
-        this.socket_.on('user:position:update', this.handlePlayerMove_.bind(this, this.socket_));
-        this.socket_.on('user:respawn', this.handleRespawn.bind(this));
-        this.socket_.on('user:status:get', this.handleGetStatus_.bind(this, this.socket_));
+        this.socket_.on('user:position:update', (data: any) => this.handlePlayerMove_(data));
+        this.socket_.on('user:respawn', (data: any) => this.handleRespawn(data));
+        this.socket_.on('user:status:get', (data: any) => this.handleGetStatus_(data));
 
         EntitiesStore = require('beamQuest/store/entities');
     }
@@ -42,14 +42,14 @@ class Entity {
      * プレイヤーの移動
      * @param {Object} data
      */
-    private handlePlayerMove_(socket, data:any) {
-        UserStore.getInstance().getSessionData(socket.id, 'mapId', (err, mapId) => {
+    private handlePlayerMove_(data:any) {
+        UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', (err, mapId) => {
             data.mapId = mapId;
 
             // プレイヤーが移動したら位置情報が送られてくる
             EntitiesStore.getInstance().updatePlayerPosition(data);
             // 自分以外の全プレイヤーにブロードキャスト
-            socket.broadcast.emit('notify:user:move', data);
+            this.socket_.broadcast.emit('notify:user:move', data);
         })
     }
 
@@ -193,15 +193,14 @@ class Entity {
 
     /**
      * entityのステータスを返す
-     * @param {io.socket} socket
      * @param {Object} data
      * @private
      */
-    handleGetStatus_(socket:any, data:any) {
+    handleGetStatus_(data:any) {
         if (data) {
             var player:any = EntitiesStore.getInstance().getPlayerById(data.mapId, data.entityId);
             if (player) {
-                socket.emit('user:status:receive', player.model.toJSON());
+                this.socket_.emit('user:status:receive', player.model.toJSON());
             }
         }
     }

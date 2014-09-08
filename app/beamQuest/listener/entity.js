@@ -19,12 +19,19 @@ var Entity = (function () {
     };
 
     Entity.prototype.listen = function (socket, io) {
+        var _this = this;
         this.socket_ = socket;
         this.io_ = io;
 
-        this.socket_.on('user:position:update', this.handlePlayerMove_.bind(this, this.socket_));
-        this.socket_.on('user:respawn', this.handleRespawn.bind(this));
-        this.socket_.on('user:status:get', this.handleGetStatus_.bind(this, this.socket_));
+        this.socket_.on('user:position:update', function (data) {
+            return _this.handlePlayerMove_(data);
+        });
+        this.socket_.on('user:respawn', function (data) {
+            return _this.handleRespawn(data);
+        });
+        this.socket_.on('user:status:get', function (data) {
+            return _this.handleGetStatus_(data);
+        });
 
         EntitiesStore = require('beamQuest/store/entities');
     };
@@ -33,15 +40,16 @@ var Entity = (function () {
     * プレイヤーの移動
     * @param {Object} data
     */
-    Entity.prototype.handlePlayerMove_ = function (socket, data) {
-        UserStore.getInstance().getSessionData(socket.id, 'mapId', function (err, mapId) {
+    Entity.prototype.handlePlayerMove_ = function (data) {
+        var _this = this;
+        UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', function (err, mapId) {
             data.mapId = mapId;
 
             // プレイヤーが移動したら位置情報が送られてくる
             EntitiesStore.getInstance().updatePlayerPosition(data);
 
             // 自分以外の全プレイヤーにブロードキャスト
-            socket.broadcast.emit('notify:user:move', data);
+            _this.socket_.broadcast.emit('notify:user:move', data);
         });
     };
 
@@ -185,15 +193,14 @@ var Entity = (function () {
 
     /**
     * entityのステータスを返す
-    * @param {io.socket} socket
     * @param {Object} data
     * @private
     */
-    Entity.prototype.handleGetStatus_ = function (socket, data) {
+    Entity.prototype.handleGetStatus_ = function (data) {
         if (data) {
             var player = EntitiesStore.getInstance().getPlayerById(data.mapId, data.entityId);
             if (player) {
-                socket.emit('user:status:receive', player.model.toJSON());
+                this.socket_.emit('user:status:receive', player.model.toJSON());
             }
         }
     };
