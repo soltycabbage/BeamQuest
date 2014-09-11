@@ -19,6 +19,11 @@ module.exports = function(grunt) {
                 tasks: ['jshint']
             },
 
+            backScripts: {
+                files: ['app/beamQuest/**/*.ts'],
+                tasks: ['ts:build']
+            },
+
             options: {
                 nospawn: true
             }
