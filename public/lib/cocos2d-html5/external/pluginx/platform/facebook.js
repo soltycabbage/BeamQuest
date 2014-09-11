@@ -38,12 +38,12 @@ plugin.extend('facebook', {
     userInfo: null,
 
     HttpMethod: {
-        'Get': 'get',
-        'Post': 'post',
-        'Delete': 'delete'
+        'GET': 'get',
+        'POST': 'post',
+        'DELETE': 'delete'
     },
 
-    CodeSucceed: 0,
+    CODE_SUCCEED: 0,
 
     /**
      * Initialize Facebook sdk
@@ -86,25 +86,42 @@ plugin.extend('facebook', {
     /**
      * Login to facebook
      * @param {Function} callback
+     * @param {Array} permissions
      * @example
      * //example
      * plugin.FacebookAgent.login();
      */
-    login: function(callback){
+    login: function(permissions,callback){
         var self = this;
+        if(typeof permissions == 'function'){
+            callback = permissions;
+            permissions = [];
+        }
+        if(permissions.every(function(item){
+            if(item != 'publish_actions')
+                return true;
+        })){
+            permissions.push("publish_actions");
+        }
+        var permissionsStr = permissions.join(',');
         FB.login(function(response) {
             if (response['authResponse']) {
                 //save user info
                 self.userInfo = response['authResponse'];
+                var permissList = response['authResponse']['grantedScopes'].split(",");
                 typeof callback === 'function' && callback(0, {
-                    accessToken: response['authResponse']['accessToken']
+                    accessToken: response['authResponse']['accessToken'],
+                    permissions: permissList
                 });
             } else {
                 typeof callback === 'function' && callback(response['error_code'] || 1, {
                     error_message: "unknown"
                 });
             }
-        }, { scope: 'publish_actions' });
+        }, {
+            scope: permissionsStr,
+            return_scopes: true
+        });
     },
 
     /**
@@ -152,7 +169,7 @@ plugin.extend('facebook', {
             if(response['authResponse']){
                 // user is now logged out
                 self.userInfo = {};
-                typeof callback === 'function' && callback(0, {});
+                typeof callback === 'function' && callback(0, {"isLoggedIn" : false});
             }else{
                 typeof callback === 'function' && callback(response['error_code'] || 1, {
                     error_message: response['error_message'] || "Unknown"
@@ -163,6 +180,7 @@ plugin.extend('facebook', {
 
     /**
      * Acquiring new permissions
+     * @deprecated since v3.0
      * @param permissions
      * @param callback
      * @example
@@ -215,6 +233,7 @@ plugin.extend('facebook', {
                     self.userInfo = response['authResponse'];
                     callback(0, {
                         accessToken: response['authResponse']['accessToken']
+
                     });
                 }else{
                     callback(response['error_code'] || 1, {
@@ -310,16 +329,11 @@ plugin.extend('facebook', {
             }else{
                 return;
             }
-        }else{
-            if(!info['href']){
-                return;
-            }
         }
 
         if(
             info['method'] != 'share_open_graph' &&
-            info['method'] != 'share_link' &&
-            info['method'] != 'apprequests'
+            info['method'] != 'share_link'
             ){
             cc.log('web is not supported what this it method');
             return;
@@ -350,7 +364,7 @@ plugin.extend('facebook', {
      * @param {Object} params
      * @param {Function} callback
      */
-    request: function(path, httpmethod, params, callback){
+    api: function(path, httpmethod, params, callback){
         if(typeof params === 'function'){
             callback = params;
             params = {};
@@ -414,5 +428,43 @@ plugin.extend('facebook', {
                 callback(0, response);
             }
         })
+    },
+
+    /**
+     * Various pop
+     * @param info
+     * @param callback
+     */
+    appRequest: function(info, callback){
+        if(!info){
+            return;
+        }
+
+        info['method'] = "apprequests";
+        delete info['dialog'];
+
+        if(
+            info['method'] != 'apprequests'
+            ){
+            cc.log('web is not supported what this it method');
+            return;
+        }
+
+        FB.ui(info,
+            function(response) {
+                if (response) {
+                    if(response['post_id'])
+                        typeof callback === 'function' && callback(0, {
+                            didComplete: true,
+                            post_id: response['post_id']
+                        });
+                    else
+                        typeof callback === 'function' && callback(0, response);
+                } else {
+                    typeof callback === 'function' && callback(1, {
+                        error_message:"Unknow error"
+                    });
+                }
+            });
     }
 });

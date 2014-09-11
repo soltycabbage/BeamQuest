@@ -30,6 +30,11 @@
 cc.Touches = [];
 cc.TouchesIntergerDict = {};
 
+cc.DENSITYDPI_DEVICE = "device-dpi";
+cc.DENSITYDPI_HIGH = "high-dpi";
+cc.DENSITYDPI_MEDIUM = "medium-dpi";
+cc.DENSITYDPI_LOW = "low-dpi";
+
 /**
  * cc.view is the singleton object which represents the game window.<br/>
  * It's main task include: <br/>
@@ -90,6 +95,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
     _frameZoomFactor: 1.0,
     __resizeWithBrowserSize: false,
     _isAdjustViewPort: true,
+    _targetDensityDPI: null,
 
     /**
      * Constructor of cc.EGLView
@@ -121,6 +127,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
 
         _t._hDC = cc._canvas;
         _t._hRC = cc._renderContext;
+        _t._targetDensityDPI = cc.DENSITYDPI_HIGH;
     },
 
     // Resize helper functions
@@ -133,6 +140,30 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
         }
         if (width > 0)
             this.setDesignResolutionSize(width, height, this._resolutionPolicy);
+    },
+
+    /**
+     * <p>
+     * Sets view's target-densitydpi for android mobile browser. it can be set to:           <br/>
+     *   1. cc.DENSITYDPI_DEVICE, value is "device-dpi"                                      <br/>
+     *   2. cc.DENSITYDPI_HIGH, value is "high-dpi"  (default value)                         <br/>
+     *   3. cc.DENSITYDPI_MEDIUM, value is "medium-dpi" (browser's default value)            <br/>
+     *   4. cc.DENSITYDPI_LOW, value is "low-dpi"                                            <br/>
+     *   5. Custom value, e.g: "480"                                                         <br/>
+     * </p>
+     * @param {String} densityDPI
+     */
+    setTargetDensityDPI: function(densityDPI){
+        this._targetDensityDPI = densityDPI;
+        this._setViewPortMeta();
+    },
+
+    /**
+     * Returns the current target-densitydpi value of cc.view.
+     * @returns {String}
+     */
+    getTargetDensityDPI: function(){
+        return this._targetDensityDPI;
     },
 
     /**
@@ -164,18 +195,30 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
      * this callback will be invoked before applying resolution policy, <br/>
      * so you can do any additional modifications within the callback.<br/>
      * Useful only on web.
-     * @param {Function} callback The callback function
+     * @param {Function|null} callback The callback function
      */
     setResizeCallback: function (callback) {
-        if (typeof callback == "function" || callback == null) {
+        if (cc.isFunction(callback) || callback == null) {
             this._resizeCallback = callback;
         }
     },
 
     _initFrameSize: function () {
         var locFrameSize = this._frameSize;
-        locFrameSize.width = this._frame.clientWidth;
-        locFrameSize.height = this._frame.clientHeight;
+        //To get the most likely for the actual display resolution data
+        var sWidth = Math.min(window.screen.availWidth, window.screen.width) * window.devicePixelRatio;
+        var sHeight = Math.min(window.screen.availHeight, window.screen.height) * window.devicePixelRatio;
+        //Calibration of the actual resolution may be smaller
+        if(cc.sys.isMobile && this._frame.clientWidth >= sWidth * 0.8){
+            locFrameSize.width = sWidth / window.devicePixelRatio;
+        }else{
+            locFrameSize.width = this._frame.clientWidth;
+        }
+        if(cc.sys.isMobile && this._frame.clientWidth >= sHeight * 0.8){
+            locFrameSize.height = sHeight / window.devicePixelRatio;
+        }else{
+            locFrameSize.height = this._frame.clientHeight;
+        }
     },
 
     // hack
@@ -188,38 +231,53 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
 
     _setViewPortMeta: function (width, height) {
         if (this._isAdjustViewPort) {
-	        var viewportMetas = {"user-scalable": "no", "maximum-scale": "1.0", "initial-scale": "1.0"}, elems = document.getElementsByName("viewport"), vp, content;
-            if (elems.length == 0) {
-                vp = cc.newElement("meta");
-                vp.name = "viewport";
-                vp.content = "";
-                document.head.appendChild(vp);
+            var vp = document.getElementById("cocosMetaElement");
+            if(vp){
+                document.head.removeChild(vp);
             }
-            else vp = elems[0];
 
-	        // For avoiding Android Firefox issue, to remove once firefox fixes its issue.
-	        if (cc.sys.isMobile && cc.sys.browserType == cc.sys.BROWSER_TYPE_FIREFOX) {
-		        vp.content = "initial-scale:1";
-		        return;
-	        }
+            var viewportMetas,
+                elems = document.getElementsByName("viewport"),
+                content;
 
-            content = vp.content;
+            vp = cc.newElement("meta");
+            vp.id = "cocosMetaElement";
+            vp.name = "viewport";
+            vp.content = "";
+
+            // For avoiding Android Firefox issue, to remove once firefox fixes its issue.
+            if (cc.sys.isMobile && cc.sys.browserType == cc.sys.BROWSER_TYPE_FIREFOX) {
+                viewportMetas = {"width": "device-width", "initial-scale": "1.0"};
+            }else{
+                viewportMetas = {"width": "device-width", "user-scalable": "no", "maximum-scale": "1.0", "initial-scale": "1.0"};
+            }
+            if(cc.sys.isMobile)
+                viewportMetas["target-densitydpi"] = this._targetDensityDPI;
+
+            content = (elems && elems.length>0) ? elems[0].content : "";
             for (var key in viewportMetas) {
                 var pattern = new RegExp(key);
+
                 if (!pattern.test(content)) {
-                    content += (content == "" ? "" : ",") + key + "=" + viewportMetas[key];
+                    content += "," + key + "=" + viewportMetas[key];
                 }
             }
-            /*
-            if(width<=320){
-                width = 321;
+            if(!elems && content != ""){
+                content = content.substr(1);
             }
-            if(height)
-                content ="height="+height+","+content;
-            if(width)
-                content ="width="+width+","+content;
-            */
+
+            /*
+             if(width<=320){
+             width = 321;
+             }
+             if(height)
+             content ="height="+height+","+content;
+             if(width)
+             content ="width="+width+","+content;
+             */
             vp.content = content;
+
+            document.head.appendChild(vp);
         }
     },
 
@@ -460,6 +518,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
             return;
         }
         var _t = this;
+        var previousPolicy = _t._resolutionPolicy;
         _t.setResolutionPolicy(resolutionPolicy);
         var policy = _t._resolutionPolicy;
         if (policy)
@@ -475,7 +534,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
             _t._setViewPortMeta(_t._frameSize.width, _t._frameSize.height);
         _t._initFrameSize();
         // No change
-        if (resolutionPolicy == _t._resolutionPolicy
+        if (previousPolicy == _t._resolutionPolicy
             && width == _t._originalDesignResolutionSize.width && height == _t._originalDesignResolutionSize.height
             && frameW == _t._frameSize.width && frameH == _t._frameSize.height)
             return;
@@ -497,8 +556,10 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
 
         // reset director's member variables to fit visible rect
         var director = cc.director;
-        cc.winSize.width = director._winSizeInPoints.width = _t._visibleRect.width;
-        cc.winSize.height = director._winSizeInPoints.height = _t._visibleRect.height;
+        director._winSizeInPoints.width = _t._designResolutionSize.width;
+        director._winSizeInPoints.height = _t._designResolutionSize.height;
+        cc.winSize.width = director._winSizeInPoints.width;
+        cc.winSize.height = director._winSizeInPoints.height;
 
         policy.postApply(_t);
 
@@ -934,13 +995,11 @@ cc.ContentStrategy = cc.Class.extend(/** @lends cc.ContentStrategy# */{
         apply: function (view, designedResolution) {
             var containerW = cc._canvas.width, containerH = cc._canvas.height,
                 designW = designedResolution.width, designH = designedResolution.height,
-                scaleX = containerW / designW, scaleY = containerH / designH, scale,
-                contentW, contentH;
+                scaleX = containerW / designW, scaleY = containerH / designH, scale;
 
-            scaleX < scaleY ? (scale = scaleY, contentW = designW * scale, contentH = containerH)
-                : (scale = scaleX, contentW = containerW, contentH = designH * scale);
+            scaleX < scaleY ? ( scale = scaleY ): ( scale = scaleX );
 
-            return this._buildResult(containerW, containerH, contentW, contentH, scale, scale);
+            return this._buildResult(containerW, containerH, containerW, containerH, scale, scale);
         }
     });
 

@@ -1104,8 +1104,6 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @param {Number} Var  The arrival order.
      */
     setOrderOfArrival: function (Var) {
-        if(this.arrivalOrder == NaN)
-            debugger;
         this.arrivalOrder = Var;
     },
 
@@ -1256,26 +1254,21 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
         var child = child;
         var localZOrder = localZOrder === undefined ? child._localZOrder : localZOrder;
         var tag, name, setTag = false;
-        switch(typeof tag){
-            case 'undefined':
-                tag = undefined;
-                name = child._name;
-                break;
-            case 'string':
-                name = tag;
-                tag = undefined;
-                break;
-            case 'number':
-                setTag = true;
-                name = "";
-                break;
+        if(cc.isUndefined(tag)){
+            tag = undefined;
+            name = child._name;
+        } else if(cc.isString(tag)){
+            name = tag;
+            tag = undefined;
+        } else if(cc.isNumber(tag)){
+            setTag = true;
+            name = "";
         }
 
         cc.assert(child, cc._LogInfos.Node_addChild_3);
         cc.assert(child._parent === null, "child already added. It can't be added again");
 
         this._addChildHelper(child, localZOrder, tag, name, setTag);
-
     },
 
     _addChildHelper: function(child, localZOrder, tag, name, setTag){
@@ -1375,11 +1368,10 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
 
     /**
      * Removes all children from the container and do a cleanup all running actions depending on the cleanup parameter.
-     * @deprecated since v3.0, please use removeAllChildren() instead
      * @param {Boolean | null } cleanup
      */
     removeAllChildrenWithCleanup: function (cleanup) {
-        cc.log(cc._LogInfos.Node_removeAllChildrenWithCleanup);
+        //cc.log(cc._LogInfos.Node_removeAllChildrenWithCleanup);        //TODO It should be discuss in v3.0
         this.removeAllChildren(cleanup);
     },
 
@@ -1565,6 +1557,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
         this._running = false;
         this.pause();
         this._arrayMakeObjectsPerformSelector(this._children, cc.Node._StateCallbackType.onExit);
+        this.removeAllComponents();
     },
 
     // actions
@@ -2028,7 +2021,9 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @return {cc.Component} The component found
      */
     getComponent: function (name) {
-        return this._componentContainer.getComponent(name);
+        if(this._componentContainer)
+            return this._componentContainer.getComponent(name);
+        return null;
     },
 
     /**
@@ -2037,7 +2032,8 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @param {cc.Component} component
      */
     addComponent: function (component) {
-        this._componentContainer.add(component);
+        if(this._componentContainer)
+            this._componentContainer.add(component);
     },
 
     /**
@@ -2046,15 +2042,18 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @param {String|cc.Component} component
      */
     removeComponent: function (component) {
-        return this._componentContainer.remove(component);
+        if(this._componentContainer)
+            return this._componentContainer.remove(component);
+        return false;
     },
 
     /**
-     * Removes all components
+     * Removes all components of cc.Node, it called when cc.Node is exiting from stage.
      * @function
      */
     removeAllComponents: function () {
-        this._componentContainer.removeAll();
+        if(this._componentContainer)
+            this._componentContainer.removeAll();
     },
 
     grid: null,
@@ -2695,10 +2694,10 @@ if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
     _p = null;
 
 } else {
-    cc.assert(typeof cc._tmp.WebGLCCNode === "function", cc._LogInfos.MissingFile, "BaseNodesWebGL.js");
+    cc.assert(cc.isFunction(cc._tmp.WebGLCCNode), cc._LogInfos.MissingFile, "BaseNodesWebGL.js");
     cc._tmp.WebGLCCNode();
     delete cc._tmp.WebGLCCNode;
 }
-cc.assert(typeof cc._tmp.PrototypeCCNode === "function", cc._LogInfos.MissingFile, "BaseNodesPropertyDefine.js");
+cc.assert(cc.isFunction(cc._tmp.PrototypeCCNode), cc._LogInfos.MissingFile, "BaseNodesPropertyDefine.js");
 cc._tmp.PrototypeCCNode();
 delete cc._tmp.PrototypeCCNode;

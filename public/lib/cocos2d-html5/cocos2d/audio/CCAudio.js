@@ -426,7 +426,7 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.audioEngine# */{
 
     /**
      * Stop playing music.
-     * @param {Boolean} releaseData If release the music data or not.As default value is false.
+     * @param {Boolean} [releaseData] If release the music data or not.As default value is false.
      * @example
      * //example
      * cc.audioEngine.stopMusic();
@@ -773,9 +773,7 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.audioEngine# */{
 
 });
 
-
-if (!cc.sys._supportWebAudio && cc.sys._supportMultipleAudio < 0) {
-
+if (!cc.sys._supportWebAudio && !cc.sys._supportMultipleAudio) {
     cc.AudioEngineForSingle = cc.AudioEngine.extend({
         _waitingEffIds: [],
         _pausedEffIds: [],
@@ -1095,7 +1093,7 @@ cc._audioLoader = {
 
     _loadAudio: function (url, audio, cb, delFlag) {
         var _Audio;
-        if (typeof(window["cc"]) != "object" && cc.sys.browserType == "firefox")
+        if (!cc.isObject(window["cc"]) && cc.sys.browserType == "firefox")
             _Audio = Audio;                  //The WebAudio of FireFox  doesn't work after google closure compiler compiled with advanced mode
         else
             _Audio = (location.origin == "file://") ? Audio : (cc.WebAudio || Audio);
@@ -1119,13 +1117,22 @@ cc._audioLoader = {
                 this.removeEventListener(canplaythrough, arguments.callee, false);
                 this.removeEventListener(error, arguments.callee, false);
             }, false);
-            cc._addEventListener(audio, error, function () {
+
+            var audioCB = function () {
+                audio.removeEventListener("emptied", audioCB);
+                audio.removeEventListener(error, audioCB);
                 cb("load " + url + " failed");
                 if(delFlag){
                     this.removeEventListener(canplaythrough, arguments.callee, false);
                     this.removeEventListener(error, arguments.callee, false);
                 }
-            }, false);
+            };
+
+            if(cc.sys.browserType === cc.sys.BROWSER_TYPE_WECHAT){
+                cc._addEventListener(audio, "emptied", audioCB, false);
+            }
+
+            cc._addEventListener(audio, error, audioCB, false);
             audio.load();
         }
         return audio;
