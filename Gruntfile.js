@@ -3,6 +3,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-compass');
     grunt.loadNpmTasks('grunt-mocha-test');
+    grunt.loadNpmTasks('grunt-ts');
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -17,11 +18,6 @@ module.exports = function(grunt) {
                 files: ['public/**/*.js'],
                 tasks: ['jshint']
             },
-
-//            typeScripts: {
-//                files: ['app/beamQuest/**/*.ts'],
-//                tasks: ['tslint']
-//            },
 
             options: {
                 nospawn: true
@@ -47,6 +43,20 @@ module.exports = function(grunt) {
                     reporter: 'spec'
                 },
                 src: ['app/**/*Spec.js']
+            }
+        },
+
+        ts: {
+            build: {
+                src: ['app/beamQuest/**/*.ts'],
+                watch:'app/beamQuest/',
+                options: {
+                    target: 'es5',
+                    module: 'commonjs',
+                    sourceMap: true,
+                    declaration: false,
+                    removeComments: false
+                }
             }
         }
     });
