@@ -7,7 +7,7 @@
     "test": "NODE_ENV=test NODE_PATH=public:app grunt test"
   },
   "dependencies": {
-    "body-parser": "1.8.1",
+    "body-parser": "1.8.2",
     "config": "1.1.0",
     "deferred": "0.7.1",
     "ejs": "1.0.0",
