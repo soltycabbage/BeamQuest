@@ -22,15 +22,15 @@ exports.start = function(io) {
         var FieldMapCtrl = require('beamQuest/ctrl/fieldMap');
         var d = deferred();
         // NOTE マップ情報の保存先がまだ決まってないので直接書いてる。将来的にはファイルorDBから取ってくる？
-        var map = new mapModel({
-            id: 1,
-            name: 'しんじゅく', // TODO 最初の村の名前は? (iwg)
-            maxMobCount: 30,
-            mobCount: 0
-        });
 
         tmx.parseFile('public/res/map/map_village.tmx', function(err, m) {
             if (err) throw err;
+            var map = new mapModel({
+                id: 1,
+                name: 'しんじゅく', // TODO 最初の村の名前は? (iwg)
+                maxMobCount: 30,
+                mobCount: 0
+            });
             map.objTmx = m;
             map.size = {width: m.width * m.tileWidth, height: m.height * m.tileHeight};
             var mapCtrl = new FieldMapCtrl(map);
