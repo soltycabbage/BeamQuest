@@ -28,7 +28,7 @@ var Entity = (function (_super) {
         this.skills = this.data.skills || this.getPresetSkills();
     }
     Entity.prototype.setId = function (id) {
-        this.id = parseInt(id);
+        this.id = id;
     };
 
     Entity.prototype.setPosition = function (position) {
