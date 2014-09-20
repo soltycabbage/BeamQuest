@@ -4,4 +4,3 @@ dump.rdb
 .DS_Store
 .sass-cache
 .tscache
-config/default.js
