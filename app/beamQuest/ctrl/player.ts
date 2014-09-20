@@ -34,7 +34,7 @@ class Player extends EntityCtrl {
 
     setModel(model) {
         super.setModel(model);
-        this.model.on('addBp', this.handleAddBp_);
+        this.model.on('addBp', _.bind(this.handleAddBp_, this));
     }
 
     /**
