@@ -9,7 +9,7 @@ declare var bq: any;
  */
 class Entity extends Model {
     hash: string;
-    id: number;
+    id: string;
     type: any; // @type bq.Types.EntityType
     name: string;
     /** @var さいだいHP */
@@ -44,7 +44,7 @@ class Entity extends Model {
     }
 
     setId(id: string): void {
-        this.id = parseInt(id);
+        this.id = id;
     }
 
     setPosition(position: Position): void {

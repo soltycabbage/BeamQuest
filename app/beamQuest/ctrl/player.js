@@ -25,7 +25,7 @@ var Player = (function (_super) {
     }
     Player.prototype.setModel = function (model) {
         _super.prototype.setModel.call(this, model);
-        this.model.on('addBp', this.handleAddBp_);
+        this.model.on('addBp', _.bind(this.handleAddBp_, this));
     };
 
     /**
