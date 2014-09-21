@@ -106,7 +106,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     moveTo: function(pos, direction) {
         this.setOpacity(255);
         var moveActTag = 'entity_move_' + this.name;
-        var move = cc.MoveTo.create(0.2, pos);
+        var move = new cc.MoveTo(0.2, pos);
         if (this.currentState == bq.entity.EntityState.Mode.walking) {
             var runningMoveAct = this.getActionByTag(moveActTag);
             if (runningMoveAct) {
@@ -120,14 +120,24 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         } else {
             this.updateAnimation(bq.entity.EntityState.Mode.walking, direction);
             // 移動したあと急に止めるとアニメーションが不自然になるので少し遅延を入れる
-            var delay = cc.DelayTime.create(0.2);
-            var changeAnime = cc.CallFunc.create(function () {
+            var delay = new cc.DelayTime(0.2);
+            var changeAnime = new cc.CallFunc(function () {
                 this.updateAnimation(bq.entity.EntityState.Mode.stop, direction);
             }.bind(this));
 
-            var act = cc.Sequence.create([move, delay, changeAnime]);
+            var act = new cc.Sequence([move, delay, changeAnime]);
             this.runAction(act);
         }
+    },
+
+    /**
+     * 指定位置に回避行動をとる
+     * @param {cc.Point} pos
+     */
+    dougeTo: function(pos) {
+        bq.mapManager.normalizePos(pos);
+        var jumpTo = new cc.JumpTo(0.2, pos, 10, 1);
+        this.runAction(jumpTo);
     },
 
     /**
@@ -230,10 +240,9 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
      */
     updateAnimation: function(state, direction){
 
-        if ( state === null && direction === null ) {
-            return;
-        }
-        if ( state === this.currentState && direction === this.currentDirection ) {
+        if ((state === null && direction === null)
+            || (state === this.currentState && direction === this.currentDirection)
+            || (this.currentState === bq.entity.EntityState.Mode.douge)) {
             return;
         }
         state = state ? state : this.currentState;

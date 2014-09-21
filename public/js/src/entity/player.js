@@ -46,8 +46,12 @@ bq.entity.Player = bq.entity.Entity.extend({
         }
 
         var direction = this.inputHandler.getDirection();
+        // SHIFTキーを押した時に回避行動をとる
+        if (direction && this.currentState !== bq.entity.EntityState.Mode.douge && this.inputHandler.isShiftKeyPressed()) {
+            this.currentState = bq.entity.EntityState.Mode.douge;
+            this.dougeInternal_(direction);
 
-        if (direction) {
+        } else if (direction && this.currentState !== bq.entity.EntityState.Mode.douge) {
             // アニメーションを更新
             this.updateAnimation(bq.entity.EntityState.Mode.walking, direction);
 
@@ -77,6 +81,25 @@ bq.entity.Player = bq.entity.Entity.extend({
         if (mouseDown) {
             this.shoot(mouseDown.getLocation());
         }
+    },
+
+    /**
+     * 回避行動
+     * @param {bq.entity.EntityState.Direction} direction
+     * @private
+     */
+    dougeInternal_: function(direction) {
+        var currentPosition = this.getPosition();
+        var directionVector = this.getNormalizedDirectionVector(direction);
+        var moveDistance = cc.pMult(directionVector, 100);
+        var nextPos = cc.pAdd(currentPosition, moveDistance);
+
+        this.dougeTo(nextPos);
+        bq.camera.forceLook();
+
+        setTimeout(_.bind(function() {
+            this.currentState = bq.entity.EntityState.Mode.stop;
+        }, this), 500);
     },
 
     /**
@@ -314,7 +337,7 @@ bq.entity.Player.EventType = {
 bq.entity.Player.InputHandler = cc.Class.extend({
     downKeys_: [],        // 押されているキーのリスト
     mouseDownEvents_: [], // クリックイベント
-
+    isShiftKeyPressed_: false, // SHIFTキーが押されている間はTRUE
     ctor: function() {
         this.init();
     },
@@ -372,10 +395,16 @@ bq.entity.Player.InputHandler = cc.Class.extend({
         });
     },
 
-    /** @override */
+    /**
+     * 特定のキーに機能を持たせたい場合はここに記述していく
+     * @override
+     */
     onKeyDown: function(key) {
         this.addDownKey_(key);
         switch(key) {
+            case cc.KEY.shift:
+                this.isShiftKeyPressed_ = true;
+                break;
             case cc.KEY.i: // iキーでステータスウィンドウを開く
                 bq.Hud.getInstance().openStatusWindow(bq.player.name);
                 break;
@@ -400,6 +429,9 @@ bq.entity.Player.InputHandler = cc.Class.extend({
     /** @override */
     onKeyUp: function(key) {
         this.removeDownKey_(key);
+        if (key === cc.KEY.shift) {
+            this.isShiftKeyPressed_ = false;
+        }
     },
 
     /**
@@ -520,6 +552,14 @@ bq.entity.Player.InputHandler = cc.Class.extend({
             onKeyPressed: _.bind(this.onKeyDown, this),
             onKeyReleased: _.bind(this.onKeyUp, this)
         });
+    },
+
+    /**
+     * SHIFTキーが押されていたらTRUE
+     * @returns {boolean}
+     */
+    isShiftKeyPressed: function() {
+        return this.isShiftKeyPressed_;
     }
 
 });

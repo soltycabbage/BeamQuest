@@ -35,8 +35,11 @@ bq.MapManager = cc.Class.extend({
      * @returns {boolean}
      */
     canMoveOnMap:function (pos) {
+        var mapSizeX = this.tileMap.getTileSize().width * this.tileMap.getMapSize().width;
+        var mapSizeY = this.tileMap.getTileSize().height * this.tileMap.getMapSize().height;
+
         // 画面外に出ようとしてたら問答無用でfalse
-        if (pos.x < 0 || pos.y < 0) {
+        if (pos.x < 0 || pos.y < 0 || pos.x > mapSizeX || pos.y > mapSizeY) {
             return false;
         }
 
@@ -46,15 +49,25 @@ bq.MapManager = cc.Class.extend({
                 layer.getProperties()['no_enterable'] === 'true');
         } );
 
-        var sizeY = this.tileMap.getTileSize().width * this.tileMap.getMapSize().width;
         // すべてのレイヤーになにもなかったら入れる
         var tileSize = bq.config.maps.TILE_SIZE;
         return _.all(layers, function(layer) {
             var gid = layer.getTileGIDAt(cc.p(Math.floor(pos.x/tileSize),
-                Math.floor((sizeY-pos.y)/tileSize)));
+                Math.floor((mapSizeY-pos.y)/tileSize)));
             return !gid;
         } );
 
+    },
+
+    /**
+     * マップの範囲内にposを調整する
+     * @param {cc.pos} pos
+     */
+    normalizePos: function(pos) {
+        var mapSizeX = this.tileMap.getTileSize().width * this.tileMap.getMapSize().width;
+        var mapSizeY = this.tileMap.getTileSize().height * this.tileMap.getMapSize().height;
+        pos.x = Math.max(0, Math.min(pos.x, mapSizeX));
+        pos.y = Math.max(0, Math.min(pos.y, mapSizeY));
     },
 
     /**
