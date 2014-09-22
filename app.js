@@ -23,7 +23,6 @@ if ('production' == env || 'heroku' == env) {
 }
 
 app.set('port', process.env.PORT || 3000);
-app.use(require('static-favicon')());
 app.use(log4js.connectLogger(expressLogWrapper, {level: log4js.levels.INFO}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
