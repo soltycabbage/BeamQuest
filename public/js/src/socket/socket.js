@@ -190,6 +190,14 @@ bq.Socket = cc.Class.extend({
     },
 
     /**
+     * 緊急回避するよって伝える
+     * @param {cc.Point} pos
+     */
+    sendDouge: function(pos) {
+        this.socket.emit('user:douge', pos);
+    },
+
+    /**
      * マップ上に存在する全Entityの一覧を要求する
      * @param {number} mapId
      * @param {Function} callback

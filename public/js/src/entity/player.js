@@ -40,6 +40,7 @@ bq.entity.Player = bq.entity.Entity.extend({
 
     /** @override */
     update: function () {
+        this._super();
         if (this.currentState === bq.entity.EntityState.Mode.death) {
             // 死んでいたらなにもできない。人生と同じ。
             return;
@@ -94,12 +95,16 @@ bq.entity.Player = bq.entity.Entity.extend({
         var moveDistance = cc.pMult(directionVector, 100);
         var nextPos = cc.pAdd(currentPosition, moveDistance);
 
+        // サーバに回避行動を開始したことを伝える
+        var posData = {
+            userId: this.name,
+            x: nextPos.x,
+            y: nextPos.y,
+            direction: direction
+        }
+        this.socket.sendDouge(posData);
         this.dougeTo(nextPos);
         bq.camera.forceLook();
-
-        setTimeout(_.bind(function() {
-            this.currentState = bq.entity.EntityState.Mode.stop;
-        }, this), 500);
     },
 
     /**

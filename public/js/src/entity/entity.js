@@ -16,6 +16,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     model_: null,
     shape_: null,
     isCasting: false, // スキルキャスト中ならtrue
+    frameMap_: null,
 
     /**
      * @param {string} spriteFrameName *.plistの<key>に設定されてるframeName
@@ -26,6 +27,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         spriteFrame && this.initWithSpriteFrame(spriteFrame); // TODO initWithSpriteFrameName ? iwg
         if ( frameMap ) {
             this.animations = bq.entity.Animation.createAnimations(frameMap);
+            this.frameMap_ = frameMap;
         }
         var body = new cp.Body(0.0001, 0.001);
         this.setBody(body);
@@ -43,6 +45,13 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     init_: function() {
         if (this.DEFAULT_NAME !== this.name) {
             this.showName(this.name, true);
+        }
+    },
+
+    /** @override */
+    update: function() {
+        if (this.currentState == bq.entity.EntityState.Mode.douge) {
+            this.putPhantom_();
         }
     },
 
@@ -138,6 +147,9 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         bq.mapManager.normalizePos(pos);
         var jumpTo = new cc.JumpTo(0.2, pos, 10, 1);
         this.runAction(jumpTo);
+        setTimeout(_.bind(function() {
+            this.currentState = bq.entity.EntityState.Mode.stop;
+        }, this), 500);
     },
 
     /**
@@ -464,5 +476,26 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
             cc.CallFunc.create(function() {
                 label.removeFromParent();
             })));
+    },
+
+    /**
+     * 緊急回避時の残像を表示
+     * @private
+     */
+    putPhantom_: function() {
+        if (!this.frameMap_) {
+            return;
+        }
+        var frame = this.frameMap_['idle_' + this.currentDirection];
+        if (frame && frame[0]) {
+            var phantom = new cc.Sprite();
+            phantom.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(frame[0]));
+            phantom.setPosition(this.getPosition());
+            bq.baseLayer.addChild(phantom, bq.config.zOrder.PLAYER);
+            var action = new cc.Sequence([new cc.FadeOut(0.2), new cc.CallFunc(function() {
+                phantom.removeFromParent();
+            })]);
+            phantom.runAction(action);
+        }
     }
 });
