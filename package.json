@@ -7,12 +7,12 @@
     "test": "NODE_ENV=test NODE_PATH=public:app grunt test"
   },
   "dependencies": {
-    "body-parser": "1.8.2",
+    "body-parser": "1.8.3",
     "config": "1.2.0",
     "deferred": "0.7.1",
     "ejs": "1.0.0",
     "errorhandler": "1.2.0",
-    "express": "4.9.1",
+    "express": "4.9.4",
     "jade": "1.7.0",
     "log4js": "0.6.21",
     "redis": "0.12.1",
