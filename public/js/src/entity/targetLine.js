@@ -7,7 +7,6 @@ bq.entity.TargetLine = cc.Node.extend({
     /**
      * @param {bq.entity.Entity} source
      * @param {bq.entity.Entity} target
-     * @constructor
      */
     ctor: function(source, target) {
         this._super();
