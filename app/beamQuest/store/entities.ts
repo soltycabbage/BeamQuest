@@ -29,37 +29,37 @@ class EntitiesStore {
         }
         EntitiesStore.instance_ = this;
 
-        this.mapPlayers_ = [];
-        this.mapMobs_ = [];
-        this.mapNpcs_ = {};
+        this.players_ = [];
+        this.mobs_ = [];
+        this.npcs_ = {};
     }
 
-    /** マップごとのプレイヤー一覧 */
-    private mapPlayers_:PlayerCtrl[];
+    /** プレイヤー一覧 */
+    private players_:PlayerCtrl[];
 
-    /** マップごとのmob一覧 */
-    private mapMobs_:MobCtrl[];
+    /** mob一覧 */
+    private mobs_:MobCtrl[];
 
     /**
-     * マップごとのnpc一覧
+     * npc一覧
      * @type {Object}
      */
-    private mapNpcs_;
+    private npcs_;
 
     init() {
-        this.mapPlayers_ = [];
-        this.mapMobs_ = [];
-        this.mapNpcs_ = [];
+        this.players_ = [];
+        this.mobs_ = [];
+        this.npcs_ = [];
     }
 
     /**
      * @param {ctrl.Player} player
      */
     addPlayer(player:any) {
-        var isAdd = !_.contains(this.mapPlayers_, player.model.id);
+        var isAdd = !_.contains(this.players_, player.model.id);
 
         if (isAdd) {
-            this.mapPlayers_[player.model.id] = player;
+            this.players_[player.model.id] = player;
         }
         logger.info('player add [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ',isAdd=' + isAdd + ']');
     }
@@ -69,14 +69,14 @@ class EntitiesStore {
      * @return {ctrl.Player}
      */
     getPlayerById(playerId) : PlayerCtrl {
-        return this.mapPlayers_[playerId] || null;
+        return this.players_[playerId] || null;
     }
 
     /**
      * @return PlayerCtrl[]
      */
     getPlayers() {
-        return this.mapPlayers_;
+        return this.players_;
     }
 
     /**
@@ -84,7 +84,7 @@ class EntitiesStore {
      * @return {PlayerCtrl[]}
      */
     getPlayersByMapId(mapId:number) {
-        return _.filter(this.mapPlayers_, (player:PlayerCtrl) => {
+        return _.filter(this.players_, (player:PlayerCtrl) => {
             return player.model.mapId === mapId;
         });
     }
@@ -94,8 +94,8 @@ class EntitiesStore {
      */
     removePlayer(player:any) {
 
-        if (this.mapPlayers_[player.model.id]) {
-            delete this.mapPlayers_[player.model.id];
+        if (this.players_[player.model.id]) {
+            delete this.players_[player.model.id];
             logger.info('player remove [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ']');
         } else {
             logger.warn('cannot remove player [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ']');
@@ -107,8 +107,8 @@ class EntitiesStore {
      * @param {ctrl.Mob} mob
      */
     addMob(map:MapModel, mob:any) {
-        if (!_.contains(this.mapMobs_, mob.model.id)) {
-            this.mapMobs_[mob.model.id] = mob;
+        if (!_.contains(this.mobs_, mob.model.id)) {
+            this.mobs_[mob.model.id] = mob;
             map.mobCount++;
             EntityListener.getInstance().popMob(mob);
         }
@@ -121,7 +121,7 @@ class EntitiesStore {
         var map:any = MapStore.getInstance().getMapById(mob.model.position.mapId);
         if (map) {
             map.model.mobCount--;
-            delete this.mapMobs_[map.model.id][mob.model.id];
+            delete this.mobs_[map.model.id][mob.model.id];
             mob.dispose();
         }
     }
@@ -130,7 +130,7 @@ class EntitiesStore {
      * @return {MobCtrl[]}
      */
     getMobs() {
-        return this.mapMobs_;
+        return this.mobs_;
     }
 
     /**
@@ -138,7 +138,7 @@ class EntitiesStore {
      * @return {ctrl.Mob}
      */
     getMobById(mobId) {
-        return this.mapMobs_[mobId] || null;
+        return this.mobs_[mobId] || null;
     }
 
     /**
@@ -146,7 +146,7 @@ class EntitiesStore {
      */
     getPlayersJSON() {
         var json = {};
-        _.each(this.mapPlayers_, (player:PlayerCtrl, key) => {
+        _.each(this.players_, (player:PlayerCtrl, key) => {
             json[key] = player.model.toJSON();
         });
         return json;
@@ -158,7 +158,7 @@ class EntitiesStore {
      */
     getMobsJSON() {
         var json = {};
-        _.each(this.mapMobs_, (mob:any, key) => {
+        _.each(this.mobs_, (mob:any, key) => {
             json[key] = mob.model.toJSON();
         });
         return json;
@@ -168,7 +168,7 @@ class EntitiesStore {
      * @param {Object.{userId, mapId, x, y}} data
      */
     updatePlayerPosition(data) {
-        var player = this.mapPlayers_[data.userId];
+        var player = this.players_[data.userId];
         if (player) {
             player.model.position.mapId = data.mapId;
             player.model.position.x = data.x;

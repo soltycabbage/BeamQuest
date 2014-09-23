@@ -12,9 +12,9 @@ var EntitiesStore = (function () {
         }
         EntitiesStore.instance_ = this;
 
-        this.mapPlayers_ = [];
-        this.mapMobs_ = [];
-        this.mapNpcs_ = {};
+        this.players_ = [];
+        this.mobs_ = [];
+        this.npcs_ = {};
     }
     EntitiesStore.getInstance = function () {
         if (EntitiesStore.instance_ === undefined) {
@@ -24,19 +24,19 @@ var EntitiesStore = (function () {
     };
 
     EntitiesStore.prototype.init = function () {
-        this.mapPlayers_ = [];
-        this.mapMobs_ = [];
-        this.mapNpcs_ = [];
+        this.players_ = [];
+        this.mobs_ = [];
+        this.npcs_ = [];
     };
 
     /**
     * @param {ctrl.Player} player
     */
     EntitiesStore.prototype.addPlayer = function (player) {
-        var isAdd = !_.contains(this.mapPlayers_, player.model.id);
+        var isAdd = !_.contains(this.players_, player.model.id);
 
         if (isAdd) {
-            this.mapPlayers_[player.model.id] = player;
+            this.players_[player.model.id] = player;
         }
         logger.info('player add [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ',isAdd=' + isAdd + ']');
     };
@@ -46,14 +46,14 @@ var EntitiesStore = (function () {
     * @return {ctrl.Player}
     */
     EntitiesStore.prototype.getPlayerById = function (playerId) {
-        return this.mapPlayers_[playerId] || null;
+        return this.players_[playerId] || null;
     };
 
     /**
     * @return PlayerCtrl[]
     */
     EntitiesStore.prototype.getPlayers = function () {
-        return this.mapPlayers_;
+        return this.players_;
     };
 
     /**
@@ -61,7 +61,7 @@ var EntitiesStore = (function () {
     * @return {PlayerCtrl[]}
     */
     EntitiesStore.prototype.getPlayersByMapId = function (mapId) {
-        return _.filter(this.mapPlayers_, function (player) {
+        return _.filter(this.players_, function (player) {
             return player.model.mapId === mapId;
         });
     };
@@ -70,8 +70,8 @@ var EntitiesStore = (function () {
     * @param {ctrl.Player} player
     */
     EntitiesStore.prototype.removePlayer = function (player) {
-        if (this.mapPlayers_[player.model.id]) {
-            delete this.mapPlayers_[player.model.id];
+        if (this.players_[player.model.id]) {
+            delete this.players_[player.model.id];
             logger.info('player remove [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ']');
         } else {
             logger.warn('cannot remove player [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ']');
@@ -83,8 +83,8 @@ var EntitiesStore = (function () {
     * @param {ctrl.Mob} mob
     */
     EntitiesStore.prototype.addMob = function (map, mob) {
-        if (!_.contains(this.mapMobs_, mob.model.id)) {
-            this.mapMobs_[mob.model.id] = mob;
+        if (!_.contains(this.mobs_, mob.model.id)) {
+            this.mobs_[mob.model.id] = mob;
             map.mobCount++;
             EntityListener.getInstance().popMob(mob);
         }
@@ -97,7 +97,7 @@ var EntitiesStore = (function () {
         var map = MapStore.getInstance().getMapById(mob.model.position.mapId);
         if (map) {
             map.model.mobCount--;
-            delete this.mapMobs_[map.model.id][mob.model.id];
+            delete this.mobs_[map.model.id][mob.model.id];
             mob.dispose();
         }
     };
@@ -106,7 +106,7 @@ var EntitiesStore = (function () {
     * @return {MobCtrl[]}
     */
     EntitiesStore.prototype.getMobs = function () {
-        return this.mapMobs_;
+        return this.mobs_;
     };
 
     /**
@@ -114,7 +114,7 @@ var EntitiesStore = (function () {
     * @return {ctrl.Mob}
     */
     EntitiesStore.prototype.getMobById = function (mobId) {
-        return this.mapMobs_[mobId] || null;
+        return this.mobs_[mobId] || null;
     };
 
     /**
@@ -122,7 +122,7 @@ var EntitiesStore = (function () {
     */
     EntitiesStore.prototype.getPlayersJSON = function () {
         var json = {};
-        _.each(this.mapPlayers_, function (player, key) {
+        _.each(this.players_, function (player, key) {
             json[key] = player.model.toJSON();
         });
         return json;
@@ -133,7 +133,7 @@ var EntitiesStore = (function () {
     */
     EntitiesStore.prototype.getMobsJSON = function () {
         var json = {};
-        _.each(this.mapMobs_, function (mob, key) {
+        _.each(this.mobs_, function (mob, key) {
             json[key] = mob.model.toJSON();
         });
         return json;
@@ -143,7 +143,7 @@ var EntitiesStore = (function () {
     * @param {Object.{userId, mapId, x, y}} data
     */
     EntitiesStore.prototype.updatePlayerPosition = function (data) {
-        var player = this.mapPlayers_[data.userId];
+        var player = this.players_[data.userId];
         if (player) {
             player.model.position.mapId = data.mapId;
             player.model.position.x = data.x;
