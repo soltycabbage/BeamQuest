@@ -38,6 +38,21 @@ exports.start = function(io) {
             d.resolve();
         }.bind(this));
 
+        tmx.parseFile('public/res/map/map_small_village.tmx', function(err, m) {
+            if (err) throw err;
+            var map = new mapModel({
+                id: 2,
+                name: '小さい村',
+                maxMobCount: 30,
+                mobCount: 0
+            });
+            map.objTmx = m;
+            map.size = {width: m.width * m.tileWidth, height: m.height * m.tileHeight};
+            var mapCtrl = new FieldMapCtrl(map);
+            MapStore.getInstance().getMaps().push(mapCtrl);
+            d.resolve();
+        }.bind(this));
+
         d.promise().then(init_);
     }
 
