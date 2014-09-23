@@ -1,3 +1,6 @@
+/**
+ * @extends cc.Layer
+ */
 bq.scene.BeamQuestWorld = cc.Layer.extend({
     init:function () {
         'use strict';
@@ -95,6 +98,9 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
     }
 });
 
+/**
+ * @extends cc.Scene
+ */
 bq.scene.BeamQuestWorldScene = cc.Scene.extend({
     onEnter:function () {
         'use strict';
