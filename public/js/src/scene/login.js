@@ -82,7 +82,11 @@ bq.scene.LoginLayer = cc.Layer.extend({
     welcomeToBeamQuestWorld_: function(userId, data) {
         this.initPlayer_(userId, data);
         bq.Socket.getInstance().initAfterLogin();
-        bq.loadingTo(new bq.scene.BeamQuestWorldScene());
+        if (data.player.position.mapId == '1') {
+            bq.loadingTo(new bq.scene.BeamQuestWorldScene());
+        } else if (data.player.position.mapId == '2') {
+            bq.loadingTo(new bq.scene.BeamQuestWorldScene2());
+        }
     },
 
     /**
