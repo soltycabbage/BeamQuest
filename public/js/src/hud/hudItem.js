@@ -1,8 +1,12 @@
 /**
- * HUDの構成要素の基底クラス
- * @constructor
+ * @fileoverview HUDの構成要素の基底クラス
  */
 bq.hud = {};
+
+/**
+ * @class
+ * @extends cc.Node
+ */
 bq.hud.HudItem = cc.Node.extend({
     ctor: function() {
         /**

@@ -1,5 +1,7 @@
-/*
+/**
  * 音楽関係はマネージャーを通してくれる？
+ * @class
+ * @extends cc.Class
  */
 bq.SoundManager = cc.Class.extend({
     DEFAULT_VOLUME: 1,

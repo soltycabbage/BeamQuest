@@ -2,6 +2,10 @@
  * @fileoverview ビムクエ全体で使用するシステムフォント
  */
 
+/**
+ * @class
+ * @extends cc.Class
+ */
 bq.Label = cc.Class.extend({
 });
 

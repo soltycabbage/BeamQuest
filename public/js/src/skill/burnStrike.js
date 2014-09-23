@@ -1,3 +1,7 @@
+/**
+ * @class
+ * @extends bq.skill
+ */
 bq.skill.BurnStrike = bq.skill.extend({
     /** @override */
     fire: function() {

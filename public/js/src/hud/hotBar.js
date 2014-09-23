@@ -1,6 +1,7 @@
 /**
  * 経験値バー
- * @constructor
+ * @class
+ * @extends bq.hud.HudItem
  */
 bq.hud.HotBar = bq.hud.HudItem.extend({
     ctor: function() {

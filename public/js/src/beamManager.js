@@ -3,6 +3,8 @@
  */
 /**
  * オブジェクト関係
+ * @class
+ * @extends cc.Class
  */
 bq.BeamManager = cc.Class.extend({
     beams_: {},

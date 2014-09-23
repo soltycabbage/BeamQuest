@@ -1,3 +1,7 @@
+/**
+ * @class
+ * @extends cc.Class
+ */
 bq.model = cc.Class.extend({
     ctor: function(json) {
         this.parse(json);

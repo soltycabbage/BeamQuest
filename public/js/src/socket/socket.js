@@ -2,6 +2,10 @@
  * @fileoverview socket.ioの初期設定をする
  */
 
+/**
+ * @class
+ * @extends cc.Class
+ */
 bq.Socket = cc.Class.extend({
     ctor: function() {
         this.socket = io.connect();

@@ -1,3 +1,7 @@
+/**
+ * @class
+ * @extends cc.Layer
+ */
 bq.scene.LoginLayer = cc.Layer.extend({
     status: {
         SUCCESS: 'success', // ログイン成功
@@ -180,6 +184,10 @@ bq.scene.LoginLayer = cc.Layer.extend({
     }
 });
 
+/**
+ * @class
+ * @extends cc.Scene
+ */
 bq.scene.LoginScene = bq.scene.extend({
     onEnter: function() {
         this._super();

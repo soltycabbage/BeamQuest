@@ -5,7 +5,7 @@ bq.beam = {};
 
 /**
  * @constructor
- * @extends {cc.Node}
+ * @extends {cc.PhysicsSprite}
  */
 bq.beam.Beam = cc.PhysicsSprite.extend({
     id: bq.Types.Beams.NORMAL0,   // ビームID

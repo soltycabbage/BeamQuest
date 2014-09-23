@@ -1,3 +1,7 @@
+/**
+ * @class
+ * @extends cc.Class
+ */
 bq.beam.BeamFactory = cc.Class.extend({
 
     createParticleBeam: function (beamType, shooterId, tag) {

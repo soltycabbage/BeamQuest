@@ -4,8 +4,8 @@
 bq.entity = {};
 
 /**
- * @constructor
- * @extends {cc.Sprite}
+ * @class
+ * @extends {cc.PhysicsSprite}
  */
 bq.entity.Entity = cc.PhysicsSprite.extend({
     DEFAULT_NAME: 'entity',

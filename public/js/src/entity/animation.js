@@ -2,6 +2,9 @@
  * Created by iwag on 2013/12/31.
  */
 
+/**
+ * @class
+ */
 bq.entity.Animation = {};
 
 /**

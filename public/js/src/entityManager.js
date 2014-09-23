@@ -2,6 +2,10 @@
  * @fileoverview Entity (player, mob, npc) の行動などなどを管理する
  */
 
+/**
+ * @class
+ * @extends cc.Class
+ */
 bq.EntityManager = cc.Class.extend({
     otherPlayers_: {},
     enemys_: {},

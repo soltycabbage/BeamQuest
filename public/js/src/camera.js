@@ -1,3 +1,7 @@
+/**
+ * @class
+ * @extends cc.Class
+ */
 bq.Camera = cc.Class.extend({
     ctor: function(follower) {
         /**

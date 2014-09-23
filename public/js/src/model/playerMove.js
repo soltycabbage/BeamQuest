@@ -1,3 +1,7 @@
+/**
+ * @class
+ * @extends bq.model
+ */
 bq.model.PlayerMove = bq.model.extend({
     ctor: function(json) {
         /** @type {string} */

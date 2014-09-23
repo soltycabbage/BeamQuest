@@ -2,6 +2,10 @@
  * @fileoverview ドロップアイテム
  */
 
+/**
+ * @class
+ * @extends bq.object.Object
+ */
 bq.object.DropItem = bq.object.Object.extend({
     prefixPath_: s_PrefixDropItem,
     /**

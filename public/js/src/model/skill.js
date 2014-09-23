@@ -1,5 +1,7 @@
 /**
  * サーバ側のmodel.Skillに対応するクライアント側のmodel
+ * @class
+ * @extends bq.model
  */
 bq.model.Skill = bq.model.extend({
     ctor: function(json) {

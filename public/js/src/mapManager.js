@@ -1,5 +1,7 @@
 /**
  * マップ関係
+ * @class
+ * @extends cc.Class
  */
 bq.MapManager = cc.Class.extend({
     /**

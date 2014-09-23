@@ -1,6 +1,10 @@
 /**
  * @fileoverview チャット情報
  */
+/**
+ * @class
+ * @extends bq.model
+ */
 bq.model.Chat = bq.model.extend({
     ctor: function(json) {
         /** @type {string} */

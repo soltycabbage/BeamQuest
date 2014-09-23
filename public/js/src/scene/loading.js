@@ -1,3 +1,7 @@
+/**
+ * @class
+ * @extends cc.Layer
+ */
 bq.scene.LoadingLayer = cc.Layer.extend({
     ctor: function(nextScene) {
         this._super();
@@ -61,6 +65,10 @@ bq.scene.LoadingLayer = cc.Layer.extend({
     }
 });
 
+/**
+ * @class
+ * @extends cc.Scene
+ */
 bq.scene.LoadingScene = cc.Scene.extend({
     /**
      * @param {cc.Scene} nextScene loading後に遷移するscene

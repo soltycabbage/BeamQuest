@@ -3,6 +3,10 @@
  * @author karihei
  */
 
+/**
+ * @class
+ * @extends cc.Class
+ */
 var BQConfig = cc.Class.extend({
     version: "ver1.0",
     ctor: function() {
