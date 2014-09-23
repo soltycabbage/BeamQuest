@@ -31,7 +31,7 @@ bq.object.DropItem = bq.object.Object.extend({
         }
 
         // ふわふわさせる
-        var bezierTo = cc.RepeatForever.create(cc.BezierTo.create(1, [cc.p(pos.x, pos.y+10), cc.p(pos.x, pos.y-10), pos]));
+        var bezierTo = new cc.RepeatForever(new cc.BezierTo(1, [cc.p(pos.x, pos.y+10), cc.p(pos.x, pos.y-10), pos]));
         this.runAction(bezierTo);
     },
 
@@ -67,10 +67,10 @@ bq.object.DropItem = bq.object.Object.extend({
      * @param {string} pickerId
      */
     pickAndRemove: function(pos, pickerId) {
-        var moveTo = cc.MoveTo.create(0.2, cc.p(pos.x, pos.y));
-        var fadeOut = cc.FadeOut.create(0.1);
-        var removeFunc = cc.CallFunc.create($.proxy(this.removeFromParent, this));
-        this.runAction(cc.Sequence.create(cc.Spawn.create(moveTo, fadeOut), removeFunc));
+        var moveTo = new cc.MoveTo(0.2, cc.p(pos.x, pos.y));
+        var fadeOut = new cc.FadeOut(0.1);
+        var removeFunc = new cc.CallFunc($.proxy(this.removeFromParent, this));
+        this.runAction(new cc.Sequence(new cc.Spawn(moveTo, fadeOut), removeFunc));
         if (pickerId === bq.player.name) {
             this.playSound_();
             this.addInstantMsg_();

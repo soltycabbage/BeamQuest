@@ -14,7 +14,7 @@ bq.beam.BeamFactory = cc.Class.extend({
         beamType2Partile[bq.Types.Beams.METEOR] = cc.ParticleMeteor;
 
         var particle = beamType2Partile[beamType];
-        var myTexture = cc.TextureCache.getInstance().textureForKey(s_Beam0);
+        var myTexture = cc.textureCache.getInstance().getTextureForKey(s_Beam0);
 
         particle.setTexture(myTexture);
         particle.setPosition(cc.p(0, 0));
@@ -36,7 +36,7 @@ bq.beam.BeamFactory = cc.Class.extend({
         var beam = new bq.beam.Beam(beamType, shooterId, tag, frames[0]);
 
         var anime = bq.entity.Animation.createAnimation(frames, 0.05);
-        var animation = anime && cc.RepeatForever.create(cc.Animate.create(anime));
+        var animation = anime && new cc.RepeatForever(new cc.Animate(anime));
         animation && beam.runAction(animation);
 
         return beam;

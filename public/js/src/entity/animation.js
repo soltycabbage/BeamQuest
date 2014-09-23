@@ -17,15 +17,15 @@ bq.entity.Animation.createAnimations = function (keyFrameMap) {
     for (var k in keyFrameMap) {
         var keyFrames = keyFrameMap[k];
         var animation = bq.entity.Animation.createAnimation(keyFrames);
-        var animate = cc.Animate.create(animation);
-        animations[k] = cc.RepeatForever.create(animate);
+        var animate = new cc.Animate(animation);
+        animations[k] = new cc.RepeatForever(animate);
     }
 
     return animations;
 };
 
 bq.entity.Animation.createAnimation = function (frames, delay) {
-    var animation = cc.Animation.create();
+    var animation = new cc.Animation();
     animation.setDelayPerUnit(delay || 0.1);
 
     _.forEach(frames, function (i) {

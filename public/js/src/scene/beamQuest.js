@@ -55,7 +55,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         // );
 
         // add Physics Debug
-        this._debugNode = cc.PhysicsDebugNode.create(bq.space);
+        this._debugNode = new cc.PhysicsDebugNode(bq.space);
         this._debugNode.setVisible(false); // 物理の箱見たいときはtrueに
         baseLayer.addChild(this._debugNode);
 

@@ -97,8 +97,8 @@ bq.entity.TargetLine = cc.Node.extend({
      * ターゲットラインを消す
      */
     clearLine: function() {
-        var fadeOut = cc.FadeOut.create(0.5);
-        var callFunc = cc.CallFunc.create(function() {
+        var fadeOut = new cc.FadeOut(0.5);
+        var callFunc = new cc.CallFunc(function() {
             this.isActive_ = false;
             this.line_.clear();
             this.step_ = 1;
@@ -108,7 +108,7 @@ bq.entity.TargetLine = cc.Node.extend({
             this.removeFromParent();
         }.bind(this));
 
-        this.runAction(cc.Sequence.create(fadeOut, callFunc));
+        this.runAction(new cc.Sequence(fadeOut, callFunc));
     },
 
     /**
@@ -116,19 +116,19 @@ bq.entity.TargetLine = cc.Node.extend({
      * @private
      */
     initLine_: function() {
-        var head = cc.Sprite.create();
+        var head = new cc.Sprite();
         head.setTextureRect(cc.rect(0,0,3,3));
         head.setColor(cc.color(255,10,10));
         head.setPosition(this.source_.getPosition());
         this.head_ = head;
         this.addChild(this.head_);
 
-        var tail = cc.Sprite.create();
+        var tail = new cc.Sprite();
         tail.setPosition(this.target_.getPosition());
         this.tail_ = tail;
         this.addChild(this.tail_);
 
-        this.line_ = cc.DrawNode.create();
+        this.line_ = new cc.DrawNode();
         this.addChild(this.line_, 10);
     },
 

@@ -13,17 +13,17 @@ bq.scene.LoadingLayer = cc.Layer.extend({
         var winSize = cc.director.getWinSize();
 
         // ワールドマップを表示する
-        var worldMap = cc.Sprite.create(s_ImgWorldMap);
+        var worldMap = new cc.Sprite(s_ImgWorldMap);
         worldMap.setScale(1.5);
         worldMap.setPosition(cc.p(winSize.width/2, winSize.height/2));
 
         // ワールドマップ上にプレイヤーの現在位置を表示する
-        var chara = cc.Sprite.create(s_ImgMiniChara);
+        var chara = new cc.Sprite(s_ImgMiniChara);
         chara.setPosition(cc.p(260, 85)); // TODO mapId によって座標を定義しておきたい
         worldMap.addChild(chara, 10);
-        chara.runAction(cc.Blink.create(10, 20));
+        chara.runAction(new cc.Blink(10, 20));
         // 背景色を海の色で埋めておく
-        var bgRect = cc.Sprite.create();
+        var bgRect = new cc.Sprite();
         var oceanColor = cc.color(50, 121, 205);
         bgRect.setTextureRect(cc.rect(0, 0, winSize.width, winSize.height));
         bgRect.setColor(oceanColor);
