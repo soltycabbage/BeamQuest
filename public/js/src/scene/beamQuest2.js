@@ -1,4 +1,5 @@
 /**
+ * @class
  * @extends cc.Layer
  */
 bq.scene.BeamQuestWorld2 = cc.Layer.extend({
@@ -99,7 +100,8 @@ bq.scene.BeamQuestWorld2 = cc.Layer.extend({
 });
 
 /**
- * @extends cc.scene
+ * @class
+ * @extends cc.Scene
  */
 bq.scene.BeamQuestWorldScene2 = cc.Scene.extend({
     onEnter:function () {
