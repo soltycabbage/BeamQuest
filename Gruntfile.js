@@ -20,7 +20,7 @@ module.exports = function(grunt) {
             },
 
             backScripts: {
-                files: ['app/beamQuest/**/*.ts'],
+                files: ['app/beamQuest/**/*.ts', 'app/beamQuestBackend/**/*.ts'],
                 tasks: ['ts:build']
             },
 
@@ -53,8 +53,8 @@ module.exports = function(grunt) {
 
         ts: {
             build: {
-                src: ['app/beamQuest/**/*.ts'],
-                watch:'app/beamQuest/',
+                src: ['app/beamQuest/**/*.ts', 'app/beamQuestBackend/**/*.ts'],
+                watch:'app/',
                 options: {
                     target: 'es5',
                     module: 'commonjs',
