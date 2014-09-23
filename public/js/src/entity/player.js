@@ -133,7 +133,7 @@ bq.entity.Player = bq.entity.Entity.extend({
             shooterId: this.name,
             src: {x: src.x, y: src.y},
             dest: {x: dest.x, y: dest.y},
-            tag: parseInt(new Date().getTime()) + this.name
+            tag: parseInt(new Date().getTime(), 10) + this.name
         };
 
         this.socket.shootBeam(json);
