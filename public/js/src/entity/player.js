@@ -4,7 +4,7 @@
 
 /**
  * @constructor
- * @extends {bq.Entity}
+ * @extends {bq.entity.Entity}
  */
 bq.entity.Player = bq.entity.Entity.extend({
     maxMoveSpeed: 6,                         // 1frameの最大移動量(px)
