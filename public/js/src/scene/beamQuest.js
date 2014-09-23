@@ -2,7 +2,7 @@
  * @extends cc.Layer
  */
 bq.scene.BeamQuestWorld = cc.Layer.extend({
-    init:function () {
+    ctor:function () {
         'use strict';
 
         this._super();
@@ -108,7 +108,6 @@ bq.scene.BeamQuestWorldScene = cc.Scene.extend({
         this._super();
         if (this.isAlreadyLogin_(bq.player.name)) {
             var layer = new bq.scene.BeamQuestWorld();
-            layer.init();
             this.addChild(layer);
             this.renderEntities_(1); // TODO: mapIdが固定なのをなんとかする
             this.renderDropItems_(1);// TODO: mapIdが固定なのをなんとかする

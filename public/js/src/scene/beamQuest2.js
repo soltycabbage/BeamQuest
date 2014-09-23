@@ -2,7 +2,7 @@
  * @extends cc.Layer
  */
 bq.scene.BeamQuestWorld2 = cc.Layer.extend({
-    init:function () {
+    ctor:function () {
         'use strict';
 
         this._super();
@@ -108,7 +108,6 @@ bq.scene.BeamQuestWorldScene2 = cc.Scene.extend({
         this._super();
         if (this.isAlreadyLogin_(bq.player.name)) {
             var layer = new bq.scene.BeamQuestWorld2();
-            layer.init();
             this.addChild(layer);
             this.renderEntities_(2);
             this.renderDropItems_(2);
