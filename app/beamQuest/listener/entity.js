@@ -158,7 +158,7 @@ var Entity = (function () {
 
     /**
     * レベルアップしたよってクライアントに伝える
-    * @param playerModel
+    * @param {PlayerModel} playerModel
     */
     Entity.prototype.levelUp = function (playerModel) {
         this.io_.sockets.emit('notify:entity:player:levelup', playerModel);
@@ -166,7 +166,7 @@ var Entity = (function () {
 
     /**
     * player死んだよってクライアントに伝える
-    * @param player
+    * @param {PlayerCtrl} player
     */
     Entity.prototype.killPlayer = function (player) {
         var data = { entity: player.model.toJSON() };
