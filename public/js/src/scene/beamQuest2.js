@@ -38,7 +38,6 @@ bq.scene.BeamQuestWorld2 = cc.Layer.extend({
             }
         }, this);
 
-        this.initPing_();
         // HUD有効
         var hud = bq.Hud.getInstance();
         hud.enable(true);
@@ -71,18 +70,6 @@ bq.scene.BeamQuestWorld2 = cc.Layer.extend({
     update: function(bt) {
         'use strict';
         bq.space.step(bt);
-    },
-
-    initPing_: function() {
-        'use strict';
-
-        if (! cc.director.isDisplayStats()) {
-            return;
-        }
-
-        var pingLayer = new bq.scene.layer.PingLayer();
-        var zIndex = 10000;
-        this.addChild(pingLayer, zIndex, bq.config.zOrder.DEBUG_PING);
     },
 
     createPhysicalSpace_: function(size) {
