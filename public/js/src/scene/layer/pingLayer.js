@@ -1,8 +1,19 @@
+/**
+ * @class
+ * @extends cc.Layer
+ */
 bq.scene.layer = cc.Layer.extend({
 });
+
+/**
+ * @class
+ * @extends cc.Layer
+ */
 bq.scene.layer.PingLayer = cc.Layer.extend({
-    init:function() {
+    ctor:function() {
         "use strict";
+
+        this._super();
 
         // ping始める
         var interval = 300;
