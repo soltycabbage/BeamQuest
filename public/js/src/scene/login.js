@@ -86,11 +86,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
     welcomeToBeamQuestWorld_: function(userId, data) {
         this.initPlayer_(userId, data);
         bq.Socket.getInstance().initAfterLogin();
-        if (data.player.position.mapId == '1') {
-            bq.loadingTo(new bq.scene.BeamQuestWorldScene());
-        } else if (data.player.position.mapId == '2') {
-            bq.loadingTo(new bq.scene.BeamQuestWorldScene2());
-        }
+        bq.loadingTo(new bq.scene.BeamQuestWorldScene());
     },
 
     /**
@@ -112,7 +108,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
         player.setPosition(cc.p(position.x, position.y));
 
         player.setModel(new bq.model.Player(data.player));
-        player.setProfile({name: userId});
+        player.setProfile({name: userId, mapId: data.player.position.mapId});
         player.showName();
         bq.player = player;
 

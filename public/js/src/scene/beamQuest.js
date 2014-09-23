@@ -109,10 +109,15 @@ bq.scene.BeamQuestWorldScene = cc.Scene.extend({
 
         this._super();
         if (this.isAlreadyLogin_(bq.player.name)) {
-            var layer = new bq.scene.BeamQuestWorld();
+            var layer;
+            if (bq.player.mapId == 1) {
+                layer = new bq.scene.BeamQuestWorld();
+            } else {
+                layer = new bq.scene.BeamQuestWorld2();
+            }
             this.addChild(layer);
-            this.renderEntities_(1); // TODO: mapIdが固定なのをなんとかする
-            this.renderDropItems_(1);// TODO: mapIdが固定なのをなんとかする
+            this.renderEntities_(bq.player.mapId);
+            this.renderDropItems_(bq.player.mapId);
         } else {
             this.addChild(new bq.scene.LoginScene());
         }

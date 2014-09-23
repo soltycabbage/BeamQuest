@@ -199,6 +199,7 @@ bq.entity.Player = bq.entity.Entity.extend({
      */
     setProfile: function(data) {
         this.name = data.name;
+        this.mapId = data.mapId;
     },
 
     /**
