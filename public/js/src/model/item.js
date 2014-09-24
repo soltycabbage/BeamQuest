@@ -1,6 +1,6 @@
 /**
- * @class
- * @extends bq.model
+ * @constructor
+ * @extends {bq.model}
  */
 bq.model.Item = bq.model.extend({
     ctor: function(json) {

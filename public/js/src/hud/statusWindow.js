@@ -1,7 +1,7 @@
 /**
  * ステータスウィンドウ
- * @class
- * @extends bq.hud.HudItem
+ * @constructor
+ * @extends {bq.hud.HudItem}
  */
 bq.hud.StatusWindow = bq.hud.HudItem.extend({
     ctor: function() {

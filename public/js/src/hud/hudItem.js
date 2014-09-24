@@ -4,8 +4,8 @@
 bq.hud = {};
 
 /**
- * @class
- * @extends cc.Node
+ * @constructor
+ * @extends {cc.Node}
  */
 bq.hud.HudItem = cc.Node.extend({
     ctor: function() {

@@ -1,6 +1,6 @@
 /**
- * @class
- * @extends cc.Scene
+ * @constructor
+ * @extends {cc.Scene}
  */
 bq.scene = cc.Scene.extend({
 });

@@ -1,7 +1,7 @@
 /**
  * HP/BPバー
- * @class
- * @extends bq.hud.HudItem
+ * @constructor
+ * @extends {bq.hud.HudItem}
  */
 bq.hud.HpBpBar = bq.hud.HudItem.extend({
     ctor: function() {

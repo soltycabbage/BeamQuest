@@ -3,8 +3,8 @@
  */
 
 /**
- * @class
- * @extends cc.Class
+ * @constructor
+ * @extends {cc.Class}
  */
 bq.EntityManager = cc.Class.extend({
     otherPlayers_: {},

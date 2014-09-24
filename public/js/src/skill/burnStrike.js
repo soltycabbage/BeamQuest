@@ -1,6 +1,6 @@
 /**
- * @class
- * @extends bq.skill
+ * @constructor
+ * @extends {bq.skill}
  */
 bq.skill.BurnStrike = bq.skill.extend({
     /** @override */

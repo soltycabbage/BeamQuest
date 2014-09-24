@@ -1,7 +1,7 @@
 /**
  * HUD
- * @class
- * @extends cc.Node
+ * @constructor
+ * @extends {cc.Node}
  */
 bq.Hud = cc.Node.extend({
     ctor: function() {

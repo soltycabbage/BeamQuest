@@ -1,6 +1,6 @@
 /**
- * @class
- * @extends bq.model.Entity
+ * @constructor
+ * @extends {bq.model.Entity}
  */
 bq.model.Mob = bq.model.Entity.extend({
     ctor: function(json) {

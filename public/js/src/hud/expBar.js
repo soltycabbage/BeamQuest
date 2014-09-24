@@ -1,7 +1,7 @@
 /**
  * 経験値バー
- * @class
- * @extends bq.hud.HudItem
+ * @constructor
+ * @extends {bq.hud.HudItem}
  */
 bq.hud.ExpBar = bq.hud.HudItem.extend({
     ctor: function() {

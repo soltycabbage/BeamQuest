@@ -1,7 +1,7 @@
 /**
  * ターゲットにラインをニョーンて伸ばす。FF12/FF14のアレやね。
- * @class
- * @extends cc.Node
+ * @constructor
+ * @extends {cc.Node}
  */
 bq.entity.TargetLine = cc.Node.extend({
     /**

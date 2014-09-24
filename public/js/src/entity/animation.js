@@ -3,7 +3,7 @@
  */
 
 /**
- * @class
+ * @constructor
  */
 bq.entity.Animation = {};
 

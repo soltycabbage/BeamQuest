@@ -3,8 +3,8 @@
  */
 
 /**
- * @class
- * @extends cc.Class
+ * @constructor
+ * @extends {cc.Class}
  */
 bq.Socket = cc.Class.extend({
     ctor: function() {

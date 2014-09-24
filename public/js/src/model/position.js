@@ -1,7 +1,7 @@
 /**
  * サーバ側のmodel.Positionに対応するmodel
- * @class
- * @extends bq.model
+ * @constructor
+ * @extends {bq.model}
  */
 bq.model.Position = bq.model.extend({
     ctor: function(json) {

@@ -1,6 +1,6 @@
 /**
- * @class
- * @extends cc.Class
+ * @constructor
+ * @extends {cc.Class}
  */
 bq.MessageLog = cc.Class.extend({
     ctor: function() {

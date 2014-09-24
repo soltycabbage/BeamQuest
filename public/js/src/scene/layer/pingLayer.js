@@ -1,13 +1,13 @@
 /**
- * @class
- * @extends cc.Layer
+ * @constructor
+ * @extends {cc.Layer}
  */
 bq.scene.layer = cc.Layer.extend({
 });
 
 /**
- * @class
- * @extends cc.Layer
+ * @constructor
+ * @extends {cc.Layer}
  */
 bq.scene.layer.PingLayer = cc.Layer.extend({
     ctor:function() {

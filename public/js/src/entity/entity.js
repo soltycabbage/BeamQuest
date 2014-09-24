@@ -4,7 +4,7 @@
 bq.entity = {};
 
 /**
- * @class
+ * @constructor
  * @extends {cc.PhysicsSprite}
  */
 bq.entity.Entity = cc.PhysicsSprite.extend({

@@ -3,8 +3,8 @@
  */
 
 /**
- * @class
- * @extends cc.Class
+ * @constructor
+ * @extends {cc.Class}
  */
 bq.Chat = cc.Class.extend({
     ctor: function() {

@@ -1,6 +1,6 @@
 /**
- * @class
- * @extends cc.Layer
+ * @constructor
+ * @extends {cc.Layer}
  */
 bq.scene.BeamQuestWorld2 = cc.Layer.extend({
     ctor:function () {

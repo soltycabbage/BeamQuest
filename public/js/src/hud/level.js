@@ -1,7 +1,7 @@
 /**
  * レベル表示
- * @class
- * @extends bq.hud.HudItem
+ * @constructor
+ * @extends {bq.hud.HudItem}
  */
 bq.hud.Level = bq.hud.HudItem.extend({
     ctor: function() {

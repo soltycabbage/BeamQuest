@@ -4,7 +4,7 @@
 bq.object = {};
 
 /**
- * @class
+ * @constructor
  * @extends {cc.Sprite}
  */
 bq.object.Object = cc.Sprite.extend({

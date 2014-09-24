@@ -1,6 +1,6 @@
 /**
- * @class
- * @extends cc.Class
+ * @constructor
+ * @extends {cc.Class}
  */
 bq.beam.BeamFactory = cc.Class.extend({
 

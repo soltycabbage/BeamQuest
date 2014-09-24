@@ -1,6 +1,6 @@
 /**
- * @class
- * @extends bq.hud.HudItem
+ * @constructor
+ * @extends {bq.hud.HudItem}
  */
 bq.hud.InstantMsg = bq.hud.HudItem.extend({
     ctor: function() {
