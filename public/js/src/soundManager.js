@@ -69,11 +69,12 @@ bq.SoundManager = cc.Class.extend({
             new cc.CallFunc(callback)
         ];
         return new cc.Sequence(actionSequence);
-    },
+    }
 });
 
-/*
+/**
  * cc.ActionTweenへのアンチテーゼ(意味不明)
+ * @extends {cc.ActionTweenDelegate}
  */
 bq.SoundManager.MusicVolumeModificationActionTweenDelegate = cc.ActionTweenDelegate.extend({
     ctor: function(audioEngine) {
@@ -82,6 +83,6 @@ bq.SoundManager.MusicVolumeModificationActionTweenDelegate = cc.ActionTweenDeleg
 
     updateTweenAction: function(value, key) {
         this.audioEngine.setMusicVolume(value);
-    },
+    }
 });
 
