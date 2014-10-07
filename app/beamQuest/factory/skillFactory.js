@@ -1,5 +1,4 @@
 var BurnStrike = require('beamQuest/skill/burnStrike');
-
 var SkillFactory = (function () {
     function SkillFactory() {
         if (SkillFactory.instance_) {
@@ -13,17 +12,15 @@ var SkillFactory = (function () {
         }
         return SkillFactory.instance_;
     };
-
     /**
-    * スキルmodelに該当するskillクラスをnewして返す
-    * @param {!model.Skill} skillModel スキルmodel
-    * @param {!ctrl.Entity} user スキル使用者
-    * @param {!model.Position} targetPos スキルのターゲット座標
-    */
+     * スキルmodelに該当するskillクラスをnewして返す
+     * @param {!model.Skill} skillModel スキルmodel
+     * @param {!ctrl.Entity} user スキル使用者
+     * @param {!model.Position} targetPos スキルのターゲット座標
+     */
     SkillFactory.prototype.create = function (skillModel, user, targetPos) {
         var s = bq.params.Skills;
         var clazz;
-
         switch (skillModel.id) {
             case s.BURNSTRIKE.id:
                 clazz = BurnStrike;
@@ -31,15 +28,14 @@ var SkillFactory = (function () {
             default:
                 return null;
         }
-
         if (clazz) {
             return new clazz(skillModel, user, targetPos);
-        } else {
+        }
+        else {
             return null;
         }
     };
     return SkillFactory;
 })();
-
 module.exports = SkillFactory;
 //# sourceMappingURL=skillFactory.js.map

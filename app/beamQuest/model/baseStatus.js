@@ -5,15 +5,13 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var Model = require('beamQuest/model/model');
-
 /**
-* Entityの基本ステータス
-*/
+ * Entityの基本ステータス
+ */
 var BaseStatus = (function (_super) {
     __extends(BaseStatus, _super);
     function BaseStatus(opt_data) {
         _super.call(this, opt_data);
-
         this.con = this.data.con || 1;
         this.int = this.data.int || 1;
         this.str = this.data.str || 1;
@@ -33,6 +31,5 @@ var BaseStatus = (function (_super) {
     };
     return BaseStatus;
 })(Model);
-
 module.exports = BaseStatus;
 //# sourceMappingURL=baseStatus.js.map

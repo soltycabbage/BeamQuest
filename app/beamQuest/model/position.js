@@ -5,31 +5,27 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var Model = require('beamQuest/model/model');
-
 /**
-* 位置情報
-*/
+ * 位置情報
+ */
 var Position = (function (_super) {
     __extends(Position, _super);
     /**
-    * @param opt_data
-    */
+     * @param opt_data
+     */
     function Position(opt_data) {
         _super.call(this, opt_data);
-
         /** @type {number} */
         this.mapId = this.data.mapId || 1;
-
         /** @type {number} */
         this.x = this.data.x || 0;
-
         /** @type {number} */
         this.y = this.data.y || 0;
     }
     /**
-    * @override
-    * @returns {*}
-    */
+     * @override
+     * @returns {*}
+     */
     Position.prototype.toJSON = function () {
         var json = _super.prototype.toJSON.call(this);
         json.mapId = this.mapId;

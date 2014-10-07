@@ -1,17 +1,15 @@
 /// <reference path="../../../typings/deferred/deferred.d.ts" />
 var EntityListener = require('beamQuest/listener/entity');
 var MapStore = require('beamQuest/store/maps');
-
 /**
-* ゲーム内のEntityの状態を保持しておくクラス
-*/
+ * ゲーム内のEntityの状態を保持しておくクラス
+ */
 var EntitiesStore = (function () {
     function EntitiesStore() {
         if (EntitiesStore.instance_) {
             throw new Error("Error: Instantiation failed: Use EntitiesStore.getInstance() instead of new.");
         }
         EntitiesStore.instance_ = this;
-
         this.players_ = [];
         this.mobs_ = [];
         this.npcs_ = {};
@@ -22,66 +20,59 @@ var EntitiesStore = (function () {
         }
         return EntitiesStore.instance_;
     };
-
     EntitiesStore.prototype.init = function () {
         this.players_ = [];
         this.mobs_ = [];
         this.npcs_ = [];
     };
-
     /**
-    * @param {ctrl.Player} player
-    */
+     * @param {ctrl.Player} player
+     */
     EntitiesStore.prototype.addPlayer = function (player) {
         var isAdd = !_.contains(this.players_, player.model.id);
-
         if (isAdd) {
             this.players_[player.model.id] = player;
         }
         logger.info('player add [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ',isAdd=' + isAdd + ']');
     };
-
     /**
-    * @param {string} playerId
-    * @return {ctrl.Player}
-    */
+     * @param {string} playerId
+     * @return {ctrl.Player}
+     */
     EntitiesStore.prototype.getPlayerById = function (playerId) {
         return this.players_[playerId] || null;
     };
-
     /**
-    * @return PlayerCtrl[]
-    */
+     * @return PlayerCtrl[]
+     */
     EntitiesStore.prototype.getPlayers = function () {
         return this.players_;
     };
-
     /**
-    * @param {number} mapId
-    * @return {PlayerCtrl[]}
-    */
+     * @param {number} mapId
+     * @return {PlayerCtrl[]}
+     */
     EntitiesStore.prototype.getPlayersByMapId = function (mapId) {
         return _.filter(this.players_, function (player) {
             return player.model.mapId === mapId;
         });
     };
-
     /**
-    * @param {ctrl.Player} player
-    */
+     * @param {ctrl.Player} player
+     */
     EntitiesStore.prototype.removePlayer = function (player) {
         if (this.players_[player.model.id]) {
             delete this.players_[player.model.id];
             logger.info('player remove [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ']');
-        } else {
+        }
+        else {
             logger.warn('cannot remove player [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ']');
         }
     };
-
     /**
-    * @param {model.Map} map
-    * @param {ctrl.Mob} mob
-    */
+     * @param {model.Map} map
+     * @param {ctrl.Mob} mob
+     */
     EntitiesStore.prototype.addMob = function (map, mob) {
         if (!_.contains(this.mobs_, mob.model.id)) {
             this.mobs_[mob.model.id] = mob;
@@ -89,10 +80,9 @@ var EntitiesStore = (function () {
             EntityListener.getInstance().popMob(mob);
         }
     };
-
     /**
-    * @param {ctrl.Mob} mob
-    */
+     * @param {ctrl.Mob} mob
+     */
     EntitiesStore.prototype.removeMob = function (mob) {
         var map = MapStore.getInstance().getMapById(mob.model.position.mapId);
         if (map) {
@@ -101,25 +91,22 @@ var EntitiesStore = (function () {
             mob.dispose();
         }
     };
-
     /**
-    * @return {MobCtrl[]}
-    */
+     * @return {MobCtrl[]}
+     */
     EntitiesStore.prototype.getMobs = function () {
         return this.mobs_;
     };
-
     /**
-    * @param {string} mobId
-    * @return {ctrl.Mob}
-    */
+     * @param {string} mobId
+     * @return {ctrl.Mob}
+     */
     EntitiesStore.prototype.getMobById = function (mobId) {
         return this.mobs_[mobId] || null;
     };
-
     /**
-    * @return {Object}
-    */
+     * @return {Object}
+     */
     EntitiesStore.prototype.getPlayersJSON = function () {
         var json = {};
         _.each(this.players_, function (player, key) {
@@ -127,10 +114,9 @@ var EntitiesStore = (function () {
         });
         return json;
     };
-
     /**
-    * @return {Object}
-    */
+     * @return {Object}
+     */
     EntitiesStore.prototype.getMobsJSON = function () {
         var json = {};
         _.each(this.mobs_, function (mob, key) {
@@ -138,10 +124,9 @@ var EntitiesStore = (function () {
         });
         return json;
     };
-
     /**
-    * @param {Object.{userId, mapId, x, y}} data
-    */
+     * @param {Object.{userId, mapId, x, y}} data
+     */
     EntitiesStore.prototype.updatePlayerPosition = function (data) {
         var player = this.players_[data.userId];
         if (player) {
@@ -150,38 +135,34 @@ var EntitiesStore = (function () {
             player.model.position.y = data.y;
         }
     };
-
     /**
-    * 指定座標を中心とする半径rの円内に含まれるMobを返す
-    * @param {model.Position} targetPos
-    * @param {number} r
-    * @return {Array.<ctrl.Entity>}
-    */
+     * 指定座標を中心とする半径rの円内に含まれるMobを返す
+     * @param {model.Position} targetPos
+     * @param {number} r
+     * @return {Array.<ctrl.Entity>}
+     */
     EntitiesStore.prototype.getMobsByRadius = function (targetPos, r) {
         return this.getEntitiesStoreByRadiusInternal_(targetPos, r, this.getMobs());
     };
-
     /**
-    * 指定座標を中心とする半径rの円内に含まれるPlayerを返す
-    * @param {model.Position} targetPos
-    * @param {number} r
-    * @return {Array.<ctrl.Entity>}
-    */
+     * 指定座標を中心とする半径rの円内に含まれるPlayerを返す
+     * @param {model.Position} targetPos
+     * @param {number} r
+     * @return {Array.<ctrl.Entity>}
+     */
     EntitiesStore.prototype.getPlayersByRadius = function (targetPos, r) {
         var players = this.getPlayersByMapId(targetPos.mapId);
         return this.getEntitiesStoreByRadiusInternal_(targetPos, r, players);
     };
-
     /**
-    * @param {Position} targetPos
-    * @param {number} r
-    * @param {MobCtrl[]} entities
-    * @return {Array.<ctrl.Entity>}
-    */
+     * @param {Position} targetPos
+     * @param {number} r
+     * @param {MobCtrl[]} entities
+     * @return {Array.<ctrl.Entity>}
+     */
     EntitiesStore.prototype.getEntitiesStoreByRadiusInternal_ = function (targetPos, r, entities) {
         var result = [];
         var r2 = Math.pow(r, 2);
-
         _.forEach(entities, function (entity) {
             var px = entity.model.position.x - targetPos.x;
             var py = entity.model.position.y - targetPos.y;
@@ -194,6 +175,5 @@ var EntitiesStore = (function () {
     };
     return EntitiesStore;
 })();
-
 module.exports = EntitiesStore;
 //# sourceMappingURL=entities.js.map

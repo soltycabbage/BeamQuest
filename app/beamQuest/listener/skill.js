@@ -1,11 +1,9 @@
 var EntityStore = require('beamQuest/store/entities');
 var UserStore = require('beamQuest/store/userStore');
-
 var SkillFactory = require('beamQuest/factory/skillFactory');
-
 /**
-* @fileoverview アイテムの取得/ドロップなどなど
-*/
+ * @fileoverview アイテムの取得/ドロップなどなど
+ */
 var Skill = (function () {
     function Skill() {
         if (Skill.instance_) {
@@ -19,17 +17,15 @@ var Skill = (function () {
         }
         return Skill.instance_;
     };
-
     Skill.prototype.listen = function (socket, io) {
         this.socket_ = socket;
         this.io_ = io;
         this.socket_.on('skill:cast', this.handleCastSkill_.bind(this));
     };
-
     /**
-    * プレイヤーからのスキル使用要求
-    * @param {Object.<skillId: string, userId: string, position: model.Position>} data
-    */
+     * プレイヤーからのスキル使用要求
+     * @param {Object.<skillId: string, userId: string, position: model.Position>} data
+     */
     Skill.prototype.handleCastSkill_ = function (data) {
         var _this = this;
         if (this.io_ && data && data.skillId && data.position) {
@@ -49,7 +45,6 @@ var Skill = (function () {
                         skill: targetSkill
                     };
                     _this.io_.sockets.emit('notify:skill:cast:start', result);
-
                     // キャストタイム終了後、スキル使用者のBPを減らす。
                     // キャストが中断されない前提。
                     data.position.mapId = mapId;
@@ -61,12 +56,11 @@ var Skill = (function () {
             });
         }
     };
-
     /**
-    * @param {!model.Skill} model
-    * @param {string} userId
-    * @param {!model.Position} targetPos
-    */
+     * @param {!model.Skill} model
+     * @param {string} userId
+     * @param {!model.Position} targetPos
+     */
     Skill.prototype.fire = function (model, userId, targetPos) {
         if (this.io_) {
             var data = {
@@ -77,14 +71,13 @@ var Skill = (function () {
             this.io_.sockets.emit('notify:skill:fire', data);
         }
     };
-
     /**
-    * そのスキルor使用者のリキャストタイムとか残りBPとかを見て使用可能かどうかを返す
-    * @param {model.Skill} skill
-    * @param {ctrl.Player} user
-    * @return {boolean} スキル使用可能ならtrue
-    * @private
-    */
+     * そのスキルor使用者のリキャストタイムとか残りBPとかを見て使用可能かどうかを返す
+     * @param {model.Skill} skill
+     * @param {ctrl.Player} user
+     * @return {boolean} スキル使用可能ならtrue
+     * @private
+     */
     Skill.prototype.canUse_ = function (skill, user) {
         // BPが足りなかったらfalse
         if (skill.bp > user.model.bp) {
@@ -95,6 +88,5 @@ var Skill = (function () {
     };
     return Skill;
 })();
-
 module.exports = Skill;
 //# sourceMappingURL=skill.js.map

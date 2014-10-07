@@ -5,15 +5,13 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var Model = require('beamQuest/model/model');
-
 /**
-* アイテムのmodel
-*/
+ * アイテムのmodel
+ */
 var Item = (function (_super) {
     __extends(Item, _super);
     function Item(opt_data) {
         _super.call(this, opt_data);
-
         this.name = this.data.name || 'item';
         this.info = this.data.info || '';
         this.type = this.data.type;
@@ -27,6 +25,5 @@ var Item = (function (_super) {
     };
     return Item;
 })(Model);
-
 module.exports = Item;
 //# sourceMappingURL=item.js.map

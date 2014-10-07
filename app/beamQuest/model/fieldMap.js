@@ -5,12 +5,10 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var MapModel = require('beamQuest/model/map');
-
 var FieldMap = (function (_super) {
     __extends(FieldMap, _super);
     function FieldMap(opt_data) {
         _super.call(this, opt_data);
-
         this.maxMobCount = this.data.maxMobCount || 0;
         this.mobCount = this.data.mobCount || 0;
         this.dropItems = this.data.dropItems || {};
@@ -21,7 +19,6 @@ var FieldMap = (function (_super) {
             _this.dropItems[item.dropId] = item;
         });
     };
-
     FieldMap.prototype.toJSON = function () {
         var json = _super.prototype.toJSON.call(this);
         json.maxMobCount = this.maxMobCount;
@@ -31,6 +28,5 @@ var FieldMap = (function (_super) {
     };
     return FieldMap;
 })(MapModel);
-
 module.exports = FieldMap;
 //# sourceMappingURL=fieldMap.js.map

@@ -6,15 +6,13 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var Skill = require('beamQuest/skill/skill');
-
 /**
-* バーンストライク
-*/
+ * バーンストライク
+ */
 var BurnStrike = (function (_super) {
     __extends(BurnStrike, _super);
     function BurnStrike(model, user, targetpos) {
         _super.call(this, model, user, targetpos);
-
         this.interval_ = null;
         this.dotcount_ = 0;
         this.maxdotcount_ = 10;
@@ -23,12 +21,10 @@ var BurnStrike = (function (_super) {
     BurnStrike.prototype.fire = function () {
         var _this = this;
         _super.prototype.fire.call(this);
-
         this.interval_ = setInterval(function () {
             if (_this.dotcount_++ > _this.maxdotcount_) {
                 clearInterval(_this.interval_);
             }
-
             // todo: ダメージ計算、クリティカル判定
             var damage = 10 + Math.floor(10 * Math.random());
             var iscritical = false;
@@ -41,6 +37,5 @@ var BurnStrike = (function (_super) {
     };
     return BurnStrike;
 })(Skill);
-
 module.exports = BurnStrike;
 //# sourceMappingURL=burnStrike.js.map

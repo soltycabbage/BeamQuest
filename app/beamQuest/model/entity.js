@@ -7,15 +7,13 @@ var __extends = this.__extends || function (d, b) {
 var Model = require('beamQuest/model/model');
 var Position = require('beamQuest/model/position');
 var Skill = require('beamQuest/model/skill');
-
 /**
-* NPC, PC, mob などの基底クラス
-*/
+ * NPC, PC, mob などの基底クラス
+ */
 var Entity = (function (_super) {
     __extends(Entity, _super);
     function Entity(opt_data) {
         _super.call(this, opt_data);
-
         this.hash = this.data.hash;
         this.id = this.data.id;
         this.type = this.data.type;
@@ -30,34 +28,30 @@ var Entity = (function (_super) {
     Entity.prototype.setId = function (id) {
         this.id = id;
     };
-
     Entity.prototype.setPosition = function (position) {
         this.position = position;
     };
-
     /**
-    * HP の増減を行う
-    * 減らす場合は負の数を指定
-    *
-    * @param {number} amount
-    * @param {boolean=} opt_isCritical クリティカルヒットの場合true
-    */
+     * HP の増減を行う
+     * 減らす場合は負の数を指定
+     *
+     * @param {number} amount
+     * @param {boolean=} opt_isCritical クリティカルヒットの場合true
+     */
     Entity.prototype.addHp = function (amount, opt_isCritical) {
         this.hp = Math.max(0, Math.min(this.maxHp, this.hp + amount));
         this.emit('addHp', amount, !!opt_isCritical);
     };
-
     /**
-    * レベル1から習得してるスキルを返す
-    * @return {Array.<mode.Skill>}
-    * @private
-    */
+     * レベル1から習得してるスキルを返す
+     * @return {Array.<mode.Skill>}
+     * @private
+     */
     Entity.prototype.getPresetSkills = function () {
         var skills = [];
         skills.push(new Skill(bq.params.Skills.BURNSTRIKE));
         return skills;
     };
-
     Entity.prototype.toJSON = function () {
         var json = _super.prototype.toJSON.call(this);
         json.hash = this.hash;
@@ -77,6 +71,5 @@ var Entity = (function (_super) {
     Entity.DEFAULT_DEFENCE = 1;
     return Entity;
 })(Model);
-
 module.exports = Entity;
 //# sourceMappingURL=entity.js.map
