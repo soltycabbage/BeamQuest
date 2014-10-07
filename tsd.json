@@ -22,6 +22,15 @@
     },
     "node_redis/node_redis.d.ts": {
       "commit": "fbd8131f776fa18007673aea9aecf9138372cebb"
+    },
+    "sinon/sinon.d.ts": {
+      "commit": "c8b6954f449bd252ee42592fe471f14b1995cffb"
+    },
+    "expect.js/expect.js.d.ts": {
+      "commit": "c8b6954f449bd252ee42592fe471f14b1995cffb"
+    },
+    "mocha/mocha.d.ts": {
+      "commit": "c8b6954f449bd252ee42592fe471f14b1995cffb"
     }
   }
 }
