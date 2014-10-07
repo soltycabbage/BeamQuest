@@ -1,10 +1,9 @@
 var Entities = require('beamQuest/store/entities');
 var Maps = require('beamQuest/store/maps');
 var UserStore = require('beamQuest/store/userStore');
-
 /**
-* @fileoverview ビームの発射などなどを扱う
-*/
+ * @fileoverview ビームの発射などなどを扱う
+ */
 var Beam = (function () {
     function Beam() {
         if (Beam.instance_) {
@@ -18,12 +17,10 @@ var Beam = (function () {
         }
         return Beam.instance_;
     };
-
     Beam.prototype.listen = function (socket, io) {
         var _this = this;
         this.socket_ = socket;
         this.io_ = io;
-
         socket.on('beam:shoot', function (data) {
             UserStore.getInstance().getSessionData(socket.id, 'mapId', function (err, mapId) {
                 var result = data;
@@ -36,7 +33,8 @@ var Beam = (function () {
                     result.beamDuration = beam.duration;
                     if (beam.bp <= player.model.bp) {
                         player.model.addBp(-beam.bp);
-                    } else {
+                    }
+                    else {
                         // BPが足りないのでビームは撃てないよみたいなアナウンスを入れる
                         socket.emit('user:status:bp:lack');
                         return;
@@ -45,11 +43,10 @@ var Beam = (function () {
                 io.sockets.emit('notify:beam:shoot', result);
             });
         });
-
         /**
-        * ビームの位置情報を受け取る
-        * @param {Object.<shooterId: string, beamId: number, mapId: number, x: number, y: number>} data
-        */
+         * ビームの位置情報を受け取る
+         * @param {Object.<shooterId: string, beamId: number, mapId: number, x: number, y: number>} data
+         */
         socket.on('beam:position:update', function (data) {
             // TODO: 誰が撃ったかによって当たり判定の対象を変えたい
             // TODO この部分は消してクライアントにします iwag
@@ -57,7 +54,6 @@ var Beam = (function () {
             if (entity) {
                 _this.updateEntityStatus_(entity, data.beamId, data);
             }
-
             // ビーム対オブジェクト
             var obj = _this.isHitObject_(data);
             if (obj) {
@@ -65,7 +61,6 @@ var Beam = (function () {
             }
         });
     };
-
     Beam.prototype.updateEntityStatus_ = function (entity, beamType, data) {
         var hitResult = {
             entity: entity.model.toJSON(),
@@ -75,60 +70,51 @@ var Beam = (function () {
         entity.beamHit(beamType, data.shooterId, data.mapId);
         this.io_.sockets.emit('notify:beam:hit:entity', hitResult);
     };
-
     /**
-    * ビームがあたっていたら対象のEntityを返す
-    * @return {model.Mob}
-    */
+     * ビームがあたっていたら対象のEntityを返す
+     * @return {model.Mob}
+     */
     Beam.prototype.isHitEntity_ = function (data) {
         var _this = this;
         var beamPos = { x: data.x, y: data.y };
         var mobs = Entities.getInstance().getMobs()[data.mapId] || {};
-        var collideRect = { width: 32, height: 32 };
+        var collideRect = { width: 32, height: 32 }; // 当たり判定の範囲（これもビームごとに決められるようにしたい）
         return _.find(mobs, function (mob) {
             return _this.pointInRect_(beamPos, mob.model.position, collideRect);
         });
     };
-
     /**
-    * 指定pointが範囲内(rect)に入っていたらtrue
-    * @param {Object} beamPoint
-    * @param {Object} targetPoint
-    * @param {Object} rect
-    */
+     * 指定pointが範囲内(rect)に入っていたらtrue
+     * @param {Object} beamPoint
+     * @param {Object} targetPoint
+     * @param {Object} rect
+     */
     Beam.prototype.pointInRect_ = function (beamPoint, targetPoint, rect) {
         var startX = beamPoint.x - rect.width;
         var endX = beamPoint.x + rect.width;
         var startY = beamPoint.y - rect.height;
         var endY = beamPoint.y + rect.height;
-
         return startX < targetPoint.x && targetPoint.x < endX && startY < targetPoint.y && targetPoint.y < endY;
     };
-
     /**
-    * オブジェクトにあたっていたら対象のEntityを返す
-    * @return {model.Mob}
-    */
+     * オブジェクトにあたっていたら対象のEntityを返す
+     * @return {model.Mob}
+     */
     Beam.prototype.isHitObject_ = function (data) {
         var beamPos = { x: data.x, y: data.y };
-
         var map = Maps.getInstance().getMapById(data.mapId) || {};
-
         var tileSize = map.model.objTmx.tileWidth;
         var sizeY = map.model.objTmx.height;
-
         var layers = map.model.objTmx.layers;
         var passables = _.select(layers, function (layer) {
             return layer && layer.type === 'tile' && layer.properties['beam_no_passable'] === 'true';
         });
-
         var objs = _.select(passables, function (layer) {
             var gid = layer.tileAt(Math.floor(beamPos.x / tileSize), sizeY - 1 - Math.floor((beamPos.y) / tileSize));
             return gid;
         });
         return objs && objs[0];
     };
-
     Beam.prototype.updateObjStatus_ = function (obj, beamType, data) {
         var hitResult = {
             // obj のIDとか入れる？
@@ -138,6 +124,5 @@ var Beam = (function () {
     };
     return Beam;
 })();
-
 module.exports = Beam;
 //# sourceMappingURL=beam.js.map

@@ -4,10 +4,8 @@ var PositionModel = require('beamQuest/model/position');
 var Entities = require('beamQuest/store/entities');
 var UserStore = require('beamQuest/store/userStore');
 var kvs = require('beamQuest/store/kvs').createClient();
-
 function listen(socket, io) {
     socket.on('login', onLogin);
-
     function onLogin(data) {
         var invalidErr = validateUserId_(data.userId);
         if (invalidErr) {
@@ -16,7 +14,6 @@ function listen(socket, io) {
         }
         login_(data);
     }
-
     function login_(loginData) {
         var respond_ = function (result) {
             socket.emit('login:receive', result);
@@ -25,23 +22,19 @@ function listen(socket, io) {
             if (error) {
                 return respond_(error);
             }
-
             if (userData && userData.hash !== loginData.hash) {
                 return respond_({ result: 'error', message: 'すでに存在するキャラクターです。' });
             }
-
             var player = (userData) ? createPlayer_(userData) : createNewPlayer_(loginData);
             addLoginUser_(player);
-
             return respond_({ result: 'success', player: player.model.toJSON() });
         });
     }
-
     /**
-    * @param {string} userId
-    * @return {Object}
-    * @private
-    */
+     * @param {string} userId
+     * @return {Object}
+     * @private
+     */
     function validateUserId_(userId) {
         var result = null;
         if (!userId.match(/^[a-zA-Zぁ-んァ-ン0-9]+$/)) {
@@ -49,7 +42,6 @@ function listen(socket, io) {
         }
         return result;
     }
-
     function createPlayer_(userData) {
         var model = new PlayerModel(userData);
         model.socket = socket;
@@ -59,7 +51,6 @@ function listen(socket, io) {
         player.respawn();
         return player;
     }
-
     function createNewPlayer_(loginData) {
         // TODO mapManager.getRespawnPoint的な奴で初期ポジションを取得する
         var position = new PositionModel({
@@ -78,11 +69,10 @@ function listen(socket, io) {
         player.setModel(model);
         return player;
     }
-
     /**
-    * @param {string} userId
-    * @private
-    */
+     * @param {string} userId
+     * @private
+     */
     function addLoginUser_(player) {
         var model = player.model;
         var position = model.position;
@@ -91,7 +81,6 @@ function listen(socket, io) {
         UserStore.getInstance().saveSessionData(socket.id, 'mapId', player.model.position.mapId);
         player.scheduleUpdate();
         socket.broadcast.emit('notify:user:login', { 'userId': model.id });
-
         // 接続が切れたらログアウト扱い
         socket.on('disconnect', function () {
             UserStore.getInstance().save(player);

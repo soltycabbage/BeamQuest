@@ -5,19 +5,17 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var Model = require('beamQuest/model/model');
-
 /**
-* Entityが使用するスキルのmodel
-* @extends {model.Model}
-*/
+ * Entityが使用するスキルのmodel
+ * @extends {model.Model}
+ */
 var Skill = (function (_super) {
     __extends(Skill, _super);
     /**
-    * @param opt_data
-    */
+     * @param opt_data
+     */
     function Skill(opt_data) {
         _super.call(this, opt_data);
-
         this.id = this.data.id;
         this.name = this.data.name;
         this.info = this.data.info;
@@ -42,6 +40,5 @@ var Skill = (function (_super) {
     };
     return Skill;
 })(Model);
-
 module.exports = Skill;
 //# sourceMappingURL=skill.js.map

@@ -7,7 +7,6 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var events = require('events');
-
 var Model = (function (_super) {
     __extends(Model, _super);
     function Model(opt_data) {
@@ -15,19 +14,18 @@ var Model = (function (_super) {
         this.data = opt_data || {};
     }
     /**
-    * @returns {{}}
-    * @protected
-    */
+     * @returns {{}}
+     * @protected
+     */
     Model.prototype.toJSON = function () {
         return {};
     };
-
     /**
-    * Objectに入った各modelをtoJSON()して返す
-    * @param {Object.<Model>} obj
-    * @return {Object.<Object>}
-    * @protected
-    */
+     * Objectに入った各modelをtoJSON()して返す
+     * @param {Object.<Model>} obj
+     * @return {Object.<Object>}
+     * @protected
+     */
     Model.prototype.toObjectJSON = function (obj) {
         var result = {};
         _.forEach(obj, function (value, key) {
@@ -35,19 +33,19 @@ var Model = (function (_super) {
         });
         return result;
     };
-
     /**
-    * 配列に入った各modelをtoJSON()して返す
-    * @param {Array.<Model>} arr
-    * @return {Array.<Object>}
-    * @protected
-    */
+     * 配列に入った各modelをtoJSON()して返す
+     * @param {Array.<Model>} arr
+     * @return {Array.<Object>}
+     * @protected
+     */
     Model.prototype.toArrayJSON = function (arr) {
         var result = [];
         _.forEach(arr, function (model) {
             if (model.toJSON) {
                 result.push(model.toJSON());
-            } else {
+            }
+            else {
                 result.push(model);
             }
         });
@@ -55,6 +53,5 @@ var Model = (function (_super) {
     };
     return Model;
 })(events.EventEmitter);
-
 module.exports = Model;
 //# sourceMappingURL=model.js.map

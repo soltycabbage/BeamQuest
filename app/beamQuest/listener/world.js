@@ -1,9 +1,8 @@
 var Entities = require('beamQuest/store/entities');
 var MapStore = require('beamQuest/store/maps');
-
 /**
-* @fileoverview ワールド全体のイベント（mob/npcの移動, ログイン数、天気、時刻）などなどを扱う
-*/
+ * @fileoverview ワールド全体のイベント（mob/npcの移動, ログイン数、天気、時刻）などなどを扱う
+ */
 var World = (function () {
     function World() {
         if (World.instance_) {
@@ -17,7 +16,6 @@ var World = (function () {
         }
         return World.instance_;
     };
-
     World.prototype.listen = function (socket) {
         // マップに存在するEntityの一覧を返す
         // @type {Object.<mapId:number>} data
@@ -28,7 +26,6 @@ var World = (function () {
             };
             socket.emit('world:entities:receive', result);
         });
-
         // マップに存在するドロップアイテムの一覧を返す
         // @type {Object.<mapId:number>} data
         socket.on('world:dropitems:get', function (data) {

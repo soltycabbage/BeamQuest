@@ -7,15 +7,13 @@ var __extends = this.__extends || function (d, b) {
 var Model = require('beamQuest/model/model');
 var PositionModel = require('beamQuest/model/position');
 var ItemModel = require('beamQuest/model/item');
-
 /**
-* ドロップ情報のmodel
-*/
+ * ドロップ情報のmodel
+ */
 var DropItem = (function (_super) {
     __extends(DropItem, _super);
     function DropItem(opt_data) {
         _super.call(this, opt_data);
-
         this.itemId = this.data.itemId;
         this.item = this.data.item;
         var item = bq.params.Items[this.itemId];
@@ -33,11 +31,9 @@ var DropItem = (function (_super) {
         var r = Math.floor(Math.random() * 1000000);
         return [this.itemId, this.dropperId, this.droppedAt, r].join('_');
     };
-
     DropItem.prototype.setPosition = function (position) {
         this.position = position;
     };
-
     DropItem.prototype.toJSON = function () {
         var json = _super.prototype.toJSON.call(this);
         json.dropId = this.dropId;
@@ -51,6 +47,5 @@ var DropItem = (function (_super) {
     };
     return DropItem;
 })(Model);
-
 module.exports = DropItem;
 //# sourceMappingURL=dropItem.js.map

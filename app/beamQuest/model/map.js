@@ -5,7 +5,6 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var Model = require('beamQuest/model/model');
-
 var MapModel = (function (_super) {
     __extends(MapModel, _super);
     function MapModel(opt_data) {
@@ -25,6 +24,5 @@ var MapModel = (function (_super) {
     MapModel.DEFAULT_SIZE = { width: 100, height: 100 };
     return MapModel;
 })(Model);
-
 module.exports = MapModel;
 //# sourceMappingURL=map.js.map
