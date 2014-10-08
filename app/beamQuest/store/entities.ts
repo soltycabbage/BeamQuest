@@ -29,16 +29,16 @@ class EntitiesStore {
         }
         EntitiesStore.instance_ = this;
 
-        this.players_ = [];
-        this.mobs_ = [];
+        this.players_ = {};
+        this.mobs_ = {};
         this.npcs_ = {};
     }
 
     /** プレイヤー一覧 */
-    private players_:PlayerCtrl[];
+    private players_;
 
     /** mob一覧 */
-    private mobs_:MobCtrl[];
+    private mobs_;
 
     /**
      * npc一覧
@@ -47,9 +47,9 @@ class EntitiesStore {
     private npcs_;
 
     init() {
-        this.players_ = [];
-        this.mobs_ = [];
-        this.npcs_ = [];
+        this.players_ = {};
+        this.mobs_ = {};
+        this.npcs_ = {};
     }
 
     /**
@@ -170,7 +170,6 @@ class EntitiesStore {
      * @return {Object}
      */
     getMobsJSON(mapId:number) {
-        console.log(this.getMobs());
         var json = {};
         _.each(this.getMobsByMapId(mapId), (mob:any, key) => {
             json[key] = mob.model.toJSON();

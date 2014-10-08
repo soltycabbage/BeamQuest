@@ -21,8 +21,8 @@ var World = (function () {
         // @type {Object.<mapId:number>} data
         socket.on('world:entities:get', function (data) {
             var result = {
-                players: Entities.getInstance().getPlayersJSON(data.mapId),
-                mobs: Entities.getInstance().getMobsJSON(data.mapId)
+                players: Entities.getInstance().getPlayersJSON(parseInt(data.mapId)),
+                mobs: Entities.getInstance().getMobsJSON(parseInt(data.mapId))
             };
             socket.emit('world:entities:receive', result);
         });

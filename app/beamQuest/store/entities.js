@@ -10,8 +10,8 @@ var EntitiesStore = (function () {
             throw new Error("Error: Instantiation failed: Use EntitiesStore.getInstance() instead of new.");
         }
         EntitiesStore.instance_ = this;
-        this.players_ = [];
-        this.mobs_ = [];
+        this.players_ = {};
+        this.mobs_ = {};
         this.npcs_ = {};
     }
     EntitiesStore.getInstance = function () {
@@ -21,9 +21,9 @@ var EntitiesStore = (function () {
         return EntitiesStore.instance_;
     };
     EntitiesStore.prototype.init = function () {
-        this.players_ = [];
-        this.mobs_ = [];
-        this.npcs_ = [];
+        this.players_ = {};
+        this.mobs_ = {};
+        this.npcs_ = {};
     };
     /**
      * @param {ctrl.Player} player
@@ -130,7 +130,6 @@ var EntitiesStore = (function () {
      * @return {Object}
      */
     EntitiesStore.prototype.getMobsJSON = function (mapId) {
-        console.log(this.getMobs());
         var json = {};
         _.each(this.getMobsByMapId(mapId), function (mob, key) {
             json[key] = mob.model.toJSON();

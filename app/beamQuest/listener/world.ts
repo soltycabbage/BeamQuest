@@ -25,8 +25,8 @@ class World {
         // @type {Object.<mapId:number>} data
         socket.on('world:entities:get', function(data) {
             var result = {
-                players: Entities.getInstance().getPlayersJSON(data.mapId),
-                mobs: Entities.getInstance().getMobsJSON(data.mapId)
+                players: Entities.getInstance().getPlayersJSON(parseInt(data.mapId)),
+                mobs: Entities.getInstance().getMobsJSON(parseInt(data.mapId))
                 // npc: entities.getNpc() みたいな感じを想定
             };
             socket.emit('world:entities:receive', result);
