@@ -33,7 +33,7 @@ class Beam {
             UserStore.getInstance().getSessionData(socket.id, 'mapId', function(err, mapId) {
                 var result = data;
                 result.success = true;
-                var player:any = Entities.getInstance().getPlayerById(mapId, data.shooterId);
+                var player:any = Entities.getInstance().getPlayerById(data.shooterId);
                 if (player) {
                     var beam =  player.model.beam;
                     result.beamId = beam.id;
@@ -76,7 +76,7 @@ class Beam {
             beamTag: data.tag,
             beamPos: {x: data.x, y: data.y}
         };
-        entity.beamHit(beamType, data.shooterId, data.mapId);
+        entity.beamHit(beamType, data.shooterId);
         this.io_.sockets.emit('notify:beam:hit:entity', hitResult);
     }
 

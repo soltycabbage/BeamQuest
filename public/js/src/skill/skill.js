@@ -1,3 +1,7 @@
+/**
+ * @constructor
+ * @extends {cc.Class}
+ */
 bq.skill = cc.Class.extend({
     /**
      * @param {!bq.model.Skill} model

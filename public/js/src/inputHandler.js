@@ -1,3 +1,7 @@
+/**
+ * @constructor
+ * @extends {cc.Class}
+ */
 bq.InputHandler = cc.Class.extend({
     listeners: [],
     targetEvents_: [

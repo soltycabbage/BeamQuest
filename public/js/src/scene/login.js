@@ -1,3 +1,7 @@
+/**
+ * @constructor
+ * @extends {cc.Layer}
+ */
 bq.scene.LoginLayer = cc.Layer.extend({
     status: {
         SUCCESS: 'success', // ログイン成功
@@ -104,7 +108,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
         player.setPosition(cc.p(position.x, position.y));
 
         player.setModel(new bq.model.Player(data.player));
-        player.setProfile({name: userId});
+        player.setProfile({name: userId, mapId: data.player.position.mapId});
         player.showName();
         bq.player = player;
 
@@ -176,6 +180,10 @@ bq.scene.LoginLayer = cc.Layer.extend({
     }
 });
 
+/**
+ * @class
+ * @extends cc.Scene
+ */
 bq.scene.LoginScene = bq.scene.extend({
     onEnter: function() {
         this._super();

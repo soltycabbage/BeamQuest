@@ -1,3 +1,7 @@
+/**
+ * @constructor
+ * @extends {bq.hud.HudItem}
+ */
 bq.hud.InstantMsg = bq.hud.HudItem.extend({
     ctor: function() {
         this.container_ = $('#bq-instant-msg');

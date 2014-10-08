@@ -41,7 +41,7 @@ var Entity = (function () {
     };
     /**
      * mobがPOPするよってクライアントに伝える
-     * @param {ctrl.Mob} mob
+     * @param {MobCtrl} mob
      */
     Entity.prototype.popMob = function (mob) {
         if (this.io_) {
@@ -51,7 +51,7 @@ var Entity = (function () {
     };
     /**
      * mobが動いたよってクライアントに伝える
-     * @param {ctrl.Mob} mob
+     * @param {MobCtrl} mob
      */
     Entity.prototype.moveMob = function (mob) {
         if (this.io_) {
@@ -60,8 +60,8 @@ var Entity = (function () {
     };
     /**
      * mobがタゲったよってクライアントに伝える
-     * @param {ctrl.Mob} mob
-     * @param {ctrl.Entity} entity
+     * @param {MobCtrl} mob
+     * @param {EntityCtrl} entity
      */
     Entity.prototype.targetTo = function (mob, entity) {
         var data = { mob: mob.model.toJSON(), target: entity.model.toJSON() };
@@ -70,8 +70,8 @@ var Entity = (function () {
     /**
      * mobが近接攻撃の構えを取ったよってクライアントに伝える
      * @param {string} mobId
-     * @param {model.Position} srcPos
-     * @param {model.Position} destPos
+     * @param {PositionModel} srcPos
+     * @param {PositionModel} destPos
      * @param {number} range 射程距離(px)
      * @param {number} castTime 発動までの時間(msec)
      */
@@ -106,7 +106,7 @@ var Entity = (function () {
     };
     /**
      * Mob殺すよってクライアントに伝える
-     * @param {ctrl.Mob} mob
+     * @param {MobCtrl} mob
      */
     Entity.prototype.killMob = function (mob) {
         var _this = this;
@@ -119,11 +119,10 @@ var Entity = (function () {
     /**
      * mobのもつ経験値をplayerに与える
      * @param {string} playerId
-     * @param {ctrl.Mob} mob
+     * @param {MobCtrl} mob
      */
     Entity.prototype.addExp = function (playerId, mob) {
-        var mapId = mob.model.position.mapId;
-        var player = EntitiesStore.getInstance().getPlayerById(mapId, playerId);
+        var player = EntitiesStore.getInstance().getPlayerById(playerId);
         if (player) {
             player.addExp(mob.model.exp);
             player.model.socket.emit('user:status:exp:update', {
@@ -137,14 +136,14 @@ var Entity = (function () {
     };
     /**
      * レベルアップしたよってクライアントに伝える
-     * @param {model.Player} playerModel
+     * @param {PlayerModel} playerModel
      */
     Entity.prototype.levelUp = function (playerModel) {
         this.io_.sockets.emit('notify:entity:player:levelup', playerModel);
     };
     /**
      * player死んだよってクライアントに伝える
-     * @param player
+     * @param {PlayerCtrl} player
      */
     Entity.prototype.killPlayer = function (player) {
         var data = { entity: player.model.toJSON() };
@@ -156,9 +155,8 @@ var Entity = (function () {
      */
     Entity.prototype.handleRespawn = function (data) {
         if (data) {
-            var mapId = data.position.mapId;
             var playerId = data.id;
-            var player = EntitiesStore.getInstance().getPlayerById(mapId, playerId);
+            var player = EntitiesStore.getInstance().getPlayerById(playerId);
             if (player) {
                 player.respawn();
                 var d = { entity: player.model.toJSON() };
@@ -173,7 +171,7 @@ var Entity = (function () {
      */
     Entity.prototype.handleGetStatus_ = function (data) {
         if (data) {
-            var player = EntitiesStore.getInstance().getPlayerById(data.mapId, data.entityId);
+            var player = EntitiesStore.getInstance().getPlayerById(data.entityId);
             if (player) {
                 this.socket_.emit('user:status:receive', player.model.toJSON());
             }

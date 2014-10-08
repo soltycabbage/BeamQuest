@@ -41,7 +41,7 @@ class Skill {
     private handleCastSkill_(data) {
         if (this.io_ && data && data.skillId && data.position) {
             var mapId = UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', (err, mapId) => {
-                var player:any = EntityStore.getInstance().getPlayerById(mapId, data.userId);
+                var player:any = EntityStore.getInstance().getPlayerById(data.userId);
                 if (!player) { return; }
                 var skills:SkillModel[] = player.model.skills;
                 var targetSkill:SkillModel = _.find(skills, (skill) => {

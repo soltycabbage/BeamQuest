@@ -1,3 +1,7 @@
+/**
+ * @constructor
+ * @extends {bq.model}
+ */
 bq.model.BeamPos = bq.model.extend({
     ctor: function(json) {
         /** @type {string} */

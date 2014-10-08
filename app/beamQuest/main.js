@@ -20,25 +20,39 @@ exports.start = function(io) {
      */
     function initDependencies_() {
         var FieldMapCtrl = require('beamQuest/ctrl/fieldMap');
-        var d = deferred();
         // NOTE マップ情報の保存先がまだ決まってないので直接書いてる。将来的にはファイルorDBから取ってくる？
-        var map = new mapModel({
-            id: 1,
-            name: 'しんじゅく', // TODO 最初の村の名前は? (iwg)
-            maxMobCount: 30,
-            mobCount: 0
-        });
 
-        tmx.parseFile('public/res/map/map_village.tmx', function(err, m) {
-            if (err) throw err;
+        var parseFile = deferred.promisify(tmx.parseFile);
+
+        var map1 = parseFile('public/res/map/map_village.tmx')(function(m) {
+            "use strict";
+            var map = new mapModel({
+                id: 1,
+                name: 'しんじゅく', // TODO 最初の村の名前は? (iwg)
+                maxMobCount: 30,
+                mobCount: 0
+            });
             map.objTmx = m;
             map.size = {width: m.width * m.tileWidth, height: m.height * m.tileHeight};
             var mapCtrl = new FieldMapCtrl(map);
             MapStore.getInstance().getMaps().push(mapCtrl);
-            d.resolve();
         }.bind(this));
 
-        d.promise().then(init_);
+        var map2 = parseFile('public/res/map/map_small_village.tmx')(function(m) {
+            "use strict";
+            var map = new mapModel({
+                id: 2,
+                name: '小さい村',
+                maxMobCount: 30,
+                mobCount: 0
+            });
+            map.objTmx = m;
+            map.size = {width: m.width * m.tileWidth, height: m.height * m.tileHeight};
+            var mapCtrl = new FieldMapCtrl(map);
+            MapStore.getInstance().getMaps().push(mapCtrl);
+        }.bind(this));
+
+        deferred(map1, map2).then(init_);
     }
 
     function init_() {

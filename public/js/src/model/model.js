@@ -1,4 +1,8 @@
-bq.model = cc.Class.extend({
+/**
+ * @constructor
+ * @extends {cc.Class}
+ */
+bq.Model = cc.Class.extend({
     ctor: function(json) {
         this.parse(json);
     },
@@ -21,3 +25,8 @@ bq.model = cc.Class.extend({
         return result;
     }
 });
+
+/**
+ * @deprecated クラスが大文字でネームスペースが小文字のほうがよさそう
+ */
+bq.model = bq.Model;

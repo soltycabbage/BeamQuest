@@ -1,3 +1,7 @@
+/**
+ * @constructor
+ * @extends {cc.Class}
+ */
 bq.Ping = cc.Class.extend({
     ctor: function(socket, interval) {
         this.socket_ = socket;

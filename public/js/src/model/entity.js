@@ -1,5 +1,7 @@
 /**
  * サーバ側のmodel.Entityに対応するクライアント側のmodel
+ * @constructor
+ * @extends {bq.model}
  */
 bq.model.Entity = bq.model.extend({
     ctor: function(json) {

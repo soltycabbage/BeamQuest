@@ -1,3 +1,7 @@
+/**
+ * @constructor
+ * @extends {cc.Class}
+ */
 bq.skill.SkillFactory = cc.Class.extend({
     /**
      * スキルmodelに該当するskillクラスをnewして返す

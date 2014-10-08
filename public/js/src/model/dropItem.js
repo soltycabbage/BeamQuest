@@ -1,3 +1,7 @@
+/**
+ * @constructor
+ * @extends {bq.model}
+ */
 bq.model.DropItem = bq.model.extend({
     ctor: function(json) {
         /** @type {string} */

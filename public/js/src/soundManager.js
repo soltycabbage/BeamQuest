@@ -1,5 +1,7 @@
-/*
+/**
  * 音楽関係はマネージャーを通してくれる？
+ * @constructor
+ * @extends {cc.Class}
  */
 bq.SoundManager = cc.Class.extend({
     DEFAULT_VOLUME: 1,
@@ -62,16 +64,17 @@ bq.SoundManager = cc.Class.extend({
 
     createFadeoutSequence_: function(duration, from, to, callback) {
         var actionSequence = [
-            cc.ActionTween.create(duration, 'dummy', from, to),
-            cc.CallFunc.create(this.stopMusic, this),
-            cc.CallFunc.create(callback)
+            new cc.ActionTween(duration, 'dummy', from, to),
+            new cc.CallFunc(this.stopMusic, this),
+            new cc.CallFunc(callback)
         ];
-        return cc.Sequence.create(actionSequence);
-    },
+        return new cc.Sequence(actionSequence);
+    }
 });
 
-/*
+/**
  * cc.ActionTweenへのアンチテーゼ(意味不明)
+ * @extends {cc.ActionTweenDelegate}
  */
 bq.SoundManager.MusicVolumeModificationActionTweenDelegate = cc.ActionTweenDelegate.extend({
     ctor: function(audioEngine) {
@@ -80,6 +83,6 @@ bq.SoundManager.MusicVolumeModificationActionTweenDelegate = cc.ActionTweenDeleg
 
     updateTweenAction: function(value, key) {
         this.audioEngine.setMusicVolume(value);
-    },
+    }
 });
 

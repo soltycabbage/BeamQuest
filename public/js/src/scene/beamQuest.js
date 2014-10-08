@@ -1,5 +1,9 @@
+/**
+ * @constructor
+ * @extends {cc.Layer}
+ */
 bq.scene.BeamQuestWorld = cc.Layer.extend({
-    init:function () {
+    ctor:function () {
         'use strict';
 
         this._super();
@@ -38,7 +42,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
             }
         }, this);
 
-        this.initPing_();
         // HUD有効
         var hud = bq.Hud.getInstance();
         hud.enable(true);
@@ -52,7 +55,7 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
         // );
 
         // add Physics Debug
-        this._debugNode = cc.PhysicsDebugNode.create(bq.space);
+        this._debugNode = new cc.PhysicsDebugNode(bq.space);
         this._debugNode.setVisible(false); // 物理の箱見たいときはtrueに
         baseLayer.addChild(this._debugNode);
 
@@ -71,42 +74,6 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
     update: function(bt) {
         'use strict';
         bq.space.step(bt);
-    },
-
-    initPing_: function() {
-        'use strict';
-
-        if (! cc.director.isDisplayStats()) {
-            return;
-        }
-
-        // ping始める
-        var interval = 300;
-        this.ping_ = new bq.Ping(bq.Socket.getInstance().socket, interval);
-        this.ping_.start();
-
-        // 表示用テキストを作る
-        var pingText = function() {
-            return "ping: " + this.ping_.getRoundTripTime();
-        }.bind(this);
-
-        // ラベル作る
-        var fontSize = 16;
-        var pingLabel = bq.Label.createWithShadow(pingText(), fontSize);
-        pingLabel.setAnchorPoint(cc.p(0, 1.0));
-
-        // 表示位置
-        var margin = 5;
-        var winSize = cc.director.getWinSize();
-        pingLabel.setPosition(cc.p(margin, winSize.height - margin));
-
-        // 表示内容更新処理
-        pingLabel.schedule(function() {
-            pingLabel.setString(pingText());
-        });
-
-        var zIndex = 10000;
-        this.addChild(pingLabel, zIndex, bq.config.zOrder.DEBUG_PING);
     },
 
     createPhysicalSpace_: function(size) {
@@ -132,17 +99,25 @@ bq.scene.BeamQuestWorld = cc.Layer.extend({
     }
 });
 
+/**
+ * @class
+ * @extends cc.Scene
+ */
 bq.scene.BeamQuestWorldScene = cc.Scene.extend({
     onEnter:function () {
         'use strict';
 
         this._super();
         if (this.isAlreadyLogin_(bq.player.name)) {
-            var layer = new bq.scene.BeamQuestWorld();
-            layer.init();
+            var layer;
+            if (bq.player.mapId == 1) {
+                layer = new bq.scene.BeamQuestWorld();
+            } else {
+                layer = new bq.scene.BeamQuestWorld2();
+            }
             this.addChild(layer);
-            this.renderEntities_(1); // TODO: mapIdが固定なのをなんとかする
-            this.renderDropItems_(1);// TODO: mapIdが固定なのをなんとかする
+            this.renderEntities_(bq.player.mapId);
+            this.renderDropItems_(bq.player.mapId);
         } else {
             this.addChild(new bq.scene.LoginScene());
         }
