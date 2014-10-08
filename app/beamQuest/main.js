@@ -50,7 +50,6 @@ exports.start = function(io) {
             map.size = {width: m.width * m.tileWidth, height: m.height * m.tileHeight};
             var mapCtrl = new FieldMapCtrl(map);
             MapStore.getInstance().getMaps().push(mapCtrl);
-
         }.bind(this));
 
         deferred(map1, map2).then(init_);
