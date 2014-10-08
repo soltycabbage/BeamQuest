@@ -75,6 +75,7 @@ var EntitiesStore = (function () {
      */
     EntitiesStore.prototype.addMob = function (map, mob) {
         if (!_.contains(this.mobs_, mob.model.id)) {
+            logger.debug(mob.model.id, mob.model.position);
             this.mobs_[mob.model.id] = mob;
             map.mobCount++;
             EntityListener.getInstance().popMob(mob);

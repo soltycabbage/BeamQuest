@@ -106,8 +106,9 @@ class EntitiesStore {
      * @param {model.Map} map
      * @param {ctrl.Mob} mob
      */
-    addMob(map:MapModel, mob:any) {
+    addMob(map:MapModel, mob:MobCtrl) {
         if (!_.contains(this.mobs_, mob.model.id)) {
+            logger.debug(mob.model.id, mob.model.position);
             this.mobs_[mob.model.id] = mob;
             map.mobCount++;
             EntityListener.getInstance().popMob(mob);
