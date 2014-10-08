@@ -49,7 +49,7 @@ var EntitiesStore = (function () {
         return this.players_;
     };
     /**
-     * @param {number} mapId
+     * @param {string} mapId
      * @return {PlayerCtrl[]}
      */
     EntitiesStore.prototype.getPlayersByMapId = function (mapId) {
@@ -99,6 +99,15 @@ var EntitiesStore = (function () {
         return this.mobs_;
     };
     /**
+     * @param {string} mapId
+     * @return {MobCtrl[]}
+     */
+    EntitiesStore.prototype.getMobsByMapId = function (mapId) {
+        return _.filter(this.mobs_, function (mob) {
+            return mob.model.mapId === mapId;
+        });
+    };
+    /**
      * @param {string} mobId
      * @return {ctrl.Mob}
      */
@@ -106,21 +115,23 @@ var EntitiesStore = (function () {
         return this.mobs_[mobId] || null;
     };
     /**
+     * @param {string} mapId
      * @return {Object}
      */
-    EntitiesStore.prototype.getPlayersJSON = function () {
+    EntitiesStore.prototype.getPlayersJSON = function (mapId) {
         var json = {};
-        _.each(this.players_, function (player, key) {
+        _.each(this.getPlayersByMapId(mapId), function (player, key) {
             json[key] = player.model.toJSON();
         });
         return json;
     };
     /**
+     * @param {string} mapId
      * @return {Object}
      */
-    EntitiesStore.prototype.getMobsJSON = function () {
+    EntitiesStore.prototype.getMobsJSON = function (mapId) {
         var json = {};
-        _.each(this.mobs_, function (mob, key) {
+        _.each(this.getMobsByMapId(mapId), function (mob, key) {
             json[key] = mob.model.toJSON();
         });
         return json;

@@ -80,10 +80,10 @@ class EntitiesStore {
     }
 
     /**
-     * @param {number} mapId
+     * @param {string} mapId
      * @return {PlayerCtrl[]}
      */
-    getPlayersByMapId(mapId:number) {
+    getPlayersByMapId(mapId:string): PlayerCtrl[] {
         return _.filter(this.players_, (player:PlayerCtrl) => {
             return player.model.mapId === mapId;
         });
@@ -135,6 +135,16 @@ class EntitiesStore {
     }
 
     /**
+     * @param {string} mapId
+     * @return {MobCtrl[]}
+     */
+    getMobsByMapId(mapId:string): MobCtrl[] {
+        return _.filter(this.mobs_, (mob:MobCtrl) => {
+            return mob.model.mapId === mapId;
+        });
+    }
+
+    /**
      * @param {string} mobId
      * @return {ctrl.Mob}
      */
@@ -143,11 +153,12 @@ class EntitiesStore {
     }
 
     /**
+     * @param {string} mapId
      * @return {Object}
      */
-    getPlayersJSON() {
+    getPlayersJSON(mapId?:string) {
         var json = {};
-        _.each(this.players_, (player:PlayerCtrl, key) => {
+        _.each(this.getPlayersByMapId(mapId), (player:PlayerCtrl, key) => {
             json[key] = player.model.toJSON();
         });
         return json;
@@ -155,11 +166,12 @@ class EntitiesStore {
 
 
     /**
+     * @param {string} mapId
      * @return {Object}
      */
-    getMobsJSON() {
+    getMobsJSON(mapId:string) {
         var json = {};
-        _.each(this.mobs_, (mob:any, key) => {
+        _.each(this.getMobsByMapId(mapId), (mob:any, key) => {
             json[key] = mob.model.toJSON();
         });
         return json;
