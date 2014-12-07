@@ -84,7 +84,7 @@ class Player extends Entity {
      * @param {number} amount
      * @param {boolean=] opt_isCritical
     */
-    addBp(amount:number, opt_isCritical: boolean): void {
+    addBp(amount:number, opt_isCritical?: boolean): void {
         this.bp = Math.max(0, Math.min(this.maxBp, this.bp + amount));
         this.emit('addBp', amount, !!opt_isCritical);
     }

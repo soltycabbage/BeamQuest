@@ -14,6 +14,9 @@ class Skill extends Model {
     /** @var スキルの説明文 */
     info: string;
 
+    /** @var 威力 */
+    power: number;
+
     /** @var 消費BP */
     bp: number;
 
@@ -38,6 +41,7 @@ class Skill extends Model {
         this.id   = this.data.id;
         this.name = this.data.name;
         this.info = this.data.info;
+        this.power = this.data.power;
         this.bp = this.data.bp;
         this.castTime = this.data.castTime;
         this.recastTime = this.data.recastTime;
@@ -51,6 +55,7 @@ class Skill extends Model {
         json.id = this.id;
         json.name = this.name;
         json.info = this.info;
+        json.power = this.power;
         json.bp = this.bp;
         json.castTime = this.castTime;
         json.recastTime = this.recastTime;

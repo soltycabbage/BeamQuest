@@ -9,27 +9,11 @@ declare var bq: any;
 
 /**
  * @constructor
- * @param {!model.Skill} model
- * @param {!ctrl.Entity} user
- * @param {!model.Position} targetPos
  */
 class Skill {
-    /**
-     * @type {!ctrl.Entity} スキル使用者
-     * @protected
-     */
+    // スキル使用者
     user:EntityCtrl;
-
-    /**
-     * @type {model.Skill}
-     * @protected
-     */
     model:SkillModel;
-
-    /**
-     * @type {model.Position}
-     * @protected
-     */
     targetPos:PositionModel;
 
     private skillListener:any;
@@ -56,17 +40,24 @@ class Skill {
     /**
      * 効果範囲内にダメージを与える
      * @param {number} damage
-     * @param {boolean=} opt_isCritical
+     * @param {number=} opt_criticalProb クリティカル率
      */
-    applyDamage(damage:number, opt_isCritical?:boolean) {
+    applyDamage(damage:number, opt_criticalProb?:number) {
         var entities = [];
+        var isCritical = false;
+        var criticalProb = opt_criticalProb || 0;
+        if (Math.floor(Math.random() * 100) < criticalProb) {
+            isCritical = true;
+            damage *= 2;
+        }
+
         if (this.user.model.type === bq.Types.EntityType.PLAYER) {
             entities = this.getMobsByRadius();
         }
 
         _.forEach(entities, (entity) => {
             if (entity && entity.model) {
-                entity.model.addHp(-damage, !!opt_isCritical);
+                entity.model.addHp(-damage, !!isCritical);
                 if (entity instanceof MobCtrl) {
                     entity.hateList && entity.applyHate(this.user.model.id, damage);
                 }

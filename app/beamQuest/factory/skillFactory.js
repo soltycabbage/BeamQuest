@@ -1,4 +1,5 @@
 var BurnStrike = require('beamQuest/skill/burnStrike');
+var BioShock = require('beamQuest/skill/bioShock');
 var SkillFactory = (function () {
     function SkillFactory() {
         if (SkillFactory.instance_) {
@@ -25,6 +26,8 @@ var SkillFactory = (function () {
             case s.BURNSTRIKE.id:
                 clazz = BurnStrike;
                 break;
+            case s.BIOSHOCK.id:
+                clazz = BioShock;
             default:
                 return null;
         }

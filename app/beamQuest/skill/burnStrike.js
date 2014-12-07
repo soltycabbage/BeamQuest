@@ -25,14 +25,8 @@ var BurnStrike = (function (_super) {
             if (_this.dotcount_++ > _this.maxdotcount_) {
                 clearInterval(_this.interval_);
             }
-            // todo: ダメージ計算、クリティカル判定
-            var damage = 10 + Math.floor(10 * Math.random());
-            var iscritical = false;
-            if (Math.floor(Math.random() * 100) < 20) {
-                iscritical = true;
-                damage *= 2;
-            }
-            _this.applyDamage(damage, iscritical);
+            var damage = _this.model.power + Math.floor(_this.model.power * Math.random());
+            _this.applyDamage(damage, 20);
         }, 500);
     };
     return BurnStrike;

@@ -3,9 +3,6 @@ var MobCtrl = require('beamQuest/ctrl/mob/mob');
 var EntityStore = require('beamQuest/store/entities');
 /**
  * @constructor
- * @param {!model.Skill} model
- * @param {!ctrl.Entity} user
- * @param {!model.Position} targetPos
  */
 var Skill = (function () {
     function Skill(model, user, targetPos) {
@@ -27,17 +24,23 @@ var Skill = (function () {
     /**
      * 効果範囲内にダメージを与える
      * @param {number} damage
-     * @param {boolean=} opt_isCritical
+     * @param {number=} opt_criticalProb クリティカル率
      */
-    Skill.prototype.applyDamage = function (damage, opt_isCritical) {
+    Skill.prototype.applyDamage = function (damage, opt_criticalProb) {
         var _this = this;
         var entities = [];
+        var isCritical = false;
+        var criticalProb = opt_criticalProb || 0;
+        if (Math.floor(Math.random() * 100) < criticalProb) {
+            isCritical = true;
+            damage *= 2;
+        }
         if (this.user.model.type === bq.Types.EntityType.PLAYER) {
             entities = this.getMobsByRadius();
         }
         _.forEach(entities, function (entity) {
             if (entity && entity.model) {
-                entity.model.addHp(-damage, !!opt_isCritical);
+                entity.model.addHp(-damage, !!isCritical);
                 if (entity instanceof MobCtrl) {
                     entity.hateList && entity.applyHate(_this.user.model.id, damage);
                 }
