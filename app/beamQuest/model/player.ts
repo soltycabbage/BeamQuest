@@ -29,6 +29,12 @@ class Player extends Entity {
      */
     nextLvExp: number;
     isDeath: boolean;
+
+    /**
+     * 回避中かどうか
+     */
+    isDouge: boolean;
+
     /** @type {Beam} */
     beam: any;
     /**
@@ -53,6 +59,7 @@ class Player extends Entity {
         this.prevLvExp = this.job.Exp[this.lv];
         this.nextLvExp = this.job.Exp[this.lv + 1];
         this.isDeath = !!this.data.isDeath;
+        this.isDouge = !!this.data.isDouge;
         this.beam = bq.params.Beams.NORMAL1;
         this.hotbarItems = this.data.hotbarItems || this.skills;
         this.socket = this.data.socket || null;
@@ -78,6 +85,10 @@ class Player extends Entity {
         this.attack = Math.ceil(this.baseStatus.str * this.job.BASE_STATUS_RATE.STR * growthRate);
         this.defence = Math.ceil(this.baseStatus.def * this.job.BASE_STATUS_RATE.DEF * growthRate);
         // TODO: ほかのステータス
+    }
+
+    setDouge(isDouge:boolean) {
+        this.isDouge = isDouge;
     }
 
     /**

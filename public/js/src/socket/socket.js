@@ -28,6 +28,11 @@ bq.Socket = cc.Class.extend({
             entityManager.moveTo(moveData);
         });
 
+        // 他プレイヤーが回避行動を取った
+        this.socket.on('notify:user:douge', function(data) {
+            entityManager.dougeTo(data);
+        });
+
         // ビーム発射
         this.socket.on('notify:beam:shoot', function(data) {
             var beamPos = new bq.model.BeamPos(data);

@@ -65,10 +65,21 @@ bq.EntityManager = cc.Class.extend({
      */
     moveTo: function(moveData) {
         var otherPlayer = this.otherPlayers_[moveData.userId];
-        if (!otherPlayer) {
+        if (!otherPlayer && moveData.userId !== bq.player.name) {
             this.createOtherPlayer(moveData);
         } else {
             otherPlayer.moveTo(cc.p(moveData.x, moveData.y), moveData.direction);
+        }
+    },
+
+    /**
+     * 他プレイヤーが回避行動を取った
+     * @param {object} data
+     */
+    dougeTo: function(data) {
+        var otherPlayer = this.otherPlayers_[data.userId];
+        if (otherPlayer) {
+            otherPlayer.dougeTo(cc.p(data.x, data.y));
         }
     },
 

@@ -144,8 +144,8 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
      * @param {cc.Point} pos
      */
     dougeTo: function(pos) {
-        bq.mapManager.normalizePos(pos);
-        var jumpTo = new cc.JumpTo(0.2, pos, 10, 1);
+        var np = bq.mapManager.getNormalizePosByEnterable(this.getPosition(), pos);
+        var jumpTo = new cc.JumpTo(0.2, np, 10, 1);
         this.runAction(jumpTo);
         setTimeout(_.bind(function() {
             this.currentState = bq.entity.EntityState.Mode.stop;
@@ -497,5 +497,23 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
             })]);
             phantom.runAction(action);
         }
-    }
+    },
+
+    /**
+     * 方向をベクトルに変換する
+     * @param {cc.p} direction
+     */
+    getNormalizedDirectionVector: _.memoize(function(direction) {
+        var d = bq.entity.EntityState.Direction;
+        var directionVectors = {};
+        directionVectors[d.bottom]      = cc.p( 0, -1);
+        directionVectors[d.bottomright] = cc.p( 1, -1);
+        directionVectors[d.right]       = cc.p( 1,  0);
+        directionVectors[d.topright]    = cc.p( 1,  1);
+        directionVectors[d.top]         = cc.p( 0,  1);
+        directionVectors[d.topleft]     = cc.p(-1,  1);
+        directionVectors[d.left]        = cc.p(-1,  0);
+        directionVectors[d.bottomleft]  = cc.p(-1, -1);
+        return cc.pNormalize(directionVectors[direction]);
+    }),
 });

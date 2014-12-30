@@ -22,6 +22,7 @@ var Player = (function (_super) {
         this.prevLvExp = this.job.Exp[this.lv];
         this.nextLvExp = this.job.Exp[this.lv + 1];
         this.isDeath = !!this.data.isDeath;
+        this.isDouge = !!this.data.isDouge;
         this.beam = bq.params.Beams.NORMAL1;
         this.hotbarItems = this.data.hotbarItems || this.skills;
         this.socket = this.data.socket || null;
@@ -45,6 +46,10 @@ var Player = (function (_super) {
         this.attack = Math.ceil(this.baseStatus.str * this.job.BASE_STATUS_RATE.STR * growthRate);
         this.defence = Math.ceil(this.baseStatus.def * this.job.BASE_STATUS_RATE.DEF * growthRate);
         // TODO: ほかのステータス
+    };
+
+    Player.prototype.setDouge = function (isDouge) {
+        this.isDouge = isDouge;
     };
 
     /**

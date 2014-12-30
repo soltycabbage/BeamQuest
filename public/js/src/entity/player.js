@@ -61,6 +61,7 @@ bq.entity.Player = bq.entity.Entity.extend({
             var directionVector = this.getNormalizedDirectionVector(direction);
             var moveDistance = cc.pMult(directionVector, this.moveSpeed);
             var nextPos = cc.pAdd(currentPosition, moveDistance);
+
             if ( bq.mapManager.canMoveOnMap(nextPos)) {
                 this.setPosition(nextPos);
             }
@@ -300,25 +301,6 @@ bq.entity.Player = bq.entity.Entity.extend({
     getKeyFrameMap_: function () {
         return bq.entity.Player.KEY_FRAME_MAP;
     },
-
-    /**
-     * 方向をベクトルに変換する
-     * TODO 他のクラスに移す
-     * @param {cc.p} direction
-     */
-    getNormalizedDirectionVector: _.memoize(function(direction) {
-        var d = bq.entity.EntityState.Direction;
-        var directionVectors = {};
-        directionVectors[d.bottom]      = cc.p( 0, -1);
-        directionVectors[d.bottomright] = cc.p( 1, -1);
-        directionVectors[d.right]       = cc.p( 1,  0);
-        directionVectors[d.topright]    = cc.p( 1,  1);
-        directionVectors[d.top]         = cc.p( 0,  1);
-        directionVectors[d.topleft]     = cc.p(-1,  1);
-        directionVectors[d.left]        = cc.p(-1,  0);
-        directionVectors[d.bottomleft]  = cc.p(-1, -1);
-        return cc.pNormalize(directionVectors[direction]);
-    }),
 
     handleTouchEnd_: function(evt, touchData) {
         this.shoot(touchData.getLocation());

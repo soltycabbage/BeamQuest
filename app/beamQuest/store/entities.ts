@@ -217,6 +217,21 @@ class EntitiesStore {
     }
 
     /**
+     * 回避行動中かどうかの状態を更新する
+     */
+    updatePlayerDouge(data:any) : boolean {
+        if (!this.mapPlayers_[data.mapId]) {
+            return false;
+        }
+        var player = this.mapPlayers_[data.mapId][data.userId];
+        if (player) {
+            player.model.setDouge(true);
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 指定座標を中心とする半径rの円内に含まれるMobを返す
      * @param {model.Position} targetPos
      * @param {number} r

@@ -32,7 +32,9 @@ var Entity = (function () {
         this.socket_.on('user:status:get', function (data) {
             return _this.handleGetStatus_(data);
         });
-
+        this.socket_.on('user:douge', function (data) {
+            return _this.handleDouge(data);
+        });
         EntitiesStore = require('beamQuest/store/entities');
     };
 
@@ -50,6 +52,19 @@ var Entity = (function () {
 
             // 自分以外の全プレイヤーにブロードキャスト
             _this.socket_.broadcast.emit('notify:user:move', data);
+        });
+    };
+
+    /**
+    * プレイヤーの緊急回避
+    */
+    Entity.prototype.handleDouge = function (data) {
+        var _this = this;
+        UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', function (err, mapId) {
+            data.mapId = mapId;
+            if (EntitiesStore.getInstance().updatePlayerDouge(data)) {
+                _this.socket_.broadcast.emit('notify:user:douge', data);
+            }
         });
     };
 
