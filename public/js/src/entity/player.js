@@ -26,6 +26,7 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.scheduleUpdate();
         this.schedule(this.sendPosition, this.POSITION_SEND_INTERVAL);
         $(this.inputHandler).on(bq.entity.Player.InputHandler.EventType.TOUCH_END, this.handleTouchEnd_.bind(this));
+        $(this.inputHandler).on(bq.entity.Player.InputHandler.EventType.STREAK_KEY, this.handleStreakKey_.bind(this));
     },
 
     /** @override */
@@ -47,12 +48,7 @@ bq.entity.Player = bq.entity.Entity.extend({
         }
 
         var direction = this.inputHandler.getDirection();
-        // SHIFTキーを押した時に回避行動をとる
-        if (direction && this.currentState !== bq.entity.EntityState.Mode.douge && this.inputHandler.isShiftKeyPressed()) {
-            this.currentState = bq.entity.EntityState.Mode.douge;
-            this.dougeInternal_(direction);
-
-        } else if (direction && this.currentState !== bq.entity.EntityState.Mode.douge) {
+        if (direction && this.currentState !== bq.entity.EntityState.Mode.douge) {
             // アニメーションを更新
             this.updateAnimation(bq.entity.EntityState.Mode.walking, direction);
 
@@ -304,6 +300,17 @@ bq.entity.Player = bq.entity.Entity.extend({
 
     handleTouchEnd_: function(evt, touchData) {
         this.shoot(touchData.getLocation());
+    },
+
+    /**
+     * 同じ方向キーを二連打することで回避行動を取る
+     * @private
+     */
+    handleStreakKey_: function(evt, direction) {
+        if (direction && this.currentState !== bq.entity.EntityState.Mode.douge) {
+            this.currentState = bq.entity.EntityState.Mode.douge;
+            this.dougeInternal_(direction);
+        }
     }
 });
 
@@ -325,6 +332,8 @@ bq.entity.Player.InputHandler = cc.Class.extend({
     downKeys_: [],        // 押されているキーのリスト
     mouseDownEvents_: [], // クリックイベント
     isShiftKeyPressed_: false, // SHIFTキーが押されている間はTRUE
+    streakDownKeys_: [],  // 連打判定用の配列
+    streakTimer_: -1,   // 連打判定用のタイマー
     ctor: function() {
         this.init();
     },
@@ -383,6 +392,25 @@ bq.entity.Player.InputHandler = cc.Class.extend({
     },
 
     /**
+     * 引数countで指定された回数を連打していたらTRUE
+     * @param {number} key
+     * @param {number} count
+     * @return {boolean}
+     * @private
+     */
+    isStreak_: function(key, count) {
+        if (this.streakDownKeys_.length !== count) {
+            return false;
+        }
+        for (var i = 0;i < this.streakDownKeys_.length;i++) {
+            if (this.streakDownKeys_[i] !== key) {
+                return false;
+            }
+        }
+        return true;
+    },
+
+    /**
      * 特定のキーに機能を持たせたい場合はここに記述していく
      * @override
      */
@@ -415,6 +443,18 @@ bq.entity.Player.InputHandler = cc.Class.extend({
 
     /** @override */
     onKeyUp: function(key) {
+        this.streakDownKeys_.unshift(key);
+        // 同じ方向キーを短時間に2回押すと緊急回避を発動
+        if (this.isStreak_(key, 2)) {
+            $(this).triggerHandler(bq.entity.Player.InputHandler.EventType.STREAK_KEY, this.getDirection());
+        }
+
+        this.streakTimer_ && clearTimeout(this.streakTimer_);
+        this.streakTimer_ = setTimeout(_.bind(function() {
+            if (this.streakDownKeys_.length)
+                this.streakDownKeys_ = [];
+        }, this), 300);
+
         this.removeDownKey_(key);
         if (key === cc.KEY.shift) {
             this.isShiftKeyPressed_ = false;
@@ -557,7 +597,8 @@ bq.entity.Player.InputHandler = cc.Class.extend({
  * @const
  */
 bq.entity.Player.InputHandler.EventType = {
-    TOUCH_END: 'touchend'
+    TOUCH_END: 'touchend',
+    STREAK_KEY: 'streakkey'
 };
 
 
