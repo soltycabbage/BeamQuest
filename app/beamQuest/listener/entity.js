@@ -25,18 +25,20 @@ var Entity = (function () {
         this.socket_.on('user:status:get', function (data) { return _this.handleGetStatus_(data); });
         EntitiesStore = require('beamQuest/store/entities');
     };
+    Entity.prototype.requestMapId = function (fn) {
+        UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', _.bind(fn, this));
+    };
     /**
      * プレイヤーの移動
      * @param {Object} data
      */
     Entity.prototype.handlePlayerMove_ = function (data) {
-        var _this = this;
-        UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', function (err, mapId) {
+        this.requestMapId(function (err, mapId) {
             data.mapId = mapId;
             // プレイヤーが移動したら位置情報が送られてくる
             EntitiesStore.getInstance().updatePlayerPosition(data);
             // 自分以外の全プレイヤーにブロードキャスト
-            _this.socket_.broadcast.emit('notify:user:move', data);
+            this.socket_.broadcast.emit('notify:user:move', data);
         });
     };
     /**
@@ -173,10 +175,12 @@ var Entity = (function () {
      */
     Entity.prototype.handleGetStatus_ = function (data) {
         if (data) {
-            var player = EntitiesStore.getInstance().getPlayerById(data.mapId, data.entityId);
-            if (player) {
-                this.socket_.emit('user:status:receive', player.model.toJSON());
-            }
+            this.requestMapId(function (err, mapId) {
+                var player = EntitiesStore.getInstance().getPlayerById(mapId, data.entityId);
+                if (player) {
+                    this.socket_.emit('user:status:receive', player.model.toJSON());
+                }
+            });
         }
     };
     return Entity;

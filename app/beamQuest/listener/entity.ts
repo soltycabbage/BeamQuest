@@ -38,19 +38,23 @@ class Entity {
         EntitiesStore = require('beamQuest/store/entities');
     }
 
+    private requestMapId(fn: Function) {
+        UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', _.bind(fn, this));
+    }
+
     /**
      * プレイヤーの移動
      * @param {Object} data
      */
     private handlePlayerMove_(data:any) {
-        UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', (err, mapId) => {
+        this.requestMapId(function(err, mapId) {
             data.mapId = mapId;
 
             // プレイヤーが移動したら位置情報が送られてくる
             EntitiesStore.getInstance().updatePlayerPosition(data);
             // 自分以外の全プレイヤーにブロードキャスト
             this.socket_.broadcast.emit('notify:user:move', data);
-        })
+        });
     }
 
     /**
@@ -198,10 +202,12 @@ class Entity {
      */
     handleGetStatus_(data:any) {
         if (data) {
-            var player:any = EntitiesStore.getInstance().getPlayerById(data.mapId, data.entityId);
-            if (player) {
-                this.socket_.emit('user:status:receive', player.model.toJSON());
-            }
+            this.requestMapId(function(err, mapId){
+                var player:any = EntitiesStore.getInstance().getPlayerById(mapId, data.entityId);
+                if (player) {
+                    this.socket_.emit('user:status:receive', player.model.toJSON());
+                }
+            });
         }
     }
 }
