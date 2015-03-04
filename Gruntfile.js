@@ -76,9 +76,12 @@ module.exports = function(grunt) {
             main: {
                 files: [{
                     expand: true,
-                    cwd: 'app/beamQuest',
-                    src: '**/*.js',
-                    dest: 'target/beamQuest/',
+                    cwd: 'app/',
+                    src: [
+                        'beamQuest/*.js',
+                        'beamQuestBackend/**/*'
+                    ],
+                    dest: 'target/',
                     filter: 'isFile'
                 }]
             }
