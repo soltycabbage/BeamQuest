@@ -88,5 +88,6 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('test', ['ts:build', 'copy', 'jshint', 'mochaTest']);
+    grunt.registerTask('build', ['ts:build', 'copy']);
+    grunt.registerTask('test', ['build', 'jshint', 'mochaTest']);
 };
