@@ -59,9 +59,17 @@ module.exports = function(grunt) {
                 target: 'es5',
                 options: {
                     module: 'commonjs'
+                }
+            },
+            watch: {
+                src: ['app/beamQuest/**/*.ts'],
+                outDir: 'target/beamQuest/',
+                target: 'es5',
+                options: {
+                    module: 'commonjs'
                 },
                 watch: 'app/beamQuest/'
-            }
+            },
         },
 
         copy: {
@@ -77,5 +85,5 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('test', ['jshint', 'mochaTest']);
+    grunt.registerTask('test', ['ts:build', 'copy', 'jshint', 'mochaTest']);
 };
