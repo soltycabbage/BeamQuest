@@ -52,7 +52,7 @@ class Skill {
         }
 
         if (this.user.model.type === bq.Types.EntityType.PLAYER) {
-            entities = this.getMobsByRadius();
+            entities = this.getMobsByRadius(this.targetPos, this.model.radius);
         }
 
         _.forEach(entities, (entity) => {
@@ -69,8 +69,8 @@ class Skill {
      * 指定座標を中心とする半径radiusの円内に含まれるMobを返す
      * @return {Array.<ctrl.Entity>}
      */
-    getMobsByRadius(): EntityCtrl[] {
-        return EntityStore.getInstance().getMobsByRadius(this.targetPos, this.model.radius);
+    getMobsByRadius(targetPos:PositionModel, radius:number): EntityCtrl[] {
+        return EntityStore.getInstance().getMobsByRadius(targetPos, radius);
     }
 
     /**

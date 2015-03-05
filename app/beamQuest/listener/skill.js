@@ -38,7 +38,7 @@ var Skill = (function () {
                 var targetSkill = _.find(skills, function (skill) {
                     return skill.id === data.skillId;
                 });
-                if (targetSkill && _this.canUse_(targetSkill, player)) {
+                if (targetSkill && _this.canUse(targetSkill, player)) {
                     var result = {
                         mapId: mapId,
                         userId: player.model.id,
@@ -78,7 +78,7 @@ var Skill = (function () {
      * @return {boolean} スキル使用可能ならtrue
      * @private
      */
-    Skill.prototype.canUse_ = function (skill, user) {
+    Skill.prototype.canUse = function (skill, user) {
         // BPが足りなかったらfalse
         if (skill.bp > user.model.bp) {
             return false;

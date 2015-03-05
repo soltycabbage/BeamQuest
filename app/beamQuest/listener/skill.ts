@@ -47,7 +47,7 @@ class Skill {
                 var targetSkill:SkillModel = _.find(skills, (skill) => {
                     return skill.id === data.skillId;
                 });
-                if (targetSkill && this.canUse_(targetSkill, player)) {
+                if (targetSkill && this.canUse(targetSkill, player)) {
                     var result = {
                         mapId: mapId,
                         userId: player.model.id,
@@ -73,7 +73,7 @@ class Skill {
      * @param {string} userId
      * @param {!model.Position} targetPos
      */
-        fire(model:SkillModel, userId, targetPos:PositionModel): void {
+    public fire(model:SkillModel, userId, targetPos:PositionModel): void {
         if (this.io_) {
             var data = {
                 skill: model,
@@ -91,7 +91,7 @@ class Skill {
      * @return {boolean} スキル使用可能ならtrue
      * @private
      */
-    canUse_(skill:SkillModel, user:PlayerCtrl): boolean{
+    private canUse(skill:SkillModel, user:PlayerCtrl): boolean{
         // BPが足りなかったらfalse
         if (skill.bp > user.model.bp) {
             return false;

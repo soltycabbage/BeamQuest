@@ -23,4 +23,4 @@ var BioShock = (function (_super) {
     return BioShock;
 })(Skill);
 module.exports = BioShock;
-//# sourceMappingURL=bioshock.js.map
+//# sourceMappingURL=bioShock.js.map

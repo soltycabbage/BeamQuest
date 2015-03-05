@@ -36,7 +36,7 @@ var Skill = (function () {
             damage *= 2;
         }
         if (this.user.model.type === bq.Types.EntityType.PLAYER) {
-            entities = this.getMobsByRadius();
+            entities = this.getMobsByRadius(this.targetPos, this.model.radius);
         }
         _.forEach(entities, function (entity) {
             if (entity && entity.model) {
@@ -51,8 +51,8 @@ var Skill = (function () {
      * 指定座標を中心とする半径radiusの円内に含まれるMobを返す
      * @return {Array.<ctrl.Entity>}
      */
-    Skill.prototype.getMobsByRadius = function () {
-        return EntityStore.getInstance().getMobsByRadius(this.targetPos, this.model.radius);
+    Skill.prototype.getMobsByRadius = function (targetPos, radius) {
+        return EntityStore.getInstance().getMobsByRadius(targetPos, radius);
     };
     /**
      * 指定座標を中心とする半径radiusの円内に含まれるPlayerを返す
