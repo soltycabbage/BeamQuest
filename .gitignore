@@ -5,3 +5,7 @@ dump.rdb
 .sass-cache
 .tscache
 config/default.js
+
+# build target directory
+**/.baseDir.ts
+target/
