@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=development NODE_PATH=public:app node app",
-    "test": "NODE_ENV=test NODE_PATH=public:app grunt test"
+    "start": "grunt build && NODE_ENV=development NODE_PATH=public:target node app",
+    "test": "NODE_ENV=test NODE_PATH=public:target grunt test"
   },
   "dependencies": {
     "body-parser": "1.8.3",
@@ -26,13 +26,14 @@
     "expect.js": "0.3.1",
     "grunt": "~0.4.5",
     "grunt-contrib-compass": "~1.0.1",
+    "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-mocha-test": "~0.12.0",
-    "grunt-ts": "^1.11.11",
+    "grunt-ts": "^3.0.0",
     "mocha": "1.21.4",
     "sinon": "1.10.3",
-    "typescript": "1.1.0-1",
-    "tsd": "^0.5.7"
+    "tsd": "^0.5.7",
+    "typescript": "^1.4.1"
   }
 }
