@@ -68,7 +68,7 @@ exports.start = function(io) {
             socket.emit('connected');
         });
         setInterval(main, config.STEP_INTERVAL);
-        setInterval(logUsage, 1000);
+        //setInterval(logUsage, 1000);
     }
 
     function main() {
