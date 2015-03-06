@@ -1,5 +1,4 @@
-/// <reference path="../../../typings/node_redis/node_redis.d.ts" />
-/// <reference path="../../../typings/config/config.d.ts" />
+/// <reference path="../../../typings/tsd.d.ts" />
 
 import redis = require('redis');
 import config = require('config');
