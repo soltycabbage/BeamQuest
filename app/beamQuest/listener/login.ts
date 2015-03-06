@@ -100,6 +100,7 @@ export function listen(socket, io) {
         UserStore.getInstance().saveSessionData(socket.id, 'mapId', player.model.position.mapId);
         player.scheduleUpdate();
         socket.broadcast.emit('notify:user:login', {'userId': model.id});
+        logger.debug('user login notified: userId "' + model.id + '" in ' + player.model.position.mapId);
 
         // 接続が切れたらログアウト扱い
         socket.on('disconnect', function() {
