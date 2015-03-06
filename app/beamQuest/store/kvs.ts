@@ -8,7 +8,13 @@ declare var logger: any;
 
 var CONFIG = config.kvs;
 
-export function createClient(): any {
+/**
+ * 拡張可能なようにラップ
+ */
+export interface Client extends redis.RedisClient {
+}
+
+export function createClient(): Client {
     logger.info('kvs type: ' + CONFIG.type);
     if (CONFIG.type !== 'redis') {
         throw new Error('not supported kvs type');
