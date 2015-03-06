@@ -28,10 +28,18 @@ export function listen(socket, io) {
             }
 
             if (userData && userData.hash !== loginData.hash) {
+                logger.debug('user login failed');
                 return respond_({result: 'error', message: 'すでに存在するキャラクターです。'});
             }
 
-            var player = (userData) ? createPlayer_(userData) : createNewPlayer_(loginData);
+            var player;
+            if (userData) {
+                logger.debug('user login successed');
+                player = createPlayer_(userData)
+            } else {
+                logger.debug('user created and login');
+                player = createNewPlayer_(loginData);
+            }
             addLoginUser_(player);
 
             return respond_({result: 'success', player: player.model.toJSON()});
