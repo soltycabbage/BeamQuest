@@ -3,6 +3,9 @@ import PlayerCtrl = require('beamQuest/ctrl/player');
 import PositionModel = require('beamQuest/model/position');
 import Entities = require('beamQuest/store/entities');
 import UserStore = require('beamQuest/store/userStore');
+
+declare var logger: any;
+
 var kvs = require('beamQuest/store/kvs').createClient();
 
 export function listen(socket, io) {
@@ -96,6 +99,7 @@ export function listen(socket, io) {
             Entities.getInstance().removePlayer(position.mapId, player);
             player.unscheduleUpdate();
             socket.broadcast.emit('notify:user:logout', {'userId': player.model.id});
+            logger.debug('socket.io connection closed');
         });
     }
 }

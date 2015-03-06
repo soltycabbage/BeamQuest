@@ -52,6 +52,8 @@ exports.start = function(io) {
 
 
         io.sockets.on('connection', function(socket) {
+            logger.debug('socket.io connection start');
+
             login.listen(socket, io);
             World.getInstance().listen(socket);
             Beam.getInstance().listen(socket, io);
@@ -66,6 +68,7 @@ exports.start = function(io) {
             });
 
             socket.emit('connected');
+            logger.debug('socket.io connection established');
         });
         setInterval(main, config.STEP_INTERVAL);
         //setInterval(logUsage, 1000);
