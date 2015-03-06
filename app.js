@@ -15,7 +15,8 @@ var expressLogWrapper = log4js.getLogger('express');
 var env = process.env.NODE_ENV || 'development';
 
 if ('development' == env) {
-    expressLogWrapper.setLevel('INFO');
+    //expressLogWrapper.setLevel('INFO');
+    expressLogWrapper.setLevel('WARN');
 }
 
 if ('production' == env || 'heroku' == env) {

@@ -18,7 +18,7 @@ class UserStore {
         this.store = kvs.createClient();
     }
 
-    store;
+    store:kvs.Client;
 
     private getStoreKey_(userId) {
         return "user:" + userId;

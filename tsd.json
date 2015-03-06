@@ -31,6 +31,9 @@
     },
     "mocha/mocha.d.ts": {
       "commit": "c8b6954f449bd252ee42592fe471f14b1995cffb"
+    },
+    "log4js/log4js.d.ts": {
+      "commit": "9585a3b741a8491d5c883249515fd00b45b0a9f9"
     }
   }
 }
