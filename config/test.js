@@ -1,8 +1,12 @@
 module.exports = {
     kvs: {
-        type: "memory"
+        type: "redis",
+        host: "localhost",
+        port: 6380
     },
     session: {
-        type: "memory"
+        type: "redis",
+        host: "localhost",
+        port: 6380
     }
 };
