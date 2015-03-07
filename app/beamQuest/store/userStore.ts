@@ -29,7 +29,7 @@ class UserStore {
 
     find(userId, callback) {
         var storeKey = this.getStoreKey_(userId);
-        this.store.get(storeKey, function(error, val) {
+        this.store.hgetall(storeKey, function(error, val) {
             if (error) {
                 callback(error);
             }
