@@ -33,15 +33,14 @@ class UserStore {
             if (error) {
                 callback(error);
             }
-            var userData = (val) ? JSON.parse(val) : null;
-            callback(null, userData);
+            callback(null, val);
         });
     }
 
     save(user) {
         var storeKey = this.getStoreKey_(user.model.id);
-        var data = JSON.stringify(user.model.toJSON());
-        this.store.set(storeKey, data);
+        var data = user.model.toJSON();
+        this.store.hmset(storeKey, data);
     }
 
     // redis のラッパすぎて抽象化できておらず
