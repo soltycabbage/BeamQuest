@@ -146,7 +146,7 @@ ccui.RichElementImage = ccui.RichElement.extend(/** @lends ccui.RichElementImage
         this._textureRect = cc.rect(0, 0, 0, 0);
         this._textureType = 0;
 
-        filePath && this.init(tag, color, opacity, filePath);
+        filePath !== undefined && this.init(tag, color, opacity, filePath);
     },
 
     /**
@@ -196,7 +196,7 @@ ccui.RichElementCustomNode = ccui.RichElement.extend(/** @lends ccui.RichElement
         this._type = ccui.RichElement.CUSTOM;
         this._customNode = null;
 
-        customNode && this.init(tag, color, opacity, customNode);
+        customNode !== undefined && this.init(tag, color, opacity, customNode);
     },
 
     /**
@@ -310,7 +310,7 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
                             elementRenderer = new cc.LabelTTF(element._text, element._fontName, element._fontSize);
                             break;
                         case ccui.RichElement.IMAGE:
-                            elementRenderer = cc.Sprite.create(element._filePath);
+                            elementRenderer = new cc.Sprite(element._filePath);
                             break;
                         case ccui.RichElement.CUSTOM:
                             elementRenderer = element._customNode;
@@ -374,7 +374,7 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
     },
 
     _handleImageRenderer: function (filePath, color, opacity) {
-        var imageRenderer = cc.Sprite.create(filePath);
+        var imageRenderer = new cc.Sprite(filePath);
         this._handleCustomRenderer(imageRenderer);
     },
 
@@ -408,7 +408,7 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
             for (j = 0; j < row.length; j++) {
                 l = row[j];
                 l.setAnchorPoint(cc.p(0, 0));
-                l.setPosition(cc.p(nextPosX, 0));
+                l.setPosition(nextPosX, 0);
                 locRenderersContainer.addChild(l, 1, j);
                 var iSize = l.getContentSize();
                 newContentSizeWidth += iSize.width;
@@ -463,16 +463,8 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
         this._elementRenders[this._elementRenders.length - 1].push(renderer);
     },
 
-    /**
-     * Calls formatText before calls parent class' visit.
-     * @override
-     * @param ctx
-     */
-    visit: function (ctx) {
-        if (this._enabled) {
-            this.formatText();
-            ccui.Widget.prototype.visit.call(this, ctx);
-        }
+    _adaptRenderers: function(){
+        this.formatText();
     },
 
     /**
@@ -540,6 +532,13 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
         return cc.Node.prototype._getHeight.call(this);
     },
 
+    setContentSize: function(contentSize, height){
+        var locWidth = (height === undefined) ? contentSize.width : contentSize;
+        var locHeight = (height === undefined) ? contentSize.height : height;
+        ccui.Widget.prototype.setContentSize.call(this, locWidth, locHeight);
+        this._formatTextDirty = true;
+    },
+
     /**
      * Returns the class name of ccui.RichText.
      * @returns {string}
@@ -553,8 +552,6 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
  * create a rich text
  * @deprecated since v3.0, please use new ccui.RichText() instead.
  * @returns {RichText}
- * @example
- * var uiRichText = ccui.RichTex.create();
  */
 ccui.RichText.create = function(){
     return new ccui.RichText();

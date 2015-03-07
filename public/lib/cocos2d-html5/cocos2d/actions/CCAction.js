@@ -255,7 +255,7 @@ cc.FiniteTimeAction = cc.Action.extend(/** @lends cc.FiniteTimeAction# */{
      * @return {Number}
      */
     getDuration:function () {
-        return this._duration * (this._times || 1);
+        return this._duration * (this._timesForRepeat || 1);
     },
 
     /**
@@ -625,6 +625,9 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
         tempPosX = this._halfScreenSize.x - tempPosX;
         tempPosY = this._halfScreenSize.y - tempPosY;
 
+        //TODO Temporary treatment - The dirtyFlag symbol error
+        this.target._renderCmd._dirtyFlag = 0;
+
         if (this._boundarySet) {
             // whole map fits inside a single screen, no need to modify the position - unless map boundaries are increased
             if (this._boundaryFullyCovered)
@@ -665,12 +668,12 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
  * @example
  * // example
  * // creates the action with a set boundary
- * var sprite = cc.Sprite.create("spriteFileName");
+ * var sprite = new cc.Sprite("spriteFileName");
  * var followAction = cc.follow(sprite, cc.rect(0, 0, s.width * 2 - 100, s.height));
  * this.runAction(followAction);
  *
  * // creates the action with no boundary set
- * var sprite = cc.Sprite.create("spriteFileName");
+ * var sprite = new cc.Sprite("spriteFileName");
  * var followAction = cc.follow(sprite);
  * this.runAction(followAction);
  */

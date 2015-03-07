@@ -26,7 +26,8 @@
 
 /**
  * <p>NodeGrid class is a class serves as a decorator of cc.Node,<br/>
- * Grid node can run grid actions over all its children</p>
+ * Grid node can run grid actions over all its children   (WebGL only)
+ * </p>
  * @type {Class}
  *
  * @property {cc.GridBase}  grid    - Grid object that is used when applying effects
@@ -57,56 +58,7 @@ cc.NodeGrid = cc.Node.extend({
      * @param {cc.Node} target
      */
     setTarget: function (target) {
-        //var self = this;
-        //self._target && self.removeChild(self._target);
         this._target = target;
-        //self.addChild(self._target);
-    },
-
-    /** <p>"add" logic MUST only be in this method <br/> </p>
-     *
-     * <p>If the child is added to a 'running' node, then 'onEnter' and 'onEnterTransitionDidFinish' will be called immediately.</p>
-     * @function
-     * @param {cc.Node} child  A child node
-     * @param {Number} [zOrder=]  Z order for drawing priority. Please refer to setZOrder(int)
-     * @param {Number} [tag=]  A integer to identify the node easily. Please refer to setTag(int)
-     */
-    addChild: function (child, zOrder, tag) {
-        cc.Node.prototype.addChild.call(this, child, zOrder, tag);
-
-        if (child && !this._target)
-            this._target = child;
-    },
-
-    /**
-     * Recursive method that visit its children and draw them
-     */
-    visit: function () {
-        var self = this;
-        // quick return if not visible
-        if (!self._visible)
-            return;
-
-        var isWebGL = cc._renderType == cc._RENDER_TYPE_WEBGL;
-        var locGrid = self.grid;
-        if (isWebGL && locGrid && locGrid._active)
-            locGrid.beforeDraw();
-
-        self.transform();
-
-        var locChildren = this._children;
-        if (locChildren && locChildren.length > 0) {
-            var childLen = locChildren.length;
-            this.sortAllChildren();
-            // draw children
-            for (i = 0; i < childLen; i++) {
-                var child = locChildren[i];
-                child && child.visit();
-            }
-        }
-
-        if (isWebGL && locGrid && locGrid._active)
-            locGrid.afterDraw(self._target);
     },
 
     _transformForWebGL: function () {
@@ -114,8 +66,7 @@ cc.NodeGrid = cc.Node.extend({
         var t4x4 = this._transform4x4, topMat4 = cc.current_stack.top;
 
         // Convert 3x3 into 4x4 matrix
-        //cc.CGAffineToGL(this.nodeToParentTransform(), this._transform4x4.mat);
-        var trans = this.nodeToParentTransform();
+        var trans = this.getNodeToParentTransform();
         var t4x4Mat = t4x4.mat;
         t4x4Mat[0] = trans.a;
         t4x4Mat[4] = trans.c;
@@ -133,8 +84,9 @@ cc.NodeGrid = cc.Node.extend({
 
         // XXX: Expensive calls. Camera should be integrated into the cached affine matrix
         if (this._camera != null && !(this.grid && this.grid.isActive())) {
-            var apx = this._anchorPointInPoints.x, apy = this._anchorPointInPoints.y;
-            var translate = (apx !== 0.0 || apy !== 0.0);
+            var app = this._renderCmd._anchorPointInPoints,
+                apx = app.x, apy = app.y,
+                translate = (apx !== 0.0 || apy !== 0.0);
             if (translate) {
                 if(!cc.SPRITEBATCHNODE_RENDER_SUBPIXEL) {
                     apx = 0 | apx;
@@ -147,14 +99,17 @@ cc.NodeGrid = cc.Node.extend({
                 this._camera.locate();
             }
         }
+    },
+
+    _createRenderCmd: function(){
+        if (cc._renderType === cc._RENDER_TYPE_WEBGL)
+            return new cc.NodeGrid.WebGLRenderCmd(this);
+        else
+            return new cc.Node.CanvasRenderCmd(this);            // cc.NodeGrid doesn't support Canvas mode.
     }
 });
 
 var _p = cc.NodeGrid.prototype;
-if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
-    _p.transform = _p._transformForWebGL;
-    //The parent class method directly from canvas model
-}
 // Extended property
 /** @expose */
 _p.grid;

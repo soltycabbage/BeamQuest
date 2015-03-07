@@ -1,13 +1,13 @@
 {
   "name": "cocos2d-html5",
   "homepage": "https://github.com/cocos2d/cocos2d-html5",
-  "_release": "Cocos2d-html5-v3.0-final",
+  "_release": "Cocos2d-html5-v3.3",
   "_resolution": {
     "type": "tag",
-    "tag": "Cocos2d-html5-v3.0-final",
-    "commit": "11e91aa51dec1d8b6ce4e564b41e5376c7081f55"
+    "tag": "Cocos2d-html5-v3.3",
+    "commit": "bde73b2f7a75b40a26612950571f48e2e2d3e1bc"
   },
   "_source": "git://github.com/cocos2d/cocos2d-html5.git",
-  "_target": "Cocos2d-html5-v3.0-final",
+  "_target": "Cocos2d-html5-v3.3",
   "_originalSource": "cocos2d-html5"
 }

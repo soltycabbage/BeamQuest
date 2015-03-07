@@ -35,7 +35,8 @@ ccui.VBox = ccui.Layout.extend(/** @lends ccui.VBox# */{
      * @param {cc.Size} size
      */
     ctor: function(size){
-        if(size)
+        ccui.Layout.prototype.ctor.call(this, size);
+        if(size !== undefined)
             this.initWithSize(size);
         else
             this.init();
