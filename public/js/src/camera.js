@@ -16,7 +16,7 @@ bq.Camera = cc.Class.extend({
     },
 
     lookAt: function(target) {
-        var follow = cc.Follow.create(target);
+        var follow = new cc.Follow(target);
         this.follower_.runAction(follow);
         this.followAct_ = follow;
     },

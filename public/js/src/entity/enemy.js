@@ -47,10 +47,10 @@ bq.entity.Enemy = bq.entity.Entity.extend({
         vibrate.setLoops(5);
         var bite = bq.entity.Animation.createAnimation(this.getSpriteFrames_([7,8]));
         bite.setDelayPerUnit(0.5);
-        return cc.Sequence.create([
-            cc.Animate.create(vibrate),
-            cc.Animate.create(bite),
-            cc.CallFunc.create(function(){
+        return new cc.Sequence([
+            new cc.Animate(vibrate),
+            new cc.Animate(bite),
+            new cc.CallFunc(function(){
                 // アタックのモーションとったら元に戻す
                 this.isAttacking = false;
                 this.updateAnimation('idle', 'bottom');
