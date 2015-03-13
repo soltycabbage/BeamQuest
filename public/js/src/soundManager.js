@@ -67,7 +67,7 @@ bq.SoundManager = cc.Class.extend({
             new cc.CallFunc(callback)
         ];
         return new cc.Sequence(actionSequence);
-    },
+    }
 });
 
 /*
@@ -80,6 +80,6 @@ bq.SoundManager.MusicVolumeModificationActionTweenDelegate = cc.ActionTweenDeleg
 
     updateTweenAction: function(value, key) {
         this.audioEngine.setMusicVolume(value);
-    },
+    }
 });
 
