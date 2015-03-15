@@ -9,7 +9,7 @@ before_script:
 deploy:
   provider: heroku
   api_key:
-    secure: OAIqG75aQ+iNyuRoBk6iLB1Cqtn6HSbONgRUdbKOnXF/2ysAfbhmXd+wPDNmYlEYqSYECz3T89V0nqTH7ky1H+z9VCOrQP9dZwykAsZbQwED70HC1KiPZKxG6R0PWyqPa6qEDnO8iqGaP1g/JDfVf8sETr07u+rhKoffvxIwgf4=
+    secure: "qk4B79Q7eUf0WDCFU/vmErFiGjpP3PPRJdL0VErH3I5RJfEpdO4JsM85o6J/Kdma9VseeBKcTQrxo3Rse/DOKQArheWR6YMkF1uq2vwlZkfaha5wLVNeQuXotYOf2Uad2VSysnxHtGnpBQwPEqUs1YhrKh8zIGsRcwKN6taWZo4="
   app: beamquest-dev
   on:
     repo: soltycabbage/BeamQuest
