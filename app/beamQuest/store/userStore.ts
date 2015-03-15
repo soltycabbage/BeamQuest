@@ -33,6 +33,11 @@ class UserStore {
             if (error) {
                 callback(error);
             }
+            if (val) {
+                Object.keys(val).forEach(function(key) {
+                    val[key] = JSON.parse(val[key]);
+                });
+            }
             callback(null, val);
         });
     }
@@ -40,6 +45,9 @@ class UserStore {
     save(user) {
         var storeKey = this.getStoreKey_(user.model.id);
         var data = user.model.toJSON();
+        Object.keys(data).forEach(function(key) {
+            data[key] = JSON.stringify(data[key]);
+        });
         this.store.hmset(storeKey, data);
     }
 
