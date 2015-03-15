@@ -2,6 +2,9 @@
   "name": "beamQuest",
   "version": "0.0.0",
   "private": true,
+  "engines" : {
+    "node": "0.12.x"
+  },
   "scripts": {
     "start": "grunt build && NODE_ENV=development NODE_PATH=public:target node app",
     "heroku": "./node_modules/grunt-cli/bin/grunt build && NODE_ENV=heroku NODE_PATH=public:target node app",
