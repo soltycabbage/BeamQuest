@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "grunt build && NODE_ENV=development NODE_PATH=public:target node app",
+    "heroku": "grunt build && NODE_ENV=heroku NODE_PATH=public:target node app",
     "test": "NODE_ENV=test NODE_PATH=public:target grunt test"
   },
   "dependencies": {
