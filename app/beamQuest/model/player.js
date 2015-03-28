@@ -50,11 +50,16 @@ var Player = (function (_super) {
 
     Player.prototype.setDouge = function (isDouge) {
         this.isDouge = isDouge;
+
+        // 500ms経過後は自動的にfalseになる
+        setTimeout(_.bind(function () {
+            this.isDouge = false;
+        }, this), 500);
     };
 
     /**
     * @param {number} amount
-    * @param {boolean=] opt_isCritical
+    * @param {boolean=} opt_isCritical
     */
     Player.prototype.addBp = function (amount, opt_isCritical) {
         this.bp = Math.max(0, Math.min(this.maxBp, this.bp + amount));

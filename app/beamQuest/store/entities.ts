@@ -208,7 +208,7 @@ class EntitiesStore {
      * @param {Object.{userId, mapId, x, y}} data
      */
     updatePlayerPosition(data) {
-        var player = this.mapPlayers_[data.mapId][data.userId];
+        var player = this.getPlayerById(data.mapId, data.userId);
         if (player) {
             player.model.position.mapId = data.mapId;
             player.model.position.x = data.x;
@@ -220,10 +220,7 @@ class EntitiesStore {
      * 回避行動中かどうかの状態を更新する
      */
     updatePlayerDouge(data:any) : boolean {
-        if (!this.mapPlayers_[data.mapId]) {
-            return false;
-        }
-        var player = this.mapPlayers_[data.mapId][data.userId];
+        var player = this.getPlayerById(data.mapId, data.userId);
         if (player) {
             player.model.setDouge(true);
             return true;

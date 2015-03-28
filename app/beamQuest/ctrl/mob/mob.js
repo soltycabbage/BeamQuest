@@ -150,6 +150,12 @@ var Mob = (function (_super) {
 
             this.timeout_ = setTimeout(function () {
                 if (_this.hateTarget) {
+                    // 緊急回避中だったらノーダメやで
+                    if (_this.hateTarget.model.isDouge) {
+                        _this.hateTarget.model.addHp(-1);
+                        return;
+                    }
+
                     // TODO: 範囲内に対象がいるかどうかチェックする
                     // ダメージテキトー
                     var damage = -Math.floor(_this.model.attack / 2 + _this.model.attack / 2 * Math.random() - _this.hateTarget.model.defence / 4);

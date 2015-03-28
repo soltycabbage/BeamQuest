@@ -176,7 +176,7 @@ var EntitiesStore = (function () {
     * @param {Object.{userId, mapId, x, y}} data
     */
     EntitiesStore.prototype.updatePlayerPosition = function (data) {
-        var player = this.mapPlayers_[data.mapId][data.userId];
+        var player = this.getPlayerById(data.mapId, data.userId);
         if (player) {
             player.model.position.mapId = data.mapId;
             player.model.position.x = data.x;
@@ -188,10 +188,7 @@ var EntitiesStore = (function () {
     * 回避行動中かどうかの状態を更新する
     */
     EntitiesStore.prototype.updatePlayerDouge = function (data) {
-        if (!this.mapPlayers_[data.mapId]) {
-            return false;
-        }
-        var player = this.mapPlayers_[data.mapId][data.userId];
+        var player = this.getPlayerById(data.mapId, data.userId);
         if (player) {
             player.model.setDouge(true);
             return true;

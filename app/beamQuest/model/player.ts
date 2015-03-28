@@ -89,12 +89,16 @@ class Player extends Entity {
 
     setDouge(isDouge:boolean) {
         this.isDouge = isDouge;
+        // 500ms経過後は自動的にfalseになる
+        setTimeout(_.bind(function() {
+            this.isDouge = false;
+        }, this), 500);
     }
 
     /**
      * @param {number} amount
-     * @param {boolean=] opt_isCritical
-    */
+     * @param {boolean=} opt_isCritical
+     */
     addBp(amount:number, opt_isCritical: boolean): void {
         this.bp = Math.max(0, Math.min(this.maxBp, this.bp + amount));
         this.emit('addBp', amount, !!opt_isCritical);
