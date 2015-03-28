@@ -68,17 +68,18 @@ ccui.LabelBMFont = ccui.TextBMFont = ccui.Widget.extend(/** @lends ccui.TextBMFo
     setFntFile: function (fileName) {
         if (!fileName)
             return;
+        this._fntFileName = fileName;
+
+        this._fntFileHasInit = true;
+        this._labelBMFontRenderer.initWithString(this._stringValue, fileName);
+        this._updateContentSizeWithTextureSize(this._labelBMFontRenderer.getContentSize());
+        this._labelBMFontRendererAdaptDirty = true;
 
         var _self = this;
-        _self._fntFileName = fileName;
-
-        _self._fntFileHasInit = true;
-        _self._labelBMFontRenderer.initWithString(this._stringValue, fileName);
-
         var locRenderer = _self._labelBMFontRenderer;
         if(!locRenderer._textureLoaded){
-             locRenderer.addLoadedEventListener(function(){
-                 _self.updateSizeAndPosition();
+             locRenderer.addEventListener("load", function(){
+                 _self.setFntFile(fileName);
              });
         }
     },
@@ -98,10 +99,12 @@ ccui.LabelBMFont = ccui.TextBMFont = ccui.Widget.extend(/** @lends ccui.TextBMFo
      * @param {String} value
      */
     setString: function (value) {
+        if(value == this._labelBMFontRenderer.getString())
+            return;
         this._stringValue = value;
+        this._labelBMFontRenderer.setString(value);
         if (!this._fntFileHasInit)
             return;
-        this._labelBMFontRenderer.setString(value);
         this._updateContentSizeWithTextureSize(this._labelBMFontRenderer.getContentSize());
         this._labelBMFontRendererAdaptDirty = true;
     },
@@ -191,7 +194,7 @@ var _p = ccui.TextBMFont.prototype;
 // Extended properties
 /** @expose */
 _p.string;
-cc.defineGetterSetter(_p, "string", _p.getString, _p.setStringValue);
+cc.defineGetterSetter(_p, "string", _p.getString, _p.setString);
 
 _p = null;
 
@@ -199,9 +202,6 @@ _p = null;
  * allocates and initializes a UILabelBMFont.
  * @deprecated since v3.0, please use new ccui.TextBMFont() instead.
  * @return {ccui.TextBMFont}
- * @example
- * // example
- * var uiLabelBMFont = ccui.TextBMFont.create();
  */
 ccui.TextBMFont.create = function (text, filename) {
     return new ccui.TextBMFont(text, filename);

@@ -22,7 +22,7 @@ bq.entity.Animation.createAnimations = function (keyFrameMap) {
 };
 
 bq.entity.Animation.createAnimation = function (frames, delay) {
-    var animation = cc.Animation.create();
+    var animation = new cc.Animation();
     animation.setDelayPerUnit(delay || 0.1);
 
     _.forEach(frames, function (i) {

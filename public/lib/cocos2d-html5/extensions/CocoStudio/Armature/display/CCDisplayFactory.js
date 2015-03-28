@@ -87,7 +87,7 @@ ccs.displayFactory = {
                 var detector = decoDisplay.getColliderDetector();
                 if (detector) {
                     var node = decoDisplay.getDisplay();
-                    var displayTransform = node.nodeToParentTransform();
+                    var displayTransform = node.getNodeToParentTransform();
                     var helpTransform = this._helpTransform;
                     helpTransform.a = displayTransform.a;
                     helpTransform.b = displayTransform.b;
@@ -98,7 +98,7 @@ ccs.displayFactory = {
                     var anchorPoint = cc.pointApplyAffineTransform(node.getAnchorPointInPoints(), helpTransform);
                     helpTransform.tx = anchorPoint.x;
                     helpTransform.ty = anchorPoint.y;
-                    var t = cc.affineTransformConcat(helpTransform, bone.getArmature().nodeToParentTransform());
+                    var t = cc.affineTransformConcat(helpTransform, bone.getArmature().getNodeToParentTransform());
                     detector.updateTransform(t);
                 }
             }
@@ -122,9 +122,9 @@ ccs.displayFactory = {
             textureName = textureName.substring(0, startPos);
         //! create display
         if (textureName == "")
-            skin = ccs.Skin.create();
+            skin = new ccs.Skin();
         else
-            skin = ccs.Skin.createWithSpriteFrameName(textureName + ".png");
+            skin = new ccs.Skin("#" + textureName + ".png");
 
         decoDisplay.setDisplay(skin);
 
@@ -160,7 +160,7 @@ ccs.displayFactory = {
         if (ccs.ENABLE_PHYSICS_CHIPMUNK_DETECT || ccs.ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX) {
             if (textureData && textureData.contourDataList.length > 0) {
                 //! create ContourSprite
-                var colliderDetector = ccs.ColliderDetector.create(bone);
+                var colliderDetector = new ccs.ColliderDetector(bone);
                 colliderDetector.addContourDataList(textureData.contourDataList);
                 decoDisplay.setColliderDetector(colliderDetector);
             }
@@ -177,7 +177,7 @@ ccs.displayFactory = {
 
     createArmatureDisplay: function (bone, decoDisplay) {
         var displayData = decoDisplay.getDisplayData();
-        var armature = ccs.Armature.create(displayData.displayName, bone);
+        var armature = new ccs.Armature(displayData.displayName, bone);
         decoDisplay.setDisplay(armature);
     },
 
@@ -197,7 +197,7 @@ ccs.displayFactory = {
 
     createParticleDisplay: function (bone, decoDisplay) {
         var displayData = decoDisplay.getDisplayData();
-        var system = cc.ParticleSystem.create(displayData.displayName);
+        var system = new cc.ParticleSystem(displayData.displayName);
 
         system.removeFromParent();
         system.cleanup();

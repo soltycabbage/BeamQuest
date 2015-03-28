@@ -99,10 +99,10 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     popExpLabel: function(exp) {
         var label = bq.Label.createWithShadow(exp + 'exp', 18);
         var pos = this.getPosition();
-        var fadeOut = cc.FadeOut.create(1);
-        var moveTo = cc.MoveTo.create(1, cc.p(pos.x, pos.y+40));
-        var callFunc = cc.CallFunc.create(label.removeFromParent.bind(label));
-        label.runAction(cc.Sequence.create(cc.Spawn.create(fadeOut, moveTo), callFunc));
+        var fadeOut = new cc.FadeOut(1);
+        var moveTo = new cc.MoveTo(1, cc.p(pos.x, pos.y+40));
+        var callFunc = new cc.CallFunc(label.removeFromParent.bind(label));
+        label.runAction(new cc.Sequence(new cc.Spawn(fadeOut, moveTo), callFunc));
         label.setPosition(pos.x, pos.y);
         bq.baseLayer.addChild(label, bq.config.zOrder.EXP_LABEL);
     },
@@ -158,22 +158,22 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
      * @param {Function=} opt_callback 死にモーションが終わった時に呼びたい関数
      */
     kill: function(opt_skipRemove, opt_callback) {
-        var fadeOut = cc.FadeOut.create(0.8);
-        var blink = cc.Blink.create(1, 50);
-        var callFunc = cc.CallFunc.create(function() {
+        var fadeOut = new cc.FadeOut(0.8);
+        var blink = new cc.Blink(1, 50);
+        var callFunc = new cc.CallFunc(function() {
             opt_callback && opt_callback.apply(this);
             if(!opt_skipRemove) {
                 this.removeFromParent();
             }
         }.bind(this));
 
-        this.runAction(cc.Sequence.create(cc.Spawn.create(fadeOut, blink), callFunc));
+        this.runAction(new cc.Sequence(new cc.Spawn(fadeOut, blink), callFunc));
     },
 
     /** 復活処理 */
     respawn: function() {
         this.isCasting = false;
-        var fadeIn = cc.FadeIn.create(0.8);
+        var fadeIn = new cc.FadeIn(0.8);
         this.runAction(fadeIn);
     },
 
@@ -186,7 +186,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var rect = this.getBoundingBox();
 
         // 吹き出し
-        var msgRect = cc.Sprite.create();
+        var msgRect = new cc.Sprite();
         msgRect.setTextureRect(cc.rect(0, 0, msg.length * 12 + 20, 20));
         msgRect.setColor(cc.color(0, 0, 0));
         msgRect.setOpacity(200);
@@ -197,7 +197,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         tt.setPosition(cc.p(msgRect.getBoundingBox().width / 2, 10));
 
         // 吹き出しのしっぽみたいなやつ
-        var tail = cc.Sprite.create(s_ImgChatTail);
+        var tail = new cc.Sprite(s_ImgChatTail);
         tail.setColor(cc.color(0, 0, 0));
         tail.setOpacity(200);
         tail.setPosition(cc.p(msgRect.getBoundingBox().width / 2, -3));
@@ -317,7 +317,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var prevHpWidth = gaugeWidth * prevHpRatio;
 
         // HP部分
-        var rect = cc.Sprite.create();
+        var rect = new cc.Sprite();
         rect.setTextureRect(cc.rect(0, 0, currentHpWidth, gaugeHeight));
         rect.setColor(cc.color(255, 20, 5));
         rect.setPosition(cc.p(entityRect.width / 2 - gaugeWidth / 2,
@@ -325,7 +325,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         rect.setAnchorPoint(0, 0.5);
 
         // HP減少したときの差分のとこ
-        var rectInner = cc.Sprite.create();
+        var rectInner = new cc.Sprite();
         rectInner.setTextureRect(cc.rect(0, 0, prevHpWidth, gaugeHeight));
         rectInner.setColor(cc.color(255, 170, 170));
         rectInner.setPosition(cc.p(0, 2));
@@ -333,7 +333,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         rectInner.runAction(cc.ScaleTo.create(0.5, currentHpWidth / prevHpWidth, 1));
 
         // 黒背景
-        var rectOuter = cc.Sprite.create();
+        var rectOuter = new cc.Sprite();
         rectOuter.setTextureRect(cc.rect(0, 0, gaugeWidth + 2, gaugeHeight + 2));
         rectOuter.setColor(cc.color(0, 0, 0));
         rectOuter.setAnchorPoint(0, 0.5);
@@ -358,8 +358,8 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
             return;
         }
 
-        var fadeOut = cc.FadeOut.create(0.5);
-        var callFunc = cc.CallFunc.create(_.bind(function() {
+        var fadeOut = new cc.FadeOut(0.5);
+        var callFunc = new cc.CallFunc(_.bind(function() {
             this.hpGauge_ && this.hpGauge_.removeFromParent();
         }, this));
         this.hpGauge_.runAction(cc.Sequence.create(fadeOut, callFunc));
@@ -383,7 +383,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var castBarHeight = 5;
         var barTop = 20;
 
-        var rect = cc.Sprite.create();
+        var rect = new cc.Sprite();
         rect.setTextureRect(cc.rect(0, 0, castBarWidth, castBarHeight));
         rect.setColor(cc.color(153, 228, 255));
         rect.setOpacity(255);
@@ -391,7 +391,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
             entityRect.height + barTop));
         rect.setAnchorPoint(0, 0.5);
 
-        var rectOuter = cc.Sprite.create();
+        var rectOuter = new cc.Sprite();
         rectOuter.setTextureRect(cc.rect(0, 0, castBarWidth + 2, castBarHeight + 2));
         rectOuter.setColor(cc.color(0, 0, 0));
         rectOuter.setOpacity(255);
@@ -402,8 +402,8 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var skillName = bq.Label.createWithShadow(data.skill.name, 10, cc.color(200, 255, 30));
         skillName.setPosition(cc.p(entityRect.width / 2, entityRect.height + barTop + castBarHeight + 5));
 
-        var scaleAnim = cc.ScaleTo.create(castTime / 1000, 0, 1);
-        rect.runAction(cc.Sequence.create(scaleAnim,
+        var scaleAnim = new cc.ScaleTo(castTime / 1000, 0, 1);
+        rect.runAction(new cc.Sequence(scaleAnim,
             cc.CallFunc.create(_.bind(function() {
                 rect.removeFromParent();
                 skillName.removeFromParent();
@@ -451,11 +451,11 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var rect = this.getBoundingBox();
         label.setPosition(cc.p(rect.width / 2, rect.height));
         var d = opt_popLeft ? -1 : 1;
-        var action = cc.JumpTo.create(1.5, cc.p(d * 200, -100), 100, 1);
-        var fadeOut = cc.FadeOut.create(1.5);
+        var action = new cc.JumpTo(1.5, cc.p(d * 200, -100), 100, 1);
+        var fadeOut = new cc.FadeOut(1.5);
         this.addChild(label);
-        label.runAction(cc.Sequence.create(cc.Spawn.create(action, fadeOut),
-            cc.CallFunc.create(function() {
+        label.runAction(new cc.Sequence(new cc.Spawn(action, fadeOut),
+            new cc.CallFunc(function() {
                 label.removeFromParent();
             })));
     },
@@ -469,11 +469,11 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var rect = this.getBoundingBox();
         label.setPosition(cc.p(rect.width / 2, rect.height));
         var d = popLeft ? -1 : 1;
-        var action = cc.JumpTo.create(1.5, cc.p(d * 200, -100), 100, 1);
-        var fadeOut = cc.FadeOut.create(1.5);
+        var action = new cc.JumpTo(1.5, cc.p(d * 200, -100), 100, 1);
+        var fadeOut = new cc.FadeOut(1.5);
         this.addChild(label);
-        label.runAction(cc.Sequence.create(cc.Spawn.create(action, fadeOut),
-            cc.CallFunc.create(function() {
+        label.runAction(new cc.Sequence(cc.Spawn(action, fadeOut),
+            new cc.CallFunc(function() {
                 label.removeFromParent();
             })));
     },

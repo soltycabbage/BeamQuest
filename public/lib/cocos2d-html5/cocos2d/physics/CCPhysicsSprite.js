@@ -49,7 +49,7 @@
          * @example
          *
          * 1.Create a sprite with image path and rect
-         * var physicsSprite1 = cc.PhysicsSprite.create("res/HelloHTML5World.png");
+         * var physicsSprite1 = new cc.PhysicsSprite("res/HelloHTML5World.png");
          * var physicsSprite2 = new cc.PhysicsSprite("res/HelloHTML5World.png",cc.rect(0,0,480,320));
          *
          * 2.Create a sprite with a sprite frame name. Must add "#" before fame name.
@@ -59,7 +59,7 @@
          * var spriteFrame = cc.spriteFrameCache.getSpriteFrame("grossini_dance_01.png");
          * var physicsSprite = new cc.PhysicsSprite(spriteFrame);
          *
-         * 4.Creates a sprite with an exsiting texture contained in a CCTexture2D object
+         * 4.Creates a sprite with an existing texture contained in a CCTexture2D object
          *      After creation, the rect will be the size of the texture, and the offset will be (0,0).
          * var texture = cc.textureCache.addImage("HelloHTML5World.png");
          * var physicsSprite1 = new cc.PhysicsSprite(texture);
@@ -90,7 +90,14 @@
                     this.initWithSpriteFrame(fileName);
                 }
             }
+            //this._transformCmd = new cc.PhysicsSpriteTransformCmdCanvas(this);
+            //cc.rendererCanvas.pushRenderCommand(this._transformCmd);
         },
+
+        //visit: function(){
+        //    cc.Sprite.prototype.visit.call(this);
+        //    cc.rendererCanvas.pushRenderCommand(this._transformCmd);
+        //},
 
         /**
          * set body
@@ -199,6 +206,7 @@
             this._ignoreBodyRotation = b;
         }
     };
+
     var chipmunkAPI = {
         _ignoreBodyRotation:false,
         _body:null, //physics body
@@ -212,10 +220,10 @@
          * @example
          *
          * 1.Create a sprite with image path and rect
-         * var physicsSprite1 = cc.PhysicsSprite.create("res/HelloHTML5World.png");
+         * var physicsSprite1 = new cc.PhysicsSprite("res/HelloHTML5World.png");
          * var physicsSprite2 = new cc.PhysicsSprite("res/HelloHTML5World.png",cc.rect(0,0,480,320));
          *
-         * 2.Create a sprite with a sprite frame name. Must add "#" before fame name.
+         * 2.Create a sprite with a sprite frame name. Must add "#" before frame name.
          * var physicsSprite = new cc.PhysicsSprite('#grossini_dance_01.png');
          *
          * 3.Create a sprite with a sprite frame
@@ -253,6 +261,13 @@
                     this.initWithSpriteFrame(fileName);
                 }
             }
+
+            cc.renderer.pushRenderCommand(this._renderCmd);
+        },
+
+        visit: function(){
+            cc.renderer.pushRenderCommand(this._renderCmd);
+            cc.Sprite.prototype.visit.call(this);
         },
 
         /**
@@ -342,7 +357,7 @@
          * @return {Number}
          */
         getRotation:function () {
-            return this._ignoreBodyRotation ? cc.radiansToDegrees(this._rotationRadiansX) : -cc.radiansToDegrees(this._body.a);
+            return this._ignoreBodyRotation ? this._rotationX : -cc.radiansToDegrees(this._body.a);
         },
 
         /**
@@ -358,96 +373,17 @@
             }
         },
         _syncRotation:function () {
-            if (this._rotationRadiansX != -this._body.a) {
+            if (this._rotationX != -cc.radiansToDegrees(this._body.a)) {
                 cc.Sprite.prototype.setRotation.call(this, -cc.radiansToDegrees(this._body.a));
             }
-        },
-        /**
-         * @deprecated since v3.0, please use getNodeToParentTransform instead
-         */
-        nodeToParentTransform: function(){
-            return this.getNodeToParentTransform();
         },
 
         /**
          * get the affine transform matrix of node to parent coordinate frame
-         * @retur {cc.AffineTransform}
+         * @return {cc.AffineTransform}
          */
         getNodeToParentTransform:function () {
-            if(cc._renderType === cc._RENDER_TYPE_CANVAS)
-                return this._nodeToParentTransformForCanvas();
-
-            var locBody = this._body, locAnchorPIP = this._anchorPointInPoints, locScaleX = this._scaleX, locScaleY = this._scaleY;
-            var x = locBody.p.x;
-            var y = locBody.p.y;
-
-            if (this._ignoreAnchorPointForPosition) {
-                x += locAnchorPIP.x;
-                y += locAnchorPIP.y;
-            }
-
-            // Make matrix
-            var radians = locBody.a;
-            var c = Math.cos(radians);
-            var s = Math.sin(radians);
-
-            // Although scale is not used by physics engines, it is calculated just in case
-            // the sprite is animated (scaled up/down) using actions.
-            // For more info see: http://www.cocos2d-iphone.org/forum/topic/68990
-            if (!cc._rectEqualToZero(locAnchorPIP)) {
-                x += c * -locAnchorPIP.x * locScaleX + -s * -locAnchorPIP.y * locScaleY;
-                y += s * -locAnchorPIP.x * locScaleX + c * -locAnchorPIP.y * locScaleY;
-            }
-
-            // Rot, Translate Matrix
-            this._transform = cc.affineTransformMake(c * locScaleX, s * locScaleX,
-                -s * locScaleY, c * locScaleY,
-                x, y);
-
-            return this._transform;
-        },
-
-        _nodeToParentTransformForCanvas: function () {
-            if (this.dirty) {
-                var t = this._transform;// quick reference
-                // base position
-                var locBody = this._body, locScaleX = this._scaleX, locScaleY = this._scaleY, locAnchorPIP = this._anchorPointInPoints;
-                t.tx = locBody.p.x;
-                t.ty = locBody.p.y;
-
-                // rotation Cos and Sin
-                var radians = -locBody.a;
-                var Cos = 1, Sin = 0;
-                if (radians) {
-                    Cos = Math.cos(radians);
-                    Sin = Math.sin(radians);
-                }
-
-                // base abcd
-                t.a = t.d = Cos;
-                t.b = -Sin;
-                t.c = Sin;
-
-                // scale
-                if (locScaleX !== 1 || locScaleY !== 1) {
-                    t.a *= locScaleX;
-                    t.c *= locScaleX;
-                    t.b *= locScaleY;
-                    t.d *= locScaleY;
-                }
-
-                // adjust anchorPoint
-                t.tx += Cos * -locAnchorPIP.x * locScaleX + -Sin * locAnchorPIP.y * locScaleY;
-                t.ty -= Sin * -locAnchorPIP.x * locScaleX + Cos * locAnchorPIP.y * locScaleY;
-
-                // if ignore anchorPoint
-                if (this._ignoreAnchorPointForPosition) {
-                    t.tx += locAnchorPIP.x;
-                    t.ty += locAnchorPIP.y;
-                }
-                this._transformDirty = false;
-            }
-            return this._transform;
+            return this._renderCmd.getNodeToParentTransform();
         },
 
         /**
@@ -460,11 +396,18 @@
         setDirty: function(){ },
 
         /**
-         * set whether to ignore ratation of body
+         * set whether to ignore rotation of body
          * @param {Boolean} b
          */
         setIgnoreBodyRotation: function(b) {
             this._ignoreBodyRotation = b;
+        },
+
+        _createRenderCmd: function(){
+            if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+                return new cc.PhysicsSprite.CanvasRenderCmd(this);
+            else
+                return new cc.PhysicsSprite.WebGLRenderCmd(this);
         }
     };
     cc.PhysicsSprite = cc.Sprite.extend(chipmunkAPI);
@@ -485,25 +428,6 @@
      * @param {String|cc.Texture2D|cc.SpriteFrame} fileName
      * @param {cc.Rect} rect
      * @return {cc.PhysicsSprite}
-     * @example
-     *
-     * 1.Create a sprite with image path and rect
-     * var physicsSprite1 = cc.PhysicsSprite.create("res/HelloHTML5World.png");
-     * var physicsSprite2 = cc.PhysicsSprite.create("res/HelloHTML5World.png",cc.rect(0,0,480,320));
-     *
-     * 2.Create a sprite with a sprite frame name. Must add "#" before fame name.
-     * var physicsSprite = cc.PhysicsSprite.create('#grossini_dance_01.png');
-     *
-     * 3.Create a sprite with a sprite frame
-     * var spriteFrame = cc.spriteFrameCache.getSpriteFrame("grossini_dance_01.png");
-     * var physicsSprite = cc.PhysicsSprite.create(spriteFrame);
-     *
-     * 4.Creates a sprite with an exsiting texture contained in a CCTexture2D object
-     *      After creation, the rect will be the size of the texture, and the offset will be (0,0).
-     * var texture = cc.textureCache.addImage("HelloHTML5World.png");
-     * var physicsSprite1 = cc.PhysicsSprite.create(texture);
-     * var physicsSprite2 = cc.PhysicsSprite.create(texture, cc.rect(0,0,480,320));
-     *
      */
     cc.PhysicsSprite.create = function (fileName, rect) {
         return new cc.PhysicsSprite(fileName, rect);

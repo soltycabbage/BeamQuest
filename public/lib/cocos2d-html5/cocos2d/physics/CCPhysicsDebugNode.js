@@ -191,6 +191,13 @@ cc.PhysicsDebugNode = cc.DrawNode.extend({
         this._space.eachConstraint(cc.DrawConstraint.bind(this));
         cc.DrawNode.prototype.draw.call(this);
         this.clear();
+    },
+
+    _createRenderCmd: function(){
+        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+            return new cc.PhysicsDebugNode.CanvasRenderCmd(this);
+        else
+            return new cc.PhysicsDebugNode.WebGLRenderCmd(this);
     }
 });
 

@@ -4,3 +4,7 @@
 /// <reference path="socket.io/socket.io.d.ts" />
 /// <reference path="underscore/underscore.d.ts" />
 /// <reference path="node_redis/node_redis.d.ts" />
+/// <reference path="sinon/sinon.d.ts" />
+/// <reference path="expect.js/expect.js.d.ts" />
+/// <reference path="mocha/mocha.d.ts" />
+/// <reference path="log4js/log4js.d.ts" />

@@ -247,29 +247,29 @@ bq.entity.Player = bq.entity.Entity.extend({
         // 死亡モーション＊くるくるまわってぱたっと倒れる
         bq.soundManager.playEffect(s_SeDeath1);
         var rotateFrames = this.getKeyFrameMap_()['rotate'];
-        var rotateAnimation = cc.Animation.create();
+        var rotateAnimation = new cc.Animation();
         rotateAnimation.setDelayPerUnit(0.03);
         rotateAnimation.setLoops(5);
         _.forEach(rotateFrames, function(rotateFrame) {
             rotateAnimation.addSpriteFrame(cc.spriteFrameCache.getSpriteFrame(rotateFrame));
         });
         var deathFrames = this.getKeyFrameMap_()['death'];
-        var deathAnimation = cc.Animation.create();
+        var deathAnimation = new cc.Animation();
         deathAnimation.setDelayPerUnit(0.1);
         _.forEach(deathFrames, function(deathFrame) {
             deathAnimation.addSpriteFrame(cc.spriteFrameCache.getSpriteFrame(deathFrame));
         });
 
-        var fadeOut = cc.FadeOut.create(0.8);
-        var blink = cc.Blink.create(1, 50);
-        var delay = cc.DelayTime.create(1);
-        var callFunc = cc.CallFunc.create(this.respawn.bind(this));
-        this.runAction(cc.Sequence.create(
-            cc.Animate.create(rotateAnimation),  // くるくるまわって
-            cc.CallFunc.create(function() {bq.soundManager.playEffect(s_SeDeath2);}),
-            cc.Animate.create(deathAnimation),   // ぱたっと倒れて
+        var fadeOut = new cc.FadeOut(0.8);
+        var blink = new cc.Blink(1, 50);
+        var delay = new cc.DelayTime(1);
+        var callFunc = new cc.CallFunc(this.respawn.bind(this));
+        this.runAction(new cc.Sequence(
+            new cc.Animate(rotateAnimation),  // くるくるまわって
+            new cc.CallFunc(function() {bq.soundManager.playEffect(s_SeDeath2);}),
+            new cc.Animate(deathAnimation),   // ぱたっと倒れて
             delay, // 1秒待って
-            cc.Spawn.create(fadeOut, blink),     // 点滅しながら消えていく
+            new cc.Spawn(fadeOut, blink),     // 点滅しながら消えていく
             delay,
             callFunc
         ));
@@ -281,7 +281,7 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.socket.sendRespawn(this.getModel());
         this.setPosition(bq.mapManager.getRespawnPoint());
         this.sendPosition();
-        var fadeIn = cc.FadeIn.create(0.8);
+        var fadeIn = new cc.FadeIn(0.8);
         this.runAction(fadeIn);
     },
 

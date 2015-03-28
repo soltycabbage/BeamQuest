@@ -181,6 +181,8 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
         this.colorSpaceHolder.g = value.g;
         this.colorSpaceHolder.b = value.b;
         this.colorSpaceHolder.a = cc.isUndefined(value.a) ? 255 : value.a;
+        if(!this._inputText.length)
+            this.setColor(this.colorSpaceHolder);
     },
 
     /**
@@ -192,6 +194,8 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
         this._colorText.g = textColor.g;
         this._colorText.b = textColor.b;
         this._colorText.a = cc.isUndefined(textColor.a) ? 255 : textColor.a;
+        if(this._inputText.length)
+            this.setColor(this._colorText);
     },
 
     /**
@@ -245,7 +249,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
             this.setColor(this._colorText);
         }
         if(cc._renderType === cc._RENDER_TYPE_CANVAS)
-            this._updateTexture();
+            this._renderCmd._updateTexture();
         this._charCount = this._inputText.length;
     },
 
@@ -451,7 +455,6 @@ cc.defineGetterSetter(_p, "charCount", _p.getCharCount);
 _p.placeHolder;
 cc.defineGetterSetter(_p, "placeHolder", _p.getPlaceHolder, _p.setPlaceHolder);
 
-
 /**
  * Please use new TextFieldTTF instead. <br />
  * Creates a cc.TextFieldTTF from a fontName, alignment, dimension and font size.
@@ -462,12 +465,6 @@ cc.defineGetterSetter(_p, "placeHolder", _p.getPlaceHolder, _p.setPlaceHolder);
  * @param {String} fontName
  * @param {Number} fontSize
  * @return {cc.TextFieldTTF|Null}
- * @example
- * //example
- * // When five parameters
- * var textField = cc.TextFieldTTF.create("<click here for input>", cc.size(100,50), cc.TEXT_ALIGNMENT_LEFT,"Arial", 32);
- * // When three parameters
- * var textField = cc.TextFieldTTF.create("<click here for input>", "Arial", 32);
  */
 cc.TextFieldTTF.create = function (placeholder, dimensions, alignment, fontName, fontSize) {
     return new cc.TextFieldTTF(placeholder, dimensions, alignment, fontName, fontSize);
