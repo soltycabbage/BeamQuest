@@ -48,7 +48,7 @@ bq.entity.Player = bq.entity.Entity.extend({
         }
 
         var direction = this.inputHandler.getDirection();
-        if (direction && this.currentState !== bq.entity.EntityState.Mode.douge) {
+        if (direction && this.currentState !== bq.entity.EntityState.Mode.dodge) {
             // アニメーションを更新
             this.updateAnimation(bq.entity.EntityState.Mode.walking, direction);
 
@@ -86,7 +86,7 @@ bq.entity.Player = bq.entity.Entity.extend({
      * @param {bq.entity.EntityState.Direction} direction
      * @private
      */
-    dougeInternal_: function(direction) {
+    dodgeInternal_: function(direction) {
         var currentPosition = this.getPosition();
         var directionVector = this.getNormalizedDirectionVector(direction);
         var moveDistance = cc.pMult(directionVector, 100);
@@ -99,8 +99,8 @@ bq.entity.Player = bq.entity.Entity.extend({
             y: nextPos.y,
             direction: direction
         }
-        this.socket.sendDouge(posData);
-        this.dougeTo(nextPos);
+        this.socket.sendDodge(posData);
+        this.dodgeTo(nextPos);
         bq.camera.forceLook();
     },
 
@@ -307,9 +307,9 @@ bq.entity.Player = bq.entity.Entity.extend({
      * @private
      */
     handleStreakKey_: function(evt, direction) {
-        if (direction && this.currentState !== bq.entity.EntityState.Mode.douge) {
-            this.currentState = bq.entity.EntityState.Mode.douge;
-            this.dougeInternal_(direction);
+        if (direction && this.currentState !== bq.entity.EntityState.Mode.dodge) {
+            this.currentState = bq.entity.EntityState.Mode.dodge;
+            this.dodgeInternal_(direction);
         }
     }
 });

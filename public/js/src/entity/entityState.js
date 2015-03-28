@@ -13,7 +13,7 @@ bq.entity.EntityState = {
         stop: 'idle', /** 止まってる */
         walking: 'step', /** 歩いてる */
         death: 'death', /** 死んでいる */
-        douge: 'douge' /** 緊急回避中 */
+        dodge: 'dodge' /** 緊急回避中 */
     },
 
     /**

@@ -187,10 +187,10 @@ var EntitiesStore = (function () {
     /**
     * 回避行動中かどうかの状態を更新する
     */
-    EntitiesStore.prototype.updatePlayerDouge = function (data) {
+    EntitiesStore.prototype.updatePlayerDodge = function (data) {
         var player = this.getPlayerById(data.mapId, data.userId);
         if (player) {
-            player.model.setDouge(true);
+            player.model.setDodge(true);
             return true;
         }
         return false;

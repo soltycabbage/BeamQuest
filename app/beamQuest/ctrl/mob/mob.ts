@@ -176,7 +176,7 @@ class Mob extends EntityCtrl {
             this.timeout_ = setTimeout(() => {
                 if (this.hateTarget) {
                     // 緊急回避中だったらノーダメやで
-                    if (this.hateTarget.model.isDouge) {
+                    if (this.hateTarget.model.isDodge) {
                         this.hateTarget.model.addHp(-1);
                         return;
                     }

@@ -29,8 +29,8 @@ bq.Socket = cc.Class.extend({
         });
 
         // 他プレイヤーが回避行動を取った
-        this.socket.on('notify:user:douge', function(data) {
-            entityManager.dougeTo(data);
+        this.socket.on('notify:user:dodge', function(data) {
+            entityManager.dodgeTo(data);
         });
 
         // ビーム発射
@@ -198,8 +198,8 @@ bq.Socket = cc.Class.extend({
      * 緊急回避するよって伝える
      * @param {cc.Point} pos
      */
-    sendDouge: function(pos) {
-        this.socket.emit('user:douge', pos);
+    sendDodge: function(pos) {
+        this.socket.emit('user:dodge', pos);
     },
 
     /**

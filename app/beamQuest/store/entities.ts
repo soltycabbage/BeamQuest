@@ -219,10 +219,10 @@ class EntitiesStore {
     /**
      * 回避行動中かどうかの状態を更新する
      */
-    updatePlayerDouge(data:any) : boolean {
+    updatePlayerDodge(data:any) : boolean {
         var player = this.getPlayerById(data.mapId, data.userId);
         if (player) {
-            player.model.setDouge(true);
+            player.model.setDodge(true);
             return true;
         }
         return false;

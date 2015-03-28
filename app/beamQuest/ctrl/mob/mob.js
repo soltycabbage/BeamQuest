@@ -151,7 +151,7 @@ var Mob = (function (_super) {
             this.timeout_ = setTimeout(function () {
                 if (_this.hateTarget) {
                     // 緊急回避中だったらノーダメやで
-                    if (_this.hateTarget.model.isDouge) {
+                    if (_this.hateTarget.model.isDodge) {
                         _this.hateTarget.model.addHp(-1);
                         return;
                     }

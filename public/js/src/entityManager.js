@@ -76,10 +76,10 @@ bq.EntityManager = cc.Class.extend({
      * 他プレイヤーが回避行動を取った
      * @param {object} data
      */
-    dougeTo: function(data) {
+    dodgeTo: function(data) {
         var otherPlayer = this.otherPlayers_[data.userId];
         if (otherPlayer) {
-            otherPlayer.dougeTo(cc.p(data.x, data.y));
+            otherPlayer.dodgeTo(cc.p(data.x, data.y));
         }
     },
 

@@ -22,7 +22,7 @@ var Player = (function (_super) {
         this.prevLvExp = this.job.Exp[this.lv];
         this.nextLvExp = this.job.Exp[this.lv + 1];
         this.isDeath = !!this.data.isDeath;
-        this.isDouge = !!this.data.isDouge;
+        this.isDodge = !!this.data.isDodge;
         this.beam = bq.params.Beams.NORMAL1;
         this.hotbarItems = this.data.hotbarItems || this.skills;
         this.socket = this.data.socket || null;
@@ -48,12 +48,12 @@ var Player = (function (_super) {
         // TODO: ほかのステータス
     };
 
-    Player.prototype.setDouge = function (isDouge) {
-        this.isDouge = isDouge;
+    Player.prototype.setDodge = function (isDodge) {
+        this.isDodge = isDodge;
 
         // 500ms経過後は自動的にfalseになる
         setTimeout(_.bind(function () {
-            this.isDouge = false;
+            this.isDodge = false;
         }, this), 500);
     };
 

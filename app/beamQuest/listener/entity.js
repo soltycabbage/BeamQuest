@@ -32,8 +32,8 @@ var Entity = (function () {
         this.socket_.on('user:status:get', function (data) {
             return _this.handleGetStatus_(data);
         });
-        this.socket_.on('user:douge', function (data) {
-            return _this.handleDouge(data);
+        this.socket_.on('user:dodge', function (data) {
+            return _this.handleDodge(data);
         });
         EntitiesStore = require('beamQuest/store/entities');
     };
@@ -58,12 +58,12 @@ var Entity = (function () {
     /**
     * プレイヤーの緊急回避
     */
-    Entity.prototype.handleDouge = function (data) {
+    Entity.prototype.handleDodge = function (data) {
         var _this = this;
         UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', function (err, mapId) {
             data.mapId = mapId;
-            if (EntitiesStore.getInstance().updatePlayerDouge(data)) {
-                _this.socket_.broadcast.emit('notify:user:douge', data);
+            if (EntitiesStore.getInstance().updatePlayerDodge(data)) {
+                _this.socket_.broadcast.emit('notify:user:dodge', data);
             }
         });
     };

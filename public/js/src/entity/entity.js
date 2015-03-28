@@ -50,7 +50,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
 
     /** @override */
     update: function() {
-        if (this.currentState == bq.entity.EntityState.Mode.douge) {
+        if (this.currentState == bq.entity.EntityState.Mode.dodge) {
             this.putPhantom_();
         }
     },
@@ -143,7 +143,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
      * 指定位置に回避行動をとる
      * @param {cc.Point} pos
      */
-    dougeTo: function(pos) {
+    dodgeTo: function(pos) {
         var np = bq.mapManager.getNormalizePosByEnterable(this.getPosition(), pos);
         var jumpTo = new cc.JumpTo(0.2, np, 10, 1);
         this.runAction(jumpTo);
@@ -254,7 +254,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
 
         if ((state === null && direction === null)
             || (state === this.currentState && direction === this.currentDirection)
-            || (this.currentState === bq.entity.EntityState.Mode.douge)) {
+            || (this.currentState === bq.entity.EntityState.Mode.dodge)) {
             return;
         }
         state = state ? state : this.currentState;
