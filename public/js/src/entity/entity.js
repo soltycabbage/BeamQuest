@@ -16,6 +16,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     model_: null,
     shape_: null,
     isCasting: false, // スキルキャスト中ならtrue
+    frameMap_: null,
 
     /**
      * @param {string} spriteFrameName *.plistの<key>に設定されてるframeName
@@ -26,6 +27,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         spriteFrame && this.initWithSpriteFrame(spriteFrame); // TODO initWithSpriteFrameName ? iwg
         if ( frameMap ) {
             this.animations = bq.entity.Animation.createAnimations(frameMap);
+            this.frameMap_ = frameMap;
         }
         var body = new cp.Body(0.0001, 0.001);
         this.setBody(body);
@@ -43,6 +45,13 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
     init_: function() {
         if (this.DEFAULT_NAME !== this.name) {
             this.showName(this.name, true);
+        }
+    },
+
+    /** @override */
+    update: function() {
+        if (this.currentState == bq.entity.EntityState.Mode.dodge) {
+            this.putPhantom_();
         }
     },
 
@@ -128,6 +137,19 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
             var act = new cc.Sequence([move, delay, changeAnime]);
             this.runAction(act);
         }
+    },
+
+    /**
+     * 指定位置に回避行動をとる
+     * @param {cc.Point} pos
+     */
+    dodgeTo: function(pos) {
+        var np = bq.mapManager.getNormalizePosByEnterable(this.getPosition(), pos);
+        var jumpTo = new cc.JumpTo(0.2, np, 10, 1);
+        this.runAction(jumpTo);
+        setTimeout(_.bind(function() {
+            this.currentState = bq.entity.EntityState.Mode.stop;
+        }, this), 500);
     },
 
     /**
@@ -230,10 +252,9 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
      */
     updateAnimation: function(state, direction){
 
-        if ( state === null && direction === null ) {
-            return;
-        }
-        if ( state === this.currentState && direction === this.currentDirection ) {
+        if ((state === null && direction === null ||
+            (state === this.currentState && direction === this.currentDirection) ||
+            (this.currentState === bq.entity.EntityState.Mode.dodge))) {
             return;
         }
         state = state ? state : this.currentState;
@@ -455,5 +476,44 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
             new cc.CallFunc(function() {
                 label.removeFromParent();
             })));
-    }
+    },
+
+    /**
+     * 緊急回避時の残像を表示
+     * @private
+     */
+    putPhantom_: function() {
+        if (!this.frameMap_) {
+            return;
+        }
+        var frame = this.frameMap_['idle_' + this.currentDirection];
+        if (frame && frame[0]) {
+            var phantom = new cc.Sprite();
+            phantom.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(frame[0]));
+            phantom.setPosition(this.getPosition());
+            bq.baseLayer.addChild(phantom, bq.config.zOrder.PLAYER);
+            var action = new cc.Sequence([new cc.FadeOut(0.2), new cc.CallFunc(function() {
+                phantom.removeFromParent();
+            })]);
+            phantom.runAction(action);
+        }
+    },
+
+    /**
+     * 方向をベクトルに変換する
+     * @param {cc.p} direction
+     */
+    getNormalizedDirectionVector: _.memoize(function(direction) {
+        var d = bq.entity.EntityState.Direction;
+        var directionVectors = {};
+        directionVectors[d.bottom]      = cc.p( 0, -1);
+        directionVectors[d.bottomright] = cc.p( 1, -1);
+        directionVectors[d.right]       = cc.p( 1,  0);
+        directionVectors[d.topright]    = cc.p( 1,  1);
+        directionVectors[d.top]         = cc.p( 0,  1);
+        directionVectors[d.topleft]     = cc.p(-1,  1);
+        directionVectors[d.left]        = cc.p(-1,  0);
+        directionVectors[d.bottomleft]  = cc.p(-1, -1);
+        return cc.pNormalize(directionVectors[direction]);
+    }),
 });

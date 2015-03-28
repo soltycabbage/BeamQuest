@@ -31,12 +31,15 @@ bq.MapManager = cc.Class.extend({
 
     /**
      * マップ上のx,y(グローバル座標）に移動できるか？！？！
-     * @param {cc.p} pos
+     * @param {cc.Point} pos
      * @returns {boolean}
      */
     canMoveOnMap:function (pos) {
+        var mapSizeX = this.tileMap.getTileSize().width * this.tileMap.getMapSize().width;
+        var mapSizeY = this.tileMap.getTileSize().height * this.tileMap.getMapSize().height;
+
         // 画面外に出ようとしてたら問答無用でfalse
-        if (pos.x < 0 || pos.y < 0) {
+        if (pos.x < 0 || pos.y < 0 || pos.x > mapSizeX || pos.y > mapSizeY) {
             return false;
         }
 
@@ -46,15 +49,43 @@ bq.MapManager = cc.Class.extend({
                 layer.getProperties()['no_enterable'] === 'true');
         } );
 
-        var sizeY = this.tileMap.getTileSize().width * this.tileMap.getMapSize().width;
         // すべてのレイヤーになにもなかったら入れる
         var tileSize = bq.config.maps.TILE_SIZE;
         return _.all(layers, function(layer) {
             var gid = layer.getTileGIDAt(cc.p(Math.floor(pos.x/tileSize),
-                Math.floor((sizeY-pos.y)/tileSize)));
+                Math.floor((mapSizeY-pos.y)/tileSize)));
             return !gid;
         } );
+    },
 
+    /**
+     * 引数fromからtoまでの線分上に侵入禁止エリアがかかっている場合、その手前の座標を返す
+     * @param {cc.Point} from
+     * @param {cc.Point} to
+     */
+    getNormalizePosByEnterable: function(from, to) {
+        if (this.canMoveOnMap(to)) {
+            return to;
+        } else if (cc.pDistance(from, to) > 10) {
+            // to, fromの単位ベクトル
+            var v = cc.pNormalize(cc.pSub(to, from));
+            return this.getNormalizePosByEnterable(from, cc.pSub(to, cc.pMult(v, 10)));
+        }
+        return from;
+    },
+
+    /**
+     * 引数posがマップの範囲外の場合は範囲内に収まるようにposを調整/更新する
+     * @param {cc.Point} pos
+     * @retuen {cc.Point}
+     */
+    getNormalizePosByMapSize: function(pos) {
+        var np = new cc.Point(0, 0);
+        var mapSizeX = this.tileMap.getTileSize().width * this.tileMap.getMapSize().width;
+        var mapSizeY = this.tileMap.getTileSize().height * this.tileMap.getMapSize().height;
+        np.x = Math.max(0, Math.min(pos.x, mapSizeX));
+        np.y = Math.max(0, Math.min(pos.y, mapSizeY));
+        return np;
     },
 
     /**

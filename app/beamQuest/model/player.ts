@@ -29,6 +29,12 @@ class Player extends Entity {
      */
     nextLvExp: number;
     isDeath: boolean;
+
+    /**
+     * 回避中かどうか
+     */
+    isDodge: boolean;
+
     /** @type {Beam} */
     beam: any;
     /**
@@ -53,6 +59,7 @@ class Player extends Entity {
         this.prevLvExp = this.job.Exp[this.lv];
         this.nextLvExp = this.job.Exp[this.lv + 1];
         this.isDeath = !!this.data.isDeath;
+        this.isDodge = !!this.data.isDodge;
         this.beam = bq.params.Beams.NORMAL1;
         this.hotbarItems = this.data.hotbarItems || this.skills;
         this.socket = this.data.socket || null;
@@ -80,10 +87,18 @@ class Player extends Entity {
         // TODO: ほかのステータス
     }
 
+    setDodge(isDodge:boolean) {
+        this.isDodge = isDodge;
+        // 500ms経過後は自動的にfalseになる
+        setTimeout(_.bind(function() {
+            this.isDodge = false;
+        }, this), 500);
+    }
+
     /**
      * @param {number} amount
-     * @param {boolean=] opt_isCritical
-    */
+     * @param {boolean=} opt_isCritical
+     */
     addBp(amount:number, opt_isCritical: boolean): void {
         this.bp = Math.max(0, Math.min(this.maxBp, this.bp + amount));
         this.emit('addBp', amount, !!opt_isCritical);

@@ -208,12 +208,24 @@ class EntitiesStore {
      * @param {Object.{userId, mapId, x, y}} data
      */
     updatePlayerPosition(data) {
-        var player = this.mapPlayers_[data.mapId][data.userId];
+        var player = this.getPlayerById(data.mapId, data.userId);
         if (player) {
             player.model.position.mapId = data.mapId;
             player.model.position.x = data.x;
             player.model.position.y = data.y;
         }
+    }
+
+    /**
+     * 回避行動中かどうかの状態を更新する
+     */
+    updatePlayerDodge(data:any) : boolean {
+        var player = this.getPlayerById(data.mapId, data.userId);
+        if (player) {
+            player.model.setDodge(true);
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -34,7 +34,7 @@ class Entity {
         this.socket_.on('user:position:update', (data: any) => this.handlePlayerMove_(data));
         this.socket_.on('user:respawn', (data: any) => this.handleRespawn(data));
         this.socket_.on('user:status:get', (data: any) => this.handleGetStatus_(data));
-
+        this.socket_.on('user:dodge', (data: any) => this.handleDodge(data));
         EntitiesStore = require('beamQuest/store/entities');
     }
 
@@ -54,6 +54,18 @@ class Entity {
             EntitiesStore.getInstance().updatePlayerPosition(data);
             // 自分以外の全プレイヤーにブロードキャスト
             this.socket_.broadcast.emit('notify:user:move', data);
+        });
+    }
+
+    /**
+     * プレイヤーの緊急回避
+     */
+    private handleDodge(data:any) {
+        UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', (err, mapId) => {
+            data.mapId = mapId;
+            if (EntitiesStore.getInstance().updatePlayerDodge(data)) {
+                this.socket_.broadcast.emit('notify:user:dodge', data);
+            }
         });
     }
 
