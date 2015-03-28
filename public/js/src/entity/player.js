@@ -98,7 +98,7 @@ bq.entity.Player = bq.entity.Entity.extend({
             x: nextPos.x,
             y: nextPos.y,
             direction: direction
-        }
+        };
         this.socket.sendDodge(posData);
         this.dodgeTo(nextPos);
         bq.camera.forceLook();

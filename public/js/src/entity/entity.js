@@ -252,9 +252,9 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
      */
     updateAnimation: function(state, direction){
 
-        if ((state === null && direction === null)
-            || (state === this.currentState && direction === this.currentDirection)
-            || (this.currentState === bq.entity.EntityState.Mode.dodge)) {
+        if ((state === null && direction === null ||
+            (state === this.currentState && direction === this.currentDirection) ||
+            (this.currentState === bq.entity.EntityState.Mode.dodge))) {
             return;
         }
         state = state ? state : this.currentState;
