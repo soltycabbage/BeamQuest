@@ -11,7 +11,8 @@ bq.Types = {
         PLAYER: 'player',
 
         // Mobs
-        KAMUTARO: 'kamutaro'
+        KAMUTARO: 'kamutaro',
+        KAMUEATER: 'kamueater'
     },
 
     Beams: {
