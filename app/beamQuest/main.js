@@ -53,8 +53,7 @@ exports.start = function(io) {
             logger.debug('socket.io connection start');
 
             login.listen(socket, io);
-
-            ping.listen(socket);
+            ping.listen(socket); // for debug
 
             socket.emit('connected');
             logger.debug('socket.io connection established');
