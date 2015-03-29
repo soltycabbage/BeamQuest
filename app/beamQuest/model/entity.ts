@@ -24,6 +24,11 @@ class Entity extends Model {
     /** @var 使用可能スキル一覧 */
     skills: Skill[];
     mapId: number;
+    /**
+     * 回避中かどうか
+     */
+    isDodge: boolean;
+
 
     static DEFAULT_MAX_HP:number = 100;
     static DEFAULT_ATTACK:number = 1;

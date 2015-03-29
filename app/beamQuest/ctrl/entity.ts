@@ -1,6 +1,7 @@
 import EntityModel = require('beamQuest/model/entity');
 import ScheduleTarget = require('beamQuest/scheduleTarget');
 import EntityListener = require('beamQuest/listener/entity');
+import Control = require('beamQuest/ctrl/ctrl');
 
 /**
  * すべてのmob、playerの基底クラス。
@@ -9,12 +10,13 @@ import EntityListener = require('beamQuest/listener/entity');
  * @param {Object} modelData
  * @extends {bq.ScheduleTarget}
  */
-class Entity extends ScheduleTarget {
-    model: any; // EntityModel だったもの
+class Entity extends ScheduleTarget implements Control<EntityModel> {
+    model:EntityModel;
 
     /**
      * ctrlをnewしたあとは必ずこれを呼んでmodel(各種ステータスとか)をセットすること
-     * @param {model.Entity} model
+     * @param {EntityModel} model
+     * @Override
      */
     setModel(model:EntityModel) {
         this.model = model;

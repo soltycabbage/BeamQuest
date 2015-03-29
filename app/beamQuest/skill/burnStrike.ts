@@ -3,13 +3,13 @@
 import SkillModel = require('beamQuest/model/skill');
 import PositionModel = require('beamQuest/model/position');
 import EntityCtrl = require('beamQuest/ctrl/entity');
-import Skill = require('beamQuest/skill/skill');
+import PlayerSkill = require('beamQuest/skill/playerSkill');
 
 
 /**
  * バーンストライク
  */
-class BurnStrike extends Skill {
+class BurnStrike extends PlayerSkill {
     private interval_;
     private dotcount_;
     private maxdotcount_;

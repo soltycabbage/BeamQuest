@@ -1,7 +1,6 @@
 import SkillModel = require('beamQuest/model/skill');
 import PositionModel = require('beamQuest/model/position');
 import EntityCtrl = require('beamQuest/ctrl/entity');
-import PlayerCtrl = require('beamQuest/ctrl/player');
 import MobCtrl = require('beamQuest/ctrl/mob/mob');
 import EntityStore = require('beamQuest/store/entities');
 
@@ -45,11 +44,6 @@ class Skill {
      * スキルを実行する
      */
     fire() {
-        // BPを減らす。BPの概念があるのはプレイヤーのみ
-        if (this.user instanceof PlayerCtrl) {
-            this.user.model.addBp(-this.model.bp);
-        }
-
         this.skillListener.fire(this.model, this.user.model.id, this.targetPos);
     }
 
