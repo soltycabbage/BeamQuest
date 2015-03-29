@@ -15,14 +15,14 @@ describe('Test: app/beamQuest/skill/skill', function() {
         var skillModel = createSkillModel();
         player = createEntity();
         var targetPos = new PositionModel({x: 100, y: 100});
-        sut = new Skill(skillModel, player, targetPos);
+        sut = new PlayerSkill(skillModel, player, targetPos);
     });
 
     afterEach(function() {
         // 後処理
     });
 
-    it('スキルを使ったら使用者のBPが減っている', function() {
+    it('プレイヤーがスキルを使ったら使用者のBPが減ってない', function() {
         var beforeBp = sut.user.model.bp;
         var expectBp = Math.max(beforeBp - sut.model.bp, 0);
         sut.fire();
