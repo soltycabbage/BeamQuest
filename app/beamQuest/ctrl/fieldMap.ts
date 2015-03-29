@@ -46,9 +46,9 @@ class FieldMap extends ScheduleTarget implements Control<FieldMapModel> {
     private spawnMob_() {
         var timeStamp = new Date().getTime() / 1;
         for(var i = this.model.mobCount;i < this.model.maxMobCount; i++) {
-            // TODO: mapごとに出現モンスターとか決める
+            // TODO: mapごとに出現の割合があってモンスターとか決める
             var position = this.randomPosition_();
-            var mobType = bq.params.Entities.KAMUTARO;
+            var mobType = ((Math.random()*10) <2) ? bq.params.Entities.KAMUTARO : bq.params.Entities.KAMUEATER;
             var mob = new MobCtrl();
             var mobModel = new MobModel(mobType);
             mobModel.mapId = this.model.id;
