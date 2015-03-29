@@ -27,7 +27,7 @@ class Entity extends ScheduleTarget implements Control<EntityModel> {
 
     /**
      * @param {number} amount
-     * @param {boolean} isCriticald
+     * @param {boolean} isCritical
      * @protected
      */
      handleAddHp(amount, isCritical, decorate) {
