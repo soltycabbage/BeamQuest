@@ -175,7 +175,7 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
             var frame = frames[key];
             var spriteFrame = spriteFrames[key];
             if (!spriteFrame) {
-                spriteFrame = cc.SpriteFrame.create(texture, frame.rect, frame.rotated, frame.offset, frame.size);
+                spriteFrame = new cc.SpriteFrame(texture, frame.rect, frame.rotated, frame.offset, frame.size);
                 var aliases = frame.aliases;
                 if(aliases){//set aliases
                     for(var i = 0, li = aliases.length; i < li; i++){
@@ -192,7 +192,7 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
                     var locTexture = spriteFrame.getTexture();
                     if (locTexture.isLoaded()) {
                         var tempElement = spriteFrame.getTexture().getHtmlElementObj();
-                        tempElement = cc.cutRotateImageToCanvas(tempElement, spriteFrame.getRectInPixels());
+                        tempElement = cc.Sprite.CanvasRenderCmd._cutRotateImageToCanvas(tempElement, spriteFrame.getRectInPixels());
                         var tempTexture = new cc.Texture2D();
                         tempTexture.initWithElement(tempElement);
                         tempTexture.handleLoadedTexture();
@@ -330,7 +330,6 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
                 if(!frame) delete self._spriteFramesAliases[name];
             }
         }
-        if (!frame) cc.log(cc._LogInfos.spriteFrameCache_getSpriteFrame, name);
         return frame;
     },
 

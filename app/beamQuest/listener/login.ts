@@ -3,6 +3,9 @@ import PlayerCtrl = require('beamQuest/ctrl/player');
 import PositionModel = require('beamQuest/model/position');
 import Entities = require('beamQuest/store/entities');
 import UserStore = require('beamQuest/store/userStore');
+
+declare var logger: any;
+
 var kvs = require('beamQuest/store/kvs').createClient();
 
 export function listen(socket, io) {
@@ -25,10 +28,18 @@ export function listen(socket, io) {
             }
 
             if (userData && userData.hash !== loginData.hash) {
+                logger.debug('user login failed');
                 return respond_({result: 'error', message: 'すでに存在するキャラクターです。'});
             }
 
-            var player = (userData) ? createPlayer_(userData) : createNewPlayer_(loginData);
+            var player;
+            if (userData) {
+                logger.debug('user login successed');
+                player = createPlayer_(userData)
+            } else {
+                logger.debug('user created and login');
+                player = createNewPlayer_(loginData);
+            }
             addLoginUser_(player);
 
             return respond_({result: 'success', player: player.model.toJSON()});
@@ -89,6 +100,7 @@ export function listen(socket, io) {
         UserStore.getInstance().saveSessionData(socket.id, 'mapId', player.model.position.mapId);
         player.scheduleUpdate();
         socket.broadcast.emit('notify:user:login', {'userId': model.id});
+        logger.debug('user login notified: userId "' + model.id + '" in ' + player.model.position.mapId);
 
         // 接続が切れたらログアウト扱い
         socket.on('disconnect', function() {
@@ -96,6 +108,7 @@ export function listen(socket, io) {
             Entities.getInstance().removePlayer(position.mapId, player);
             player.unscheduleUpdate();
             socket.broadcast.emit('notify:user:logout', {'userId': player.model.id});
+            logger.debug('socket.io connection closed');
         });
     }
 }

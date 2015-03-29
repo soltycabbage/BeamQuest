@@ -1,0 +1,44 @@
+html {
+	min-height: 100%; /* html要素をウィンドウサイズにフィット */
+	background:url('images/page_image_login_mozaic.jpg') no-repeat center; /* 背景画像をhtml要素に表示 */
+	background-size:cover; /* 背景画像をhtml要素にフィット */
+}
+
+ul li {
+	list-style: none;
+}
+
+.wrapper {
+	width: 100%;
+	color: #fff;
+	text-align: center;
+	font-family: 'Press Start 2P', cursive;
+}
+
+h1{
+	color: #fff;
+	font-size: 45px;
+}
+
+.top_movie {
+	margin-top: 10px;
+}
+.top_movie video {
+	-webkit-box-shadow: 0 0 20px 1px #888; /* Safari, Chrome用 */
+	-moz-box-shadow: 0 0 20px 1px #888; /* Firefox用 */
+	box-shadow: 0 0 20px 1px #888; /* CSS3 */	
+}
+
+.comment{
+	color: #222;
+	font-size: 14px;
+}
+
+.menu {
+	margin: 40px 0;
+	font-size: 26px;
+}
+.menu a:link { color: #fff; text-decoration: none; }
+.menu a:visited { color: #fff; }
+.menu a:hover { color: #fff; text-decoration: underline; }
+.menu a:active { color: #fff; }

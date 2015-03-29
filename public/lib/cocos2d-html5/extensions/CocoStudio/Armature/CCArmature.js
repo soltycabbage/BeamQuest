@@ -52,7 +52,6 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
     _body: null,
     _blendFunc: null,
     _className: "Armature",
-    _realAnchorPointInPoints: null,
 
     /**
      * Create a armature node.
@@ -69,7 +68,7 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
         this._armatureIndexDic = {};
         this._offsetPoint = cc.p(0, 0);
         this._armatureTransformDirty = true;
-        this._realAnchorPointInPoints = cc.p(0, 0);
+        this._blendFunc = {src: cc.BLEND_SRC, dst: cc.BLEND_DST};
         name && ccs.Armature.prototype.init.call(this, name, parentBone);
     },
 
@@ -90,7 +89,7 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
         this._boneDic = {};
         this._topBoneList.length = 0;
 
-        this._blendFunc = {src: cc.BLEND_SRC, dst: cc.BLEND_DST};
+
         this._name = name || "";
         var armatureDataManager = ccs.armatureDataManager;
 
@@ -133,10 +132,10 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
             this.updateOffsetPoint();
         } else {
             this._name = "new_armature";
-            this.armatureData = ccs.ArmatureData.create();
+            this.armatureData = new ccs.ArmatureData();
             this.armatureData.name = this._name;
 
-            animationData = ccs.AnimationData.create();
+            animationData = new ccs.AnimationData();
             animationData.name = this._name;
 
             armatureDataManager.addArmatureData(this._name, this.armatureData);
@@ -144,12 +143,20 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
 
             this.animation.setAnimationData(animationData);
         }
-        if (cc._renderType === cc._RENDER_TYPE_WEBGL)
-            this.setShaderProgram(cc.shaderCache.programForKey(cc.SHADER_POSITION_TEXTURECOLOR));
+
+        this._renderCmd.initShaderCache();
 
         this.setCascadeOpacityEnabled(true);
         this.setCascadeColorEnabled(true);
         return true;
+    },
+
+    addChild: function (child, localZOrder, tag) {
+        if(child instanceof ccui.Widget){
+            cc.log("Armature doesn't support to add Widget as its child, it will be fix soon.");
+            return;
+        }
+        cc.Node.prototype.addChild.call(this, child, localZOrder, tag);
     },
 
     /**
@@ -168,10 +175,10 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
         var bone = null;
         if (parentName) {
             this.createBone(parentName);
-            bone = ccs.Bone.create(boneName);
+            bone = new ccs.Bone(boneName);
             this.addBone(bone, parentName);
         } else {
-            bone = ccs.Bone.create(boneName);
+            bone = new ccs.Bone(boneName);
             this.addBone(bone, "");
         }
 
@@ -276,58 +283,8 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
             this.setAnchorPoint(locOffsetPoint.x / rect.width, locOffsetPoint.y / rect.height);
     },
 
-    /**
-     * Sets armature's anchor point, because it need to consider offset point, so here is the override function.
-     * @override
-     * @param {cc.Point|Number} point point or x of point
-     * @param {Number} [y] y of point
-     */
-    setAnchorPoint: function(point, y){
-        var ax, ay;
-        if(y !== undefined){
-            ax = point;
-            ay = y;
-        }else{
-            ax = point.x;
-            ay = point.y;
-        }
-        var locAnchorPoint = this._anchorPoint;
-        if(ax != locAnchorPoint.x || ay != locAnchorPoint.y){
-            var contentSize = this._contentSize ;
-            locAnchorPoint.x = ax;
-            locAnchorPoint.y = ay;
-            this._anchorPointInPoints.x = contentSize.width * locAnchorPoint.x - this._offsetPoint.x;
-            this._anchorPointInPoints.y = contentSize.height * locAnchorPoint.y - this._offsetPoint.y;
-
-            this._realAnchorPointInPoints.x = contentSize.width * locAnchorPoint.x;
-            this._realAnchorPointInPoints.y = contentSize.height * locAnchorPoint.y;
-            this.setNodeDirty();
-        }
-    },
-
-    _setAnchorX: function (x) {
-        if (this._anchorPoint.x === x) return;
-        this._anchorPoint.x = x;
-        this._anchorPointInPoints.x = this._contentSize.width * x - this._offsetPoint.x;
-        this._realAnchorPointInPoints.x = this._contentSize.width * x;
-        this.setNodeDirty();
-    },
-
-    _setAnchorY: function (y) {
-        if (this._anchorPoint.y === y) return;
-        this._anchorPoint.y = y;
-        this._anchorPointInPoints.y = this._contentSize.height * y - this._offsetPoint.y;
-        this._realAnchorPointInPoints.y = this._contentSize.height * y;
-        this.setNodeDirty();
-    },
-
-    /**
-     * Returns the anchor point in points of ccs.Armature.
-     * @override
-     * @returns {cc.Point}
-     */
-    getAnchorPointInPoints: function(){
-        return this._realAnchorPointInPoints;
+    getOffsetPoints: function(){
+        return {x: this._offsetPoint.x, y: this._offsetPoint.y};
     },
 
     /**
@@ -368,67 +325,6 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
     },
 
     /**
-     * Draws armature's display render node.
-     * @override
-     * @param  {CanvasRenderingContext2D | WebGLRenderingContext} ctx The render context
-     */
-    draw: function(ctx){
-        if (this._parentBone == null && this._batchNode == null) {
-            //        CC_NODE_DRAW_SETUP();
-        }
-
-        var locChildren = this._children;
-        var alphaPremultiplied = cc.BlendFunc.ALPHA_PREMULTIPLIED, alphaNonPremultipled = cc.BlendFunc.ALPHA_NON_PREMULTIPLIED;
-        for (var i = 0, len = locChildren.length; i< len; i++) {
-            var selBone = locChildren[i];
-            if (selBone && selBone.getDisplayRenderNode) {
-                var node = selBone.getDisplayRenderNode();
-
-                if (null == node)
-                    continue;
-
-                if(cc._renderType === cc._RENDER_TYPE_WEBGL)
-                    node.setShaderProgram(this._shaderProgram);
-
-                switch (selBone.getDisplayRenderNodeType()) {
-                    case ccs.DISPLAY_TYPE_SPRITE:
-                        if(node instanceof ccs.Skin){
-                            if(cc._renderType === cc._RENDER_TYPE_WEBGL){
-                                node.updateTransform();
-
-                                var func = selBone.getBlendFunc();
-                                if (func.src != alphaPremultiplied.src || func.dst != alphaPremultiplied.dst)
-                                    node.setBlendFunc(selBone.getBlendFunc());
-                                else {
-                                    if ((this._blendFunc.src == alphaPremultiplied.src && this._blendFunc.dst == alphaPremultiplied.dst)
-                                        && !node.getTexture().hasPremultipliedAlpha())
-                                        node.setBlendFunc(alphaNonPremultipled);
-                                    else
-                                        node.setBlendFunc(this._blendFunc);
-                                }
-                                node.draw(ctx);
-                            } else{
-                                node.visit(ctx);
-                            }
-                        }
-                        break;
-                    case ccs.DISPLAY_TYPE_ARMATURE:
-                        node.draw(ctx);
-                        break;
-                    default:
-                        node.visit(ctx);
-                        break;
-                }
-            } else if(selBone instanceof cc.Node) {
-                if(cc._renderType === cc._RENDER_TYPE_WEBGL)
-                    selBone.setShaderProgram(this._shaderProgram);
-                selBone.visit(ctx);
-                //            CC_NODE_DRAW_SETUP();
-            }
-        }
-    },
-
-    /**
      * The callback when ccs.Armature enter stage.
      * @override
      */
@@ -444,48 +340,6 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
     onExit: function () {
         cc.Node.prototype.onExit.call(this);
         this.unscheduleUpdate();
-    },
-
-    visit: null,
-
-    _visitForCanvas: function(ctx){
-        var context = ctx || cc._renderContext;
-        // quick return if not visible. children won't be drawn.
-        if (!this._visible)
-            return;
-
-        context.save();
-        this.transform(context);
-
-        this.sortAllChildren();
-        this.draw(ctx);
-
-        // reset for next frame
-        this._cacheDirty = false;
-        this.arrivalOrder = 0;
-
-        context.restore();
-    },
-
-    _visitForWebGL: function(){
-        // quick return if not visible. children won't be drawn.
-        if (!this._visible)
-            return;
-
-        var context = cc._renderContext, currentStack = cc.current_stack;
-
-        currentStack.stack.push(currentStack.top);
-        cc.kmMat4Assign(this._stackMatrix, currentStack.top);
-        currentStack.top = this._stackMatrix;
-
-        this.transform();
-
-        this.sortAllChildren();
-        this.draw(context);
-
-        // reset for next frame
-        this.arrivalOrder = 0;
-        currentStack.top = currentStack.stack.pop();
     },
 
     /**
@@ -587,7 +441,6 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
         }
     },
 
-
     setBody: function (body) {
         if (this._body == body)
             return;
@@ -621,10 +474,17 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
 
     /**
      * Sets the blendFunc to ccs.Armature
-     * @param {cc.BlendFunc} blendFunc
+     * @param {cc.BlendFunc|Number} blendFunc
+     * @param {Number} [dst]
      */
-    setBlendFunc: function (blendFunc) {
-        this._blendFunc = blendFunc;
+    setBlendFunc: function (blendFunc, dst) {
+        if(dst === undefined){
+            this._blendFunc.src = blendFunc.src;
+            this._blendFunc.dst = blendFunc.dst;
+        } else {
+            this._blendFunc.src = blendFunc;
+            this._blendFunc.dst = dst;
+        }
     },
 
     /**
@@ -632,7 +492,7 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
      * @returns {cc.BlendFunc}
      */
     getBlendFunc: function () {
-        return this._blendFunc;
+        return new cc.BlendFunc(this._blendFunc.src, this._blendFunc.dst);
     },
 
     /**
@@ -683,14 +543,15 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
      */
     setVersion: function (version) {
         this.version = version;
+    },
+
+    _createRenderCmd: function(){
+        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+            return new ccs.Armature.CanvasRenderCmd(this);
+        else
+            return new ccs.Armature.WebGLRenderCmd(this);
     }
 });
-
-if (cc._renderType == cc._RENDER_TYPE_WEBGL) {
-    ccs.Armature.prototype.visit = ccs.Armature.prototype._visitForWebGL;
-} else {
-    ccs.Armature.prototype.visit = ccs.Armature.prototype._visitForCanvas;
-}
 
 var _p = ccs.Armature.prototype;
 
@@ -711,13 +572,8 @@ _p = null;
  * @param {String} [name] Bone name
  * @param {ccs.Bone} [parentBone] the parent bone
  * @return {ccs.Armature}
- * @example
- * // example
- * var armature = ccs.Armature.create();
+ * @deprecated since v3.1, please use new construction instead
  */
 ccs.Armature.create = function (name, parentBone) {
-    var armature = new ccs.Armature();
-    if (armature.init(name, parentBone))
-        return armature;
-    return null;
+    return new ccs.Armature(name, parentBone);
 };

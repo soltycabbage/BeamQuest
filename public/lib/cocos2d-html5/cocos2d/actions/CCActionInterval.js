@@ -47,7 +47,7 @@ cc.ActionInterval = cc.FiniteTimeAction.extend(/** @lends cc.ActionInterval# */{
     _elapsed:0,
     _firstTick:false,
     _easeList: null,
-    _times:1,
+    _timesForRepeat:1,
     _repeatForever: false,
     _repeatMethod: false,//Compatible with repeat class, Discard after can be deleted
     _speed: 1,
@@ -59,7 +59,7 @@ cc.ActionInterval = cc.FiniteTimeAction.extend(/** @lends cc.ActionInterval# */{
 	 */
     ctor:function (d) {
         this._speed = 1;
-        this._times = 1;
+        this._timesForRepeat = 1;
         this._repeatForever = false;
         this.MAX_VALUE = 2;
         this._repeatMethod = false;//Compatible with repeat class, Discard after can be deleted
@@ -107,7 +107,7 @@ cc.ActionInterval = cc.FiniteTimeAction.extend(/** @lends cc.ActionInterval# */{
     _cloneDecoration: function(action){
         action._repeatForever = this._repeatForever;
         action._speed = this._speed;
-        action._times = this._times;
+        action._timesForRepeat = this._timesForRepeat;
         action._easeList = this._easeList;
         action._speedMethod = this._speedMethod;
         action._repeatMethod = this._repeatMethod;
@@ -180,9 +180,9 @@ cc.ActionInterval = cc.FiniteTimeAction.extend(/** @lends cc.ActionInterval# */{
         this.update(t > 0 ? t : 0);
 
         //Compatible with repeat class, Discard after can be deleted (this._repeatMethod)
-        if(this._repeatMethod && this._times > 1 && this.isDone()){
+        if(this._repeatMethod && this._timesForRepeat > 1 && this.isDone()){
             if(!this._repeatForever){
-                this._times--;
+                this._timesForRepeat--;
             }
             //var diff = locInnerAction.getElapsed() - locInnerAction._duration;
             this.startWithTarget(this.target);
@@ -286,7 +286,7 @@ cc.ActionInterval = cc.FiniteTimeAction.extend(/** @lends cc.ActionInterval# */{
             return this;
         }
         this._repeatMethod = true;//Compatible with repeat class, Discard after can be deleted
-        this._times *= times;
+        this._timesForRepeat *= times;
         return this;
     },
 
@@ -297,7 +297,7 @@ cc.ActionInterval = cc.FiniteTimeAction.extend(/** @lends cc.ActionInterval# */{
      */
     repeatForever: function(){
         this._repeatMethod = true;//Compatible with repeat class, Discard after can be deleted
-        this._times = this.MAX_VALUE;
+        this._timesForRepeat = this.MAX_VALUE;
         this._repeatForever = true;
         return this;
     }
@@ -423,9 +423,10 @@ cc.Sequence = cc.ActionInterval.extend(/** @lends cc.Sequence# */{
      * @param {Number}  dt
      */
     update:function (dt) {
-        dt = this._computeEaseTime(dt);
         var new_t, found = 0;
-        var locSplit = this._split, locActions = this._actions, locLast = this._last;
+        var locSplit = this._split, locActions = this._actions, locLast = this._last, actionFound;
+
+        dt = this._computeEaseTime(dt);
         if (dt < locSplit) {
             // action[0]
             new_t = (locSplit !== 0) ? dt / locSplit : 1;
@@ -456,15 +457,17 @@ cc.Sequence = cc.ActionInterval.extend(/** @lends cc.Sequence# */{
             }
         }
 
+        actionFound = locActions[found];
         // Last action found and it is done.
-        if (locLast === found && locActions[found].isDone())
+        if (locLast === found && actionFound.isDone())
             return;
 
         // Last action found and it is done
         if (locLast !== found)
-            locActions[found].startWithTarget(this.target);
+            actionFound.startWithTarget(this.target);
 
-        locActions[found].update(new_t);
+        new_t = new_t * actionFound._timesForRepeat;
+        actionFound.update(new_t > 1 ? new_t % 1 : new_t);
         this._last = found;
     },
 
@@ -491,18 +494,32 @@ cc.Sequence = cc.ActionInterval.extend(/** @lends cc.Sequence# */{
  *
  * // create sequence with array
  * var seq = cc.sequence(actArray);
+ * todo: It should be use new
  */
 cc.sequence = function (/*Multiple Arguments*/tempArray) {
     var paramArray = (tempArray instanceof Array) ? tempArray : arguments;
     if ((paramArray.length > 0) && (paramArray[paramArray.length - 1] == null))
         cc.log("parameters should not be ending with null in Javascript");
 
-    var prev = paramArray[0];
-    for (var i = 1; i < paramArray.length; i++) {
-        if (paramArray[i])
-            prev = cc.Sequence._actionOneTwo(prev, paramArray[i]);
+    var result, current, i, repeat;
+    while(paramArray && paramArray.length > 0){
+        current = Array.prototype.shift.call(paramArray);
+        repeat = current._timesForRepeat || 1;
+        current._repeatMethod = false;
+        current._timesForRepeat = 1;
+
+        i = 0;
+        if(!result){
+            result = current;
+            i = 1;
+        }
+
+        for(i; i<repeat; i++){
+            result = cc.Sequence._actionOneTwo(result, current);
+        }
     }
-    return prev;
+
+    return result;
 };
 
 /**
@@ -975,6 +992,7 @@ cc.Spawn = cc.ActionInterval.extend(/** @lends cc.Spawn# */{
  * @example
  * // example
  * var action = cc.spawn(cc.jumpBy(2, cc.p(300, 0), 50, 4), cc.rotateBy(2, 720));
+ * todo:It should be the direct use new
  */
 cc.spawn = function (/*Multiple Arguments*/tempArray) {
     var paramArray = (tempArray instanceof Array) ? tempArray : arguments;
@@ -2636,7 +2654,6 @@ cc.FadeTo = cc.ActionInterval.extend(/** @lends cc.FadeTo# */{
         time = this._computeEaseTime(time);
         var fromOpacity = this._fromOpacity !== undefined ? this._fromOpacity : 255;
         this.target.opacity = fromOpacity + (this._toOpacity - fromOpacity) * time;
-
     },
 
     /**
@@ -2688,7 +2705,9 @@ cc.FadeIn = cc.FadeTo.extend(/** @lends cc.FadeIn# */{
      */
     ctor:function (duration) {
         cc.FadeTo.prototype.ctor.call(this);
-        duration && this.initWithDuration(duration, 255);
+        if (duration == null)
+            duration = 0;
+        this.initWithDuration(duration, 255);
     },
 
     /**
@@ -2762,7 +2781,9 @@ cc.FadeOut = cc.FadeTo.extend(/** @lends cc.FadeOut# */{
      */
     ctor:function (duration) {
         cc.FadeTo.prototype.ctor.call(this);
-        duration && this.initWithDuration(duration, 0);
+        if (duration == null)
+            duration = 0;
+        this.initWithDuration(duration, 0);
     },
 
     /**

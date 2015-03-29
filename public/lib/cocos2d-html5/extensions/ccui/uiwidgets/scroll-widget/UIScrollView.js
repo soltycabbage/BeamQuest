@@ -141,7 +141,13 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
 
     _initRenderer: function () {
         ccui.Layout.prototype._initRenderer.call(this);
-        this._innerContainer = ccui.Layout.create();
+
+        this._innerContainer = new ccui.Layout();
+        this._innerContainer.setColor(cc.color(255,255,255));
+        this._innerContainer.setOpacity(255);
+        this._innerContainer.setCascadeColorEnabled(true);
+        this._innerContainer.setCascadeOpacityEnabled(true);
+
         this.addProtectedChild(this._innerContainer, 1, 1);
     },
 
@@ -695,7 +701,7 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
         var icBottomPos, icLeftPos, icRightPos, icTopPos;
         var locContainer = this._innerContainer, locDestination = this._autoScrollDestination;
         switch (this.direction) {
-            case ccui.ScrollView.DIR_VERTICAL: // vertical
+            case ccui.ScrollView.DIR_VERTICAL:
                 if (this._autoScrollDir.y > 0) {
                     icBottomPos = locContainer.getBottomBoundary();
                     if (icBottomPos + touchOffsetY >= locDestination.y) {
@@ -710,7 +716,7 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
                     }
                 }
                 break;
-            case ccui.ScrollView.DIR_HORIZONTAL: // horizontal
+            case ccui.ScrollView.DIR_HORIZONTAL:
                 if (this._autoScrollDir.x > 0) {
                     icLeftPos = locContainer.getLeftBoundary();
                     if (icLeftPos + touchOffsetX >= locDestination.x) {
@@ -1315,23 +1321,25 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
         if (!this._checkNeedBounce() && this.inertiaScrollEnabled) {
             if (this._slidTime <= 0.016)
                 return;
-            var totalDis = 0;
-            var dir;
+            var totalDis = 0, dir;
+            var touchEndPositionInNodeSpace = this.convertToNodeSpace(this._touchEndPosition);
+            var touchBeganPositionInNodeSpace = this.convertToNodeSpace(this._touchBeganPosition);
             switch (this.direction) {
                 case ccui.ScrollView.DIR_VERTICAL :
-                    totalDis = this._touchEndPosition.y - this._touchBeganPosition.y;
+                    totalDis = touchEndPositionInNodeSpace.y - touchBeganPositionInNodeSpace.y;
                     dir = (totalDis < 0) ? ccui.ScrollView.SCROLLDIR_DOWN : ccui.ScrollView.SCROLLDIR_UP;
                     break;
                 case ccui.ScrollView.DIR_HORIZONTAL:
-                    totalDis = this._touchEndPosition.x - this._touchBeganPosition.x;
+                    totalDis = touchEndPositionInNodeSpace.x - touchBeganPositionInNodeSpace.x;
                     dir = totalDis < 0 ? ccui.ScrollView.SCROLLDIR_LEFT : ccui.ScrollView.SCROLLDIR_RIGHT;
                     break;
                 case ccui.ScrollView.DIR_BOTH :
-                    var subVector = cc.pSub(this._touchEndPosition, this._touchBeganPosition);
+                    var subVector = cc.pSub(touchEndPositionInNodeSpace, touchBeganPositionInNodeSpace);
                     totalDis = cc.pLength(subVector);
                     dir = cc.pNormalize(subVector);
                     break;
                 default:
+                    dir = cc.p(0,0);
                     break;
             }
             var orSpeed = Math.min(Math.abs(totalDis) / (this._slidTime), ccui.ScrollView.AUTO_SCROLL_MAX_SPEED);
@@ -1346,7 +1354,9 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
     },
 
     _handleMoveLogic: function (touch) {
-        var delta = cc.pSub(touch.getLocation(), touch.getPreviousLocation());
+        var touchPositionInNodeSpace = this.convertToNodeSpace(touch.getLocation()),
+            previousTouchPositionInNodeSpace = this.convertToNodeSpace(touch.getPreviousLocation());
+        var delta = cc.pSub(touchPositionInNodeSpace, previousTouchPositionInNodeSpace);
         switch (this.direction) {
             case ccui.ScrollView.DIR_VERTICAL: // vertical
                 this._scrollChildren(0.0, delta.y);
@@ -1375,8 +1385,10 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
      */
     onTouchBegan: function (touch, event) {
         var pass = ccui.Layout.prototype.onTouchBegan.call(this, touch, event);
-        if (this._hit)
-            this._handlePressLogic(touch);
+        if(!this._isInterceptTouch){
+            if (this._hit)
+                this._handlePressLogic(touch);
+        }
         return pass;
     },
 
@@ -1387,7 +1399,8 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
      */
     onTouchMoved: function (touch, event) {
         ccui.Layout.prototype.onTouchMoved.call(this, touch, event);
-        this._handleMoveLogic(touch);
+        if(!this._isInterceptTouch)
+            this._handleMoveLogic(touch);
     },
 
     /**
@@ -1397,7 +1410,9 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
      */
     onTouchEnded: function (touch, event) {
         ccui.Layout.prototype.onTouchEnded.call(this, touch, event);
-        this._handleReleaseLogic(touch);
+        if(!this._isInterceptTouch)
+            this._handleReleaseLogic(touch);
+        this._isInterceptTouch = false;
     },
 
     /**
@@ -1407,6 +1422,9 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
      */
     onTouchCancelled: function (touch, event) {
         ccui.Layout.prototype.onTouchCancelled.call(this, touch, event);
+        if (!this._isInterceptTouch)
+            this.handleReleaseLogic(touch);
+        this._isInterceptTouch = false;
     },
 
     /**
@@ -1437,16 +1455,17 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
         var touchPoint = touch.getLocation();
         switch (event) {
             case ccui.Widget.TOUCH_BEGAN:
+                this._isInterceptTouch = true;
                 this._touchBeganPosition.x = touchPoint.x;
                 this._touchBeganPosition.y = touchPoint.y;
                 this._handlePressLogic(touch);
                 break;
             case ccui.Widget.TOUCH_MOVED:
                 var offset = cc.pLength(cc.pSub(sender.getTouchBeganPosition(), touchPoint));
+                this._touchMovePosition.x = touchPoint.x;
+                this._touchMovePosition.y = touchPoint.y;
                 if (offset > this._childFocusCancelOffset) {
                     sender.setHighlighted(false);
-                    this._touchMovePosition.x = touchPoint.x;
-                    this._touchMovePosition.y = touchPoint.y;
                     this._handleMoveLogic(touch);
                 }
                 break;
@@ -1455,6 +1474,8 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
                 this._touchEndPosition.x = touchPoint.x;
                 this._touchEndPosition.y = touchPoint.y;
                 this._handleReleaseLogic(touch);
+                if (sender.isSwallowTouches())
+                    this._isInterceptTouch = false;
                 break;
         }
     },
@@ -1466,6 +1487,8 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
             else
                 this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_SCROLL_TO_TOP);
         }
+        if(this._ccEventCallback)
+            this._ccEventCallback(this, ccui.ScrollView.EVENT_SCROLL_TO_TOP);
     },
 
     _scrollToBottomEvent: function () {
@@ -1475,6 +1498,8 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
             else
                 this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_SCROLL_TO_BOTTOM);
         }
+        if(this._ccEventCallback)
+            this._ccEventCallback(this, ccui.ScrollView.EVENT_SCROLL_TO_BOTTOM);
     },
 
     _scrollToLeftEvent: function () {
@@ -1484,6 +1509,8 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
             else
                 this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_SCROLL_TO_LEFT);
         }
+        if(this._ccEventCallback)
+            this._ccEventCallback(this, ccui.ScrollView.EVENT_SCROLL_TO_LEFT);
     },
 
     _scrollToRightEvent: function () {
@@ -1493,6 +1520,8 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
             else
                 this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_SCROLL_TO_RIGHT);
         }
+        if(this._ccEventCallback)
+            this._ccEventCallback(this, ccui.ScrollView.EVENT_SCROLL_TO_RIGHT);
     },
 
     _scrollingEvent: function () {
@@ -1502,6 +1531,8 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
             else
                 this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_SCROLLING);
         }
+        if(this._ccEventCallback)
+            this._ccEventCallback(this, ccui.ScrollView.EVENT_SCROLLING);
     },
 
     _bounceTopEvent: function () {
@@ -1511,6 +1542,8 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
             else
                 this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_BOUNCE_TOP);
         }
+        if(this._ccEventCallback)
+            this._ccEventCallback(this, ccui.ScrollView.EVENT_BOUNCE_TOP);
     },
 
     _bounceBottomEvent: function () {
@@ -1520,6 +1553,8 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
             else
                 this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_BOUNCE_BOTTOM);
         }
+        if(this._ccEventCallback)
+            this._ccEventCallback(this, ccui.ScrollView.EVENT_BOUNCE_BOTTOM);
     },
 
     _bounceLeftEvent: function () {
@@ -1529,6 +1564,8 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
             else
                 this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_BOUNCE_LEFT);
         }
+        if(this._ccEventCallback)
+            this._ccEventCallback(this, ccui.ScrollView.EVENT_BOUNCE_LEFT);
     },
 
     _bounceRightEvent: function () {
@@ -1538,6 +1575,8 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
             else
                 this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_BOUNCE_RIGHT);
         }
+        if(this._ccEventCallback)
+            this._ccEventCallback(this, ccui.ScrollView.EVENT_BOUNCE_RIGHT);
     },
 
     /**
@@ -1648,7 +1687,7 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
     },
 
     _createCloneInstance: function(){
-        return ccui.ScrollView.create();
+        return new ccui.ScrollView();
     },
 
     _copyClonedWidgetChildren: function (model) {
@@ -1664,6 +1703,7 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
             this.setInertiaScrollEnabled(scrollView.inertiaScrollEnabled);
             this._scrollViewEventListener = scrollView._scrollViewEventListener;
             this._scrollViewEventSelector = scrollView._scrollViewEventSelector;
+            this._ccEventCallback = scrollView._ccEventCallback;
         }
     },
 
@@ -1740,9 +1780,6 @@ _p = null;
  * allocates and initializes a UIScrollView.
  * @deprecated since v3.0, please use new ccui.ScrollView() instead.
  * @return {ccui.ScrollView}
- * @example
- * // example
- * var uiScrollView = ccui.ScrollView.create();
  */
 ccui.ScrollView.create = function () {
     return new ccui.ScrollView();

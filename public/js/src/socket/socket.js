@@ -28,6 +28,11 @@ bq.Socket = cc.Class.extend({
             entityManager.moveTo(moveData);
         });
 
+        // 他プレイヤーが回避行動を取った
+        this.socket.on('notify:user:dodge', function(data) {
+            entityManager.dodgeTo(data);
+        });
+
         // ビーム発射
         this.socket.on('notify:beam:shoot', function(data) {
             var beamPos = new bq.model.BeamPos(data);
@@ -187,6 +192,14 @@ bq.Socket = cc.Class.extend({
      */
     sendRespawn: function(player) {
         this.socket.emit('user:respawn', player);
+    },
+
+    /**
+     * 緊急回避するよって伝える
+     * @param {cc.Point} pos
+     */
+    sendDodge: function(pos) {
+        this.socket.emit('user:dodge', pos);
     },
 
     /**

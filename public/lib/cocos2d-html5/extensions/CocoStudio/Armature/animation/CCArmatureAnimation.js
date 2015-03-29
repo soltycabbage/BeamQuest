@@ -100,6 +100,8 @@ ccs.FrameEvent = function () {
  * @class
  * @extends ccs.ProcessBase
  *
+ * @param {ccs.Armature} [armature] The armature
+ *
  * @property {ccs.AnimationData}    animationData       - Animation data
  * @property {Object}               userObject          - User custom object
  * @property {Boolean}              ignoreFrameEvent    - Indicate whether the frame event is ignored
@@ -130,16 +132,16 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
     _movementEventListener: null,
     _frameEventListener: null,
 
-    /**
-     * The Construction of ccs.ArmatureAnimation
-     */
-    ctor: function () {
+    ctor: function (armature) {
         ccs.ProcessBase.prototype.ctor.call(this);
 
         this._tweenList = [];
         this._movementList = [];
         this._frameEventQueue = [];
         this._movementEventQueue = [];
+        this._armature = null;
+
+        armature && ccs.ArmatureAnimation.prototype.init.call(this, armature);
     },
 
     /**
@@ -232,7 +234,7 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
      * play animation by animation name.
      * @param {String} animationName The animation name you want to play
      * @param {Number} [durationTo=-1]
-     *         he frames between two animation changing-over.It's meaning is changing to this animation need how many frames
+     *         the frames between two animation changing-over.It's meaning is changing to this animation need how many frames
      *         -1 : use the value from CCMovementData get from flash design panel
      * @param {Number} [loop=-1]
      *          Whether the animation is loop.
@@ -276,10 +278,9 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
             this._durationTween = durationTween;
         }
 
-        var movementBoneData;
-        this._tweenList = [];
+        this._tweenList.length = 0;
 
-        var map = this._armature.getBoneDic();
+        var movementBoneData, map = this._armature.getBoneDic();
         for(var element in map) {
             var bone = map[element];
             movementBoneData = this._movementData.movBoneDataDic[bone.getName()];
@@ -525,7 +526,7 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
      */
     setMovementEventCallFunc: function (callFunc, target) {
         if(arguments.length == 1){
-            this._frameEventListener = target;
+            this._movementEventListener = callFunc;
         }else if(arguments.length == 2){
             this._movementEventTarget = target;
             this._movementEventCallFunc = callFunc;
@@ -539,7 +540,7 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
      */
     setFrameEventCallFunc: function (callFunc, target) {
         if(arguments.length == 1){
-            this._frameEventListener = target;
+            this._frameEventListener = callFunc;
         }else if(arguments.length == 2){
             this._frameEventTarget = target;
             this._frameEventCallFunc = callFunc;
@@ -661,13 +662,8 @@ _p = null;
 /**
  * Allocates and initializes a ArmatureAnimation.
  * @return {ccs.ArmatureAnimation}
- * @example
- * // example
- * var animation = ccs.ArmatureAnimation.create();
+ * @deprecated since v3.1, please use new construction instead
  */
-ccs.ArmatureAnimation.create = function (armature) {    //TODO it will be deprecated in v3.1
-    var animation = new ccs.ArmatureAnimation();
-    if (animation && animation.init(armature))
-        return animation;
-    return null;
+ccs.ArmatureAnimation.create = function (armature) {
+    return new ccs.ArmatureAnimation(armature);
 };

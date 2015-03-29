@@ -48,6 +48,9 @@
  * @property {Number}   insetRight      - The right inset of the 9-slice sprite
  * @property {Number}   insetBottom     - The bottom inset of the 9-slice sprite
  */
+
+//todo checking here. Maybe need synchronous.
+
 ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
     _spriteRect: null,
     _capInsetsInternal: null,
@@ -64,11 +67,6 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
     _bottom: null,
     _bottomRight: null,
 
-    //cache in canvas on Canvas mode
-    _cacheSprite: null,
-    _cacheCanvas: null,
-    _cacheContext: null,
-    _cacheTexture: null,
     _scale9Dirty: true,
 
     _opacityModifyRGB: false,
@@ -86,8 +84,11 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
     _spritesGenerated: false,
     _spriteFrameRotated: false,
     _textureLoaded:false,
-    _loadedEventListeners: null,
     _className:"Scale9Sprite",
+
+    //v3.3
+    _flippedX: false,
+    _flippedY: false,
 
     /**
      * return  texture is loaded
@@ -101,19 +102,10 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
      * add texture loaded event listener
      * @param {Function} callback
      * @param {Object} target
+     * @deprecated since 3.1, please use addEventListener instead
      */
     addLoadedEventListener:function(callback, target){
-        this._loadedEventListeners.push({eventCallback:callback, eventTarget:target});
-    },
-
-    _callLoadedEventCallbacks:function(){
-        this._textureLoaded = true;
-        var locListeners = this._loadedEventListeners;
-        for(var i = 0, len = locListeners.length;  i < len; i++){
-            var selCallback = locListeners[i];
-            selCallback.eventCallback.call(selCallback.eventTarget, this);
-        }
-        locListeners.length = 0;
+        this.addEventListener("load", callback, target);
     },
 
     _updateCapInset: function () {
@@ -207,31 +199,6 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         locCenter.setPosition(leftWidth, bottomHeight);
     },
 
-    _cacheScale9Sprite: function(){
-        if(!this._scale9Image)
-            return;
-        var size = this._contentSize, locCanvas = this._cacheCanvas;
-        var contentSizeChanged = false;
-        if(locCanvas.width != size.width || locCanvas.height != size.height){
-            locCanvas.width = size.width;
-            locCanvas.height = size.height;
-            this._cacheContext.translate(0, size.height);
-            contentSizeChanged = true;
-        }
-
-        //cc._renderContext = this._cacheContext;
-        cc.view._setScaleXYForRenderTexture();
-        this._scale9Image.visit(this._cacheContext);
-        //cc._renderContext = cc._mainRenderContextBackup;
-        cc.view._resetScale();
-
-        if(contentSizeChanged)
-            this._cacheSprite.setTextureRect(cc.rect(0,0, size.width, size.height));
-
-        if(!this._cacheSprite.getParent())
-            this.addChild(this._cacheSprite);
-    },
-
     /**
      * Constructor function. override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
      * @function
@@ -248,21 +215,6 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         this._originalSize = cc.size(0, 0);
         this._preferredSize = cc.size(0, 0);
         this._capInsets = cc.rect(0, 0, 0, 0);
-        this._loadedEventListeners = [];
-
-        //cache
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS){
-            var locCacheCanvas = this._cacheCanvas = cc.newElement('canvas');
-            locCacheCanvas.width = 1;
-            locCacheCanvas.height = 1;
-            this._cacheContext = locCacheCanvas.getContext("2d");
-            var locTexture = this._cacheTexture = new cc.Texture2D();
-            locTexture.initWithElement(locCacheCanvas);
-            locTexture.handleLoadedTexture();
-            this._cacheSprite = new cc.Sprite(locTexture);
-            this._cacheSprite.setAnchorPoint(0,0);
-            this.addChild(this._cacheSprite);
-        }
 
         if(file != undefined){
             if(file instanceof cc.SpriteFrame)
@@ -277,6 +229,10 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         }else{
             this.init();
         }
+    },
+
+    getSprite: function () {
+        return this._scale9Image;
     },
 
     /** Original sprite's size. */
@@ -297,6 +253,12 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
     setPreferredSize: function (preferredSize) {
         this.setContentSize(preferredSize);
         this._preferredSize = preferredSize;
+
+        if (this._positionsAreDirty) {
+            this._updatePositions();
+            this._positionsAreDirty = false;
+            this._scale9Dirty = true;
+        }
     },
     _setPreferredWidth: function (value) {
         this._setWidth(value);
@@ -321,20 +283,6 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         this._scale9Dirty = true;
     },
 
-    updateDisplayedOpacity: function(parentOpacity){
-        if(!this._scale9Image)
-            return;
-
-        cc.Node.prototype.updateDisplayedOpacity.call(this, parentOpacity);
-        var scaleChildren = this._scale9Image.getChildren();
-        for (var i = 0; i < scaleChildren.length; i++) {
-            var selChild = scaleChildren[i];
-            if (selChild)
-                selChild.updateDisplayedOpacity(parentOpacity);
-        }
-        this._scale9Dirty = true;
-    },
-
     /** Color: conforms to CCRGBAProtocol protocol */
     setColor: function (color) {
         if(!this._scale9Image)
@@ -346,33 +294,6 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
             var selChild = scaleChildren[i];
             if (selChild)
                 selChild.setColor(color);
-        }
-        this._scale9Dirty = true;
-    },
-
-    updateDisplayedColor: function(parentColor){
-        if(!this._scale9Image)
-            return;
-
-        cc.Node.prototype.updateDisplayedColor.call(this, parentColor);
-        var scaleChildren = this._scale9Image.getChildren();
-        for (var i = 0; i < scaleChildren.length; i++) {
-            var selChild = scaleChildren[i];
-            if (selChild){
-                if(cc._renderType === cc._RENDER_TYPE_CANVAS){
-                    cc.Node.prototype.updateDisplayedColor.call(selChild, parentColor);
-                    if(
-                        parentColor.r !== 255 ||
-                        parentColor.g !== 255 ||
-                        parentColor.b !== 255
-                    ){
-                        selChild._changeTextureColor();
-                        selChild._setNodeDirtyForCache();
-                    }
-                }else{
-                    selChild.updateDisplayedColor(parentColor);
-                }
-            }
         }
         this._scale9Dirty = true;
     },
@@ -480,19 +401,6 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         this._positionsAreDirty = true;
     },
 
-    visit: function (ctx) {
-        if (this._positionsAreDirty) {
-            this._updatePositions();
-            this._positionsAreDirty = false;
-            this._scale9Dirty = true;
-        }
-        if(this._scale9Dirty && cc._renderType === cc._RENDER_TYPE_CANVAS){
-            this._scale9Dirty = false;
-            this._cacheScale9Sprite();
-        }
-        cc.Node.prototype.visit.call(this, ctx);
-    },
-
     /**
      * Initializes a ccui.Scale9Sprite. please do not call this function by yourself, you should pass the parameters to constructor to initialize it.
      * @returns {boolean}
@@ -557,7 +465,7 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         var locLoaded = texture.isLoaded();
         this._textureLoaded = locLoaded;
         if(!locLoaded){
-            texture.addLoadedEventListener(function(sender){
+            texture.addEventListener("load", function(sender){
                 // the texture is rotated on Canvas render mode, so isRotated always is false.
                 var preferredSize = this._preferredSize;
                 preferredSize = cc.size(preferredSize.width, preferredSize.height);
@@ -565,11 +473,11 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
                 this.updateWithBatchNode(this._scale9Image, cc.rect(0,0,size.width,size.height), false, this._capInsets);
                 this.setPreferredSize(preferredSize);
                 this._positionsAreDirty = true;
-                this._callLoadedEventCallbacks();
+                this.dispatchEvent("load");
             }, this);
         }
 
-        return this.initWithBatchNode(cc.SpriteBatchNode.create(file, 9), rect, false, capInsets);
+        return this.initWithBatchNode(new cc.SpriteBatchNode(file, 9), rect, false, capInsets);
     },
 
     /**
@@ -590,17 +498,17 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         var locLoaded = spriteFrame.textureLoaded();
         this._textureLoaded = locLoaded;
         if(!locLoaded){
-            spriteFrame.addLoadedEventListener(function(sender){
+            spriteFrame.addEventListener("load", function(sender){
                 // the texture is rotated on Canvas render mode, so isRotated always is false.
                 var preferredSize = this._preferredSize;
                 preferredSize = cc.size(preferredSize.width, preferredSize.height);
                 this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc._renderType == cc._RENDER_TYPE_WEBGL && sender.isRotated(), this._capInsets);
                 this.setPreferredSize(preferredSize);
                 this._positionsAreDirty = true;
-                this._callLoadedEventCallbacks();
+                this.dispatchEvent("load");
             },this);
         }
-        var batchNode = cc.SpriteBatchNode.create(spriteFrame.getTexture(), 9);
+        var batchNode = new cc.SpriteBatchNode(spriteFrame.getTexture(), 9);
         // the texture is rotated on Canvas render mode, so isRotated always is false.
         return this.initWithBatchNode(batchNode, spriteFrame.getRect(), cc._renderType == cc._RENDER_TYPE_WEBGL && spriteFrame.isRotated(), capInsets);
     },
@@ -694,9 +602,9 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         var locLoaded = tmpTexture.isLoaded();
         this._textureLoaded = locLoaded;
         if(!locLoaded){
-            tmpTexture.addLoadedEventListener(function(sender){
+            tmpTexture.addEventListener("load", function(sender){
                 this._positionsAreDirty = true;
-                this._callLoadedEventCallbacks();
+                this.dispatchEvent("load");
             },this);
             return true;
         }
@@ -985,19 +893,19 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
      * @param {cc.SpriteFrame} spriteFrame
      */
     setSpriteFrame: function (spriteFrame) {
-        var batchNode = cc.SpriteBatchNode.create(spriteFrame.getTexture(), 9);
+        var batchNode = new cc.SpriteBatchNode(spriteFrame.getTexture(), 9);
         // the texture is rotated on Canvas render mode, so isRotated always is false.
         var locLoaded = spriteFrame.textureLoaded();
         this._textureLoaded = locLoaded;
         if(!locLoaded){
-            spriteFrame.addLoadedEventListener(function(sender){
+            spriteFrame.addEventListener("load", function(sender){
                 // the texture is rotated on Canvas render mode, so isRotated always is false.
                 var preferredSize = this._preferredSize;
                 preferredSize = cc.size(preferredSize.width, preferredSize.height);
                 this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc._renderType == cc._RENDER_TYPE_WEBGL && sender.isRotated(), this._capInsets);
                 this.setPreferredSize(preferredSize);
                 this._positionsAreDirty = true;
-                this._callLoadedEventCallbacks();
+                this.dispatchEvent("load");
             },this);
         }
         this.updateWithBatchNode(batchNode, spriteFrame.getRect(), cc._renderType == cc._RENDER_TYPE_WEBGL && spriteFrame.isRotated(), cc.rect(0, 0, 0, 0));
@@ -1007,10 +915,123 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         this._insetTop = 0;
         this._insetRight = 0;
         this._insetBottom = 0;
+    },
+
+    //v3.3
+    /**
+     * Sets ccui.Scale9Sprite's state
+     * @since v3.3
+     * @param {Number} state
+     */
+    setState: function(state){
+        this._renderCmd.setState(state);
+    },
+
+    //setScale9Enabled implement late
+
+    /**
+     * Sets whether the widget should be flipped horizontally or not.
+     * @since v3.3
+     * @param flippedX true if the widget should be flipped horizontally, false otherwise.
+     */
+    setFlippedX: function(flippedX){
+        var realScale = this.getScaleX();
+        this._flippedX = flippedX;
+        this.setScaleX(realScale);
+    },
+
+    /**
+     * <p>
+     * Returns the flag which indicates whether the widget is flipped horizontally or not.                         <br/>
+     *                                                                                                             <br/>
+     * It only flips the texture of the widget, and not the texture of the widget's children.                      <br/>
+     * Also, flipping the texture doesn't alter the anchorPoint.                                                   <br/>
+     * If you want to flip the anchorPoint too, and/or to flip the children too use:                               <br/>
+     * widget->setScaleX(sprite->getScaleX() * -1);                                                                <br/>
+     * </p>
+     * @since v3.3
+     * @return {Boolean} true if the widget is flipped horizontally, false otherwise.
+     */
+    isFlippedX: function(){
+        return this._flippedX;
+    },
+
+    /**
+     * Sets whether the widget should be flipped vertically or not.
+     * @since v3.3
+     * @param flippedY true if the widget should be flipped vertically, false otherwise.
+     */
+    setFlippedY:function(flippedY){
+        var realScale = this.getScaleY();
+        this._flippedY = flippedY;
+        this.setScaleY(realScale);
+    },
+
+    /**
+     * <p>
+     * Return the flag which indicates whether the widget is flipped vertically or not.                             <br/>
+     *                                                                                                              <br/>
+     * It only flips the texture of the widget, and not the texture of the widget's children.                       <br/>
+     * Also, flipping the texture doesn't alter the anchorPoint.                                                    <br/>
+     * If you want to flip the anchorPoint too, and/or to flip the children too use:                                <br/>
+     * widget->setScaleY(widget->getScaleY() * -1);                                                                 <br/>
+     * </p>
+     * @since v3.3
+     * @return {Boolean} true if the widget is flipped vertically, false otherwise.
+     */
+    isFlippedY:function(){
+        return this._flippedY;
+    },
+
+    setScaleX: function (scaleX) {
+        if (this._flippedX)
+            scaleX = scaleX * -1;
+        cc.Node.prototype.setScaleX.call(this, scaleX);
+    },
+
+    setScaleY: function (scaleY) {
+        if (this._flippedY)
+            scaleY = scaleY * -1;
+        cc.Node.prototype.setScaleY.call(this, scaleY);
+    },
+
+    setScale: function (scaleX, scaleY) {
+        if(scaleY === undefined)
+            scaleY = scaleX;
+        this.setScaleX(scaleX);
+        this.setScaleY(scaleY);
+    },
+
+    getScaleX: function () {
+        var originalScale = cc.Node.prototype.getScaleX.call(this);
+        if (this._flippedX)
+            originalScale = originalScale * -1.0;
+        return originalScale;
+    },
+
+    getScaleY: function () {
+        var originalScale = cc.Node.prototype.getScaleY.call(this);
+        if (this._flippedY)
+            originalScale = originalScale * -1.0;
+        return originalScale;
+    },
+
+    getScale: function () {
+        if(this.getScaleX() !== this.getScaleY())
+            cc.log("Scale9Sprite#scale. ScaleX != ScaleY. Don't know which one to return");
+        return this.getScaleX();
+    },
+
+    _createRenderCmd: function(){
+        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+            return new ccui.Scale9Sprite.CanvasRenderCmd(this);
+        else
+            return new ccui.Scale9Sprite.WebGLRenderCmd(this);
     }
 });
 
 var _p = ccui.Scale9Sprite.prototype;
+cc.EventHelper.prototype.apply(_p);
 
 // Extended properties
 /** @expose */
@@ -1080,3 +1101,5 @@ ccui.Scale9Sprite.POSITIONS_BOTTOM = 4;
 ccui.Scale9Sprite.POSITIONS_TOPRIGHT = 5;
 ccui.Scale9Sprite.POSITIONS_TOPLEFT = 6;
 ccui.Scale9Sprite.POSITIONS_BOTTOMRIGHT = 7;
+
+ccui.Scale9Sprite.state = {NORMAL: 0, GRAY: 1};

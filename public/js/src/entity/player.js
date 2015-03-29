@@ -26,6 +26,7 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.scheduleUpdate();
         this.schedule(this.sendPosition, this.POSITION_SEND_INTERVAL);
         $(this.inputHandler).on(bq.entity.Player.InputHandler.EventType.TOUCH_END, this.handleTouchEnd_.bind(this));
+        $(this.inputHandler).on(bq.entity.Player.InputHandler.EventType.STREAK_KEY, this.handleStreakKey_.bind(this));
     },
 
     /** @override */
@@ -40,14 +41,14 @@ bq.entity.Player = bq.entity.Entity.extend({
 
     /** @override */
     update: function () {
+        this._super();
         if (this.currentState === bq.entity.EntityState.Mode.death) {
             // 死んでいたらなにもできない。人生と同じ。
             return;
         }
 
         var direction = this.inputHandler.getDirection();
-
-        if (direction) {
+        if (direction && this.currentState !== bq.entity.EntityState.Mode.dodge) {
             // アニメーションを更新
             this.updateAnimation(bq.entity.EntityState.Mode.walking, direction);
 
@@ -56,6 +57,7 @@ bq.entity.Player = bq.entity.Entity.extend({
             var directionVector = this.getNormalizedDirectionVector(direction);
             var moveDistance = cc.pMult(directionVector, this.moveSpeed);
             var nextPos = cc.pAdd(currentPosition, moveDistance);
+
             if ( bq.mapManager.canMoveOnMap(nextPos)) {
                 this.setPosition(nextPos);
             }
@@ -77,6 +79,29 @@ bq.entity.Player = bq.entity.Entity.extend({
         if (mouseDown) {
             this.shoot(mouseDown.getLocation());
         }
+    },
+
+    /**
+     * 回避行動
+     * @param {bq.entity.EntityState.Direction} direction
+     * @private
+     */
+    dodgeInternal_: function(direction) {
+        var currentPosition = this.getPosition();
+        var directionVector = this.getNormalizedDirectionVector(direction);
+        var moveDistance = cc.pMult(directionVector, 100);
+        var nextPos = cc.pAdd(currentPosition, moveDistance);
+
+        // サーバに回避行動を開始したことを伝える
+        var posData = {
+            userId: this.name,
+            x: nextPos.x,
+            y: nextPos.y,
+            direction: direction
+        };
+        this.socket.sendDodge(posData);
+        this.dodgeTo(nextPos);
+        bq.camera.forceLook();
     },
 
     /**
@@ -222,29 +247,29 @@ bq.entity.Player = bq.entity.Entity.extend({
         // 死亡モーション＊くるくるまわってぱたっと倒れる
         bq.soundManager.playEffect(s_SeDeath1);
         var rotateFrames = this.getKeyFrameMap_()['rotate'];
-        var rotateAnimation = cc.Animation.create();
+        var rotateAnimation = new cc.Animation();
         rotateAnimation.setDelayPerUnit(0.03);
         rotateAnimation.setLoops(5);
         _.forEach(rotateFrames, function(rotateFrame) {
             rotateAnimation.addSpriteFrame(cc.spriteFrameCache.getSpriteFrame(rotateFrame));
         });
         var deathFrames = this.getKeyFrameMap_()['death'];
-        var deathAnimation = cc.Animation.create();
+        var deathAnimation = new cc.Animation();
         deathAnimation.setDelayPerUnit(0.1);
         _.forEach(deathFrames, function(deathFrame) {
             deathAnimation.addSpriteFrame(cc.spriteFrameCache.getSpriteFrame(deathFrame));
         });
 
-        var fadeOut = cc.FadeOut.create(0.8);
-        var blink = cc.Blink.create(1, 50);
-        var delay = cc.DelayTime.create(1);
-        var callFunc = cc.CallFunc.create(this.respawn.bind(this));
-        this.runAction(cc.Sequence.create(
-            cc.Animate.create(rotateAnimation),  // くるくるまわって
-            cc.CallFunc.create(function() {bq.soundManager.playEffect(s_SeDeath2);}),
-            cc.Animate.create(deathAnimation),   // ぱたっと倒れて
+        var fadeOut = new cc.FadeOut(0.8);
+        var blink = new cc.Blink(1, 50);
+        var delay = new cc.DelayTime(1);
+        var callFunc = new cc.CallFunc(this.respawn.bind(this));
+        this.runAction(new cc.Sequence(
+            new cc.Animate(rotateAnimation),  // くるくるまわって
+            new cc.CallFunc(function() {bq.soundManager.playEffect(s_SeDeath2);}),
+            new cc.Animate(deathAnimation),   // ぱたっと倒れて
             delay, // 1秒待って
-            cc.Spawn.create(fadeOut, blink),     // 点滅しながら消えていく
+            new cc.Spawn(fadeOut, blink),     // 点滅しながら消えていく
             delay,
             callFunc
         ));
@@ -256,7 +281,7 @@ bq.entity.Player = bq.entity.Entity.extend({
         this.socket.sendRespawn(this.getModel());
         this.setPosition(bq.mapManager.getRespawnPoint());
         this.sendPosition();
-        var fadeIn = cc.FadeIn.create(0.8);
+        var fadeIn = new cc.FadeIn(0.8);
         this.runAction(fadeIn);
     },
 
@@ -273,27 +298,19 @@ bq.entity.Player = bq.entity.Entity.extend({
         return bq.entity.Player.KEY_FRAME_MAP;
     },
 
-    /**
-     * 方向をベクトルに変換する
-     * TODO 他のクラスに移す
-     * @param {cc.p} direction
-     */
-    getNormalizedDirectionVector: _.memoize(function(direction) {
-        var d = bq.entity.EntityState.Direction;
-        var directionVectors = {};
-        directionVectors[d.bottom]      = cc.p( 0, -1);
-        directionVectors[d.bottomright] = cc.p( 1, -1);
-        directionVectors[d.right]       = cc.p( 1,  0);
-        directionVectors[d.topright]    = cc.p( 1,  1);
-        directionVectors[d.top]         = cc.p( 0,  1);
-        directionVectors[d.topleft]     = cc.p(-1,  1);
-        directionVectors[d.left]        = cc.p(-1,  0);
-        directionVectors[d.bottomleft]  = cc.p(-1, -1);
-        return cc.pNormalize(directionVectors[direction]);
-    }),
-
     handleTouchEnd_: function(evt, touchData) {
         this.shoot(touchData.getLocation());
+    },
+
+    /**
+     * 同じ方向キーを二連打することで回避行動を取る
+     * @private
+     */
+    handleStreakKey_: function(evt, direction) {
+        if (direction && this.currentState !== bq.entity.EntityState.Mode.dodge) {
+            this.currentState = bq.entity.EntityState.Mode.dodge;
+            this.dodgeInternal_(direction);
+        }
     }
 });
 
@@ -314,7 +331,9 @@ bq.entity.Player.EventType = {
 bq.entity.Player.InputHandler = cc.Class.extend({
     downKeys_: [],        // 押されているキーのリスト
     mouseDownEvents_: [], // クリックイベント
-
+    isShiftKeyPressed_: false, // SHIFTキーが押されている間はTRUE
+    streakDownKeys_: [],  // 連打判定用の配列
+    streakTimer_: -1,   // 連打判定用のタイマー
     ctor: function() {
         this.init();
     },
@@ -372,10 +391,35 @@ bq.entity.Player.InputHandler = cc.Class.extend({
         });
     },
 
-    /** @override */
+    /**
+     * 引数countで指定された回数を連打していたらTRUE
+     * @param {number} key
+     * @param {number} count
+     * @return {boolean}
+     * @private
+     */
+    isStreak_: function(key, count) {
+        if (this.streakDownKeys_.length !== count) {
+            return false;
+        }
+        for (var i = 0;i < this.streakDownKeys_.length;i++) {
+            if (this.streakDownKeys_[i] !== key) {
+                return false;
+            }
+        }
+        return true;
+    },
+
+    /**
+     * 特定のキーに機能を持たせたい場合はここに記述していく
+     * @override
+     */
     onKeyDown: function(key) {
         this.addDownKey_(key);
         switch(key) {
+            case cc.KEY.shift:
+                this.isShiftKeyPressed_ = true;
+                break;
             case cc.KEY.i: // iキーでステータスウィンドウを開く
                 bq.Hud.getInstance().openStatusWindow(bq.player.name);
                 break;
@@ -399,7 +443,22 @@ bq.entity.Player.InputHandler = cc.Class.extend({
 
     /** @override */
     onKeyUp: function(key) {
+        this.streakDownKeys_.unshift(key);
+        // 同じ方向キーを短時間に2回押すと緊急回避を発動
+        if (this.isStreak_(key, 2)) {
+            $(this).triggerHandler(bq.entity.Player.InputHandler.EventType.STREAK_KEY, this.getDirection());
+        }
+
+        this.streakTimer_ && clearTimeout(this.streakTimer_);
+        this.streakTimer_ = setTimeout(_.bind(function() {
+            if (this.streakDownKeys_.length)
+                this.streakDownKeys_ = [];
+        }, this), 300);
+
         this.removeDownKey_(key);
+        if (key === cc.KEY.shift) {
+            this.isShiftKeyPressed_ = false;
+        }
     },
 
     /**
@@ -520,6 +579,14 @@ bq.entity.Player.InputHandler = cc.Class.extend({
             onKeyPressed: _.bind(this.onKeyDown, this),
             onKeyReleased: _.bind(this.onKeyUp, this)
         });
+    },
+
+    /**
+     * SHIFTキーが押されていたらTRUE
+     * @returns {boolean}
+     */
+    isShiftKeyPressed: function() {
+        return this.isShiftKeyPressed_;
     }
 
 });
@@ -530,7 +597,8 @@ bq.entity.Player.InputHandler = cc.Class.extend({
  * @const
  */
 bq.entity.Player.InputHandler.EventType = {
-    TOUCH_END: 'touchend'
+    TOUCH_END: 'touchend',
+    STREAK_KEY: 'streakkey'
 };
 
 

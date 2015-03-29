@@ -1,73 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>BEAM QUEST ONLINE</title>
-    <link rel="stylesheet" type="text/css" href="css/lib/jquery/jquery-ui.min.css"/>
-    <link rel="stylesheet" type="text/css" href="css/lib/font-awesome/css/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href="css/layout.css"/>
+<meta charset="UTF-8">
+<title>Beam Quest Online</title>
+<script src="bq_site/comment.js" type="text/javascript"></script>
+<link href="bq_site/style.css" rel="stylesheet" type="text/css"></style>
+<link href="http://fonts.googleapis.com/css?family=Press+Start+2P" rel='stylesheet' type='text/css'>
 </head>
+
 <body>
-<div id="bq-canvas-container">
-    <div id="bq-loading-top">
-        <span>ビームクエスト　オンライン</span>
-    </div>
-    <div id="bq-loading-bottom">
-        <span>Now loading...</span>
-    </div>
-    <canvas id="gameCanvas" width="1040" height="620"></canvas>
-    <div id="bq-hud" style="display: none;">
-        <div id="bq-message-container">
-            <div id="bq-message-log">
-                <i id="bq-message-log-expand" class="fa fa-toggle-up bq-contract"></i>
-                <div id="bq-message-log-inner"></div>
-            </div>
-            <form id="bq-chat-form">
-                <input id="bq-chat-input"><input type="submit" value="say" id="bq-chat-submit">
-            </form>
+<div class="wrapper">
+	<h1>Beam Quest Online</h1>
 
-        </div>
-        <span id="bq-level"><span class="bq-level-label">Lv</span><span id="bq-level-value">1</span></span>
-        <div id="bq-bar-container">
-            <div id="bq-hp-bar">
-                <img class="bq-hp-bar-frame" src="res/img/ui/bar_hp.png"/>
-                <span id="bq-hp-bar-value-text"></span>
-                <div id="bq-hp-bar-value"></div>
-                <div id="bq-hp-bar-background"></div>
-            </div>
-            <div id="bq-bp-bar">
-                <img class="bq-bp-bar-frame" src="res/img/ui/bar_bp.png"/>
-                <span id="bq-bp-bar-value-text"></span>
-                <div id="bq-bp-bar-value"></div>
-                <div id="bq-bp-bar-background"></div>
-            </div>
-        </div>
-        <div id="bq-hot-bar">
-            <span id="bq-hot-bar-item-1" class="bq-hot-bar-item"></span>
-            <span id="bq-hot-bar-item-2" class="bq-hot-bar-item"></span>
-            <span id="bq-hot-bar-item-3" class="bq-hot-bar-item"></span>
-            <span id="bq-hot-bar-item-4" class="bq-hot-bar-item"></span>
-            <span id="bq-hot-bar-item-5" class="bq-hot-bar-item"></span>
-            <span id="bq-hot-bar-item-6" class="bq-hot-bar-item"></span>
-            <span id="bq-hot-bar-item-7" class="bq-hot-bar-item"></span>
-            <span id="bq-hot-bar-item-8" class="bq-hot-bar-item"></span>
-            <span id="bq-hot-bar-item-9" class="bq-hot-bar-item"></span>
-            <span id="bq-hot-bar-item-0" class="bq-hot-bar-item"></span>
-        </div>
-        <div id="bq-exp-bar" class="bq-tooltip-item">
-            <div id="bq-exp-bar-value"></div>
-        </div>
+	<div class="comment">"<script>document.write(msg[no]);</script>"</div>
 
-        <div id="bq-instant-msg">
-            <div class="bq-instant-msg-inner">
+	<div class="top_movie">
+		<video src="bq_site/movie/bq_sample_movie.mp4" autoplay controls>
+			<p>動画を再生するには最新のブラウザをお使い下さい。</p>
+		</video>
+	</div>
 
-            </div>
-        </div>
-    </div>
+	<ul class="menu">
+		<li><a href="/play">GAME START</a></li>
+	</ul>
 </div>
-<div style="text-align: center; font-family: systemFont;">操作説明：[ASDWキー]->移動 / [左クリック]->ビーム発射 / [I]->ステータス / [ENTER]->チャット</div>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/lib/cocos2d-html5/CCBoot.js"></script>
-<script src="main.js"></script>
 </body>
 </html>

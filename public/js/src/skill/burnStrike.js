@@ -12,8 +12,8 @@ bq.skill.BurnStrike = bq.skill.extend({
      * @private
      */
     fireShot_: function(deferred) {
-        var fireBall = cc.Sprite.create();
-        var particle = cc.ParticleSun.create();
+        var fireBall = new cc.Sprite();
+        var particle = new cc.ParticleSun();
         var texture = cc.textureCache.textureForKey(s_ImgParticleSmoke);
         particle.setTexture(texture);
         particle.setPosition(cc.p(0, 0));
@@ -21,9 +21,9 @@ bq.skill.BurnStrike = bq.skill.extend({
         fireBall.setPosition(cc.p(this.user.x, this.user.y));
         fireBall.addChild(particle);
         fireBall.runAction(
-            cc.Sequence.create(
-                cc.JumpTo.create(0.5, cc.p(this.targetPos.x, this.targetPos.y), 50, 1),
-                cc.CallFunc.create(function() {
+            new cc.Sequence(
+                new cc.JumpTo(0.5, cc.p(this.targetPos.x, this.targetPos.y), 50, 1),
+                new cc.CallFunc(function() {
                     deferred.resolve();
                     fireBall.removeFromParent();
                 })
@@ -50,13 +50,13 @@ bq.skill.BurnStrike = bq.skill.extend({
     */
 
         cc.spriteFrameCache.addSpriteFrames(s_PlistEffectBurn, s_ImgEffectBurn);
-        var burn = cc.Sprite.create();
+        var burn = new cc.Sprite();
         var frames = [];
         for (var i = 0;i < 4; i++) {
             frames.push('burn' + i + '.png');
         }
         burn.initWithSpriteFrameName(frames[0]);
-        var animation = cc.Animation.create();
+        var animation = new cc.Animation();
         animation.setDelayPerUnit(0.1);
 
         _.forEach(frames, function (i) {
@@ -64,15 +64,15 @@ bq.skill.BurnStrike = bq.skill.extend({
             animation.addSpriteFrame(frame);
         }, this);
         burn.setPosition(cc.p(this.targetPos.x, this.targetPos.y));
-        var removeFunc = cc.CallFunc.create(function() {
+        var removeFunc = new cc.CallFunc(function() {
             burn.removeFromParent();
         });
         burn.setOpacity(0);
         burn.runAction(
-            cc.Spawn.create(
-                cc.FadeIn.create(0.3, 255),
-                cc.Repeat.create(cc.Animate.create(animation), 100),
-                cc.Sequence.create(cc.DelayTime.create(5), cc.FadeOut.create(1), removeFunc)
+            new cc.Spawn(
+                new cc.FadeIn(0.3, 255),
+                new cc.Repeat(cc.Animate.create(animation), 100),
+                new cc.Sequence(new cc.DelayTime(5), new cc.FadeOut(1), removeFunc)
         ));
 
         bq.baseLayer.addChild(burn, bq.config.zOrder.GROUND_EFFECT);

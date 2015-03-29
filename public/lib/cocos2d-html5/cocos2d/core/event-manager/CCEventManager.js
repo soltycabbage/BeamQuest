@@ -83,6 +83,8 @@ cc.__getListenerID = function (event) {
         return cc._EventListenerKeyboard.LISTENER_ID;
     if(getType === eventType.MOUSE)
         return cc._EventListenerMouse.LISTENER_ID;
+    if(getType === eventType.FOCUS)
+        return cc._EventListenerFocus.LISTENER_ID;
     if(getType === eventType.TOUCH){
         // Touch listener is very special, it contains two kinds of listeners, EventListenerTouchOneByOne and EventListenerTouchAllAtOnce.
         // return UNKNOWN instead.
@@ -646,6 +648,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
      *         A lower priority will be called before the ones that have a higher value. 0 priority is forbidden for fixed priority since it's used for scene graph based priority.
      *         The listener must be a cc.EventListener object when adding a fixed priority listener, because we can't remove a fixed priority listener without the listener handler,
      *         except calls removeAllListeners().
+     * @return {cc.EventListener} Return the listener. Needed in order to remove the event from the dispatcher.
      */
     addListener: function (listener, nodeOrPriority) {
         cc.assert(listener && nodeOrPriority, cc._LogInfos.eventManager_addListener_2);
@@ -679,6 +682,8 @@ cc.eventManager = /** @lends cc.eventManager# */{
             listener._setRegistered(true);
             this._addListener(listener);
         }
+
+        return listener;
     },
 
     /**
@@ -688,7 +693,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
      * @return {cc.EventListener} the generated event. Needed in order to remove the event from the dispatcher
      */
     addCustomListener: function (eventName, callback) {
-        var listener = cc._EventListenerCustom.create(eventName, callback);
+        var listener = new cc._EventListenerCustom(eventName, callback);
         this.addListener(listener, 1);
         return listener;
     },
@@ -731,6 +736,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
                 var selListener = locToAddedListeners[i];
                 if (selListener == listener) {
                     cc.arrayRemoveObject(locToAddedListeners, selListener);
+                    selListener._setRegistered(false);
                     break;
                 }
             }
@@ -923,3 +929,97 @@ cc.eventManager = /** @lends cc.eventManager# */{
         this.dispatchEvent(ev);
     }
 };
+
+// The event helper
+cc.EventHelper = function(){};
+
+cc.EventHelper.prototype = {
+    constructor: cc.EventHelper,
+
+    apply: function ( object ) {
+        object.addEventListener = cc.EventHelper.prototype.addEventListener;
+        object.hasEventListener = cc.EventHelper.prototype.hasEventListener;
+        object.removeEventListener = cc.EventHelper.prototype.removeEventListener;
+        object.dispatchEvent = cc.EventHelper.prototype.dispatchEvent;
+    },
+
+    addEventListener: function ( type, listener, target ) {
+        //check 'type' status, if the status is ready, dispatch event next frame
+        if(type === "load" && this._textureLoaded){            //only load event checked.
+            setTimeout(function(){
+                listener.call(target);
+            }, 0);
+            return;
+        }
+
+        if ( this._listeners === undefined )
+            this._listeners = {};
+
+        var listeners = this._listeners;
+        if ( listeners[ type ] === undefined )
+            listeners[ type ] = [];
+
+        if ( !this.hasEventListener(type, listener, target))
+            listeners[ type ].push( {callback:listener, eventTarget: target} );
+    },
+
+    hasEventListener: function ( type, listener, target ) {
+        if ( this._listeners === undefined )
+            return false;
+
+        var listeners = this._listeners;
+        if ( listeners[ type ] !== undefined ) {
+            for(var i = 0, len = listeners.length; i < len ; i++){
+                var selListener = listeners[i];
+                if(selListener.callback == listener && selListener.eventTarget == target)
+                    return true;
+            }
+        }
+        return false;
+    },
+
+    removeEventListener: function( type, target){
+        if ( this._listeners === undefined )
+            return;
+
+        var listeners = this._listeners;
+        var listenerArray = listeners[ type ];
+
+        if ( listenerArray !== undefined ) {
+            for(var i = 0; i < listenerArray.length ; ){
+                var selListener = listenerArray[i];
+                if(selListener.eventTarget == target)
+                    listenerArray.splice( i, 1 );
+                else
+                    i++
+            }
+        }
+    },
+
+    dispatchEvent: function ( event, clearAfterDispatch ) {
+        if ( this._listeners === undefined )
+            return;
+
+        if(clearAfterDispatch == null)
+            clearAfterDispatch = true;
+        var listeners = this._listeners;
+        var listenerArray = listeners[ event];
+
+        if ( listenerArray !== undefined ) {
+            var array = [];
+            var length = listenerArray.length;
+
+            for ( var i = 0; i < length; i ++ ) {
+                array[ i ] = listenerArray[ i ];
+            }
+
+            for ( i = 0; i < length; i ++ ) {
+                array[ i ].callback.call( array[i].eventTarget, this );
+            }
+
+            if(clearAfterDispatch)
+                listenerArray.length = 0;
+        }
+    }
+};
+

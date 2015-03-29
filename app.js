@@ -15,7 +15,8 @@ var expressLogWrapper = log4js.getLogger('express');
 var env = process.env.NODE_ENV || 'development';
 
 if ('development' == env) {
-    expressLogWrapper.setLevel('INFO');
+    //expressLogWrapper.setLevel('INFO');
+    expressLogWrapper.setLevel('WARN');
 }
 
 if ('production' == env || 'heroku' == env) {
@@ -29,6 +30,9 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.get('/play', function(req, res) {
+    res.sendfile(__dirname + '/public/play.html');
+});
 
 var backend = require('beamQuestBackend/main');
 app.use('/backend', backend(app));

@@ -43,7 +43,7 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
      */
     ctor: function(){
         cc.Node.prototype.ctor.call(this);
-       this._protectedChildren = [];
+        this._protectedChildren = [];
     },
 
     /**
@@ -67,7 +67,6 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
         child.setParent(this);
         child.setOrderOfArrival(cc.s_globalOrderOfArrival);
 
-        //TODO USE PHYSICS
         if(this._running){
             child.onEnter();
             // prevent onEnterTransitionDidFinish to be called twice when a node is added in onEnter
@@ -75,9 +74,9 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
                 child.onEnterTransitionDidFinish();
         }
         if(this._cascadeColorEnabled)
-            this._enableCascadeColor();
+            this._renderCmd.setCascadeColorEnabledDirty();
         if (this._cascadeOpacityEnabled)
-            this._enableCascadeOpacity();
+            this._renderCmd.setCascadeOpacityEnabledDirty();
     },
 
     /**
@@ -111,7 +110,6 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
                  child.onExitTransitionDidStart();
                  child.onExit();
              }
-            //TODO  USE PHYSICS
 
             // If you don't do cleanup, the child's actions will not get removed and the
             // its scheduledSelectors_ dict will not get released!
@@ -171,7 +169,6 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
                 child.onExit();
             }
 
-            //TODO USE PHYSICS
             if (cleanup)
                 child.cleanup();
             // set parent nil at the end
@@ -227,111 +224,7 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
         }
     },
 
-    /**
-     * transforms and draws itself, and visit its children and protected children.
-     * @override
-     * @function
-     * @param {CanvasRenderingContext2D|WebGLRenderingContext} ctx context of renderer
-     */
-    visit: null,
-
-    _visitForCanvas: function(ctx){
-        var _t = this;
-        // quick return if not visible
-        if (!_t._visible)
-            return;
-
-        //visit for canvas
-        var context = ctx || cc._renderContext, i, j;
-        var children = _t._children, child;
-        var locChildren = _t._children, locProtectedChildren = this._protectedChildren;
-        var childLen = locChildren.length, pLen = locProtectedChildren.length;
-        context.save();
-        _t.transform(context);
-
-        _t.sortAllChildren();
-        _t.sortAllProtectedChildren();
-
-        // draw children zOrder < 0
-        for (i = 0; i < childLen; i++) {
-            child = children[i];
-            if (child._localZOrder < 0)
-                child.visit(context);
-            else
-                break;
-        }
-        for (j = 0; j < pLen; j++) {
-            child = locProtectedChildren[j];
-            if (child._localZOrder < 0)
-                child.visit(context);
-            else
-                break;
-        }
-
-        _t.draw(context);
-
-        for (; i < childLen; i++)
-            children[i] && children[i].visit(context);
-        for (; j < pLen; j++)
-            locProtectedChildren[j] && locProtectedChildren[j].visit(context);
-
-        this._cacheDirty = false;
-        _t.arrivalOrder = 0;
-        context.restore();
-    },
-
-    _visitForWebGL: function(){
-        var _t = this;
-        // quick return if not visible
-        if (!_t._visible)
-            return;
-        var context = cc._renderContext, i, currentStack = cc.current_stack, j;
-
-        //optimize performance for javascript
-        currentStack.stack.push(currentStack.top);
-        cc.kmMat4Assign(_t._stackMatrix, currentStack.top);
-        currentStack.top = _t._stackMatrix;
-
-        var locGrid = _t.grid;
-        if (locGrid && locGrid._active)
-            locGrid.beforeDraw();
-
-        _t.transform();
-
-        var locChildren = _t._children, locProtectedChildren = this._protectedChildren;
-        var childLen = locChildren.length, pLen = locProtectedChildren.length;
-        _t.sortAllChildren();
-        _t.sortAllProtectedChildren();
-
-        // draw children zOrder < 0
-        for (i = 0; i < childLen; i++) {
-            if (locChildren[i] && locChildren[i]._localZOrder < 0)
-                locChildren[i].visit();
-            else
-                break;
-        }
-        for(j = 0; j < pLen; j++){
-            if (locProtectedChildren[j] && locProtectedChildren[j]._localZOrder < 0)
-                locProtectedChildren[j].visit();
-            else
-                break;
-        }
-        _t.draw(context);
-        // draw children zOrder >= 0
-        for (; i < childLen; i++) {
-            locChildren[i] && locChildren[i].visit();
-        }
-        for (; j < pLen; j++) {
-            locProtectedChildren[j] && locProtectedChildren[j].visit();
-        }
-
-        _t.arrivalOrder = 0;
-        if (locGrid && locGrid._active)
-            locGrid.afterDraw(_t);
-
-        //optimize performance for javascript
-        currentStack.top = currentStack.stack.pop();
-    },
+    _changePosition: function(){},
 
     /**
      * Stops itself and its children and protected children's all running actions and schedulers
@@ -394,93 +287,13 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
             locChildren[i].onExitTransitionDidStart();
     },
 
-    /**
-     * Updates itself and its protected children displayed opacity, if opacity cascade is enable, its children also update.
-     * @param {Number} parentOpacity
-     * @override
-     */
-    updateDisplayedOpacity: function(parentOpacity){
-        this._displayedOpacity = this._realOpacity * parentOpacity/255.0;
-        this._updateColor();
-
-        var i,len, locChildren, _opacity = this._displayedOpacity;
-        if (this._cascadeOpacityEnabled){
-            locChildren = this._children;
-            for(i = 0, len = locChildren.length;i < len; i++){
-                if(locChildren[i].updateDisplayedOpacity)
-                    locChildren[i].updateDisplayedOpacity(_opacity);
-            }
-        }
-        locChildren = this._protectedChildren;
-        for(i = 0, len = locChildren.length;i < len; i++){
-            if(locChildren[i])
-                locChildren[i].updateDisplayedOpacity(_opacity);
-        }
-    },
-
-    /**
-     * Updates itself and its protected children displayed color, if opacity cascade is enable, its children also update.
-     * @param {cc.Color} parentColor
-     * @override
-     */
-    updateDisplayedColor: function(parentColor){
-        var displayedColor = this._displayedColor, realColor = this._realColor;
-        displayedColor.r = realColor.r * parentColor.r/255.0;
-        displayedColor.g = realColor.g * parentColor.g/255.0;
-        displayedColor.b = realColor.b * parentColor.b/255.0;
-        this._updateColor();
-
-        var i, len, locChildren;
-        if (this._cascadeColorEnabled){
-            locChildren = this._children;
-            for(i = 0, len = locChildren.length; i < len; i++){
-                if(locChildren[i].updateDisplayedColor)
-                    locChildren[i].updateDisplayedColor(displayedColor);
-            }
-        }
-
-        locChildren = this._protectedChildren;
-        for(i =0, len = locChildren.length; i < len; i++) {
-            if (locChildren[i])
-                locChildren[i].updateDisplayedColor(displayedColor);
-        }
-    },
-
-    _disableCascadeOpacity: function () {
-        this._displayedOpacity = this._realOpacity;
-
-        var selChildren = this._children, i, item;
-        for (i = 0; i < selChildren.length; i++) {
-            item = selChildren[i];
-            if (item)
-                item.updateDisplayedOpacity(255);
-        }
-
-        selChildren = this._protectedChildren;
-        for (i = 0; i < selChildren.length; i++) {
-            item = selChildren[i];
-            if (item)
-                item.updateDisplayedOpacity(255);
-        }
-    },
-
-    _disableCascadeColor: function(){
-        var white = cc.color.WHITE;
-        var i, len, locChildren = this._children;
-        for(i = 0, len = locChildren.length; i < len; i++)
-            locChildren[i].updateDisplayedColor(white);
-
-        locChildren = this._protectedChildren;
-        for(i =0, len = locChildren.length; i < len; i++)
-            locChildren[i].setColor(white);
+    _createRenderCmd: function(){
+        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+            return new cc.ProtectedNode.CanvasRenderCmd(this);
+        else
+            return new cc.ProtectedNode.WebGLRenderCmd(this);
     }
 });
-
-if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
-    cc.ProtectedNode.prototype.visit =  cc.ProtectedNode.prototype._visitForCanvas;
-}else{
-    cc.ProtectedNode.prototype.visit =  cc.ProtectedNode.prototype._visitForWebGL;
-}
 
 /**
  * create a cc.ProtectedNode object;
