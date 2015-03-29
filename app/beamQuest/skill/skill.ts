@@ -49,7 +49,7 @@ class Skill {
         if (this.user.model.type === bq.Types.EntityType.PLAYER) {
             entities = this.getMobsByRadius(this.targetPos, this.model.radius);
         }
-
+        entities = entities.concat(this.getPlayersByRadius());
         _.forEach(entities, (entity) => {
             if (entity && entity.model) {
                 entity.model.addHp(-damage, !!isCritical);
@@ -65,6 +65,7 @@ class Skill {
      */
     applyDebuff(debuffClass:any) {
         var entities = this.getMobsByRadius(this.targetPos, this.model.radius);
+        entities = entities.concat(this.getPlayersByRadius());
         _.forEach(entities, (entity) => {
             if (entity) {
                 entity.model.addDebuff(new debuffClass(entity));

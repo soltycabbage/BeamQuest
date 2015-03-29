@@ -2,6 +2,7 @@
 import Entities = require('beamQuest/store/entities');
 import Maps = require('beamQuest/store/maps');
 import UserStore = require('beamQuest/store/userStore');
+import PlayerCtrl = require('beamQuest/ctrl/player');
 
 /**
  * @fileoverview ビームの発射などなどを扱う
@@ -83,11 +84,21 @@ class Beam {
      * @return {model.Mob}
      */
     private isHitEntity_(data) {
+        // TODO: マップごとにPVPの可否を切り替える
         var beamPos = {x: data.x, y: data.y};
-        var mobs:any = Entities.getInstance().getMobs() || {};
+        var targets = Entities.getInstance().getMobs() || {};
+        var players = Entities.getInstance().getPlayers();
+
         var collideRect = {width: 32, height: 32}; // 当たり判定の範囲（これもビームごとに決められるようにしたい）
-        return _.find(mobs, (mob:any) => {
-            return this.pointInRect_(beamPos, mob.model.position, collideRect);
+        var targetPlayer = _.find(players, (player:PlayerCtrl) => {
+            return this.pointInRect_(beamPos, player.model.position, collideRect);
+        });
+
+        if (targetPlayer) {
+            return targetPlayer;
+        }
+        return _.find(targets, (target:any) => {
+            return this.pointInRect_(beamPos, target.model.position, collideRect);
         });
     }
 

@@ -244,31 +244,14 @@ class Mob extends EntityCtrl implements Control<MobModel> {
     }
 
     /** @override */
-    beamHit(beamType, shooterId) {
+    beamHit(beamType:string, shooterId:string):number {
         var shooter = EntityStore.getInstance().getPlayerById(shooterId);
         if (this.isCancelAttacking_ || !shooter) {
             this.model.addHp(0);
             return;
         }
-
-        // TODO: ほんとはクライアント側から指定されたビームtypeをそのまま使うべきではない
-        //       サーバ側に保存してあるプレイヤーの装備しているビームを参照すべき
-        var beam = bq.params.Beams[beamType.toUpperCase()];
-
-        // TODO: ダメージ計算(どこかにロジックをまとめたい）
-        // いまんとこドラクエ式 (攻撃力/2) - (防御力/4)
-        var damage = Math.floor((Math.random() * beam.atk / 2 + beam.atk + shooter.model.attack) / 2 -
-            this.model.defence / 4);
-
-        // TODO: クリティカル計算
-        var isCritical = false;
-        if (Math.floor(Math.random() * 100) < 10) {
-            isCritical = true;
-            damage *= 2;
-        }
-
+        var damage = super.beamHit(beamType, shooterId);
         this.applyHate(shooterId, damage);
-        this.model.addHp(-damage, isCritical);
     }
 
     /**
@@ -280,7 +263,7 @@ class Mob extends EntityCtrl implements Control<MobModel> {
         var hateTarget:any = _.find(this.hateList, (h) => h.entityId === entityId);
 
         if (!hateTarget) {
-            this.hateList.push({entityId: entityId, hate: hate});
+            this.hateList && this.hateList.push({entityId: entityId, hate: hate});
         } else {
             // ダメージ量がそのままヘイト値になる
             hateTarget.hate += hate;
