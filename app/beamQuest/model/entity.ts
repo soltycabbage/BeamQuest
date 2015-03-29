@@ -28,6 +28,11 @@ class Entity extends Model {
     buffs: Buff[];
     /** @var デバフ一覧 */
     debuffs: Buff[];
+    mapId: number;
+    /**
+     * 回避中かどうか
+     */
+    isDodge: boolean;
 
     static DEFAULT_MAX_HP:number = 100;
     static DEFAULT_ATTACK:number = 1;
@@ -67,7 +72,7 @@ class Entity extends Model {
      * @param {string=} opt_decorate ダメージのフライテキストの装飾フォーマット(html使用可)
      *                  例: <b>毒: ${value}</b> 　　${value}は数値が入る
      */
-    addHp(amount: number, opt_isCritical?: boolean, opt_decorate?: string): void {
+    addHp(amount: number, opt_isCritical = false, opt_decorate?: string): void {
         var decorate = opt_decorate ? opt_decorate : null;
         this.hp = Math.max(0, Math.min(this.maxHp, this.hp + amount));
 

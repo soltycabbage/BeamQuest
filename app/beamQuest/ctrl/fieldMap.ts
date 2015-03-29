@@ -1,19 +1,28 @@
 import MobModel = require('beamQuest/model/mob');
+import FieldMapModel = require('beamQuest/model/fieldMap');
 import PositionModel = require('beamQuest/model/position');
 import EntitiesStore = require('beamQuest/store/entities');
 import EntityCtrl = require('beamQuest/ctrl/entity');
 import MobCtrl = require('beamQuest/ctrl/mob/mob');
+import DropItem = require('beamQuest/model/dropItem');
+import Control = require('beamQuest/ctrl/ctrl');
+import ScheduleTarget = require('beamQuest/scheduleTarget');
 
 declare var bq: any;
 
-class FieldMap extends EntityCtrl {
+class FieldMap extends ScheduleTarget implements Control<FieldMapModel> {
+    model:FieldMapModel;
+
+    setModel(model:FieldMapModel) {
+        this.model = model;
+    }
+
     static POP_INTERVAL:number =  15000;
-    constructor(map) {
+    constructor(map:FieldMapModel) {
         super();
 
         this.scheduleUpdate();
-
-        this.model = map;
+        this.setModel(map);
 
         setInterval(this.spawnMob_.bind(this), FieldMap.POP_INTERVAL);
     }
@@ -42,6 +51,7 @@ class FieldMap extends EntityCtrl {
             var mobType = bq.params.Entities.KAMUTARO;
             var mob = new MobCtrl();
             var mobModel = new MobModel(mobType);
+            mobModel.mapId = this.model.id;
             mobModel.setId(mobType.id + '_' + this.model.id + '_' + i + '_' + timeStamp);
             mobModel.setPosition(position);
             mob.setModel(mobModel);
@@ -68,7 +78,7 @@ class FieldMap extends EntityCtrl {
     /**
      * @param {Array.<model.DropItem>} items
      */
-    addDropItems = function(items) {
+    public addDropItems(items:DropItem[]): void {
         this.model.addDropItems(items);
     }
 }

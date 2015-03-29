@@ -22,6 +22,9 @@ bq.model.DropItem = bq.model.extend({
         this.position;
 
         this._super(json);
+
+        /** @type {number} */
+        this.mapId;
     },
 
     /** @override */
@@ -33,5 +36,6 @@ bq.model.DropItem = bq.model.extend({
         this.dropperId = json['dropperId'];
         this.droppedAt = json['droppedAt'];
         this.position = new bq.model.Position(json['position']);
+        this.mapId = json['mapId'];
     }
 });

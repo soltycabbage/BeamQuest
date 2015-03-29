@@ -2,6 +2,7 @@
 /// <reference path="../../../typings/deferred/deferred.d.ts" />
 
 import mapModel = require('beamQuest/model/fieldMap');
+import FieldMapCtrl = require('beamQuest/ctrl/fieldMap');
 
 /**
  * ゲーム内のマップの状態を保持しておくクラス
@@ -55,7 +56,7 @@ class Maps {
      * @param {number} mapId
      * @return {ctrl.FieldMap}
      */
-    getMapById(mapId:number) {
+    getMapById(mapId:number): any {
         return _.find(this.maps_, (map) => {
             return map.model.id === mapId;
         }) || null;

@@ -1,14 +1,14 @@
 import SkillModel = require('beamQuest/model/skill');
 import PositionModel = require('beamQuest/model/position');
 import EntityCtrl = require('beamQuest/ctrl/entity');
-import Skill = require('beamQuest/skill/skill');
+import PlayerSkill = require('beamQuest/skill/playerskill');
 import Poison = require('beamQuest/buff/poison');
 
 /**
  * バイオショック
  * 対象にダメージ + 毒
  */
-class BioShock extends Skill {
+class BioShock extends PlayerSkill {
     constructor(model:SkillModel, user:EntityCtrl, targetpos:PositionModel) {
         super(model, user, targetpos);
     }

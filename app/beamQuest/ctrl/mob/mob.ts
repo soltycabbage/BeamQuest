@@ -1,10 +1,15 @@
 import EntityCtrl = require('beamQuest/ctrl/entity');
+import FieldMapCtrl = require('beamQuest/ctrl/fieldMap');
 import EntityListener = require('beamQuest/listener/entity');
 import ItemListener = require('beamQuest/listener/item');
 import distance = require('beamQuest/math/distance');
 import DropItemModel = require('beamQuest/model/dropItem');
 import PositionModel = require('beamQuest/model/position');
 import EntityStore = require('beamQuest/store/entities');
+import MapStore = require('beamQuest/store/maps');
+import Control = require('beamQuest/ctrl/ctrl');
+import MobModel = require('beamQuest/model/mob');
+import ScheduleTarget = require('beamQuest/scheduleTarget');
 
 declare var bq: any;
 
@@ -14,7 +19,9 @@ declare var bq: any;
  * プレイヤーとの距離（近距離、中距離、遠距離）によって攻撃パターンが変化する。
  * 特殊なAIを実装したい場合は新たにクラスを作ってこのクラスを継承し、各種メソッドをoverrideすること。
  */
-class Mob extends EntityCtrl {
+class Mob extends EntityCtrl implements Control<MobModel> {
+    model:MobModel;
+
     /**
      * 移動速度
      * TODO: このへんはmobの種類によって変えられるようにする
@@ -65,10 +72,16 @@ class Mob extends EntityCtrl {
         this.startPos = null;
     }
 
+    setModel(model:MobModel) {
+        this.model = model;
+
+        this.model.on('addHp', _.bind(this.handleAddHp, this));
+    }
+
     update() {
         if (!_.isEmpty(this.hateList)) {
             var targetId = this.hateList[0].entityId;
-            var targetEntity = EntityStore.getInstance().getPlayerById(this.model.position.mapId, targetId);
+            var targetEntity = EntityStore.getInstance().getPlayerById(targetId);
             if (targetEntity && targetEntity.model.isDeath) {
                 this.hateList.shift();
                 if (_.isEmpty(this.hateList) && this.startPos) {
@@ -87,7 +100,7 @@ class Mob extends EntityCtrl {
      * 指定IDに敵対行動を取る
      * @param {ctrl.Entity} entity
      */
-     attackTo(entity:EntityCtrl) {
+    attackTo(entity:EntityCtrl) {
         if (this.hateTarget !== entity) {
             EntityListener.getInstance().targetTo(this, entity);
         }
@@ -153,7 +166,7 @@ class Mob extends EntityCtrl {
      * 現在の位置情報を更新する
      */
     updatePosition() {
-        var entity:any = EntityStore.getInstance().getMobById(this.model.position.mapId, this.model.id);
+        var entity:any = EntityStore.getInstance().getMobById(this.model.id);
         if (entity) {
             entity.model.position.x = this.model.position.x;
             entity.model.position.y = this.model.position.y;
@@ -231,8 +244,8 @@ class Mob extends EntityCtrl {
     }
 
     /** @override */
-    beamHit(beamType, shooterId, mapId) {
-        var shooter = EntityStore.getInstance().getPlayerById(mapId, shooterId);
+    beamHit(beamType, shooterId) {
+        var shooter = EntityStore.getInstance().getPlayerById(shooterId);
         if (this.isCancelAttacking_ || !shooter) {
             this.model.addHp(0);
             return;
@@ -280,7 +293,17 @@ class Mob extends EntityCtrl {
      * @override
      */
     death() {
-        ItemListener.getInstance().drop(this.chooseDropItems_(), this.model.position);
+        var map = MapStore.getInstance().getMapById(this.model.mapId);
+        var dropItems:DropItemModel[] = this.throwDropItems_(this.chooseDropItems_());
+        map.addDropItems(dropItems);
+
+        var data = [];
+        dropItems.forEach((dropItem:DropItemModel) => {
+            var json = dropItem.toJSON();
+            json.mapId = this.model.mapId; // とちゅうで混ぜるのはわかりにくいのでなんとかしたい
+            data.push(json);
+        });
+        ItemListener.getInstance().notify(data);
         EntityListener.getInstance().killMob(this);
         EntityStore.getInstance().removeMob(this);
     }
@@ -303,6 +326,24 @@ class Mob extends EntityCtrl {
         });
 
         return result;
+    }
+
+    /**
+     * アイテムを散らす
+     * @param dropItems
+     * @returns {DropItemModel[]}
+     * @private
+     */
+    private throwDropItems_(dropItems:DropItemModel[]): DropItemModel[] {
+        var pos = this.model.position;
+        _.forEach(dropItems, (dropItem:DropItemModel) => {
+            var p:any = _.clone(pos);
+            // ドロップ位置を散らす
+            p.x += Math.random() * 64;
+            p.y += Math.random() * 64;
+            dropItem.setPosition(p);
+        });
+        return dropItems;
     }
 
     /**

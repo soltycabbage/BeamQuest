@@ -4,6 +4,12 @@ import PositionModel = require('beamQuest/model/position');
 import Entities = require('beamQuest/store/entities');
 import UserStore = require('beamQuest/store/userStore');
 
+import World = require('beamQuest/listener/world');
+import Beam = require('beamQuest/listener/beam');
+import Skill = require('beamQuest/listener/skill');
+import Entity = require('beamQuest/listener/entity');
+import Item = require('beamQuest/listener/item');
+
 declare var logger: any;
 
 var kvs = require('beamQuest/store/kvs').createClient();
@@ -42,7 +48,17 @@ export function listen(socket, io) {
             }
             addLoginUser_(player);
 
-            return respond_({result: 'success', player: player.model.toJSON()});
+            World.getInstance().listen(socket);
+            Beam.getInstance().listen(socket, io);
+            Skill.getInstance().listen(socket, io);
+            Entity.getInstance().listen(socket, io);
+            Item.getInstance().listen(socket, io);
+            // チャット
+            socket.on('message:update', function(data) {
+                socket.broadcast.emit('notify:message', data);
+            });
+
+            return respond_({result: 'success', mapId: 1, player: player.model.toJSON()});
         });
     }
 
@@ -72,7 +88,6 @@ export function listen(socket, io) {
     function createNewPlayer_(loginData) {
         // TODO mapManager.getRespawnPoint的な奴で初期ポジションを取得する
         var position = new PositionModel({
-            mapId: 1,
             x: 700,
             y: 700
         });
@@ -95,17 +110,16 @@ export function listen(socket, io) {
     function addLoginUser_(player) {
         var model = player.model;
         var position = model.position;
-        Entities.getInstance().addPlayer(position.mapId, player);
+        Entities.getInstance().addPlayer(player);
         UserStore.getInstance().saveSessionData(socket.id, 'userId', player.model.id);
-        UserStore.getInstance().saveSessionData(socket.id, 'mapId', player.model.position.mapId);
         player.scheduleUpdate();
         socket.broadcast.emit('notify:user:login', {'userId': model.id});
-        logger.debug('user login notified: userId "' + model.id + '" in ' + player.model.position.mapId);
+        logger.debug('user login notified: userId "' + model.id + '" in ' + player.model.mapId);
 
         // 接続が切れたらログアウト扱い
         socket.on('disconnect', function() {
             UserStore.getInstance().save(player);
-            Entities.getInstance().removePlayer(position.mapId, player);
+            Entities.getInstance().removePlayer(player);
             player.unscheduleUpdate();
             socket.broadcast.emit('notify:user:logout', {'userId': player.model.id});
             logger.debug('socket.io connection closed');

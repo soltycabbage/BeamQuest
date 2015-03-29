@@ -40,31 +40,26 @@ class Skill {
      */
     private handleCastSkill_(data) {
         if (this.io_ && data && data.skillId && data.position) {
-            var mapId = UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', (err, mapId) => {
-                var player:any = EntityStore.getInstance().getPlayerById(mapId, data.userId);
-                if (!player) { return; }
-                var skills:SkillModel[] = player.model.skills;
-                var targetSkill:SkillModel = _.find(skills, (skill) => {
-                    return skill.id === data.skillId;
-                });
-                if (targetSkill && this.canUse(targetSkill, player)) {
-                    var result = {
-                        mapId: mapId,
-                        userId: player.model.id,
-                        skill: targetSkill
-                    };
-                    this.io_.sockets.emit('notify:skill:cast:start', result);
-
-                    // キャストタイム終了後、スキル使用者のBPを減らす。
-                    // キャストが中断されない前提。
-                    data.position.mapId = mapId;
-                    setTimeout(() => {
-                        var s = SkillFactory.getInstance().create(targetSkill, player, data.position);
-                        s && s.fire();
-                    }, targetSkill.castTime);
-                }
-
+            var player:any = EntityStore.getInstance().getPlayerById(data.userId);
+            if (!player) { return; }
+            var skills:SkillModel[] = player.model.skills;
+            var targetSkill:SkillModel = _.find(skills, (skill) => {
+                return skill.id === data.skillId;
             });
+            if (targetSkill && this.canUse(targetSkill, player)) {
+                var result = {
+                    userId: player.model.id,
+                    skill: targetSkill
+                };
+                this.io_.sockets.emit('notify:skill:cast:start', result);
+
+                // キャストタイム終了後、スキル使用者のBPを減らす。
+                // キャストが中断されない前提。
+                setTimeout(() => {
+                    var s = SkillFactory.getInstance().create(targetSkill, player, data.position);
+                    s && s.fire();
+                }, targetSkill.castTime);
+            }
         }
     }
 

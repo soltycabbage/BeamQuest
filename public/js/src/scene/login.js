@@ -102,7 +102,7 @@ bq.scene.LoginLayer = cc.Layer.extend({
         hud.initPlayer(player);
         var position = data.player.position;
         player.setPosition(cc.p(position.x, position.y));
-
+        player.mapId = data.mapId;
         player.setModel(new bq.model.Player(data.player));
         player.setProfile({name: userId});
         player.showName();

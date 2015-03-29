@@ -24,8 +24,8 @@ class Entity {
         Entity.instance_ = this;
     }
 
-    private socket_;
-    private io_;
+    socket_;
+    io_;
 
     listen(socket, io) {
         this.socket_ = socket;
@@ -38,35 +38,24 @@ class Entity {
         EntitiesStore = require('beamQuest/store/entities');
     }
 
-    private requestMapId(fn: Function) {
-        UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', _.bind(fn, this));
-    }
-
     /**
      * プレイヤーの移動
      * @param {Object} data
      */
     private handlePlayerMove_(data:any) {
-        this.requestMapId(function(err, mapId) {
-            data.mapId = mapId;
-
-            // プレイヤーが移動したら位置情報が送られてくる
-            EntitiesStore.getInstance().updatePlayerPosition(data);
-            // 自分以外の全プレイヤーにブロードキャスト
-            this.socket_.broadcast.emit('notify:user:move', data);
-        });
+        // プレイヤーが移動したら位置情報が送られてくる
+        EntitiesStore.getInstance().updatePlayerPosition(data);
+        // 自分以外の全プレイヤーにブロードキャスト
+        this.socket_.broadcast.emit('notify:user:move', data);
     }
 
     /**
      * プレイヤーの緊急回避
      */
     private handleDodge(data:any) {
-        UserStore.getInstance().getSessionData(this.socket_.id, 'mapId', (err, mapId) => {
-            data.mapId = mapId;
-            if (EntitiesStore.getInstance().updatePlayerDodge(data)) {
-                this.socket_.broadcast.emit('notify:user:dodge', data);
-            }
-        });
+        if (EntitiesStore.getInstance().updatePlayerDodge(data)) {
+            this.socket_.broadcast.emit('notify:user:dodge', data);
+        }
     }
 
     /**
@@ -159,8 +148,7 @@ class Entity {
      * @param {ctrl.Mob} mob
      */
     addExp(playerId, mob:any) {
-        var mapId = mob.model.position.mapId;
-        var player:any = EntitiesStore.getInstance().getPlayerById(mapId, playerId);
+        var player:any = EntitiesStore.getInstance().getPlayerById(playerId);
         if (player) {
             player.addExp(mob.model.exp);
             player.model.socket.emit('user:status:exp:update', {
@@ -196,9 +184,8 @@ class Entity {
      */
     handleRespawn(data:any) {
         if (data) {
-            var mapId = data.position.mapId;
             var playerId = data.id;
-            var player:any = EntitiesStore.getInstance().getPlayerById(mapId, playerId);
+            var player:any = EntitiesStore.getInstance().getPlayerById(playerId);
             if (player) {
                 player.respawn();
                 var d = {entity: player.model.toJSON()};
@@ -214,12 +201,10 @@ class Entity {
      */
     handleGetStatus_(data:any) {
         if (data) {
-            this.requestMapId(function(err, mapId){
-                var player:any = EntitiesStore.getInstance().getPlayerById(mapId, data.entityId);
-                if (player) {
-                    this.socket_.emit('user:status:receive', player.model.toJSON());
-                }
-            });
+            var player:any = EntitiesStore.getInstance().getPlayerById(data.entityId);
+            if (player) {
+                this.socket_.emit('user:status:receive', player.model.toJSON());
+            }
         }
     }
 }

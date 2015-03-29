@@ -2,6 +2,7 @@ import EntityModel = require('beamQuest/model/entity');
 import ScheduleTarget = require('beamQuest/scheduleTarget');
 import EntityListener = require('beamQuest/listener/entity');
 import Buff     = require('beamQuest/buff/buff');
+import Control = require('beamQuest/ctrl/ctrl');
 
 /**
  * すべてのmob、playerの基底クラス。
@@ -10,12 +11,13 @@ import Buff     = require('beamQuest/buff/buff');
  * @param {Object} modelData
  * @extends {bq.ScheduleTarget}
  */
-class Entity extends ScheduleTarget {
-    model: any; // EntityModel だったもの
+class Entity extends ScheduleTarget implements Control<EntityModel> {
+    model:EntityModel;
 
     /**
      * ctrlをnewしたあとは必ずこれを呼んでmodel(各種ステータスとか)をセットすること
-     * @param {model.Entity} model
+     * @param {EntityModel} model
+     * @Override
      */
     setModel(model:EntityModel) {
         this.model = model;
@@ -25,7 +27,7 @@ class Entity extends ScheduleTarget {
 
     /**
      * @param {number} amount
-     * @param {boolean} isCritical
+     * @param {boolean} isCriticald
      * @protected
      */
      handleAddHp(amount, isCritical, decorate) {
@@ -44,13 +46,6 @@ class Entity extends ScheduleTarget {
      */
     death() {
         // playerとかmobとかでoverrideする
-    }
-
-    /**
-     * デバフを付与する
-     */
-    applyDebuff(debuff: Buff): void {
-        this.model.addDebuff(debuff);
     }
 }
 

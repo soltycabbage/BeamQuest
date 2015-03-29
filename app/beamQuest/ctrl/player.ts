@@ -1,6 +1,8 @@
 import EntityCtrl = require('beamQuest/ctrl/entity');
+import Control = require('beamQuest/ctrl/ctrl');
 import UserStore = require('beamQuest/store/userStore');
 import EntityListener = require('beamQuest/listener/entity');
+import PlayerModel = require('beamQuest/model/player');
 
 declare var logger: any;
 
@@ -9,7 +11,9 @@ var config = {
     SAVE_INTERVAL: 300
 };
 
-class Player extends EntityCtrl {
+class Player extends EntityCtrl implements Control<PlayerModel> {
+    model: PlayerModel;
+
     private updateCount_:number;
     /** HP自動回復の間隔(step) */
     private autoHpHealInterval_:number;
