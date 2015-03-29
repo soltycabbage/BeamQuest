@@ -4,6 +4,7 @@ import EntityCtrl = require('beamQuest/ctrl/entity');
 import PlayerCtrl = require('beamQuest/ctrl/player');
 import MobCtrl = require('beamQuest/ctrl/mob/mob');
 import EntityStore = require('beamQuest/store/entities');
+import Buff        = require('beamQuest/buff/buff');
 
 declare var bq: any;
 
@@ -61,6 +62,18 @@ class Skill {
                 if (entity instanceof MobCtrl) {
                     entity.hateList && entity.applyHate(this.user.model.id, damage);
                 }
+            }
+        });
+    }
+
+    /**
+     * 対象にデバフを与える
+     */
+    applyDebuff(debuffClass:any) {
+        var entities = this.getMobsByRadius(this.targetPos, this.model.radius);
+        _.forEach(entities, (entity) => {
+            if (entity) {
+                entity.applyDebuff(new debuffClass(entity));
             }
         });
     }

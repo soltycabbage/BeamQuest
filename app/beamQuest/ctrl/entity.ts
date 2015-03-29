@@ -1,6 +1,7 @@
 import EntityModel = require('beamQuest/model/entity');
 import ScheduleTarget = require('beamQuest/scheduleTarget');
 import EntityListener = require('beamQuest/listener/entity');
+import Buff     = require('beamQuest/buff/buff');
 
 /**
  * すべてのmob、playerの基底クラス。
@@ -27,9 +28,9 @@ class Entity extends ScheduleTarget {
      * @param {boolean} isCritical
      * @protected
      */
-     handleAddHp(amount, isCritical) {
+     handleAddHp(amount, isCritical, decorate) {
         var hpData = [
-            {entity: this.model, hpAmount: amount, isCritical: isCritical}
+            {entity: this.model, hpAmount: amount, isCritical: isCritical, decorate: decorate}
         ];
         EntityListener.getInstance().updateHp(hpData);
         if (this.model.hp <= 0) {
@@ -43,6 +44,13 @@ class Entity extends ScheduleTarget {
      */
     death() {
         // playerとかmobとかでoverrideする
+    }
+
+    /**
+     * デバフを付与する
+     */
+    applyDebuff(debuff: Buff): void {
+        this.model.addDebuff(debuff);
     }
 }
 
