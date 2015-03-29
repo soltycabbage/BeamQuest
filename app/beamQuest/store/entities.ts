@@ -150,7 +150,7 @@ class EntitiesStore {
      */
      getMobsByMapId(mapId):  MobCtrl[] {
         return _.filter(this.mobs_, (mob:MobCtrl) => {
-            return mob.startPos.mapId === mapId;
+            return mob.model.mapId === mapId;
         });
     }
 
@@ -218,7 +218,7 @@ class EntitiesStore {
      * @return {Array.<ctrl.Entity>}
      */
     getMobsByRadius(targetPos:PositionModel, r): EntityCtrl[] {
-        var mobs:any = this.getMobsByMapId(targetPos.mapId);
+        var mobs:any = this.getMobs();
         return this.getEntitiesStoreByRadiusInternal_(targetPos, r, mobs);
     }
 
@@ -229,7 +229,7 @@ class EntitiesStore {
      * @return {Array.<ctrl.Entity>}
      */
     getPlayersByRadius(targetPos:PositionModel, r): EntityCtrl[] {
-        var players:any = this.getPlayersByMapId(targetPos.mapId);
+        var players:any = this.getPlayers();
         return this.getEntitiesStoreByRadiusInternal_(targetPos, r, players);
     }
 
@@ -238,7 +238,7 @@ class EntitiesStore {
      * @param {number} r
      * @return {Array.<ctrl.Entity>}
      */
-    private getEntitiesStoreByRadiusInternal_(targetPos, r, entities): EntityCtrl[] {
+    private getEntitiesStoreByRadiusInternal_(targetPos:PositionModel, r, entities): EntityCtrl[] {
         var result = [];
         var r2 = Math.pow(r, 2);
 

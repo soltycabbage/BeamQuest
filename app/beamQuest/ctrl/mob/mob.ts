@@ -1,10 +1,12 @@
 import EntityCtrl = require('beamQuest/ctrl/entity');
+import FieldMapCtrl = require('beamQuest/ctrl/fieldMap');
 import EntityListener = require('beamQuest/listener/entity');
 import ItemListener = require('beamQuest/listener/item');
 import distance = require('beamQuest/math/distance');
 import DropItemModel = require('beamQuest/model/dropItem');
 import PositionModel = require('beamQuest/model/position');
 import EntityStore = require('beamQuest/store/entities');
+import MapStore = require('beamQuest/store/maps');
 
 declare var bq: any;
 
@@ -280,7 +282,15 @@ class Mob extends EntityCtrl {
      * @override
      */
     death() {
-        ItemListener.getInstance().drop(this.chooseDropItems_(), this.model.position);
+        var map = MapStore.getInstance().getMapById(this.model.mapId);
+        var dropItems:DropItemModel[] = this.throwDropItems_(this.chooseDropItems_());
+        map.addDropItems(dropItems);
+
+        var data = []
+        dropItems.forEach((dropItem:DropItemModel) => {
+            data.push(dropItem.toJSON());
+        });
+        ItemListener.getInstance().notify(data);
         EntityListener.getInstance().killMob(this);
         EntityStore.getInstance().removeMob(this);
     }
@@ -303,6 +313,24 @@ class Mob extends EntityCtrl {
         });
 
         return result;
+    }
+
+    /**
+     * アイテムを散らす
+     * @param dropItems
+     * @returns {DropItemModel[]}
+     * @private
+     */
+    private throwDropItems_(dropItems:DropItemModel[]): DropItemModel[] {
+        var pos = this.model.positino;
+        _.forEach(dropItems, (dropItem:DropItemModel) => {
+            var p:any = _.clone(pos);
+            // ドロップ位置を散らす
+            p.x += Math.random() * 64;
+            p.y += Math.random() * 64;
+            dropItem.setPosition(p);
+        });
+        return dropItems;
     }
 
     /**

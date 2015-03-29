@@ -24,8 +24,8 @@ class Entity {
         Entity.instance_ = this;
     }
 
-    private socket_;
-    private io_;
+    socket_;
+    io_;
 
     listen(socket, io) {
         this.socket_ = socket;
@@ -196,7 +196,6 @@ class Entity {
      */
     handleRespawn(data:any) {
         if (data) {
-            var mapId = data.position.mapId;
             var playerId = data.id;
             var player:any = EntitiesStore.getInstance().getPlayerById(playerId);
             if (player) {

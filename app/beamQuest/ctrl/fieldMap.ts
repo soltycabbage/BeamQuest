@@ -3,6 +3,7 @@ import PositionModel = require('beamQuest/model/position');
 import EntitiesStore = require('beamQuest/store/entities');
 import EntityCtrl = require('beamQuest/ctrl/entity');
 import MobCtrl = require('beamQuest/ctrl/mob/mob');
+import DropItem = require('beamQuest/model/dropItem');
 
 declare var bq: any;
 
@@ -68,7 +69,7 @@ class FieldMap extends EntityCtrl {
     /**
      * @param {Array.<model.DropItem>} items
      */
-    addDropItems = function(items) {
+    public addDropItems(items:DropItem[]): void {
         this.model.addDropItems(items);
     }
 }
