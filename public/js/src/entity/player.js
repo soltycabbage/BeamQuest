@@ -192,12 +192,16 @@ bq.entity.Player = bq.entity.Entity.extend({
      */
     initHotbar: function() {
         var items = this.model_.hotbarItems;
-        _.forEach(items, function(item, index) {
+        _.forEach(items, _.bind(function(item, index) {
             var hotNum = (index + 1) % 10;
             var hotbarItem = $('#bq-hot-bar-item-' + hotNum);
             var img = $('<img/>').attr('src', 'res/img/icon/'+ item.id + '.png');
+            img.infoBox({content: item.name + ': ' + item.info});
+            img.on('click', _.bind(function() {
+                this.setSelectedHotbarNumber(hotNum);
+            }, this));
             hotbarItem.append(img);
-        });
+        }, this));
     },
 
     /**
@@ -232,6 +236,7 @@ bq.entity.Player = bq.entity.Entity.extend({
      * @param {number} num
      */
     setSelectedHotbarNumber: function(num) {
+        $(bq.player).triggerHandler(bq.entity.Player.EventType.SELECT_HOT_BAR, [num]);
         if (this.selectedHotbarNumber_ !== num) {
             this.selectedHotbarNumber_ = num;
         } else {
@@ -553,7 +558,6 @@ bq.entity.Player.InputHandler = cc.Class.extend({
      * @private
      */
     handleNumKeyDown_: function(num) {
-        $(bq.player).triggerHandler(bq.entity.Player.EventType.SELECT_HOT_BAR, [num]);
         bq.player.setSelectedHotbarNumber(num);
     },
 
