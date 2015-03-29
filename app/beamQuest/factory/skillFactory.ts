@@ -2,6 +2,7 @@ import SkillModel = require('beamQuest/model/skill');
 import PositionModel = require('beamQuest/model/position');
 import EntityCtrl = require('beamQuest/ctrl/entity');
 import BurnStrike = require('beamQuest/skill/burnStrike');
+import BioShock = require('beamQuest/skill/bioShock');
 
 declare var bq: any;
 
@@ -34,6 +35,9 @@ class SkillFactory {
         switch(skillModel.id) {
             case s.BURNSTRIKE.id:
                 clazz = BurnStrike;
+                break;
+            case s.BIOSHOCK.id:
+                clazz = BioShock;
                 break;
             default:
                 return null;

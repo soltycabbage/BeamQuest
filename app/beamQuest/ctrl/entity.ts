@@ -1,6 +1,7 @@
 import EntityModel = require('beamQuest/model/entity');
 import ScheduleTarget = require('beamQuest/scheduleTarget');
 import EntityListener = require('beamQuest/listener/entity');
+import Buff     = require('beamQuest/buff/buff');
 import Control = require('beamQuest/ctrl/ctrl');
 
 /**
@@ -24,14 +25,10 @@ class Entity extends ScheduleTarget implements Control<EntityModel> {
         this.model.on('addHp', _.bind(this.handleAddHp, this));
     }
 
-    /**
-     * @param {number} amount
-     * @param {boolean} isCritical
-     * @protected
-     */
-     handleAddHp(amount, isCritical) {
+    /** @protected */
+    handleAddHp(amount:number, isCritical:boolean, decorate:string) {
         var hpData = [
-            {entity: this.model, hpAmount: amount, isCritical: isCritical}
+            {entity: this.model, hpAmount: amount, isCritical: isCritical, decorate: decorate}
         ];
         EntityListener.getInstance().updateHp(hpData);
         if (this.model.hp <= 0) {

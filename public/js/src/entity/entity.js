@@ -444,10 +444,23 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var amount = hpData.hpAmount;
         var damage = Math.abs(amount);
         var size = hpData.isCritical ? 32 : 16;
+        var color = opt_color || null;
         if (hpData.isCritical) {
             damage += '!!';
         }
-        var label = bq.Label.createWithShadow(damage, size, opt_color);
+
+        if (hpData.decorate) {
+            var decoMsg = hpData.decorate;
+            decoMsg = decoMsg.replace('${value}', damage);
+            var m = decoMsg.match(/\${color:(\d+),(\d+),(\d+)}/);
+            if (m && m[0]) {
+                color = new cc.Color(parseInt(m[1], 10), parseInt(m[2], 10), parseInt(m[3], 10));
+                decoMsg = decoMsg.replace(m[0], '');
+            }
+            damage = decoMsg;
+        }
+
+        var label = bq.Label.createWithShadow(damage, size, color);
         var rect = this.getBoundingBox();
         label.setPosition(cc.p(rect.width / 2, rect.height));
         var d = opt_popLeft ? -1 : 1;

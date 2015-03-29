@@ -71,6 +71,7 @@
         "js/src/skill/skill.js",
         "js/src/skill/skillFactory.js",
         "js/src/skill/burnStrike.js",
+        "js/src/skill/bioShock.js",
 
         "js/src/scene/scene.js",
         "js/src/scene/loading.js",

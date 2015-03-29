@@ -19,7 +19,7 @@ declare var bq: any;
  * プレイヤーとの距離（近距離、中距離、遠距離）によって攻撃パターンが変化する。
  * 特殊なAIを実装したい場合は新たにクラスを作ってこのクラスを継承し、各種メソッドをoverrideすること。
  */
-class Mob extends ScheduleTarget implements Control<MobModel> {
+class Mob extends EntityCtrl implements Control<MobModel> {
     model:MobModel;
 
     /**
@@ -76,21 +76,6 @@ class Mob extends ScheduleTarget implements Control<MobModel> {
         this.model = model;
 
         this.model.on('addHp', _.bind(this.handleAddHp, this));
-    }
-
-    /**
-     * @param {number} amount
-     * @param {boolean} isCritical
-     * @protected
-     */
-    handleAddHp(amount, isCritical) {
-        var hpData = [
-            {entity: this.model, hpAmount: amount, isCritical: isCritical}
-        ];
-        EntityListener.getInstance().updateHp(hpData);
-        if (this.model.hp <= 0) {
-            this.death();
-        }
     }
 
     update() {

@@ -23,7 +23,8 @@ bq.Types = {
     },
 
     Skills: {
-        BURNSTRIKE: '001_burnstrike'
+        BURNSTRIKE: '001_burnstrike',
+        BIOSHOCK: '002_bioshock'
     },
 
     Items: {
