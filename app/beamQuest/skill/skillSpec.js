@@ -14,7 +14,7 @@ describe('Test: app/beamQuest/skill/skill', function() {
     beforeEach(function() {
         var skillModel = createSkillModel();
         player = createEntity();
-        var targetPos = new PositionModel({mapId: 1, x: 100, y: 100});
+        var targetPos = new PositionModel({x: 100, y: 100});
         sut = new Skill(skillModel, player, targetPos);
     });
 

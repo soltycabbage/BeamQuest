@@ -4,7 +4,6 @@ import Model = require('beamQuest/model/model');
  * 位置情報
  */
 class Position extends Model {
-    mapId: number;
     x: number;
     y: number;
 
@@ -13,9 +12,6 @@ class Position extends Model {
      */
     constructor(opt_data) {
         super(opt_data);
-
-        /** @type {number} */
-        this.mapId = this.data.mapId || 1;
 
         /** @type {number} */
         this.x = this.data.x || 0;
@@ -30,7 +26,6 @@ class Position extends Model {
      */
     toJSON(): any {
         var json = super.toJSON();
-        json.mapId =  this.mapId;
         json.x =  this.x;
         json.y = this.y;
         return json;

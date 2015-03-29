@@ -160,7 +160,7 @@ class Entity {
      */
     addExp(playerId, mob:any) {
         var mapId = mob.model.position.mapId;
-        var player:any = EntitiesStore.getInstance().getPlayerById(mapId, playerId);
+        var player:any = EntitiesStore.getInstance().getPlayerById(playerId);
         if (player) {
             player.addExp(mob.model.exp);
             player.model.socket.emit('user:status:exp:update', {
@@ -198,7 +198,7 @@ class Entity {
         if (data) {
             var mapId = data.position.mapId;
             var playerId = data.id;
-            var player:any = EntitiesStore.getInstance().getPlayerById(mapId, playerId);
+            var player:any = EntitiesStore.getInstance().getPlayerById(playerId);
             if (player) {
                 player.respawn();
                 var d = {entity: player.model.toJSON()};
@@ -215,7 +215,7 @@ class Entity {
     handleGetStatus_(data:any) {
         if (data) {
             this.requestMapId(function(err, mapId){
-                var player:any = EntitiesStore.getInstance().getPlayerById(mapId, data.entityId);
+                var player:any = EntitiesStore.getInstance().getPlayerById(data.entityId);
                 if (player) {
                     this.socket_.emit('user:status:receive', player.model.toJSON());
                 }
