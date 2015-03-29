@@ -30,25 +30,23 @@ class Beam {
         this.io_ = io;
 
         socket.on('beam:shoot', function(data) {
-            UserStore.getInstance().getSessionData(socket.id, 'mapId', function(err, mapId) {
-                var result = data;
-                result.success = true;
-                var player:any = Entities.getInstance().getPlayerById(mapId, data.shooterId);
-                if (player) {
-                    var beam =  player.model.beam;
-                    result.beamId = beam.id;
-                    result.beamSpeed = beam.speed;
-                    result.beamDuration = beam.duration;
-                    if (beam.bp <= player.model.bp) {
-                        player.model.addBp(-beam.bp);
-                    } else {
-                        // BPが足りないのでビームは撃てないよみたいなアナウンスを入れる
-                        socket.emit('user:status:bp:lack');
-                        return;
-                    }
+            var result = data;
+            result.success = true;
+            var player:any = Entities.getInstance().getPlayerById(data.shooterId);
+            if (player) {
+                var beam =  player.model.beam;
+                result.beamId = beam.id;
+                result.beamSpeed = beam.speed;
+                result.beamDuration = beam.duration;
+                if (beam.bp <= player.model.bp) {
+                    player.model.addBp(-beam.bp);
+                } else {
+                    // BPが足りないのでビームは撃てないよみたいなアナウンスを入れる
+                    socket.emit('user:status:bp:lack');
+                    return;
                 }
-                io.sockets.emit('notify:beam:shoot', result);
-            });
+            }
+            io.sockets.emit('notify:beam:shoot', result);
         });
 
         /**
@@ -76,7 +74,7 @@ class Beam {
             beamTag: data.tag,
             beamPos: {x: data.x, y: data.y}
         };
-        entity.beamHit(beamType, data.shooterId, data.mapId);
+        entity.beamHit(beamType, data.shooterId);
         this.io_.sockets.emit('notify:beam:hit:entity', hitResult);
     }
 
@@ -86,7 +84,7 @@ class Beam {
      */
     private isHitEntity_(data) {
         var beamPos = {x: data.x, y: data.y};
-        var mobs:any = Entities.getInstance().getMobs()[data.mapId] || {};
+        var mobs:any = Entities.getInstance().getMobs() || {};
         var collideRect = {width: 32, height: 32}; // 当たり判定の範囲（これもビームごとに決められるようにしたい）
         return _.find(mobs, (mob:any) => {
             return this.pointInRect_(beamPos, mob.model.position, collideRect);

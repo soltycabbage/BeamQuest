@@ -3,6 +3,7 @@ import PositionModel = require('beamQuest/model/position');
 import EntitiesStore = require('beamQuest/store/entities');
 import EntityCtrl = require('beamQuest/ctrl/entity');
 import MobCtrl = require('beamQuest/ctrl/mob/mob');
+import DropItem = require('beamQuest/model/dropItem');
 
 declare var bq: any;
 
@@ -42,6 +43,7 @@ class FieldMap extends EntityCtrl {
             var mobType = bq.params.Entities.KAMUTARO;
             var mob = new MobCtrl();
             var mobModel = new MobModel(mobType);
+            mobModel.mapId = this.model.id;
             mobModel.setId(mobType.id + '_' + this.model.id + '_' + i + '_' + timeStamp);
             mobModel.setPosition(position);
             mob.setModel(mobModel);
@@ -68,7 +70,7 @@ class FieldMap extends EntityCtrl {
     /**
      * @param {Array.<model.DropItem>} items
      */
-    addDropItems = function(items) {
+    public addDropItems(items:DropItem[]): void {
         this.model.addDropItems(items);
     }
 }

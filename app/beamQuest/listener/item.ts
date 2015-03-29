@@ -3,7 +3,6 @@
 import MapStore = require('beamQuest/store/maps');
 import EntityStore = require('beamQuest/store/entities');
 import Position = require('beamQuest/model/position');
-import DropItem = require('beamQuest/model/dropItem');
 
 /**
  * @fileoverview アイテムの取得/ドロップなどなど
@@ -35,36 +34,13 @@ class Item {
     }
 
     /**
-     * 指定位置に指定アイテムをまき散らす
-     * @param {Array.<model.dropItem>} dropItems
-     * @param {model.Position} position
-     */
-    drop(dropItems:DropItem[], position:Position) {
-        if (this.io_ && !_.isEmpty(dropItems)) {
-            var map:any = MapStore.getInstance().getMapById(position.mapId);
-            var datas = [];
-            _.forEach(dropItems, (dropItem:DropItem) => {
-                var p:any = _.clone(position);
-                // ドロップ位置を散らす
-                p.x += Math.random() * 64;
-                p.y += Math.random() * 64;
-                dropItem.setPosition(p);
-                datas.push(dropItem.toJSON());
-            });
-
-            map.addDropItems(dropItems);
-            this.io_.sockets.emit('notify:item:drop', datas);
-        }
-    }
-
-    /**
      * プレイヤーからのアイテム取得要求
      * @param {Object} data
      */
      private handlePickItem_(data:any) {
         if (this.io_ && data && data.mapId && data.pickerId && data.dropId) {
             var map:any = MapStore.getInstance().getMapById(data.mapId);
-            var picker = EntityStore.getInstance().getPlayerById(data.mapId, data.pickerId);
+            var picker = EntityStore.getInstance().getPlayerById(data.pickerId);
             if (map && picker) {
                 var dropItem = map.model.dropItems[data.dropId];
                 if (dropItem) {
@@ -78,6 +54,15 @@ class Item {
             }
         }
     }
+
+    /**
+     * リスナで notify するのに違和感がある
+     * @param data
+     */
+    public notify(data) {
+        this.io_.sockets.emit('notify:item:drop', data);
+    }
+
 }
 
 
