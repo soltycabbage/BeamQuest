@@ -43,6 +43,7 @@ class FieldMap extends EntityCtrl {
             var mobType = bq.params.Entities.KAMUTARO;
             var mob = new MobCtrl();
             var mobModel = new MobModel(mobType);
+            mobModel.mapId = this.model.id;
             mobModel.setId(mobType.id + '_' + this.model.id + '_' + i + '_' + timeStamp);
             mobModel.setPosition(position);
             mob.setModel(mobModel);

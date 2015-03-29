@@ -23,6 +23,7 @@ class Entity extends Model {
     position: Position;
     /** @var 使用可能スキル一覧 */
     skills: Skill[];
+    mapId: number;
 
     static DEFAULT_MAX_HP:number = 100;
     static DEFAULT_ATTACK:number = 1;

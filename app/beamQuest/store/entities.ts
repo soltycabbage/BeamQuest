@@ -193,7 +193,6 @@ class EntitiesStore {
     updatePlayerPosition(data) {
         var player = this.getPlayerById(data.userId);
         if (player) {
-            player.model.position.mapId = data.mapId;
             player.model.position.x = data.x;
             player.model.position.y = data.y;
         }

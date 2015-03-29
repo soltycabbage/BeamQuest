@@ -72,7 +72,6 @@ export function listen(socket, io) {
     function createNewPlayer_(loginData) {
         // TODO mapManager.getRespawnPoint的な奴で初期ポジションを取得する
         var position = new PositionModel({
-            mapId: 1,
             x: 700,
             y: 700
         });
@@ -97,10 +96,9 @@ export function listen(socket, io) {
         var position = model.position;
         Entities.getInstance().addPlayer(player);
         UserStore.getInstance().saveSessionData(socket.id, 'userId', player.model.id);
-        UserStore.getInstance().saveSessionData(socket.id, 'mapId', player.model.position.mapId);
         player.scheduleUpdate();
         socket.broadcast.emit('notify:user:login', {'userId': model.id});
-        logger.debug('user login notified: userId "' + model.id + '" in ' + player.model.position.mapId);
+        logger.debug('user login notified: userId "' + model.id + '" in ' + player.model.mapId);
 
         // 接続が切れたらログアウト扱い
         socket.on('disconnect', function() {
