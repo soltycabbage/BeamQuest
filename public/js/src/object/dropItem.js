@@ -55,7 +55,7 @@ bq.object.DropItem = bq.object.Object.extend({
      */
     tryPick_: function() {
         var soc = bq.Socket.getInstance();
-        soc.requestPickItem(this.model_.dropId, this.model_.position.mapId, bq.player.name);
+        soc.requestPickItem(this.model_.dropId, this.model_.mapId, bq.player.name);
     },
 
     /**

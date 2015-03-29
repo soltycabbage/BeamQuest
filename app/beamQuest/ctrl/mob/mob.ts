@@ -288,7 +288,9 @@ class Mob extends EntityCtrl {
 
         var data = [];
         dropItems.forEach((dropItem:DropItemModel) => {
-            data.push(dropItem.toJSON());
+            var json = dropItem.toJSON();
+            json.mapId = this.model.mapId; // とちゅうで混ぜるのはわかりにくいのでなんとかしたい
+            data.push(json);
         });
         ItemListener.getInstance().notify(data);
         EntityListener.getInstance().killMob(this);

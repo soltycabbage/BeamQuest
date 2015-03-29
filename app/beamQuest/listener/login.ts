@@ -42,7 +42,7 @@ export function listen(socket, io) {
             }
             addLoginUser_(player);
 
-            return respond_({result: 'success', player: player.model.toJSON()});
+            return respond_({result: 'success', mapId: 1, player: player.model.toJSON()});
         });
     }
 
