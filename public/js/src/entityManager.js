@@ -68,7 +68,7 @@ bq.EntityManager = cc.Class.extend({
         if (!otherPlayer && moveData.userId !== bq.player.name) {
             this.createOtherPlayer(moveData);
         } else {
-            otherPlayer.moveTo(cc.p(moveData.x, moveData.y), moveData.direction);
+            otherPlayer && otherPlayer.moveTo(cc.p(moveData.x, moveData.y), moveData.direction);
         }
     },
 
