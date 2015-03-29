@@ -71,6 +71,7 @@ class Entity extends Model {
     private getPresetSkills(): Skill[] {
         var skills = [];
         skills.push(new Skill(bq.params.Skills.BURNSTRIKE));
+        skills.push(new Skill(bq.params.Skills.BIOSHOCK));
         return skills;
     }
 

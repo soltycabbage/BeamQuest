@@ -38,6 +38,7 @@ class SkillFactory {
                 break;
             case s.BIOSHOCK.id:
                 clazz = BioShock;
+                break;
             default:
                 return null;
         }

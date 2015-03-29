@@ -18,11 +18,11 @@ module.exports = {
         name: 'バイオショック',
         info: '毒で対象の体を蝕む下級光術。',
         power: 5,
-        bp: 20,
+        bp: 15,
         castTime: 1600,
         recastTime: 5000,
         range: 100,
-        radius: 15
+        radius: 30
     }
 };
 

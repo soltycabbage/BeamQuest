@@ -15,7 +15,8 @@ bq.skill.SkillFactory = cc.Class.extend({
                    clazz = bq.skill.BurnStrike;
                    break;
                case s.BIOSHOCK:
-                   claszz = bq.skill.BioShock;
+                   clazz = bq.skill.BioShock;
+                   break;
                default:
                    return null;
            }

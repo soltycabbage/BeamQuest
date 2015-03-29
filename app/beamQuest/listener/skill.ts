@@ -94,6 +94,10 @@ class Skill {
     private canUse(skill:SkillModel, user:PlayerCtrl): boolean{
         // BPが足りなかったらfalse
         if (skill.bp > user.model.bp) {
+            if (this.socket_) {
+                this.socket_.emit('user:status:bp:lack');
+            }
+
             return false;
         }
         return true;
