@@ -38,7 +38,7 @@ var s_PlistSimpleBeam    =  'res/img/beam/simple.plist';
 var s_PlistPlayerMisc    =  'res/img/player/misc.plist';
 var s_PlistEffectBurn    =  'res/img/effect/burn.plist';
 var s_PlistEffectExplode =  'res/img/effect/explodingRing.plist';
-var s_PlistEffectPoison    =  'res/img/effect/poison.plist';
+var s_PlistEffectPoison  =  'res/img/effect/poison.plist';
 
 // sounds
 var s_BgmField       = 'res/sounds/bgm/Field.m4a';  // テンテテン　テン　テン
