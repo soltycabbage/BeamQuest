@@ -286,7 +286,7 @@ class Mob extends EntityCtrl {
         var dropItems:DropItemModel[] = this.throwDropItems_(this.chooseDropItems_());
         map.addDropItems(dropItems);
 
-        var data = []
+        var data = [];
         dropItems.forEach((dropItem:DropItemModel) => {
             data.push(dropItem.toJSON());
         });
