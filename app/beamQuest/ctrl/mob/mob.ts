@@ -322,7 +322,7 @@ class Mob extends EntityCtrl {
      * @private
      */
     private throwDropItems_(dropItems:DropItemModel[]): DropItemModel[] {
-        var pos = this.model.positino;
+        var pos = this.model.position;
         _.forEach(dropItems, (dropItem:DropItemModel) => {
             var p:any = _.clone(pos);
             // ドロップ位置を散らす
