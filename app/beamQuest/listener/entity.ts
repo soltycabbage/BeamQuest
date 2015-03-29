@@ -28,13 +28,12 @@ class Entity {
     io_;
 
     listen(socket, io) {
-        this.socket_ = socket;
         this.io_ = io;
 
-        this.socket_.on('user:position:update', (data: any) => this.handlePlayerMove_(data));
-        this.socket_.on('user:respawn', (data: any) => this.handleRespawn(data));
-        this.socket_.on('user:status:get', (data: any) => this.handleGetStatus_(data));
-        this.socket_.on('user:dodge', (data: any) => this.handleDodge(data));
+        socket.on('user:position:update', _.partial(this.handlePlayerMove_, socket));
+        socket.on('user:respawn', _.partial(this.handleRespawn, socket));
+        socket.on('user:dodge', _.partial(this.handleDodge, socket));
+        socket.on('user:status:get', _.partial(this.handleGetStatus_, socket));
         EntitiesStore = require('beamQuest/store/entities');
     }
 
@@ -42,19 +41,19 @@ class Entity {
      * プレイヤーの移動
      * @param {Object} data
      */
-    private handlePlayerMove_(data:any) {
+    private handlePlayerMove_(socket:any, data:any) {
         // プレイヤーが移動したら位置情報が送られてくる
         EntitiesStore.getInstance().updatePlayerPosition(data);
         // 自分以外の全プレイヤーにブロードキャスト
-        this.socket_.broadcast.emit('notify:user:move', data);
+        socket.broadcast.emit('notify:user:move', data);
     }
 
     /**
      * プレイヤーの緊急回避
      */
-    private handleDodge(data:any) {
+    private handleDodge(socket:any, data:any) {
         if (EntitiesStore.getInstance().updatePlayerDodge(data)) {
-            this.socket_.broadcast.emit('notify:user:dodge', data);
+            socket.broadcast.emit('notify:user:dodge', data);
         }
     }
 
@@ -182,14 +181,14 @@ class Entity {
      * プレイヤーが復活したよ
      * @param {Object} data
      */
-    handleRespawn(data:any) {
+    handleRespawn(socket:any, data:any) {
         if (data) {
             var playerId = data.id;
             var player:any = EntitiesStore.getInstance().getPlayerById(playerId);
             if (player) {
                 player.respawn();
                 var d = {entity: player.model.toJSON()};
-                this.socket_.broadcast.emit('notify:entity:player:respawn', d);
+                socket.broadcast.emit('notify:entity:player:respawn', d);
             }
         }
     }
@@ -199,11 +198,11 @@ class Entity {
      * @param {Object} data
      * @private
      */
-    handleGetStatus_(data:any) {
-        if (data) {
+    handleGetStatus_(socket:any, data:any) {
+        if (data && socket) {
             var player:any = EntitiesStore.getInstance().getPlayerById(data.entityId);
             if (player) {
-                this.socket_.emit('user:status:receive', player.model.toJSON());
+                socket.emit('user:status:receive', player.model.toJSON());
             }
         }
     }
