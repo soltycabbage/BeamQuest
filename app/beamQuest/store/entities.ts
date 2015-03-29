@@ -73,7 +73,7 @@ class EntitiesStore {
         if (isAdd) {
             this.players_[player.model.id] = player;
         }
-        logger.info('player add [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ',isAdd=' + isAdd + ']');
+        logger.info('player add [mapId=' + player.model.mapId + ',playerId=' + player.model.id + ',isAdd=' + isAdd + ']');
     }
 
     /**
