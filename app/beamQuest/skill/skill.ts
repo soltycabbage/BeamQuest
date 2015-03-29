@@ -35,7 +35,7 @@ class Skill {
     /**
      * 効果範囲内にダメージを与える
      * @param {number} damage
-     * @param {number=} opt_criticalProb クリティカル率
+     * @param {number=} opt_criticalProb クリティカル率（百分率）
      */
     applyDamage(damage:number, opt_criticalProb?:number) {
         var entities = [];
