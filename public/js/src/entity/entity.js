@@ -485,7 +485,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         var action = new cc.JumpTo(1.5, cc.p(d * 200, -100), 100, 1);
         var fadeOut = new cc.FadeOut(1.5);
         this.addChild(label);
-        label.runAction(new cc.Sequence(cc.Spawn(action, fadeOut),
+        label.runAction(new cc.Sequence(new cc.Spawn(action, fadeOut),
             new cc.CallFunc(function() {
                 label.removeFromParent();
             })));
