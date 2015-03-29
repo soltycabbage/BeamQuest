@@ -108,9 +108,9 @@ class EntitiesStore {
     removePlayer(player:any) {
         if (this.players_[player.model.id]) {
             delete this.players_[player.model.id];
-            logger.info('player remove [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ']');
+            logger.info('player remove [mapId=' + player.model.mapId + ',playerId=' + player.model.id + ']');
         } else {
-            logger.warn('cannot remove player [mapId=' + player.model.position.mapId + ',playerId=' + player.model.id + ']');
+            logger.warn('cannot remove player [mapId=' + player.model.mapId + ',playerId=' + player.model.id + ']');
         }
     }
 
@@ -130,7 +130,7 @@ class EntitiesStore {
      * @param {ctrl.Mob} mob
      */
     removeMob(mob:any) {
-        var map:any = MapStore.getInstance().getMapById(mob.model.position.mapId);
+        var map:any = MapStore.getInstance().getMapById(mob.model.mapId);
         if (map) {
             map.model.mobCount--;
             delete this.mobs_[mob.model.id];
