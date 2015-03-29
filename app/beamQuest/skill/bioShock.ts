@@ -1,7 +1,7 @@
 import SkillModel = require('beamQuest/model/skill');
 import PositionModel = require('beamQuest/model/position');
 import EntityCtrl = require('beamQuest/ctrl/entity');
-import PlayerSkill = require('beamQuest/skill/playerskill');
+import PlayerSkill = require('beamQuest/skill/playerSkill');
 import Poison = require('beamQuest/buff/poison');
 
 /**
