@@ -13,9 +13,9 @@ class Poison extends Buff {
     damage: number;
 
     constructor(target:EntityCtrl) {
-        super(target)
+        super(target);
 
-        this.time = 5000;
+        this.time = 18000;
         this.intervalTime = 2500;
         this.decorateFormat = 'どく:${value}${color:178,108,255}';
         this.damage = -10;
