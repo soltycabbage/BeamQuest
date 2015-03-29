@@ -1,7 +1,7 @@
 var init = require('beamQuest/init'),
     expect = require('expect.js'),
     sinon = require('sinon'),
-    Skill = require('beamQuest/skill/skill'),
+    PlayerSkill = require('beamQuest/skill/playerSkill'),
     SkillModel = require('beamQuest/model/skill'),
     PlayerCtrl = require('beamQuest/ctrl/player'),
     PlayerModel = require('beamQuest/model/player'),
