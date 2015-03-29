@@ -25,7 +25,8 @@ class Entity extends ScheduleTarget implements Control<EntityModel> {
         this.model.on('addHp', _.bind(this.handleAddHp, this));
     }
 
-     handleAddHp(amount:number, isCritical:bool, decorate:string) {
+    /** @protected */
+     handleAddHp(amount:number, isCritical:boolean, decorate:string) {
         var hpData = [
             {entity: this.model, hpAmount: amount, isCritical: isCritical, decorate: decorate}
         ];
