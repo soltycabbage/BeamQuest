@@ -7,6 +7,9 @@ import DropItemModel = require('beamQuest/model/dropItem');
 import PositionModel = require('beamQuest/model/position');
 import EntityStore = require('beamQuest/store/entities');
 import MapStore = require('beamQuest/store/maps');
+import Control = require('beamQuest/ctrl/ctrl');
+import MobModel = require('beamQuest/model/mob');
+import ScheduleTarget = require('beamQuest/scheduleTarget');
 
 declare var bq: any;
 
@@ -16,7 +19,9 @@ declare var bq: any;
  * プレイヤーとの距離（近距離、中距離、遠距離）によって攻撃パターンが変化する。
  * 特殊なAIを実装したい場合は新たにクラスを作ってこのクラスを継承し、各種メソッドをoverrideすること。
  */
-class Mob extends EntityCtrl {
+class Mob extends ScheduleTarget implements Control<MobModel> {
+    model:MobModel;
+
     /**
      * 移動速度
      * TODO: このへんはmobの種類によって変えられるようにする
@@ -67,6 +72,27 @@ class Mob extends EntityCtrl {
         this.startPos = null;
     }
 
+    setModel(model:MobModel) {
+        this.model = model;
+
+        this.model.on('addHp', _.bind(this.handleAddHp, this));
+    }
+
+    /**
+     * @param {number} amount
+     * @param {boolean} isCritical
+     * @protected
+     */
+    handleAddHp(amount, isCritical) {
+        var hpData = [
+            {entity: this.model, hpAmount: amount, isCritical: isCritical}
+        ];
+        EntityListener.getInstance().updateHp(hpData);
+        if (this.model.hp <= 0) {
+            this.death();
+        }
+    }
+
     update() {
         if (!_.isEmpty(this.hateList)) {
             var targetId = this.hateList[0].entityId;
@@ -89,7 +115,7 @@ class Mob extends EntityCtrl {
      * 指定IDに敵対行動を取る
      * @param {ctrl.Entity} entity
      */
-     attackTo(entity:EntityCtrl) {
+    attackTo(entity:EntityCtrl) {
         if (this.hateTarget !== entity) {
             EntityListener.getInstance().targetTo(this, entity);
         }

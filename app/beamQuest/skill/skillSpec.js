@@ -1,7 +1,7 @@
 var init = require('beamQuest/init'),
     expect = require('expect.js'),
     sinon = require('sinon'),
-    Skill = require('beamQuest/skill/skill'),
+    PlayerSkill = require('beamQuest/skill/playerSkill'),
     SkillModel = require('beamQuest/model/skill'),
     PlayerCtrl = require('beamQuest/ctrl/player'),
     PlayerModel = require('beamQuest/model/player'),
@@ -15,14 +15,14 @@ describe('Test: app/beamQuest/skill/skill', function() {
         var skillModel = createSkillModel();
         player = createEntity();
         var targetPos = new PositionModel({x: 100, y: 100});
-        sut = new Skill(skillModel, player, targetPos);
+        sut = new PlayerSkill(skillModel, player, targetPos);
     });
 
     afterEach(function() {
         // 後処理
     });
 
-    it('スキルを使ったら使用者のBPが減っている', function() {
+    it('プレイヤーがスキルを使ったら使用者のBPが減ってない', function() {
         var beforeBp = sut.user.model.bp;
         var expectBp = Math.max(beforeBp - sut.model.bp, 0);
         sut.fire();

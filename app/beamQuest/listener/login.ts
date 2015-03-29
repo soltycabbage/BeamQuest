@@ -4,6 +4,12 @@ import PositionModel = require('beamQuest/model/position');
 import Entities = require('beamQuest/store/entities');
 import UserStore = require('beamQuest/store/userStore');
 
+import World = require('beamQuest/listener/world');
+import Beam = require('beamQuest/listener/beam');
+import Skill = require('beamQuest/listener/skill');
+import Entity = require('beamQuest/listener/entity');
+import Item = require('beamQuest/listener/item');
+
 declare var logger: any;
 
 var kvs = require('beamQuest/store/kvs').createClient();
@@ -41,6 +47,16 @@ export function listen(socket, io) {
                 player = createNewPlayer_(loginData);
             }
             addLoginUser_(player);
+
+            World.getInstance().listen(socket);
+            Beam.getInstance().listen(socket, io);
+            Skill.getInstance().listen(socket, io);
+            Entity.getInstance().listen(socket, io);
+            Item.getInstance().listen(socket, io);
+            // チャット
+            socket.on('message:update', function(data) {
+                socket.broadcast.emit('notify:message', data);
+            });
 
             return respond_({result: 'success', mapId: 1, player: player.model.toJSON()});
         });
