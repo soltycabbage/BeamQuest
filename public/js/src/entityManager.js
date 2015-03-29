@@ -247,10 +247,7 @@ bq.EntityManager = cc.Class.extend({
      * @param {Object.<mob: Object, range: number, castTime: number>} data
      */
     startAttackShortRange: function(data) {
-        var enemy =  this.enemys_[data.mobId];
-        if (enemy) {
-            enemy.showMessage('ころちゅ');
-        }
+        // 攻撃モーションとか。
     },
 
     /**
