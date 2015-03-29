@@ -74,6 +74,23 @@ class Mob extends ScheduleTarget implements Control<MobModel> {
 
     setModel(model:MobModel) {
         this.model = model;
+
+        this.model.on('addHp', _.bind(this.handleAddHp, this));
+    }
+
+    /**
+     * @param {number} amount
+     * @param {boolean} isCritical
+     * @protected
+     */
+    handleAddHp(amount, isCritical) {
+        var hpData = [
+            {entity: this.model, hpAmount: amount, isCritical: isCritical}
+        ];
+        EntityListener.getInstance().updateHp(hpData);
+        if (this.model.hp <= 0) {
+            this.death();
+        }
     }
 
     update() {
