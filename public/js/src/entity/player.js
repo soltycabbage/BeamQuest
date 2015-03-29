@@ -137,7 +137,7 @@ bq.entity.Player = bq.entity.Entity.extend({
             var item = this.model_.hotbarItems[hotNum];
             if (!item) { // ホットバーが空
                 this.shootInternal_(destination);
-		return;
+                return;
             }
             var dest = bq.camera.convertWindowPositionToWorldPosition(destination);
             this.socket.castSkill(item.id, this.model_.id, dest);
