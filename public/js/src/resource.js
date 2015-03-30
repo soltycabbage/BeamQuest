@@ -18,6 +18,7 @@ var s_ImgWorldMap      = 'res/img/worldmap.png';
 var s_ImgMiniChara     = 'res/img/minichara.png';
 var s_ImgEffectBurn    = 'res/img/effect/burn.png';
 var s_ImgEffectPoison  = 'res/img/effect/poison.png';
+var s_ImgEffectReactionPoison  = 'res/img/effect/reaction_poison.png';
 var s_ImgParticleSmoke = 'res/img/beam/smoke.png';
 
 // path prefix
@@ -39,6 +40,7 @@ var s_PlistPlayerMisc    =  'res/img/player/misc.plist';
 var s_PlistEffectBurn    =  'res/img/effect/burn.plist';
 var s_PlistEffectExplode =  'res/img/effect/explodingRing.plist';
 var s_PlistEffectPoison  =  'res/img/effect/poison.plist';
+var s_PlistEffectReactionPoison  =  'res/img/effect/reaction_poison.plist';
 
 // sounds
 var s_BgmField       = 'res/sounds/bgm/Field.m4a';  // テンテテン　テン　テン
@@ -75,6 +77,7 @@ var g_resources = [
     {type: 'png', src:s_ImgMiniChara},
     {type: 'png', src:s_ImgEffectBurn},
     {type: 'png', src:s_ImgEffectPoison},
+    {type: 'png', src:s_ImgEffectReactionPoison},
     {type: 'png', src:s_ImgParticleSmoke},
 
     //plist
@@ -83,7 +86,7 @@ var g_resources = [
     {type: 'plist', src:s_PlistPlayerMisc},
     {type: 'plist', src:s_PlistEffectBurn},
     {type: 'plist', src:s_PlistEffectPoison},
-
+    {type: 'plist', src:s_PlistEffectReactionPoison},
     //fnt
 
     //bgm

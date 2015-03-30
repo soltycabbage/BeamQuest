@@ -24,7 +24,6 @@ class Entity {
         Entity.instance_ = this;
     }
 
-    socket_;
     io_;
 
     listen(socket, io) {

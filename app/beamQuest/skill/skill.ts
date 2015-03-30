@@ -52,7 +52,7 @@ class Skill {
         entities = entities.concat(this.getPlayersByRadius());
         _.forEach(entities, (entity) => {
             if (entity && entity.model) {
-                entity.model.addHp(-damage, !!isCritical);
+                entity.model.addHp(-damage, bq.Types.DamageType.NORMAL, !!isCritical);
                 if (entity instanceof MobCtrl) {
                     entity.hateList && entity.applyHate(this.user.model.id, damage);
                 }

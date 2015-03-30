@@ -28,10 +28,22 @@ class Entity extends ScheduleTarget implements Control<EntityModel> {
         this.model.on('addHp', _.bind(this.handleAddHp, this));
     }
 
-    /** @protected */
-    handleAddHp(amount:number, isCritical:boolean, decorate:string) {
+    /**
+     *
+     * @param amount 効果量
+     * @param type ダメージの種類 例) normal, poison
+     * @param isCritical クリティカルヒットの場合TRUE
+     * @param decorate 装飾付きフライテキスト。
+     *                 例) "どく:${value}${color:255,255,0}"
+     *                　placeholder一覧:
+     *                      ${value} => 効果量の数値が入る
+     *                      ${color:nnn,nnn,nnn} => フォントの色（RGB指定）
+     *
+     * @protected
+     */
+    handleAddHp(amount:number, type:string, isCritical:boolean, decorate:string) {
         var hpData = [
-            {entity: this.model, hpAmount: amount, isCritical: isCritical, decorate: decorate}
+            {entity: this.model, hpAmount: amount, type: type, isCritical: isCritical, decorate: decorate}
         ];
         EntityListener.getInstance().updateHp(hpData);
         if (this.model.hp <= 0) {

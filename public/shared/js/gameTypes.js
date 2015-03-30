@@ -44,5 +44,9 @@ bq.Types = {
     EntityType: {
         PLAYER: 'player', // プレイヤー
         MOB:    'mob'     // 敵キャラ
+    },
+    DamageType: {
+        NORMAL: 'normal', // 通常ダメージ
+        POISON: 'poison'  // 毒
     }
 };

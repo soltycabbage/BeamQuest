@@ -1,6 +1,8 @@
 import Buff = require('beamQuest/buff/buff');
 import EntityCtrl = require('beamQuest/ctrl/entity');
 
+declare var bq: any;
+
 /**
  * 対象に毒の継続ダメージを与える
  */
@@ -26,7 +28,7 @@ class Poison extends Buff {
         var interval = setInterval(() => {
             if (this.target) {
                 var damage = this.damage + Math.floor(this.damage * Math.random());
-                this.target.model && this.target.model.addHp(damage, false, this.decorateFormat);
+                this.target.model && this.target.model.addHp(damage, bq.Types.DamageType.POISON, false, this.decorateFormat);
             }
         }, this.intervalTime);
 

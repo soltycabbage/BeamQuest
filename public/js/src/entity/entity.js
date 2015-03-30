@@ -277,6 +277,9 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
      */
     updateHp: function(hpData, opt_popLeft, opt_color) {
         var amount = hpData.hpAmount;
+        if (hpData.type !== bq.Types.DamageType.NORMAL) {
+            this.runUpdateHpEffect_(hpData);
+        }
         if (amount < 0) { // ダメージ
             bq.soundManager.playEffect(s_SeDamage);
             this.popDamageLabel_(hpData, !!opt_popLeft, opt_color);
@@ -449,6 +452,7 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
             damage += '!!';
         }
 
+        // 装飾付きフライテキストの設定
         if (hpData.decorate) {
             var decoMsg = hpData.decorate;
             decoMsg = decoMsg.replace('${value}', damage);
@@ -529,4 +533,50 @@ bq.entity.Entity = cc.PhysicsSprite.extend({
         directionVectors[d.bottomleft]  = cc.p(-1, -1);
         return cc.pNormalize(directionVectors[direction]);
     }),
+
+    /**
+     * typeに応じてダメージや回復エフェクトを再生する
+     * @private
+     */
+    runUpdateHpEffect_: function(hpData) {
+        var type = bq.Types.DamageType;
+        switch(hpData.type) {
+            case type.POISON:
+                this.poisonEffect_();
+                break;
+            default:
+                break;
+        }
+    },
+
+    poisonEffect_: function() {
+        cc.spriteFrameCache.addSpriteFrames(s_PlistEffectReactionPoison, s_ImgEffectReactionPoison);
+        var effect = new cc.Sprite();
+        var size = this.getContentSize();
+
+        var frames = [];
+        for (var i = 0;i < 4; i++) {
+            frames.push('reaction_poison' + i + '.png');
+        }
+        effect.initWithSpriteFrameName(frames[0]);
+        var animation = new cc.Animation();
+        animation.setDelayPerUnit(0.1);
+
+        _.forEach(frames, function (i) {
+            var frame = cc.spriteFrameCache.getSpriteFrame(i);
+            animation.addSpriteFrame(frame);
+        }, this);
+        effect.setPosition(cc.p(size.width / 2, size.height));
+        var removeFunc = new cc.CallFunc(function() {
+            effect.removeFromParent();
+        });
+
+        effect.runAction(
+            new cc.Spawn(
+                new cc.MoveTo(0.5, cc.p(size.width / 2, size.height * 1.5)),
+                new cc.Sequence(new cc.Animate(animation), new cc.FadeOut(1), removeFunc)
+            ));
+        effect.setScale(2);
+        this.addChild(effect, bq.config.zOrder.PLAYER + 1);
+    }
 });

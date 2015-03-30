@@ -68,15 +68,16 @@ class Entity extends Model {
      * 減らす場合は負の数を指定
      *
      * @param {number} amount
+     * @param {string} type
      * @param {boolean=} opt_isCritical クリティカルヒットの場合true
      * @param {string=} opt_decorate ダメージのフライテキストの装飾フォーマット(html使用可)
      *                  例: <b>毒: ${value}</b> 　　${value}は数値が入る
      */
-    addHp(amount: number, opt_isCritical = false, opt_decorate?: string): void {
+    addHp(amount: number, type = bq.Types.DamageType.NORMAL, opt_isCritical = false, opt_decorate?: string): void {
         var decorate = opt_decorate ? opt_decorate : null;
         this.hp = Math.max(0, Math.min(this.maxHp, this.hp + amount));
 
-        this.emit('addHp', amount, !!opt_isCritical, decorate);
+        this.emit('addHp', amount, type, !!opt_isCritical, decorate);
     }
 
     /**
