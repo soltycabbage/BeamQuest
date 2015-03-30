@@ -103,7 +103,7 @@ var g_sprite_frames = [
 ];
 
 // 敵の画像とか
-var KINDS_OF_ENEMY = 1;
+var KINDS_OF_ENEMY = 2;
 for (var i = 1; i <= KINDS_OF_ENEMY; i++) {
     var no = String('00' + i).slice(-3); // NOTE sprintf('%03d')
     var ename = 'res/img/enemy' + no;

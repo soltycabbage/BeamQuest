@@ -204,7 +204,7 @@ bq.EntityManager = cc.Class.extend({
         var mobModel = new bq.model.Mob(mob);
         var x = mobModel.position.x;
         var y = mobModel.position.y;
-        var enemy_id = 1;
+        var enemy_id = mob.mobImageId;
         var enemy = new bq.entity.Enemy(enemy_id);
         enemy.setModel(mobModel);
         enemy.setPosition(cc.p(x, y));
