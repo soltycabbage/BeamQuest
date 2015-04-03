@@ -9,7 +9,9 @@ module.exports = {
         pass: redisURL.auth.split(":")[1]
     },
     session: {
-        // type = "memory" or "redis"
-        type: "memory"
+        type: "redis",
+        host: redisURL.hostname,
+        port: redisURL.port,
+        pass: redisURL.auth.split(":")[1]
     }
 };
