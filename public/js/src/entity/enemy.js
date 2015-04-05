@@ -6,23 +6,15 @@ bq.entity.Enemy = bq.entity.Entity.extend({
     idlingAnimationSpeed: 0.15, // delay on animation
     isAttacking: false,
     enemy_id_: 0, // enemy_id
-    ctor: function (enemy_image_id) {
+    ctor: function (enemy_id) {
         'use strict';
-        this.enemy_id_ = this.createEnemyId(enemy_image_id);
+        this.enemy_id_ = enemy_id;
         this._super(this.getSpriteFrame_(1), this.getKeyFrameMap_());
 
         this.animations['atacking_bottom'] = this.createAttackingAnimation();
         this.updateAnimation(bq.entity.EntityState.Mode.stop, bq.entity.EntityState.Direction.bottom);
 
         this.scheduleUpdate();
-    },
-
-    /**
-     * enemy_image_id? から enemy_id を生成する
-     * @private
-     */
-    createEnemyId: function(enemy_image_id) {
-        return String('00' + enemy_image_id).slice(-3); // NOTE sprintf('%03d')
     },
 
     update: function () {
