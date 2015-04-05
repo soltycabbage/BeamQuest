@@ -5,6 +5,7 @@
 bq.entity.Enemy = bq.entity.Entity.extend({
     idlingAnimationSpeed: 0.15, // delay on animation
     isAttacking: false,
+    enemy_id_: 0, // enemy_id
     ctor: function (enemy_image_id) {
         'use strict';
         this.enemy_id_ = this.createEnemyId(enemy_image_id);
