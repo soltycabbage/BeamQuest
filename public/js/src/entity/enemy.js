@@ -6,9 +6,9 @@ bq.entity.Enemy = bq.entity.Entity.extend({
     idlingAnimationSpeed: 0.15, // delay on animation
     isAttacking: false,
     enemy_id_: 0, // enemy_id
-    ctor: function (enemy_id) {
+    ctor: function (enemy_image_id) {
         'use strict';
-        this.enemy_id_ = enemy_id;
+        this.enemy_id_ = String('00' + enemy_image_id).slice(-3); // NOTE sprintf('%03d')
         this._super(this.getSpriteFrame_(1), this.getKeyFrameMap_());
 
         this.animations['atacking_bottom'] = this.createAttackingAnimation();
