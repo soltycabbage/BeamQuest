@@ -17,6 +17,8 @@ class Mob extends Entity {
     money: number;
     /** 敵の場合は最大HPを設定値から取得してくる */
     maxHp: number;
+    /** クライアントで表示する敵画像の番号 */
+    mobImageId: string;
 
     constructor(opt_dat) {
         super(opt_dat);
@@ -30,9 +32,14 @@ class Mob extends Entity {
         this.maxHp = _.isUndefined(this.data.hp) ? this.maxHp : this.data.hp;
     }
 
-    toJSON(): any {
+    setMobImageId(id:string) {
+        this.mobImageId = id;
+    }
+
+    toJSON() {
         var json = super.toJSON();
         json.exp = this.exp;
+        json.mobImageId = this.mobImageId;
         return json;
     }
 }
