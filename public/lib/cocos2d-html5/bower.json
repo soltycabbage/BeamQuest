@@ -1,5 +1,6 @@
 {
   "name": "cocos2d-html5",
+  "version": "3.4",
   "homepage": "http://www.cocos2d-x.org",
   "authors": [
     "AUTHORS.txt"
@@ -32,14 +33,5 @@
     "bower_components",
     "test",
     "tests"
-  ],
-  "_release": "Cocos2d-html5-v3.5",
-  "_resolution": {
-    "type": "tag",
-    "tag": "Cocos2d-html5-v3.5",
-    "commit": "d47f061c0ae13078e08c637fa69e629a54177ffe"
-  },
-  "_source": "git://github.com/cocos2d/cocos2d-html5.git",
-  "_target": "Cocos2d-html5-v3.5",
-  "_originalSource": "cocos2d-html5"
+  ]
 }
