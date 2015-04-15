@@ -5,6 +5,10 @@ services:
 - redis-server
 before_script:
 - npm install -g grunt-cli
+sudo: false
+cache:
+  directories:
+    - node_modules
 deploy:
   provider: heroku
   api_key:
