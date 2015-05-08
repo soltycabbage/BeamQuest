@@ -45,14 +45,14 @@ class Entity extends ScheduleTarget implements Control<EntityModel> {
         var hpData = [
             {entity: this.model, hpAmount: amount, type: type, isCritical: isCritical, decorate: decorate}
         ];
-        EntityListener.updateHp(hpData);
+        EntityListener.getInstance().updateHp(hpData);
         if (this.model.hp <= 0) {
             this.death();
         }
     }
 
     beamHit(beamType:string, shooterId: string):number {
-        var shooter = EntityStore.getPlayerById(shooterId);
+        var shooter = EntityStore.getInstance().getPlayerById(shooterId);
         // TODO: ほんとはクライアント側から指定されたビームtypeをそのまま使うべきではない
         //       サーバ側に保存してあるプレイヤーの装備しているビームを参照すべき
         var beam = bq.params.Beams[beamType.toUpperCase()];

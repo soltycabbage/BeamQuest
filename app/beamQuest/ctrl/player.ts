@@ -46,13 +46,13 @@ class Player extends EntityCtrl implements Control<PlayerModel> {
      * @param {boolean} isCritical
      */
     private handleAddBp_(amount:number, isCritical:boolean) {
-        EntityListener.updateBp({entity: this.model, bpAmount: amount, isCritical: isCritical});
+        EntityListener.getInstance().updateBp({entity: this.model, bpAmount: amount, isCritical: isCritical});
     }
 
     update() {
         this.updateCount_++;
         if (this.updateCount_ % config.SAVE_INTERVAL === 0) {
-            UserStore.save(this);
+            UserStore.getInstance().save(this);
         }
 
         // 自動回復(HP)
@@ -80,7 +80,7 @@ class Player extends EntityCtrl implements Control<PlayerModel> {
     }
     death() {
         if (!this.model.isDeath) {
-            EntityListener.killPlayer(this);
+            EntityListener.getInstance().killPlayer(this);
             this.model.isDeath = true;
         }
     }
@@ -118,7 +118,7 @@ class Player extends EntityCtrl implements Control<PlayerModel> {
     private levelUp_(lvUpCount) {
         this.model.addLevel(lvUpCount);
         logger.info('player levelUp [playerId=' + this.model.id + ', level=' + this.model.lv +']');
-        EntityListener.levelUp(this.model);
+        EntityListener.getInstance().levelUp(this.model);
     }
 }
 

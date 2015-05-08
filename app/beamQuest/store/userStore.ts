@@ -1,50 +1,71 @@
 import kvs = require('beamQuest/store/kvs');
 
-var store:kvs.Client = kvs.createClient();
-
-function getStoreKey_(userId) {
-    return "user:" + userId;
-}
-function getSessionKey_(sessionId) {
-    return 'session:' + sessionId;
-}
-
-export function find(userId, callback) {
-    var storeKey = getStoreKey_(userId);
-    store.hgetall(storeKey, function(error, val) {
-        if (error) {
-            callback(error);
+class UserStore {
+    private static instance_:UserStore;
+    public static getInstance():UserStore {
+        if (UserStore.instance_ === undefined) {
+            UserStore.instance_ = new UserStore();
         }
-        if (val) {
-            Object.keys(val).forEach(function(key) {
-                val[key] = JSON.parse(val[key]);
-            });
+        return UserStore.instance_;
+    }
+
+    constructor() {
+        if (UserStore.instance_){
+            throw new Error("Error: Instantiation failed: Use UserStore.getInstance() instead of new.");
         }
-        callback(null, val);
-    });
+        UserStore.instance_ = this;
+
+        this.store = kvs.createClient();
+    }
+
+    store:kvs.Client;
+
+    private getStoreKey_(userId) {
+        return "user:" + userId;
+    }
+    private getSessionKey_(sessionId) {
+        return 'session:' + sessionId;
+    }
+
+    find(userId, callback) {
+        var storeKey = this.getStoreKey_(userId);
+        this.store.hgetall(storeKey, function(error, val) {
+            if (error) {
+                callback(error);
+            }
+            if (val) {
+                Object.keys(val).forEach(function(key) {
+                    val[key] = JSON.parse(val[key]);
+                });
+            }
+            callback(null, val);
+        });
+    }
+
+    save(user) {
+        var storeKey = this.getStoreKey_(user.model.id);
+        var data = user.model.toJSON();
+        Object.keys(data).forEach(function(key) {
+            data[key] = JSON.stringify(data[key]);
+        });
+        this.store.hmset(storeKey, data);
+    }
+
+    // redis のラッパすぎて抽象化できておらず
+    getSessionData(sessionId, name, callback) {
+        var storeKey = this.getSessionKey_(sessionId);
+        this.store.hget(storeKey, name, function(error, val) {
+            if (error) {
+                callback(error);
+            }
+            callback(null, val);
+        });
+    }
+
+    saveSessionData(sessionId, name, data) {
+        var storeKey = this.getSessionKey_(sessionId);
+        this.store.hset(storeKey, name, data);
+    }
 }
 
-export function save(user) {
-    var storeKey = getStoreKey_(user.model.id);
-    var data = user.model.toJSON();
-    Object.keys(data).forEach(function(key) {
-        data[key] = JSON.stringify(data[key]);
-    });
-    store.hmset(storeKey, data);
-}
-
-// redis のラッパすぎて抽象化できておらず
-export function getSessionData(sessionId, name, callback) {
-    var storeKey = getSessionKey_(sessionId);
-    store.hget(storeKey, name, function(error, val) {
-        if (error) {
-            callback(error);
-        }
-        callback(null, val);
-    });
-}
-
-export function saveSessionData(sessionId, name, data) {
-    var storeKey = getSessionKey_(sessionId);
-    store.hset(storeKey, name, data);
-}
+export = UserStore;

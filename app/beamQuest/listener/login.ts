@@ -28,7 +28,7 @@ export function listen(socket, io) {
 
     function login_(loginData) {
         var respond_ = function(result) { socket.emit('login:receive', result); };
-        UserStore.find(loginData.userId, function(error, userData) {
+        UserStore.getInstance().find(loginData.userId, function(error, userData) {
             if (error) {
                 return respond_(error);
             }
@@ -48,11 +48,11 @@ export function listen(socket, io) {
             }
             addLoginUser_(player);
 
-            World.listen(socket);
-            Beam.listen(socket, io);
-            Skill.listen(socket, io);
-            Entity.listen(socket, io);
-            Item.listen(socket, io);
+            World.getInstance().listen(socket);
+            Beam.getInstance().listen(socket, io);
+            Skill.getInstance().listen(socket, io);
+            Entity.getInstance().listen(socket, io);
+            Item.getInstance().listen(socket, io);
             // チャット
             socket.on('message:update', function(data) {
                 socket.broadcast.emit('notify:message', data);
@@ -74,7 +74,6 @@ export function listen(socket, io) {
         }
         return result;
     }
-
 
     function createPlayer_(userData) {
         var model = new PlayerModel(userData);
@@ -111,16 +110,16 @@ export function listen(socket, io) {
     function addLoginUser_(player) {
         var model = player.model;
         var position = model.position;
-        Entities.addPlayer(player);
-        UserStore.saveSessionData(socket.id, 'userId', player.model.id);
+        Entities.getInstance().addPlayer(player);
+        UserStore.getInstance().saveSessionData(socket.id, 'userId', player.model.id);
         player.scheduleUpdate();
         socket.broadcast.emit('notify:user:login', {'userId': model.id});
         logger.debug('user login notified: userId "' + model.id + '" in ' + player.model.mapId);
 
         // 接続が切れたらログアウト扱い
         socket.on('disconnect', function() {
-            UserStore.save(player);
-            Entities.removePlayer(player);
+            UserStore.getInstance().save(player);
+            Entities.getInstance().removePlayer(player);
             player.unscheduleUpdate();
             socket.broadcast.emit('notify:user:logout', {'userId': player.model.id});
             logger.debug('socket.io connection closed');
