@@ -19,30 +19,30 @@ declare var logger: any;
 /**
  * マップごとのプレイヤー一覧
  * @typedef {
-     *    mapId: {
+     *    id: {
      *       userId: ctrl.Player
      *    }
      * }
  */
-var players_ = {};
+var players_:_.Dictionary<PlayerCtrl> = {};
 
 /**
  * マップごとのmob一覧
  * @type {Object}
  */
-var mobs_ = {};
+var mobs_:_.Dictionary<MobCtrl> = {};
 
 /**
  * マップごとのnpc一覧
  * @type {Object}
  */
-var npcs_ = {};
+var npcs:_.Dictionary<any> = {};
 
 /**
  * @param {ctrl.Player} player
  */
 export function addPlayer(player:PlayerCtrl) {
-    var isAdd = !_.contains(players_, player.model.id);
+    var isAdd = !_.has(players_, player.model.id);
 
     if (isAdd) {
         players_[player.model.id] = player;
@@ -93,7 +93,7 @@ export function removePlayer(player:any) {
  * @param {ctrl.Mob} mob
  */
 export function addMob(map:MapModel, mob:any) {
-    if (!_.contains(mobs_, mob.model.id)) {
+    if (!_.has(mobs_, mob.model.id)) {
         mobs_[mob.model.id] = mob;
         map.mobCount++;
         EntityListener.popMob(mob);
