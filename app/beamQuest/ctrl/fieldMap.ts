@@ -57,7 +57,7 @@ class FieldMap extends ScheduleTarget implements Control<FieldMapModel> {
             mobModel.setMobImageId(mobType.image_id);
             mob.setModel(mobModel);
             mob.startPos = _.clone(position);
-            EntitiesStore.getInstance().addMob(this.model, mob);
+            EntitiesStore.addMob(this.model, mob);
         }
     }
 

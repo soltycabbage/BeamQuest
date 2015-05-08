@@ -81,7 +81,7 @@ class Mob extends EntityCtrl implements Control<MobModel> {
     update() {
         if (!_.isEmpty(this.hateList)) {
             var targetId = this.hateList[0].entityId;
-            var targetEntity = EntityStore.getInstance().getPlayerById(targetId);
+            var targetEntity = EntityStore.getPlayerById(targetId);
             if (targetEntity && targetEntity.model.isDeath) {
                 this.hateList.shift();
                 if (_.isEmpty(this.hateList) && this.startPos) {
@@ -102,7 +102,7 @@ class Mob extends EntityCtrl implements Control<MobModel> {
      */
     attackTo(entity:EntityCtrl) {
         if (this.hateTarget !== entity) {
-            EntityListener.getInstance().targetTo(this, entity);
+            EntityListener.targetTo(this, entity);
         }
         this.hateTarget = entity;
         this.moveTo(this.hateTarget.model.position);
@@ -166,11 +166,11 @@ class Mob extends EntityCtrl implements Control<MobModel> {
      * 現在の位置情報を更新する
      */
     updatePosition() {
-        var entity:any = EntityStore.getInstance().getMobById(this.model.id);
+        var entity:any = EntityStore.getMobById(this.model.id);
         if (entity) {
             entity.model.position.x = this.model.position.x;
             entity.model.position.y = this.model.position.y;
-            EntityListener.getInstance().moveMob(entity);
+            EntityListener.moveMob(entity);
         }
     }
 
@@ -184,7 +184,7 @@ class Mob extends EntityCtrl implements Control<MobModel> {
             var destPos = this.hateTarget.model.position;
             var range = 100; // TODO: 攻撃の種類によって設定できるように
             var castTime = 1000;
-            EntityListener.getInstance().startAttackShortRange(this.model.id, srcPos, destPos, range, castTime);
+            EntityListener.startAttackShortRange(this.model.id, srcPos, destPos, range, castTime);
 
             this.timeout_ = setTimeout(() => {
                 if (this.hateTarget) {
@@ -245,7 +245,7 @@ class Mob extends EntityCtrl implements Control<MobModel> {
 
     /** @override */
     beamHit(beamType:string, shooterId:string):number {
-        var shooter = EntityStore.getInstance().getPlayerById(shooterId);
+        var shooter = EntityStore.getPlayerById(shooterId);
         if (this.isCancelAttacking_ || !shooter) {
             this.model.addHp(0);
             return;
@@ -276,7 +276,7 @@ class Mob extends EntityCtrl implements Control<MobModel> {
      * @override
      */
     death() {
-        var map = MapStore.getInstance().getMapById(this.model.mapId);
+        var map = MapStore.getMapById(this.model.mapId);
         var dropItems:DropItemModel[] = this.throwDropItems_(this.chooseDropItems_());
         map.addDropItems(dropItems);
 
@@ -286,9 +286,9 @@ class Mob extends EntityCtrl implements Control<MobModel> {
             json.mapId = this.model.mapId; // とちゅうで混ぜるのはわかりにくいのでなんとかしたい
             data.push(json);
         });
-        ItemListener.getInstance().notify(data);
-        EntityListener.getInstance().killMob(this);
-        EntityStore.getInstance().removeMob(this);
+        ItemListener.notify(data);
+        EntityListener.killMob(this);
+        EntityStore.removeMob(this);
     }
 
     /**
