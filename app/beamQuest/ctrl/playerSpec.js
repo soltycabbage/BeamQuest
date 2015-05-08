@@ -55,7 +55,7 @@ describe('test: ctrl/player', function() {
         // entityListenerのlevelUp()処理はsocket通信が入って邪魔なのでスタブ化する
         // sinon.stub(対象クラス, クラスメソッド, function() { 置き換えたい処理...});
         // 第三引数を省略すると何もしないメソッドに置き換えられる。
-        sinon.stub(EntityListener.getInstance(), 'levelUp');
+        sinon.stub(EntityListener, 'levelUp');
         var firstLevel = sut.model.lv;
         sut.addExp(10000);
 
