@@ -32,7 +32,7 @@ exports.start = function(io) {
             map.objTmx = m;
             map.size = {width: m.width * m.tileWidth, height: m.height * m.tileHeight};
             var mapCtrl = new FieldMapCtrl(map);
-            MapStore.getInstance().getMaps().push(mapCtrl);
+            MapStore.getMaps().push(mapCtrl);
             d.resolve();
         }.bind(this));
 
@@ -43,8 +43,7 @@ exports.start = function(io) {
         var config = {
             STEP_INTERVAL: 30 // mainループの間隔(msec)
         };
-        Entities.getInstance().init();
-        _.each(MapStore.getInstance().getMaps(), function(map) {
+        _.each(MapStore.getMaps(), function(map) {
             map.initMobs();
         }.bind(this));
 
@@ -63,7 +62,7 @@ exports.start = function(io) {
     }
 
     function main() {
-        Scheduler.getInstance().update();
+        Scheduler.update();
     }
 
     function logUsage() {

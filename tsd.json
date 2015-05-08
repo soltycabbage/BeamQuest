@@ -6,34 +6,34 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "99805384e2702609d78632c7cc965f11b75081c9"
+      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
     },
     "express/express.d.ts": {
-      "commit": "99805384e2702609d78632c7cc965f11b75081c9"
+      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
     },
     "body-parser/body-parser.d.ts": {
-      "commit": "99805384e2702609d78632c7cc965f11b75081c9"
+      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
     },
     "socket.io/socket.io.d.ts": {
-      "commit": "99805384e2702609d78632c7cc965f11b75081c9"
+      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
     },
     "underscore/underscore.d.ts": {
-      "commit": "f3109015583d99e122a08114a29e38f3f2f207d0"
+      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
     },
     "node_redis/node_redis.d.ts": {
-      "commit": "fbd8131f776fa18007673aea9aecf9138372cebb"
+      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
     },
     "sinon/sinon.d.ts": {
-      "commit": "c8b6954f449bd252ee42592fe471f14b1995cffb"
+      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
     },
     "expect.js/expect.js.d.ts": {
-      "commit": "c8b6954f449bd252ee42592fe471f14b1995cffb"
+      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
     },
     "mocha/mocha.d.ts": {
-      "commit": "c8b6954f449bd252ee42592fe471f14b1995cffb"
+      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
     },
     "log4js/log4js.d.ts": {
-      "commit": "9585a3b741a8491d5c883249515fd00b45b0a9f9"
+      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
     }
   }
 }

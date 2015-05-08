@@ -4,6 +4,7 @@ import EntityCtrl = require('beamQuest/ctrl/entity');
 import MobCtrl = require('beamQuest/ctrl/mob/mob');
 import EntityStore = require('beamQuest/store/entities');
 import Buff        = require('beamQuest/buff/buff');
+import skillListener = require('beamQuest/listener/skill');
 
 declare var bq: any;
 
@@ -16,20 +17,17 @@ class Skill {
     model:SkillModel;
     targetPos:PositionModel;
 
-    private skillListener:any;
-
     constructor(model:SkillModel, user:EntityCtrl, targetPos:PositionModel) {
         this.user = user;
         this.model = model;
         this.targetPos = targetPos;
 
-        this.skillListener = require('beamQuest/listener/skill').getInstance();
     }
     /**
      * スキルを実行する
      */
     fire() {
-        this.skillListener.fire(this.model, this.user.model.id, this.targetPos);
+        skillListener.fire(this.model, this.user.model.id, this.targetPos);
     }
 
     /**
@@ -78,7 +76,7 @@ class Skill {
      * @return {Array.<ctrl.Entity>}
      */
     getMobsByRadius(targetPos:PositionModel, radius:number): EntityCtrl[] {
-        return EntityStore.getInstance().getMobsByRadius(targetPos, radius);
+        return EntityStore.getMobsByRadius(targetPos, radius);
     }
 
     /**
@@ -86,7 +84,7 @@ class Skill {
      * @return {Array.<ctrl.Entity>}
      */
     getPlayersByRadius(): EntityCtrl[] {
-        return EntityStore.getInstance().getPlayersByRadius(this.targetPos, this.model.radius);
+        return EntityStore.getPlayersByRadius(this.targetPos, this.model.radius);
     }
 }
 
