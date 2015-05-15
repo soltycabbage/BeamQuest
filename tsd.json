@@ -6,34 +6,34 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
+      "commit": "68114f9ff37de0f92c94126b6e0164e026a1737a"
     },
     "express/express.d.ts": {
-      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
+      "commit": "68114f9ff37de0f92c94126b6e0164e026a1737a"
     },
     "body-parser/body-parser.d.ts": {
-      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
+      "commit": "68114f9ff37de0f92c94126b6e0164e026a1737a"
     },
     "socket.io/socket.io.d.ts": {
-      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
+      "commit": "68114f9ff37de0f92c94126b6e0164e026a1737a"
     },
     "underscore/underscore.d.ts": {
-      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
+      "commit": "68114f9ff37de0f92c94126b6e0164e026a1737a"
     },
     "node_redis/node_redis.d.ts": {
-      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
+      "commit": "68114f9ff37de0f92c94126b6e0164e026a1737a"
     },
     "sinon/sinon.d.ts": {
-      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
+      "commit": "68114f9ff37de0f92c94126b6e0164e026a1737a"
     },
     "expect.js/expect.js.d.ts": {
-      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
+      "commit": "68114f9ff37de0f92c94126b6e0164e026a1737a"
     },
     "mocha/mocha.d.ts": {
-      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
+      "commit": "68114f9ff37de0f92c94126b6e0164e026a1737a"
     },
     "log4js/log4js.d.ts": {
-      "commit": "6c2589a6335713cc5b88701d607a2770f1c53b63"
+      "commit": "68114f9ff37de0f92c94126b6e0164e026a1737a"
     }
   }
 }
