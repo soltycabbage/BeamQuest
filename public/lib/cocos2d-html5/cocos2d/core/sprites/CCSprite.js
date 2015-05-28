@@ -558,12 +558,15 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
 				// Init with a sprite frame name
 				var frameName = fileName.substr(1, fileName.length - 1);
 				var spriteFrame = cc.spriteFrameCache.getSpriteFrame(frameName);
-				this.initWithSpriteFrame(spriteFrame);
+				if (spriteFrame)
+					this.initWithSpriteFrame(spriteFrame);
+				else
+					cc.log("%s does not exist", fileName);
 			} else {
 				// Init  with filename and rect
 				cc.Sprite.prototype.init.call(this, fileName, rect);
 			}
-		} else if (cc.isObject(fileName)) {
+		} else if (typeof fileName === "object") {
 			if (fileName instanceof cc.Texture2D) {
 				// Init  with texture and rect
 				this.initWithTexture(fileName, rect, rotated);
@@ -938,12 +941,14 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
 
             if(!texture._textureLoaded){
                 texture.addEventListener("load", function(){
+                    this._clearRect();
                     this._renderCmd._setTexture(texture);
                     this._changeRectWithTexture(texture.getContentSize());
                     this.setColor(this._realColor);
                     this._textureLoaded = true;
                 }, this);
             }else{
+                this._clearRect();
                 this._renderCmd._setTexture(texture);
                 this._changeRectWithTexture(texture.getContentSize());
                 this.setColor(this._realColor);
@@ -952,8 +957,22 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
         }else{
             // CCSprite: setTexture doesn't work when the sprite is rendered using a CCSpriteSheet
             cc.assert(texture instanceof cc.Texture2D, cc._LogInfos.Sprite_setTexture_2);
+            this._clearRect();
             this._changeRectWithTexture(texture.getContentSize());
             this._renderCmd._setTexture(texture);
+        }
+    },
+
+    _clearRect: function(){
+        var texture = this._texture;
+        if(texture){
+            var textureRect = texture._contentSize;
+            var spriteRect = this._rect;
+            if(
+                textureRect.width === spriteRect.width &&
+                textureRect.height === spriteRect.height
+            )
+                spriteRect.width = spriteRect.height = 0;
         }
     },
 

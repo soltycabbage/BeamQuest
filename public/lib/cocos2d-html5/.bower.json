@@ -33,13 +33,13 @@
     "test",
     "tests"
   ],
-  "_release": "Cocos2d-html5-v3.5",
+  "_release": "Cocos2d-html5-v3.6",
   "_resolution": {
     "type": "tag",
-    "tag": "Cocos2d-html5-v3.5",
-    "commit": "d47f061c0ae13078e08c637fa69e629a54177ffe"
+    "tag": "Cocos2d-html5-v3.6",
+    "commit": "29641aa5720113ccb9d2b5f7d61677f8646f7dee"
   },
   "_source": "git://github.com/cocos2d/cocos2d-html5.git",
-  "_target": "Cocos2d-html5-v3.5",
+  "_target": "Cocos2d-html5-v3.6",
   "_originalSource": "cocos2d-html5"
 }
