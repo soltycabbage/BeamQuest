@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/play', function(req, res) {
-    res.sendfile(__dirname + '/public/play.html');
+    res.sendFile(__dirname + '/public/play.html');
 });
 
 var backend = require('beamQuestBackend/main');
