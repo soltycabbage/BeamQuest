@@ -1,15 +1,15 @@
-import EntityCtrl = require('beamQuest/ctrl/entity');
-import FieldMapCtrl = require('beamQuest/ctrl/fieldMap');
-import EntityListener = require('beamQuest/listener/entity');
-import ItemListener = require('beamQuest/listener/item');
-import distance = require('beamQuest/math/distance');
-import DropItemModel = require('beamQuest/model/dropItem');
-import PositionModel = require('beamQuest/model/position');
-import EntityStore = require('beamQuest/store/entities');
-import MapStore = require('beamQuest/store/maps');
-import Control = require('beamQuest/ctrl/ctrl');
-import MobModel = require('beamQuest/model/mob');
-import ScheduleTarget = require('beamQuest/scheduleTarget');
+import EntityCtrl = require('../entity');
+import FieldMapCtrl = require('../fieldMap');
+import EntityListener = require('../../listener/entity');
+import ItemListener = require('../../listener/item');
+import distance = require('../..//math/distance');
+import DropItemModel = require('../../model/dropItem');
+import PositionModel = require('../../model/position');
+import EntityStore = require('../../store/entities');
+import MapStore = require('../../store/maps');
+import Control = require('../ctrl');
+import MobModel = require('../../model/mob');
+import ScheduleTarget = require('../../scheduleTarget');
 
 declare var bq: any;
 

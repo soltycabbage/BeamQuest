@@ -1,5 +1,5 @@
-import MapModel = require('beamQuest/model/map');
-import DropItem = require('beamQuest/model/dropItem');
+import MapModel = require('./map');
+import DropItem = require('./dropItem');
 
 class FieldMap extends MapModel {
     /** マップ上に存在できるmobの最大値。mobCountがこの数以下になるとmobがPOPする */

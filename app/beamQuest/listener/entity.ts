@@ -1,6 +1,6 @@
 /// <reference path="../../../typings/tsd.d.ts" />
 
-import UserStore = require('beamQuest/store/userStore');
+import UserStore = require('../store/userStore');
 
 declare var EntitiesStore:any;
 

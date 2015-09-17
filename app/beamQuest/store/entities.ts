@@ -1,12 +1,12 @@
 /// <reference path="../../../typings/deferred/deferred.d.ts" />
 
-import EntityListener = require('beamQuest/listener/entity');
-import MapStore = require('beamQuest/store/maps');
-import MapModel = require('beamQuest/model/fieldMap');
-import PositionModel = require('beamQuest/model/position');
-import EntityCtrl = require('beamQuest/ctrl/entity');
-import PlayerCtrl = require('beamQuest/ctrl/player');
-import MobCtrl = require('beamQuest/ctrl/mob/mob');
+import EntityListener = require('../listener/entity');
+import MapStore = require('./maps');
+import MapModel = require('../model/fieldMap');
+import PositionModel = require('../model/position');
+import EntityCtrl = require('../ctrl/entity');
+import PlayerCtrl = require('../ctrl/player');
+import MobCtrl = require('../ctrl/mob/mob');
 import deferred = require('deferred');
 
 declare var logger: any;

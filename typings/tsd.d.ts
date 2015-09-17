@@ -8,3 +8,5 @@
 /// <reference path="expect.js/expect.js.d.ts" />
 /// <reference path="mocha/mocha.d.ts" />
 /// <reference path="log4js/log4js.d.ts" />
+/// <reference path="serve-static/serve-static.d.ts" />
+/// <reference path="mime/mime.d.ts" />

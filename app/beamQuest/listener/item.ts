@@ -1,8 +1,8 @@
 /// <reference path="../../../typings/tsd.d.ts" />
 
-import MapStore = require('beamQuest/store/maps');
-import EntityStore = require('beamQuest/store/entities');
-import Position = require('beamQuest/model/position');
+import MapStore = require('../store/maps');
+import EntityStore = require('../store/entities');
+import Position = require('../model/position');
 
 /**
  * @fileoverview アイテムの取得/ドロップなどなど

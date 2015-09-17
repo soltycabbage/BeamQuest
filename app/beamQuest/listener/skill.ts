@@ -1,9 +1,9 @@
-import EntityStore = require('beamQuest/store/entities');
-import UserStore = require('beamQuest/store/userStore');
-import SkillModel = require('beamQuest/model/skill');
-import PositionModel = require('beamQuest/model/position');
-import PlayerCtrl = require('beamQuest/ctrl/player');
-import SkillFactory = require('beamQuest/factory/skillFactory');
+import EntityStore = require('../store/entities');
+import UserStore = require('../store/userStore');
+import SkillModel = require('../model/skill');
+import PositionModel = require('../model/position');
+import PlayerCtrl = require('../ctrl/player');
+import SkillFactory = require('../factory/skillFactory');
 
 /**
  * @fileoverview アイテムの取得/ドロップなどなど

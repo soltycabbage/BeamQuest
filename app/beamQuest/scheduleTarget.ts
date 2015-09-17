@@ -1,4 +1,4 @@
-import Scheduler = require('beamQuest/scheduler')
+import Scheduler = require('./scheduler')
 
 /**
  * メインループで実行されるクラスはこいつを継承する

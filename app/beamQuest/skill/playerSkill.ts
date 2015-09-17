@@ -1,5 +1,5 @@
-import Skill = require('beamQuest/skill/skill');
-import PlayerCtrl = require('beamQuest/ctrl/player');
+import Skill = require('./skill');
+import PlayerCtrl = require('../ctrl/player');
 
 class PlayerSkill extends Skill {
     /**

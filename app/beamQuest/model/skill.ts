@@ -1,4 +1,4 @@
-import  Model = require('beamQuest/model/model');
+import  Model = require('./model');
 
 /**
  * Entityが使用するスキルのmodel

@@ -1,9 +1,9 @@
-import EntityModel = require('beamQuest/model/entity');
-import ScheduleTarget = require('beamQuest/scheduleTarget');
-import EntityListener = require('beamQuest/listener/entity');
-import EntityStore = require('beamQuest/store/entities');
-import Buff     = require('beamQuest/buff/buff');
-import Control = require('beamQuest/ctrl/ctrl');
+import EntityModel = require('../model/entity');
+import ScheduleTarget = require('../scheduleTarget');
+import EntityListener = require('../listener/entity');
+import EntityStore = require('../store/entities');
+import Buff     = require('../buff/buff');
+import Control = require('./ctrl');
 
 declare var bq: any;
 

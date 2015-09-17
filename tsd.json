@@ -34,6 +34,12 @@
     },
     "log4js/log4js.d.ts": {
       "commit": "8e7c1b59121496da379511628fc444f9596cc34c"
+    },
+    "serve-static/serve-static.d.ts": {
+      "commit": "8e7c1b59121496da379511628fc444f9596cc34c"
+    },
+    "mime/mime.d.ts": {
+      "commit": "8e7c1b59121496da379511628fc444f9596cc34c"
     }
   }
 }

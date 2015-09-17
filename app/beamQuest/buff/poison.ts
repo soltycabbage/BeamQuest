@@ -1,5 +1,5 @@
-import Buff = require('beamQuest/buff/buff');
-import EntityCtrl = require('beamQuest/ctrl/entity');
+import Buff = require('./buff');
+import EntityCtrl = require('../ctrl/entity');
 
 declare var bq: any;
 

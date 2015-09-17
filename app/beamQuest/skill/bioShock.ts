@@ -1,8 +1,8 @@
-import SkillModel = require('beamQuest/model/skill');
-import PositionModel = require('beamQuest/model/position');
-import EntityCtrl = require('beamQuest/ctrl/entity');
-import PlayerSkill = require('beamQuest/skill/playerSkill');
-import Poison = require('beamQuest/buff/poison');
+import SkillModel = require('../model/skill');
+import PositionModel = require('../model/position');
+import EntityCtrl = require('../ctrl/entity');
+import PlayerSkill = require('./playerSkill');
+import Poison = require('../buff/poison');
 
 /**
  * バイオショック

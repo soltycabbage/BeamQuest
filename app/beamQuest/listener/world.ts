@@ -1,5 +1,5 @@
-import Entities = require('beamQuest/store/entities');
-import MapStore = require('beamQuest/store/maps');
+import Entities = require('../store/entities');
+import MapStore = require('../store/maps');
 
 /**
  * @fileoverview ワールド全体のイベント（mob/npcの移動, ログイン数、天気、時刻）などなどを扱う

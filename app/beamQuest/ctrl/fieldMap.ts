@@ -1,12 +1,12 @@
-import MobModel = require('beamQuest/model/mob');
-import FieldMapModel = require('beamQuest/model/fieldMap');
-import PositionModel = require('beamQuest/model/position');
-import EntitiesStore = require('beamQuest/store/entities');
-import EntityCtrl = require('beamQuest/ctrl/entity');
-import MobCtrl = require('beamQuest/ctrl/mob/mob');
-import DropItem = require('beamQuest/model/dropItem');
-import Control = require('beamQuest/ctrl/ctrl');
-import ScheduleTarget = require('beamQuest/scheduleTarget');
+import MobModel = require('../model/mob');
+import FieldMapModel = require('../model/fieldMap');
+import PositionModel = require('../model/position');
+import EntitiesStore = require('../store/entities');
+import EntityCtrl = require('./entity');
+import MobCtrl = require('./mob/mob');
+import DropItem = require('../model/dropItem');
+import Control = require('./ctrl');
+import ScheduleTarget = require('../scheduleTarget');
 
 declare var bq: any;
 

@@ -1,4 +1,4 @@
-import Entity = require('beamQuest/model/entity');
+import Entity = require('./entity');
 
 declare var bq: any;
 

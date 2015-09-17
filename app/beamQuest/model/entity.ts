@@ -1,7 +1,7 @@
-import Model    = require('beamQuest/model/model');
-import Position = require('beamQuest/model/position');
-import Skill    = require('beamQuest/model/skill');
-import Buff     = require('beamQuest/buff/buff');
+import Model    = require('./model');
+import Position = require('./position');
+import Skill    = require('./skill');
+import Buff     = require('../buff/buff');
 
 declare var bq: any;
 

@@ -1,6 +1,6 @@
-import Model = require('beamQuest/model/model');
-import PositionModel = require('beamQuest/model/position');
-import ItemModel = require('beamQuest/model/item');
+import Model = require('./model');
+import PositionModel = require('./position');
+import ItemModel = require('./item');
 
 declare var bq: any;
 

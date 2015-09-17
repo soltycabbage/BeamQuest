@@ -1,8 +1,8 @@
-import SkillModel = require('beamQuest/model/skill');
-import PositionModel = require('beamQuest/model/position');
-import EntityCtrl = require('beamQuest/ctrl/entity');
-import BurnStrike = require('beamQuest/skill/burnStrike');
-import BioShock = require('beamQuest/skill/bioShock');
+import SkillModel = require('../model/skill');
+import PositionModel = require('../model/position');
+import EntityCtrl = require('../ctrl/entity');
+import BurnStrike = require('../skill/burnStrike');
+import BioShock = require('../skill/bioShock');
 
 declare var bq: any;
 

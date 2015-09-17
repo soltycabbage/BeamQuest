@@ -1,6 +1,6 @@
 /// <reference path="../../typings/underscore/underscore.d.ts" />
 
-import ScheduleTarget = require('beamQuest/scheduleTarget');
+import ScheduleTarget = require('./scheduleTarget');
 
 /**
  * ループ毎に処理を行うクラスを管理するクラス

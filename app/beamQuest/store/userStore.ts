@@ -1,4 +1,4 @@
-import kvs = require('beamQuest/store/kvs');
+import kvs = require('./kvs');
 
 class UserStore {
     private static instance_:UserStore;

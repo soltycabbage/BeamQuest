@@ -1,5 +1,5 @@
-import Entity = require('beamQuest/model/entity');
-import BaseStatusModel = require('beamQuest/model/baseStatus');
+import Entity = require('./entity');
+import BaseStatusModel = require('./baseStatus');
 
 declare var bq: any;
 

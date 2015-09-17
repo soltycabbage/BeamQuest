@@ -1,8 +1,7 @@
-
-import Entities = require('beamQuest/store/entities');
-import Maps = require('beamQuest/store/maps');
-import UserStore = require('beamQuest/store/userStore');
-import PlayerCtrl = require('beamQuest/ctrl/player');
+import Entities = require('../store/entities');
+import Maps = require('../store/maps');
+import UserStore = require('../store/userStore');
+import PlayerCtrl = require('../ctrl/player');
 
 /**
  * @fileoverview ビームの発射などなどを扱う

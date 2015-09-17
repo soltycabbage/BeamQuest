@@ -1,18 +1,18 @@
-import PlayerModel = require('beamQuest/model/player');
-import PlayerCtrl = require('beamQuest/ctrl/player');
-import PositionModel = require('beamQuest/model/position');
-import Entities = require('beamQuest/store/entities');
-import UserStore = require('beamQuest/store/userStore');
+import PlayerModel = require('../model/player');
+import PlayerCtrl = require('../ctrl/player');
+import PositionModel = require('../model/position');
+import Entities = require('../store/entities');
+import UserStore = require('../store/userStore');
 
-import World = require('beamQuest/listener/world');
-import Beam = require('beamQuest/listener/beam');
-import Skill = require('beamQuest/listener/skill');
-import Entity = require('beamQuest/listener/entity');
-import Item = require('beamQuest/listener/item');
+import World = require('./world');
+import Beam = require('./beam');
+import Skill = require('./skill');
+import Entity = require('./entity');
+import Item = require('./item');
 
 declare var logger: any;
 
-var kvs = require('beamQuest/store/kvs').createClient();
+var kvs = require('../store/kvs').createClient();
 
 export function listen(socket, io) {
     socket.on('login', onLogin);

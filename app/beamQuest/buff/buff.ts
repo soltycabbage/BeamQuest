@@ -1,4 +1,4 @@
-import EntityCtrl = require('beamQuest/ctrl/entity');
+import EntityCtrl = require('../ctrl/entity');
 
 /**
  * バフ・デバフの基底クラス

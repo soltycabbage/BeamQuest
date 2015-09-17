@@ -1,8 +1,8 @@
 /// <reference path="../../../typings/tmx-parser/tmx-parser.d.ts" />
 /// <reference path="../../../typings/deferred/deferred.d.ts" />
 
-import mapModel = require('beamQuest/model/fieldMap');
-import FieldMapCtrl = require('beamQuest/ctrl/fieldMap');
+import mapModel = require('../model/fieldMap');
+import FieldMapCtrl = require('../ctrl/fieldMap');
 
 /**
  * ゲーム内のマップの状態を保持しておくクラス

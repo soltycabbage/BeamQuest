@@ -1,9 +1,9 @@
-import SkillModel = require('beamQuest/model/skill');
-import PositionModel = require('beamQuest/model/position');
-import EntityCtrl = require('beamQuest/ctrl/entity');
-import MobCtrl = require('beamQuest/ctrl/mob/mob');
-import EntityStore = require('beamQuest/store/entities');
-import Buff        = require('beamQuest/buff/buff');
+import SkillModel = require('../model/skill');
+import PositionModel = require('../model/position');
+import EntityCtrl = require('../ctrl/entity');
+import MobCtrl = require('../ctrl/mob/mob');
+import EntityStore = require('../store/entities');
+import Buff        = require('../buff/buff');
 
 declare var bq: any;
 
@@ -23,7 +23,7 @@ class Skill {
         this.model = model;
         this.targetPos = targetPos;
 
-        this.skillListener = require('beamQuest/listener/skill').getInstance();
+        this.skillListener = require('../listener/skill').getInstance();
     }
     /**
      * スキルを実行する
