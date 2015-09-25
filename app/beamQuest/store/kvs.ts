@@ -22,6 +22,6 @@ export function createClient(): Client {
         throw new Error('not supported kvs type');
     }
     var client = redis.createClient(CONFIG.port, CONFIG.host);
-    client.auth(CONFIG.pass);
+    client.auth(CONFIG.pass || '');
     return client;
 }
